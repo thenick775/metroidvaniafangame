@@ -20,7 +20,7 @@
   SKView * skView = (SKView *)self.view;
   skView.showsFPS = YES;
   skView.showsNodeCount = YES;
-  
+  skView.showsDrawCount =YES;
   
   // Create and configure the scene.
   /*SKScene * scene = [GameLevelScene sceneWithSize:CGSizeMake((CGFloat)skView.bounds.size.width/1.2, ((CGFloat)skView.bounds.size.height/1.2))];  //was skView.bounds.size
