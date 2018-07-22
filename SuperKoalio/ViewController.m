@@ -3,8 +3,7 @@
 //  SuperKoalio
 //
 //  Created by Jake Gundersen on 12/27/13.
-//  Copyright (c) 2013 Razeware, LLC. All rights reserved.
-//
+//  Modified by Nick VanCise
 
 #import "ViewController.h"
 #import "MenuScene.h"

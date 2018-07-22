@@ -3,8 +3,7 @@
 //  SuperKoalio
 //
 //  Created by nick vancise on 5/25/18.
-//  Copyright © 2018 Razeware. All rights reserved.
-//
+
 
 #import "PlayerProjectile.h"
 

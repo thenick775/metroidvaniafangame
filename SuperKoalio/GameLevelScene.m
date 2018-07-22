@@ -3,9 +3,8 @@
 //  Base: SuperKoalio
 //
 //  Base Created by Jake Gundersen on 12/27/13.
-//  Copyright (c) 2013 Razeware, LLC. All rights reserved.
 //
-//  Alterations Made by Nick VanCise
+//  Made by Nick VanCise
 //  jun 11 2018
 //  this is a game for fun, nothing serious
 //  ill give sprite credit when polished
@@ -13,40 +12,18 @@
 
 #import "GameLevelScene.h"
 #import "GameLevelScene2.h"
-#import "JSTileMap.h"
 #import "SKTUtils.h"
-#import "Player.h"
 #import "PlayerProjectile.h"
 #import "sciserenemy.h"
-#import "TravelPortal.h"
 
 
-@interface GameLevelScene()
-
-@property (nonatomic,strong) Player *player;
-@property (nonatomic,strong) JSTileMap *map;
-@property (nonatomic,strong) TMXLayer *walls,*hazards,*mysteryboxes;
-@property (nonatomic,assign) NSTimeInterval storetime;
-@property (nonatomic,assign) BOOL gameOver;
-@property (nonatomic,strong) SKLabelNode *healthlabel;
-@property (nonatomic,strong) SKSpriteNode *healthbar,*healthbarborder;
-@property (nonatomic,strong) NSMutableArray *enemies,*bullets;
-
-@end
-
-@implementation GameLevelScene{
-  double _healthbarsize; //size of healthbar at start used to reduce the bar by a constant rate equivilent with playerhealth
-  TravelPortal * _travelportal;
-  BOOL _repeating;
-  SKSpriteNode *buttonup,*buttonright,*buttonleft,*startbutton;
-  SKSpriteNode*pauselabel,*unpauselabel;
-}
+@implementation GameLevelScene
 
 -(instancetype)initWithSize:(CGSize)size {
   if (self = [super initWithSize:size]) {
-    /* Setup your scene here */
+    /* Setup scene here */
     self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
-    //self.view.shouldCullNonVisibleNodes=NO; //??? seems to help framerate for now 
+    //self.view.shouldCullNonVisibleNodes=NO; //??? seems to help framerate for now
     
     self.backgroundColor = /*[SKColor blackColor];*/[SKColor colorWithRed:0.7259 green:0 blue:0.8863 alpha:1.0];
     self.map = [JSTileMap mapNamed:@"level1.tmx"];
@@ -88,21 +65,21 @@
     [self addChild:self.healthbarborder];
     
     //button stuff unless i find a better place to put it...
-    buttonup=[SKSpriteNode spriteNodeWithImageNamed:@"buttonupv4real.png"];
-    buttonup.position=CGPointMake(self.size.width/6, self.size.height/2-36);
-    [self addChild:buttonup];
+    _buttonup=[SKSpriteNode spriteNodeWithImageNamed:@"buttonupv4real.png"];
+    _buttonup.position=CGPointMake(self.size.width/6, self.size.height/2-36);
+    [self addChild:_buttonup];
     
-    buttonleft=[SKSpriteNode spriteNodeWithImageNamed:@"buttonleftv2real.png"];
-    buttonleft.position=CGPointMake(self.size.width/6-28, self.size.height/2-75);
-    [self addChild:buttonleft];
+    _buttonleft=[SKSpriteNode spriteNodeWithImageNamed:@"buttonleftv2real.png"];
+    _buttonleft.position=CGPointMake(self.size.width/6-28, self.size.height/2-75);
+    [self addChild:_buttonleft];
     
-    buttonright=[SKSpriteNode spriteNodeWithImageNamed:@"buttonrightv2real.png"];
-    buttonright.position=CGPointMake(self.size.width/6+28, self.size.height/2-75);
-    [self addChild:buttonright];
+    _buttonright=[SKSpriteNode spriteNodeWithImageNamed:@"buttonrightv2real.png"];
+    _buttonright.position=CGPointMake(self.size.width/6+28, self.size.height/2-75);
+    [self addChild:_buttonright];
     
-    startbutton=[SKSpriteNode spriteNodeWithImageNamed:@"startbutton.png"];
-    startbutton.position=CGPointMake(self.size.width/2+206,self.size.height-12);
-    [self addChild:startbutton];
+    _startbutton=[SKSpriteNode spriteNodeWithImageNamed:@"startbutton.png"];
+    _startbutton.position=CGPointMake(self.size.width/2+206,self.size.height-12);
+    [self addChild:_startbutton];
     
     //mutable arrays here
     self.bullets=[[NSMutableArray alloc]init];
@@ -366,11 +343,11 @@
     
     //start delegating parts of the screen to specific movements
     
-    if(self.paused && CGRectContainsPoint(unpauselabel.frame, touchlocation)) //check for unpause
+    if(self.paused && CGRectContainsPoint(_unpauselabel.frame, touchlocation)) //check for unpause
       [self unpausegame];
     else if(self.paused)
       return;
-    else if(CGRectContainsPoint(buttonright.frame, touchlocation)){
+    else if(CGRectContainsPoint(_buttonright.frame, touchlocation)){
       //NSLog(@"touching right control");
       self.player.goForeward=YES;
       
@@ -379,7 +356,7 @@
       
       [self.player runAction:[SKAction repeatActionForever:self.player.runAnimation] withKey:@"runf"];
     }
-    else if(CGRectContainsPoint(buttonleft.frame, touchlocation)){
+    else if(CGRectContainsPoint(_buttonleft.frame, touchlocation)){
       //NSLog(@"touching left control");
       self.player.goBackward=YES;
       
@@ -388,7 +365,7 @@
       
       [self.player runAction:[SKAction repeatActionForever:self.player.runBackwardsAnimation] withKey:@"runb"];
     }
-    else if(CGRectContainsPoint(buttonup.frame, touchlocation)){
+    else if(CGRectContainsPoint(_buttonup.frame, touchlocation)){
       //NSLog(@"touching up control");
       self.player.shouldJump=YES;
       if(self.player.forwardtrack)
@@ -396,7 +373,7 @@
       else
         [self.player runAction:[SKAction repeatActionForever:self.player.jumpBackwardsAnimation] withKey:@"jmpb"];
     }
-    else if(CGRectContainsPoint(startbutton.frame, touchlocation)){
+    else if(CGRectContainsPoint(_startbutton.frame, touchlocation)){
       [self pausegame];
     }
     else if(touchlocation.x>self.size.width/2 && touchlocation.y<self.size.height/2){
@@ -429,7 +406,7 @@
       self.player.goBackward=NO;
       self.player.fireProjectile=YES;
     }
-    else if(CGRectContainsPoint(buttonup.frame, currtouchlocation) && CGRectContainsPoint(buttonright.frame, previoustouchlocation)){
+    else if(CGRectContainsPoint(_buttonup.frame, currtouchlocation) && CGRectContainsPoint(_buttonright.frame, previoustouchlocation)){
     //NSLog(@"moving from move right to jumping");
       self.player.shouldJump=YES;
       self.player.goForeward=NO;
@@ -437,7 +414,7 @@
       [self.player runAction:[SKAction repeatActionForever:self.player.jumpForewardsAnimation] withKey:@"jmpf"];
       [self.player removeActionForKey:@"runf"];
     }
-    else if(CGRectContainsPoint(buttonup.frame, currtouchlocation) && CGRectContainsPoint(buttonleft.frame, previoustouchlocation)){
+    else if(CGRectContainsPoint(_buttonup.frame, currtouchlocation) && CGRectContainsPoint(_buttonleft.frame, previoustouchlocation)){
       //NSLog(@"moving from move backward to jumping");
       
       self.player.shouldJump=YES;
@@ -446,7 +423,7 @@
       [self.player runAction:[SKAction repeatActionForever:self.player.jumpBackwardsAnimation] withKey:@"jmpb"];
       [self.player removeActionForKey:@"runb"];
     }
-    else if(CGRectContainsPoint(buttonright.frame, currtouchlocation) && CGRectContainsPoint(buttonleft.frame, previoustouchlocation)){
+    else if(CGRectContainsPoint(_buttonright.frame, currtouchlocation) && CGRectContainsPoint(_buttonleft.frame, previoustouchlocation)){
       //NSLog(@"moving from move backward to moveforeward");
       self.player.goForeward=YES;
       self.player.goBackward=NO;
@@ -457,7 +434,7 @@
       [self.player runAction:[SKAction repeatActionForever:self.player.runAnimation] withKey:@"runf"];
       [self.player removeActionForKey:@"runb"];
     }
-    else if(CGRectContainsPoint(buttonright.frame, currtouchlocation) && CGRectContainsPoint(buttonup.frame, previoustouchlocation)){
+    else if(CGRectContainsPoint(_buttonright.frame, currtouchlocation) && CGRectContainsPoint(_buttonup.frame, previoustouchlocation)){
       //NSLog(@"move up to move foreward");
       self.player.goForeward=YES;
       self.player.shouldJump=NO;
@@ -468,7 +445,7 @@
       [self.player runAction:[SKAction repeatActionForever:self.player.jumpForewardsAnimation] withKey:@"jmpf"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
     }
-    else if(CGRectContainsPoint(buttonleft.frame, currtouchlocation) && CGRectContainsPoint(buttonright.frame, previoustouchlocation)){
+    else if(CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && CGRectContainsPoint(_buttonright.frame, previoustouchlocation)){
       //NSLog(@"move forewards to movebackwards");
       self.player.goBackward=YES;
       self.player.goForeward=NO;
@@ -479,7 +456,7 @@
       [self.player runAction:[SKAction repeatActionForever:self.player.runBackwardsAnimation] withKey:@"runb"];
       [self.player removeActionForKey:@"runf"];
     }
-    else if(CGRectContainsPoint(buttonleft.frame, currtouchlocation) && CGRectContainsPoint(buttonup.frame, previoustouchlocation)){
+    else if(CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && CGRectContainsPoint(_buttonup.frame, previoustouchlocation)){
       //NSLog(@"move up to movebackwards");
       self.player.goBackward=YES;
       self.player.shouldJump=NO;
@@ -490,7 +467,7 @@
       [self.player runAction:[SKAction repeatActionForever:self.player.jumpBackwardsAnimation] withKey:@"jmpb"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
     }
-    else if(!CGRectContainsPoint(buttonup.frame, currtouchlocation) && !CGRectContainsPoint(buttonright.frame, currtouchlocation) && !CGRectContainsPoint(buttonleft.frame, currtouchlocation) && currtouchlocation.x<self.size.width/2){
+    else if(!CGRectContainsPoint(_buttonup.frame, currtouchlocation) && !CGRectContainsPoint(_buttonright.frame, currtouchlocation) && !CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && currtouchlocation.x<self.size.width/2){
       //NSLog(@"not in dpad");
       self.player.shouldJump=NO;
       self.player.goForeward=NO;
@@ -533,7 +510,7 @@
     [self.player removeActionForKey:@"jmpb"];
     
     
-    if(CGRectContainsPoint(buttonup.frame, fnctouchlocation)){
+    if(CGRectContainsPoint(_buttonup.frame, fnctouchlocation)){
       //NSLog(@"done touching up");
       self.player.shouldJump=NO;
       if(self.player.backwardtrack)
@@ -541,7 +518,7 @@
       else
       [self.player runAction:[SKAction repeatAction:self.player.standAnimation count:3]];
     }
-    else if(CGRectContainsPoint(buttonright.frame, fnctouchlocation)){
+    else if(CGRectContainsPoint(_buttonright.frame, fnctouchlocation)){
       //NSLog(@"done touching right");
       self.player.goForeward=NO;
       self.player.forwardtrack=YES;
@@ -549,14 +526,14 @@
       [self.player runAction:[SKAction repeatAction:self.player.standAnimation count:3]];
       
     }
-    else if(CGRectContainsPoint(buttonleft.frame, fnctouchlocation)){
+    else if(CGRectContainsPoint(_buttonleft.frame, fnctouchlocation)){
       //NSLog(@"done touching left");
       self.player.goBackward=NO;
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
       [self.player runAction:[SKAction repeatAction:self.player.standbackwardsAnimation count:3]];
     }
-    else if(CGRectContainsPoint(startbutton.frame, fnctouchlocation)){
+    else if(CGRectContainsPoint(_startbutton.frame, fnctouchlocation)){
       //NSLog(@"do nothing hit the pause");
     }
     else if(fnctouchlocation.x>self.size.width/2 && fnctouchlocation.y<self.size.height/2){
@@ -678,21 +655,21 @@
 -(void)pausegame{
   //NSLog(@"game paused");
   
-  pauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"pauselabel.png"];
-  pauselabel.position=CGPointMake(self.size.width/2, self.size.height/2+35);
-  [self addChild:pauselabel];
+  _pauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"pauselabel.png"];
+  _pauselabel.position=CGPointMake(self.size.width/2, self.size.height/2+35);
+  [self addChild:_pauselabel];
   
-  unpauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"unpauselabel.png"];
-  unpauselabel.position=CGPointMake(self.size.width/2, self.size.height/2+10);
-  [self addChild: unpauselabel];
+  _unpauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"unpauselabel.png"];
+  _unpauselabel.position=CGPointMake(self.size.width/2, self.size.height/2+10);
+  [self addChild: _unpauselabel];
   
   self.paused=YES;
   self.player.playervelocity=CGPointMake(0,18);
   
 }
 -(void)unpausegame{
-  [pauselabel removeFromParent];
-  [unpauselabel removeFromParent];
+  [_pauselabel removeFromParent];
+  [_unpauselabel removeFromParent];
   self.paused=NO;
 }
 
@@ -709,7 +686,7 @@
   CGPoint viewPoint=CGPointSubtract(centerOfTheView, actualPosition);
   
   self.map.position=viewPoint;
-  }
+}
 
 
 -(void) gameOver:(BOOL)didwin{
@@ -772,7 +749,7 @@
   self.healthbar.size=CGSizeMake((((float)self.player.health/100)*_healthbarsize), self.healthbar.size.height);
 }
 
-/*- (void)dealloc {
+/*-(void)dealloc {
   NSLog(@"LVL1 SCENE DEALLOCATED");
 }*/
 
