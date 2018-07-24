@@ -18,8 +18,7 @@
 }
 
 -(id)initWithImageNamed:(NSString *)name{
-    __weak NSString *weakname=name;//we'll try this and see if the leaks go away
-    
+    __weak NSString *weakname=name;
     if (self == [super initWithImageNamed:weakname]) {
         self.playervelocity = CGPointMake(0.0, 0.0);
         self.health=100;

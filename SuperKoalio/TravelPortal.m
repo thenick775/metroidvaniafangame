@@ -16,8 +16,7 @@
 
 
 -(instancetype)initWithStuff:(NSString *)name{
-    __weak NSString *weakname=name;//we'll try this to fix memory leak?
-    
+    __weak NSString *weakname=name;
     if(self==[super initWithImageNamed:weakname]){
         SKTextureAtlas *portalatlas=[SKTextureAtlas atlasNamed:@"travelmirror"];
         
