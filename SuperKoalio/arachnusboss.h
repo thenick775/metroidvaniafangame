@@ -9,4 +9,6 @@
 
 @interface arachnusboss : SKSpriteNode
 
+@property (nonatomic,assign) int health;
+
 @end
