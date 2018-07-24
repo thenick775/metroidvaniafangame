@@ -10,15 +10,15 @@
 @implementation arachnusboss{
     SKAction *moveforeward;
     SKAction *movebackward;
-    SKAction *fireleft;
-    SKAction *fireright;
-    SKAction *morphballattackleft;
+    SKAction *fireattackleft;
+    SKAction *fireattackright;
     SKAction *morphballattackright;
+    SKAction *morphballattackleft;
     SKAction *slashattackleft;
     SKAction *slashattackright;
     SKAction *turnleft;
     SKAction *turnright;
-    
+    SKAction *recievedamage;
 }
 
 -(instancetype)initWithImageNamed:(NSString *)name{
@@ -32,17 +32,26 @@
         
         
         
-        
-        //initialize attacks
-        
-        
-        
         //initialize projectiles
         
         
         
        
         //initialize animations
+        NSArray *morphtoballrighttex=@[[arachnustextures textureNamed:@"toball_1.png"],[arachnustextures textureNamed:@"toball_2.png"],[arachnustextures textureNamed:@"toball_3.png"],[arachnustextures textureNamed:@"toball_4.png"]];
+        SKAction *morphtoballright=[SKAction animateWithTextures:morphtoballtex timePerFrame:<#(NSTimeInterval)#>];
+        
+        NSArray *ballrighttex=@[[arachnustextures textureNamed:@"ball_1.png"],[arachnustextures textureNamed:@"ball_2.png"],[arachnustextures textureNamed:@"ball_3.png"],[arachnustextures textureNamed:@"ball_4.png"]];
+        SKAction *ballattackright=[SKAction animateWithTextures:ballrighttex timePerFrame:<#(NSTimeInterval)#>];
+        
+        
+        
+        NSArray *moveforewardtex=@[[arachnustextures textureNamed:@"walk_1.png"],[arachnustextures textureNamed:@"walk_2.png"],[arachnustextures textureNamed:@"walk_3.png"],[arachnustextures textureNamed:@"walk_4.png"],[arachnustextures textureNamed:@"walk_5.png"],[arachnustextures textureNamed:@"walk_6.png"],[arachnustextures textureNamed:@"walk_7.png"],[arachnustextures textureNamed:@"walk_8.png"],[arachnustextures textureNamed:@"walk_9.png"],[arachnustextures textureNamed:@"walk_10.png"],[arachnustextures textureNamed:@"walk_11.png"],[arachnustextures textureNamed:@"walk_12.png"]];
+        
+
+        
+        //initialize attacks
+        
         
         
     }
