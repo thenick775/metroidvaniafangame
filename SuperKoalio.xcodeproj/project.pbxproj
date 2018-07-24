@@ -14,6 +14,7 @@
 		594F558520CE16A9000E476E /* spacefloortile.png in Resources */ = {isa = PBXBuildFile; fileRef = 594F558420CE16A9000E476E /* spacefloortile.png */; };
 		594F558720CE1874000E476E /* asteroidsmirrorv4.png in Resources */ = {isa = PBXBuildFile; fileRef = 594F558620CE1874000E476E /* asteroidsmirrorv4.png */; };
 		594F559320CE1CA0000E476E /* level2.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 594F559220CE1CA0000E476E /* level2.tmx */; };
+		5952F8752106AAB600F3BC5B /* arachnusboss.m in Sources */ = {isa = PBXBuildFile; fileRef = 5952F8742106AAB600F3BC5B /* arachnusboss.m */; };
 		595C42D720FD3CCE00A47BB8 /* 52089.png in Resources */ = {isa = PBXBuildFile; fileRef = 595C42D620FD3CCD00A47BB8 /* 52089.png */; };
 		595C42DD20FD418100A47BB8 /* brokendoors.png in Resources */ = {isa = PBXBuildFile; fileRef = 595C42DC20FD418100A47BB8 /* brokendoors.png */; };
 		595C42E720FDA6AC00A47BB8 /* JSTileMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 595C42E320FDA6AC00A47BB8 /* JSTileMap.m */; };
@@ -66,6 +67,8 @@
 		594F558420CE16A9000E476E /* spacefloortile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spacefloortile.png; sourceTree = "<group>"; };
 		594F558620CE1874000E476E /* asteroidsmirrorv4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = asteroidsmirrorv4.png; sourceTree = "<group>"; };
 		594F559220CE1CA0000E476E /* level2.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = level2.tmx; sourceTree = "<group>"; };
+		5952F8732106AAB600F3BC5B /* arachnusboss.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = arachnusboss.h; sourceTree = "<group>"; };
+		5952F8742106AAB600F3BC5B /* arachnusboss.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = arachnusboss.m; sourceTree = "<group>"; };
 		595C42D620FD3CCD00A47BB8 /* 52089.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 52089.png; sourceTree = "<group>"; };
 		595C42DC20FD418100A47BB8 /* brokendoors.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brokendoors.png; sourceTree = "<group>"; };
 		595C42E320FDA6AC00A47BB8 /* JSTileMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSTileMap.m; sourceTree = "<group>"; };
@@ -205,6 +208,8 @@
 				596F2DA720BFAFAE00B32C47 /* sciserenemy.h */,
 				596F2DA820BFAFAE00B32C47 /* sciserenemy.m */,
 				592B389B20DB008400C62977 /* MenuScene.h */,
+				5952F8732106AAB600F3BC5B /* arachnusboss.h */,
+				5952F8742106AAB600F3BC5B /* arachnusboss.m */,
 				592B389C20DB008400C62977 /* MenuScene.m */,
 				F275B68A186E0B06009F6E6B /* GameLevelScene.h */,
 				F275B68B186E0B06009F6E6B /* GameLevelScene.m */,
@@ -406,6 +411,7 @@
 				F275B6E2186E25C1009F6E6B /* SKNode+SKTExtras.m in Sources */,
 				F275B689186E0B06009F6E6B /* ViewController.m in Sources */,
 				F275B683186E0B06009F6E6B /* AppDelegate.m in Sources */,
+				5952F8752106AAB600F3BC5B /* arachnusboss.m in Sources */,
 				F275B67F186E0B06009F6E6B /* main.m in Sources */,
 				595C42E820FDA6AC00A47BB8 /* LFCGzipUtility.m in Sources */,
 				F275B6E5186E25C1009F6E6B /* SKTTimingFunctions.m in Sources */,
