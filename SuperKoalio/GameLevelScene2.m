@@ -6,6 +6,7 @@
 
 #include "GameLevelScene2.h"
 #include "sciserenemy.h"
+#include "arachnusboss.h"
 
 @implementation GameLevelScene2
 
@@ -43,6 +44,10 @@
         [self.enemies addObject:enemy];
         [self.map addChild:enemy];
         
+        arachnusboss *boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
+        boss1.position=CGPointMake(100,150);
+        [boss1 runAction:boss1.testallactions];
+        [self.map addChild:boss1];
         
         //door stuff here
         //self.repeating=NO;

@@ -156,9 +156,9 @@
             SKTransition *menutolvl1tran=[SKTransition fadeWithDuration:1.5];
             scene.scaleMode = SKSceneScaleModeAspectFill;
             NSArray *shipgrp=@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.8]];
-            [samusgunship runAction:[SKAction group:shipgrp] completion:^{ [self.view presentScene:scene transition:menutolvl1tran];}];
             [shipflamesright2 runAction:flameflicker];
             [shipflamesleft2 runAction:flameflicker];
+            [samusgunship runAction:[SKAction group:shipgrp] completion:^{ [self.view presentScene:scene transition:menutolvl1tran];}];
         }
     }
 }
