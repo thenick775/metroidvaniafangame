@@ -6,7 +6,7 @@
 //
 //  Made by Nick VanCise
 //  jun 11 2018
-//  this is a game for fun, nothing serious
+//  this is a game for fun and experience, nothing serious
 //  ill give sprite credit when polished
 
 
@@ -23,7 +23,12 @@
   if (self = [super initWithSize:size]) {
     /* Setup scene here */
     self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
+    self.view.multipleTouchEnabled=YES;
     //self.view.shouldCullNonVisibleNodes=NO; //??? seems to help framerate for now
+    
+    SKCameraNode*mycam=[SKCameraNode new];
+    self.camera=mycam;
+    [self addChild:mycam];
     
     self.backgroundColor = /*[SKColor blackColor];*/[SKColor colorWithRed:0.7259 green:0 blue:0.8863 alpha:1.0];
     self.map = [JSTileMap mapNamed:@"level1.tmx"];
@@ -47,39 +52,39 @@
     self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
     self.healthlabel.fontSize=15;
     self.healthlabel.zPosition=14;
-    self.healthlabel.position=CGPointMake(self.size.width/10+3, self.size.height-20);
-    [self addChild:self.healthlabel];
+    self.healthlabel.position=CGPointMake((-4*(self.size.width/10))+3, self.size.height/2-20);
+    [self.camera addChild:self.healthlabel];
     
     //health bar stuff initialization
     self.healthbar=[SKSpriteNode spriteNodeWithColor:[UIColor redColor] size:CGSizeMake(200, 20)];
     self.healthbar.zPosition=12;
     self.healthbar.anchorPoint=CGPointMake(0.0, 0.0);
-    self.healthbar.position=CGPointMake(self.size.width/20-10, self.size.height-24);
-    [self addChild:self.healthbar];
+    self.healthbar.position=CGPointMake((-9*(self.size.width/20))-9.5/*self.size.width/20-10*/, self.size.height/2-24);
+    [self.camera addChild:self.healthbar];
     _healthbarsize=(double)self.healthbar.size.width;
     
     self.healthbarborder=[SKSpriteNode spriteNodeWithImageNamed:@"healthbarborder.png"];
     self.healthbarborder.anchorPoint=CGPointMake(0.0, 0.0);
     self.healthbarborder.zPosition=13;
-    self.healthbarborder.position=CGPointMake(self.size.width/20-10, self.size.height-24);
-    [self addChild:self.healthbarborder];
+    self.healthbarborder.position=CGPointMake((-9*(self.size.width/20))-9.5/*self.size.width/20-10*/, self.size.height/2-24);
+    [self.camera addChild:self.healthbarborder];
     
     //button stuff unless i find a better place to put it...
     _buttonup=[SKSpriteNode spriteNodeWithImageNamed:@"buttonupv4real.png"];
-    _buttonup.position=CGPointMake(self.size.width/6, self.size.height/2-36);
-    [self addChild:_buttonup];
+    _buttonup.position=CGPointMake((-2*(self.size.width/6)), -36);//CGPointMake(self.size.width/6, self.size.height/2-36);
+    [self.camera addChild:_buttonup];
     
     _buttonleft=[SKSpriteNode spriteNodeWithImageNamed:@"buttonleftv2real.png"];
-    _buttonleft.position=CGPointMake(self.size.width/6-28, self.size.height/2-75);
-    [self addChild:_buttonleft];
-    
+    _buttonleft.position=CGPointMake((-2*(self.size.width/6))-28, -75);//CGPointMake(self.size.width/6-28, self.size.height/2-75);
+    [self.camera addChild:_buttonleft];
+   
     _buttonright=[SKSpriteNode spriteNodeWithImageNamed:@"buttonrightv2real.png"];
-    _buttonright.position=CGPointMake(self.size.width/6+28, self.size.height/2-75);
-    [self addChild:_buttonright];
+    _buttonright.position=CGPointMake((-2*(self.size.width/6))+28, -75);//CGPointMake(self.size.width/6+28, self.size.height/2-75);
+    [self.camera addChild:_buttonright];
     
     _startbutton=[SKSpriteNode spriteNodeWithImageNamed:@"startbutton.png"];
-    _startbutton.position=CGPointMake(self.size.width/2+206,self.size.height-12);
-    [self addChild:_startbutton];
+    _startbutton.position=CGPointMake(self.size.width/4+90,self.size.height/2-12);
+    [self.camera addChild:_startbutton];
     
     //mutable arrays here
     self.bullets=[[NSMutableArray alloc]init];
@@ -123,8 +128,7 @@
   
   [self checkAndResolveCollisionsForPlayer:self.player];
   
-  //if(self.bullets.count!=0)
-    [self handleBulletEnemyCollisions];
+  [self handleBulletEnemyCollisions];
   
   [self setViewPointCenter:self.player.position];
   
@@ -339,7 +343,7 @@
   
   for(UITouch *touch in touches){
     
-    CGPoint touchlocation=[touch locationInNode:self];  //location of the touch
+    CGPoint touchlocation=[touch locationInNode:self.camera];  //location of the touch
     
     //start delegating parts of the screen to specific movements
     
@@ -365,7 +369,7 @@
       
       [self.player runAction:[SKAction repeatActionForever:self.player.runBackwardsAnimation] withKey:@"runb"];
     }
-    else if(CGRectContainsPoint(_buttonup.frame, touchlocation)){
+    else if(CGRectContainsPoint(_buttonup.frame,touchlocation)){
       //NSLog(@"touching up control");
       self.player.shouldJump=YES;
       if(self.player.forwardtrack)
@@ -396,8 +400,8 @@
   //NSLog(@"Touch is moving");
   for(UITouch *touch in touches){
   
-    CGPoint currtouchlocation=[touch locationInNode:self];
-    CGPoint previoustouchlocation=[touch previousLocationInNode:self];
+    CGPoint currtouchlocation=[touch locationInNode:self.camera];
+    CGPoint previoustouchlocation=[touch previousLocationInNode:self.camera];
     
     if(currtouchlocation.x>self.size.width/2 && (previoustouchlocation.x<=self.size.width/2)){
       //NSLog(@"moving to firing weapon");
@@ -501,7 +505,7 @@
     return;
   
   for(UITouch *touch in touches){
-  CGPoint fnctouchlocation=[touch locationInNode:self];
+  CGPoint fnctouchlocation=[touch locationInNode:self.camera];
   
     [self.player removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
     [self.player removeActionForKey:@"runf"];
@@ -536,7 +540,7 @@
     else if(CGRectContainsPoint(_startbutton.frame, fnctouchlocation)){
       //NSLog(@"do nothing hit the pause");
     }
-    else if(fnctouchlocation.x>self.size.width/2 && fnctouchlocation.y<self.size.height/2){
+    else if(fnctouchlocation.x>self.camera.frame.size.width/2 && fnctouchlocation.y<self.camera.frame.size.height/2){
       self.player.fireProjectile=NO;
       //call build projectile/set it going right ->
       if(self.player.forwardtrack)
@@ -545,7 +549,7 @@
         [self firePlayerProjectilewithdirection:FALSE];
       //NSLog(@"done firing weapon");
     }
-    else if(fnctouchlocation.x>self.size.width/2 && fnctouchlocation.y>self.size.height/2){
+    else if(fnctouchlocation.x>self.camera.frame.size.width/2 && fnctouchlocation.y>self.camera.frame.size.height/2){
       [self.player runAction:self.player.meleeactionright];
     }
     
@@ -562,8 +566,6 @@
 
 
 -(void)handleBulletEnemyCollisions{
-  
-  //NSLog(@"enemypoint:%@",NSStringFromCGRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height)));
   
   for(sciserenemy*enemycon in [self.enemies reverseObjectEnumerator]){    //check all of this for __weak problems, due to blocks
     if(fabs(self.player.position.x-enemycon.position.x)<70){  //minimize comparisons
@@ -648,24 +650,23 @@
   self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
   self.healthbar.size=CGSizeMake((((float)self.player.health/100)*_healthbarsize), self.healthbar.size.height);
   
-  [self.player runAction:self.player.plyrdmgwaitlock /*completion:^{NSLog(@"waitlockdone");}*/];
-  [self.player runAction:[SKAction repeatAction:self.player.damageaction count:15] /*completion:^{NSLog(@"dmganimationdone");}*/];
+  [self.player runAction:self.player.plyrdmgwaitlock];
+  [self.player runAction:[SKAction repeatAction:self.player.damageaction count:15]];
 }
 
 -(void)pausegame{
   //NSLog(@"game paused");
   
   _pauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"pauselabel.png"];
-  _pauselabel.position=CGPointMake(self.size.width/2, self.size.height/2+35);
-  [self addChild:_pauselabel];
+  _pauselabel.position=CGPointMake(0,35);
+  [self.camera addChild:_pauselabel];
   
   _unpauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"unpauselabel.png"];
-  _unpauselabel.position=CGPointMake(self.size.width/2, self.size.height/2+10);
-  [self addChild: _unpauselabel];
+  _unpauselabel.position=CGPointMake(0,10);
+  [self.camera addChild: _unpauselabel];
   
   self.paused=YES;
   self.player.playervelocity=CGPointMake(0,18);
-  
 }
 -(void)unpausegame{
   [_pauselabel removeFromParent];
@@ -680,12 +681,8 @@
   
   x = MIN(x, (self.map.mapSize.width * self.map.tileSize.width) - self.size.width / 2);
   y = MIN(y, (self.map.mapSize.height * self.map.tileSize.height) - self.size.height / 2);
-  
-  CGPoint actualPosition=CGPointMake(x, y);
-  CGPoint centerOfTheView=CGPointMake(self.size.width/2, self.size.height/2);
-  CGPoint viewPoint=CGPointSubtract(centerOfTheView, actualPosition);
-  
-  self.map.position=viewPoint;
+ 
+  self.camera.position=CGPointMake(x, y);
 }
 
 
@@ -698,7 +695,7 @@
   //label setup for end of game message
   SKLabelNode *endgamelabel=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
   endgamelabel.fontSize=40;
-  endgamelabel.position=CGPointMake(self.size.width/2.0, self.size.height/2+35);
+  endgamelabel.position=CGPointMake(0,35);
   
   //setup replay message/reset the screen stuff
   UIButton *replaybutton=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -718,13 +715,13 @@
   if(didwin){
     fintext=@"You Won!";
     endgamelabel.text=fintext;
-    [self.player runAction:self.player.travelthruportalAnimation completion:^{[self addChild:endgamelabel];[self.view addSubview:continuebutton];}];
+    [self.player runAction:self.player.travelthruportalAnimation completion:^{[self.camera addChild:endgamelabel];[self.view addSubview:continuebutton];}];
   }
   else{
     fintext=@"You Died :(";
   //label setup for end of game message
   endgamelabel.text=fintext;
-  [self addChild:endgamelabel];
+  [self.camera addChild:endgamelabel];
   [self.view addSubview:replaybutton];
   }
 }

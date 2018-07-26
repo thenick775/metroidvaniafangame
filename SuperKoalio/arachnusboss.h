@@ -11,4 +11,6 @@
 
 @property (nonatomic,assign) int health;
 
+@property (nonatomic,strong) SKAction*testallactions;
+
 @end
