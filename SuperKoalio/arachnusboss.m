@@ -65,7 +65,7 @@
         NSArray *recievedamagetex=@[[arachnustextures textureNamed:@"damage_scream_1.png"],[arachnustextures textureNamed:@"damage_scream_2.png"],[arachnustextures textureNamed:@"damage_scream_3.png"],[arachnustextures textureNamed:@"damage_scream_4.png"],[arachnustextures textureNamed:@"damage_scream_5.png"]];
         SKAction *recievedamagerightanim=[SKAction animateWithTextures:recievedamagetex timePerFrame:0.15 resize:YES restore:YES];
         
-        self.testallactions=[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:morphtoballrightanim,ballattackrightanim,moveforewardanim,fireattackrightanim,slashrightanim,turnrightanim,recievedamagerightanim, nil]]];
+        self.testallactions=[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:morphtoballrightanim,ballattackrightanim,moveforewardanim,moveforewardanim,moveforewardanim,fireattackrightanim,slashrightanim,turnrightanim,recievedamagerightanim, nil]]];
         
         //initialize attacks
         
