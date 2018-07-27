@@ -14,7 +14,6 @@
     if (self = [super initWithSize:size]) {
         
         //self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
-        //self.view.shouldCullNonVisibleNodes=NO; //??? seems to help framerate for now
         [self.map removeFromParent]; //gets rid of super's implementation of my map
         self.backgroundColor = [SKColor blackColor];
         self.map = [JSTileMap mapNamed:@"level2.tmx"];
@@ -46,7 +45,8 @@
         
         arachnusboss *boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
         boss1.position=CGPointMake(100,150);
-        [boss1 runAction:boss1.testallactions];
+        //[boss1 runAction:boss1.testallactions];
+        [boss1 runAction:[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:boss1.testallactions,[SKAction waitForDuration:5.0],[SKAction scaleXTo:-1 duration:0.08],boss1.testallactions,[SKAction waitForDuration:5.0],[SKAction scaleXTo:1 duration:0.08], nil]]]];
         [self.map addChild:boss1];
         
         //door stuff here
