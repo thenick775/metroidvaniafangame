@@ -65,7 +65,7 @@
     
     self.healthbarborder=[SKSpriteNode spriteNodeWithImageNamed:@"healthbarborder.png"];
     self.healthbarborder.anchorPoint=CGPointMake(0.0, 0.0);
-    self.healthbarborder.zPosition=13;
+    self.healthbarborder.zPosition=14;
     self.healthbarborder.position=CGPointMake((-9*(self.size.width/20))-9.5/*self.size.width/20-10*/, self.size.height/2-24);
     [self.camera addChild:self.healthbarborder];
     
@@ -677,7 +677,7 @@
 -(void)setViewPointCenter:(CGPoint) position{
   
   NSInteger x=MAX(position.x,self.size.width/2);
-  NSInteger y=MAX(position.y, self.size.height/2);
+  NSInteger y=MAX(position.y, self.size.height/2+1);
   
   x = MIN(x, (self.map.mapSize.width * self.map.tileSize.width) - self.size.width / 2);
   y = MIN(y, (self.map.mapSize.height * self.map.tileSize.height) - self.size.height / 2);

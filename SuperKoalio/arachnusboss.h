@@ -10,6 +10,7 @@
 @interface arachnusboss : SKSpriteNode
 
 @property (nonatomic,assign) int health;
+@property (nonatomic,strong) SKSpriteNode *slashprojectile;
 
 @property (nonatomic,strong) SKAction*testallactions;
 
