@@ -1,6 +1,6 @@
 //
 //  sciserenemy.m
-//  SuperKoalio
+//  Metroidvania
 //
 //  Created by nick vancise on 5/30/18.
 //  Copyright © 2018 Razeware. All rights reserved.

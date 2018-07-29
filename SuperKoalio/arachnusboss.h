@@ -1,6 +1,6 @@
 //
 //  arachnusboss.h
-//  SuperKoalio
+//  Metroidvania
 //
 //  Created by nick vancise on 7/23/18.
 
