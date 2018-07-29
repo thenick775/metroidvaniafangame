@@ -32,6 +32,13 @@
         self.player.forwardtrack=YES;
         self.player.backwardtrack=NO;
         
+        //camera initialization
+        SKRange *xrange=[SKRange rangeWithLowerLimit:self.size.width/2 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-self.size.width/2];
+        SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
+        SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
+        
+        self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint, nil];
+        
         //mutable arrays here
         self.bullets=nil;
         self.enemies=nil;

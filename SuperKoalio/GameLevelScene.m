@@ -27,9 +27,9 @@
     self.view.multipleTouchEnabled=YES;
     //self.view.shouldCullNonVisibleNodes=NO; //??? seems to help framerate for now
     
-    SKCameraNode*mycam=[SKCameraNode new];
-    self.camera=mycam;
-    [self addChild:mycam];
+    //SKCameraNode*mycam=[SKCameraNode new];
+    //self.camera=mycam;
+    //[self addChild:mycam];
     
     self.backgroundColor = /*[SKColor blackColor];*/[SKColor colorWithRed:0.7259 green:0 blue:0.8863 alpha:1.0];
     self.map = [JSTileMap mapNamed:@"level1.tmx"];
@@ -47,6 +47,16 @@
     
     self.player.forwardtrack=YES;
     self.player.backwardtrack=NO;
+    
+    //camera initialization
+    SKCameraNode*mycam=[SKCameraNode new];
+    self.camera=mycam;
+    [self addChild:mycam];
+    SKRange *xrange=[SKRange rangeWithLowerLimit:self.size.width/2 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-self.size.width/2];
+    SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
+    SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
+    
+    self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint, nil];
     
     //health label initialization
     self.healthlabel=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
@@ -130,9 +140,6 @@
   [self checkAndResolveCollisionsForPlayer:self.player];
   
   [self handleBulletEnemyCollisions];
-  
-  [self setViewPointCenter:self.player.position];
-  
 }
 
 
@@ -673,17 +680,6 @@
   [_pauselabel removeFromParent];
   [_unpauselabel removeFromParent];
   self.paused=NO;
-}
-
--(void)setViewPointCenter:(CGPoint) position{
-  
-  NSInteger x=MAX(position.x,self.size.width/2);
-  NSInteger y=MAX(position.y, self.size.height/2+1);
-  
-  x = MIN(x, (self.map.mapSize.width * self.map.tileSize.width) - self.size.width / 2);
-  y = MIN(y, (self.map.mapSize.height * self.map.tileSize.height) - self.size.height / 2);
- 
-  self.camera.position=CGPointMake(x, y);
 }
 
 
