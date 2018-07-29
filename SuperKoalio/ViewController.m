@@ -1,6 +1,6 @@
 //
 //  ViewController.m
-//  SuperKoalio
+//  Metroidvania
 //
 //  Created by Jake Gundersen on 12/27/13.
 //  Modified by Nick VanCise

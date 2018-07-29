@@ -1,6 +1,6 @@
 //
 //  arachnusboss.m
-//  SuperKoalio
+//  Metroidvania
 //
 //  Created by nick vancise on 7/23/18.
 
@@ -36,9 +36,14 @@
         
         //initialize projectiles
         self.slashprojectile=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"arachnus_slash_1.png"]];
+        self.slashprojectile.position=CGPointMake(27,0);
+        SKSpriteNode *slashprojectiletrail=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"arachnus_slashsingle.png"]];
+        slashprojectiletrail.position=CGPointMake(-15,0);
+        slashprojectiletrail.alpha=0.8;
+        [self.slashprojectile addChild:slashprojectiletrail];
         NSArray*projtextures=@[[arachnustextures textureNamed:@"arachnus_slash_1.png"],[arachnustextures textureNamed:@"arachnus_slash_2.png"],[arachnustextures textureNamed:@"arachnus_slash_3.png"],[arachnustextures textureNamed:@"arachnus_slash_4.png"]];
         slashprojmoveanim=[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:[SKAction animateWithTextures:projtextures timePerFrame:0.05 resize:YES restore:YES] count:10],[SKAction moveBy:CGVectorMake(300,0) duration:2.0], nil]];
-        
+        [self addChild:self.slashprojectile];
        
         //initialize animations
         NSArray *morphtoballrighttex=@[[arachnustextures textureNamed:@"toball_1.png"],[arachnustextures textureNamed:@"toball_2.png"],[arachnustextures textureNamed:@"toball_3.png"],[arachnustextures textureNamed:@"toball_4.png"]];
