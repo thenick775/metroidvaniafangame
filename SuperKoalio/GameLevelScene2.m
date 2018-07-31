@@ -39,6 +39,12 @@
         
         self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint, nil];
         
+        //star parallax initialization here
+        SKEmitterNode *starbackground=[SKEmitterNode nodeWithFileNamed:@"starsbackground.sks"];
+        starbackground.position=CGPointMake(/*(self.map.mapSize.width*self.map.tileSize.width)/2*/2400,(self.map.mapSize.height*self.map.tileSize.height));
+        [starbackground advanceSimulationTime:180.0];
+        [self.map addChild: starbackground];
+        
         //mutable arrays here
         self.bullets=nil;
         self.enemies=nil;
@@ -53,7 +59,7 @@
         arachnusboss *boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
         boss1.position=CGPointMake(100,150);
         //[boss1 runAction:boss1.testallactions];
-        [boss1 runAction:[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:boss1.testallactions,[SKAction waitForDuration:5.0],[SKAction scaleXTo:-1 duration:0.08],boss1.testallactions,[SKAction waitForDuration:5.0],[SKAction scaleXTo:1 duration:0.08], nil]]]];
+        [boss1 runAction:[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:boss1.testallactions,[SKAction waitForDuration:5.0], nil]]]];
         [self.map addChild:boss1];
         
         //door stuff here
@@ -64,6 +70,12 @@
     }
     return self;
 }
+
+-(void)replaybuttonpush:(id)sender{
+    [[self.view viewWithTag:666] removeFromSuperview];
+    [self.view presentScene:[[GameLevelScene2 alloc] initWithSize:self.size]];
+}
+
 
 /*- (void)dealloc {
     NSLog(@"LVL2 SCENE DEALLOCATED");

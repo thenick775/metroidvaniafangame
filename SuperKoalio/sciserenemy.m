@@ -23,10 +23,11 @@
     self=[super initWithTexture:stand];
     
     if(self!=NULL){
+        self.health=10;
         //setup enemy pos/animations/etc here
         NSArray *moveanim=@[[sciseranimation textureNamed:@"scisser1.png"],[sciseranimation textureNamed:@"scisser2.png"],[sciseranimation textureNamed:@"scisser3.png"],[sciseranimation textureNamed:@"scisser4.png"]];
         NSArray *fireanim=@[[sciseranimation textureNamed:@"scisserfire1.png"],[sciseranimation textureNamed:@"scisserfire2.png"],[sciseranimation textureNamed:@"scisserfire3.png"],[sciseranimation textureNamed:@"scisserfire4.png"],[sciseranimation textureNamed:@"scisserfire5.png"],[sciseranimation textureNamed:@"scisserfire6.png"],[sciseranimation textureNamed:@"scisserfire7.png"],[sciseranimation textureNamed:@"scisserfire8.png"],[sciseranimation textureNamed:@"scisserfire9.png"]];
-        self.health=10;
+        
         CGVector forwardvec=CGVectorMake(150,0);
         CGVector backwardvec=CGVectorMake(-150,0);
         self.enemybullet1=[SKSpriteNode spriteNodeWithImageNamed:@"scisserprojectile2.png"];

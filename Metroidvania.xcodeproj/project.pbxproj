@@ -16,6 +16,7 @@
 		594F559320CE1CA0000E476E /* level2.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 594F559220CE1CA0000E476E /* level2.tmx */; };
 		5952F8752106AAB600F3BC5B /* arachnusboss.m in Sources */ = {isa = PBXBuildFile; fileRef = 5952F8742106AAB600F3BC5B /* arachnusboss.m */; };
 		5952F877210AFDEF00F3BC5B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5952F876210AFDEF00F3BC5B /* Main.storyboard */; };
+		5952F87A210E76B000F3BC5B /* starsbackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5952F878210E76B000F3BC5B /* starsbackground.sks */; };
 		595C42D720FD3CCE00A47BB8 /* 52089.png in Resources */ = {isa = PBXBuildFile; fileRef = 595C42D620FD3CCD00A47BB8 /* 52089.png */; };
 		595C42DD20FD418100A47BB8 /* brokendoors.png in Resources */ = {isa = PBXBuildFile; fileRef = 595C42DC20FD418100A47BB8 /* brokendoors.png */; };
 		595C42E720FDA6AC00A47BB8 /* JSTileMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 595C42E320FDA6AC00A47BB8 /* JSTileMap.m */; };
@@ -70,6 +71,7 @@
 		5952F8732106AAB600F3BC5B /* arachnusboss.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = arachnusboss.h; sourceTree = "<group>"; };
 		5952F8742106AAB600F3BC5B /* arachnusboss.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = arachnusboss.m; sourceTree = "<group>"; };
 		5952F876210AFDEF00F3BC5B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		5952F878210E76B000F3BC5B /* starsbackground.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = starsbackground.sks; sourceTree = "<group>"; };
 		595C42D620FD3CCD00A47BB8 /* 52089.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 52089.png; sourceTree = "<group>"; };
 		595C42DC20FD418100A47BB8 /* brokendoors.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brokendoors.png; sourceTree = "<group>"; };
 		595C42E320FDA6AC00A47BB8 /* JSTileMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSTileMap.m; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 				F275B687186E0B06009F6E6B /* ViewController.h */,
 				F275B688186E0B06009F6E6B /* ViewController.m */,
 				5952F876210AFDEF00F3BC5B /* Main.storyboard */,
+				5952F878210E76B000F3BC5B /* starsbackground.sks */,
 				F275B6C2186E21EB009F6E6B /* Resources */,
 				F275B68F186E0B06009F6E6B /* Images.xcassets */,
 				59028E6020B74062007F4C4E /* replay@2x.png */,
@@ -363,6 +366,7 @@
 				F275B6F1186E2749009F6E6B /* tileSet@2x.png in Resources */,
 				595C42EA20FDC66C00A47BB8 /* chozodiatiles.png in Resources */,
 				594F558520CE16A9000E476E /* spacefloortile.png in Resources */,
+				5952F87A210E76B000F3BC5B /* starsbackground.sks in Resources */,
 				59028E6120B74062007F4C4E /* replay@2x.png in Resources */,
 				F275B67D186E0B06009F6E6B /* InfoPlist.strings in Resources */,
 				F275B690186E0B06009F6E6B /* Images.xcassets in Resources */,

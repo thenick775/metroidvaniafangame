@@ -7,7 +7,7 @@
 
 #import "MenuScene.h"
 #import "GameLevelScene.h"
-
+#import "GameLevelScene2.h"
 
 @implementation MenuScene{
     SKSpriteNode *_playlabel;
@@ -152,7 +152,7 @@
     for(UITouch*touch in touches){
         if((CGRectContainsPoint(_playlabel.frame,[touch locationInNode:self])) || (CGRectContainsPoint(_playbutton.frame,[touch locationInNode:self]))){
             
-            SKScene * scene = [GameLevelScene sceneWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];  //was skView.bounds.size
+            SKScene * scene = [[GameLevelScene2 alloc]initWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];//[GameLevelScene sceneWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];  //was skView.bounds.size
             SKTransition *menutolvl1tran=[SKTransition fadeWithDuration:1.5];
             scene.scaleMode = SKSceneScaleModeAspectFill;
             NSArray *shipgrp=@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.8]];

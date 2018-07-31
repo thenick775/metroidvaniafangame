@@ -27,10 +27,6 @@
     self.view.multipleTouchEnabled=YES;
     //self.view.shouldCullNonVisibleNodes=NO; //??? seems to help framerate for now
     
-    //SKCameraNode*mycam=[SKCameraNode new];
-    //self.camera=mycam;
-    //[self addChild:mycam];
-    
     self.backgroundColor = /*[SKColor blackColor];*/[SKColor colorWithRed:0.7259 green:0 blue:0.8863 alpha:1.0];
     self.map = [JSTileMap mapNamed:@"level1.tmx"];
     [self addChild:self.map];
@@ -55,7 +51,6 @@
     SKRange *xrange=[SKRange rangeWithLowerLimit:self.size.width/2 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-self.size.width/2];
     SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
     SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
-    
     self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint, nil];
     
     //health label initialization
@@ -681,7 +676,6 @@
   [_unpauselabel removeFromParent];
   self.paused=NO;
 }
-
 
 -(void) gameOver:(BOOL)didwin{
   
