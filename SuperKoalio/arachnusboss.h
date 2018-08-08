@@ -6,6 +6,7 @@
 
 
 #import <SpriteKit/SpriteKit.h>
+#import "JSTileMap.h"
 
 @interface arachnusboss : SKSpriteNode
 
@@ -14,5 +15,6 @@
 @property (nonatomic,strong) SKSpriteNode *slashprojectile;
 
 @property (nonatomic,strong) SKAction*testallactions;
+-(void)addfiretomap:(JSTileMap*)map;
 
 @end

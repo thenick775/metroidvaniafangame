@@ -41,7 +41,7 @@
         
         //star parallax initialization here
         SKEmitterNode *starbackground=[SKEmitterNode nodeWithFileNamed:@"starsbackground.sks"];
-        starbackground.position=CGPointMake(/*(self.map.mapSize.width*self.map.tileSize.width)/2*/2400,(self.map.mapSize.height*self.map.tileSize.height));
+        starbackground.position=CGPointMake(2400,(self.map.mapSize.height*self.map.tileSize.height));
         [starbackground advanceSimulationTime:180.0];
         [self.map addChild: starbackground];
         
@@ -57,15 +57,10 @@
         [self.map addChild:enemy];
         
         arachnusboss *boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
-        boss1.position=CGPointMake(100,150);
-        //[boss1 runAction:boss1.testallactions];
-        [boss1 runAction:[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:boss1.testallactions,[SKAction waitForDuration:5.0], nil]]]];
+        boss1.position=CGPointMake(300,56);
+        [boss1 runAction:[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:boss1.testallactions,[SKAction waitForDuration:1.0], nil]]]];
         [self.map addChild:boss1];
-        
-        //door stuff here
-        //self.repeating=NO;
-        
-        //self.userInteractionEnabled=YES;
+        //[boss1 addfiretomap:self.map];
         
     }
     return self;
@@ -73,12 +68,12 @@
 
 -(void)replaybuttonpush:(id)sender{
     [[self.view viewWithTag:666] removeFromSuperview];
-    [self.view presentScene:[[GameLevelScene2 alloc] initWithSize:self.size]];
+    [self.view presentScene:[[GameLevelScene alloc] initWithSize:self.size]];
 }
 
 
-/*- (void)dealloc {
+- (void)dealloc {
     NSLog(@"LVL2 SCENE DEALLOCATED");
-}*/
+}
 
 @end

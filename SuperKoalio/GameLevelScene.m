@@ -57,13 +57,13 @@
     self.healthlabel=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
     self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
     self.healthlabel.fontSize=15;
-    self.healthlabel.zPosition=14;
+    self.healthlabel.zPosition=15;
     self.healthlabel.position=CGPointMake((-4*(self.size.width/10))+3, self.size.height/2-20);
     [self.camera addChild:self.healthlabel];
     
     //health bar stuff initialization
     self.healthbar=[SKSpriteNode spriteNodeWithColor:[UIColor redColor] size:CGSizeMake(200, 20)];
-    self.healthbar.zPosition=12;
+    self.healthbar.zPosition=14;
     self.healthbar.anchorPoint=CGPointMake(0.0, 0.0);
     self.healthbar.position=CGPointMake((-9*(self.size.width/20))-9.5/*self.size.width/20-10*/, self.size.height/2-24);
     [self.camera addChild:self.healthbar];
@@ -71,7 +71,7 @@
     
     self.healthbarborder=[SKSpriteNode spriteNodeWithImageNamed:@"healthbarborder.png"];
     self.healthbarborder.anchorPoint=CGPointMake(0.0, 0.0);
-    self.healthbarborder.zPosition=14;
+    self.healthbarborder.zPosition=15;
     self.healthbarborder.position=CGPointMake((-9*(self.size.width/20))-9.5/*self.size.width/20-10*/, self.size.height/2-24);
     [self.camera addChild:self.healthbarborder];
     
