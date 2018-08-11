@@ -90,7 +90,7 @@
                 [firecpy runAction:[SKAction repeatActionForever:firespanim]];
                 pointinlevel=CGPointAdd(pointinlevel,CGPointMake(13,0));
                 [weakself.parent addChild:firecpy];
-                [firecpy runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:2.0],[SKAction runBlock:^{[firecpy removeFromParent];[firecpy removeAllActions];}], nil]]];
+                [firecpy runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:4.0],[SKAction runBlock:^{[firecpy removeFromParent];[firecpy removeAllActions];}], nil]]];
             }];
             [weakself runAction:[SKAction repeatAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.07],blkac, nil]] count:10]];
         }];
@@ -102,8 +102,25 @@
         SKAction *fireblk=[SKAction runBlock:^{[weakself addChild:weakfiresprite];[weakfiresprite runAction:[SKAction repeatActionForever:firespanim]];[weakfiresprite runAction:[SKAction followPath:firepath.CGPath duration:0.4] completion:^{[weakself runAction:addfiretoparentblk];[weakfiresprite removeFromParent];weakfiresprite.position=CGPointMake(16,2);[weakfiresprite removeAllActions];}];}];
         SKAction *firespriteac=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.52],fireblk, nil]];
        
-        fireattackright=[SKAction group:[NSArray arrayWithObjects:fireattackrightanim,firespriteac, nil]];
-        //testing^-
+        fireattackright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction group:[NSArray arrayWithObjects:[SKAction scaleXTo:1 duration:0],fireattackrightanim,firespriteac, nil]],[SKAction waitForDuration:0.15],nil]];
+        
+        addfiretoparentblk=[SKAction runBlock:^{
+            __block CGPoint pointinlevel=[weakself convertPoint:CGPointMake(49,-24) toNode:weakself.parent];
+            SKAction *blkac=[SKAction runBlock:^{
+                SKSpriteNode*firecpy=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"Fire1.png"]];
+                firecpy.position=pointinlevel;
+                [firecpy runAction:[SKAction repeatActionForever:firespanim]];
+                pointinlevel=CGPointSubtract(pointinlevel,CGPointMake(13,0));
+                [weakself.parent addChild:firecpy];
+                [firecpy runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:4.0],[SKAction runBlock:^{[firecpy removeFromParent];[firecpy removeAllActions];}], nil]]];
+            }];
+            [weakself runAction:[SKAction repeatAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.07],blkac, nil]] count:10]];
+        }];
+        fireblk=[SKAction runBlock:^{[weakself addChild:weakfiresprite];[weakfiresprite runAction:[SKAction repeatActionForever:firespanim]];[weakfiresprite runAction:[SKAction followPath:firepath.CGPath duration:0.4] completion:^{[weakself runAction:addfiretoparentblk];[weakfiresprite removeFromParent];weakfiresprite.position=CGPointMake(16,2);[weakfiresprite removeAllActions];}];}];
+        firespriteac=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.52],fireblk, nil]];
+        
+        fireattackleft=[SKAction sequence:[NSArray arrayWithObjects:[SKAction group:[NSArray arrayWithObjects:[SKAction scaleXTo:-1 duration:0],fireattackrightanim,firespriteac, nil]],[SKAction waitForDuration:0.15],nil]];
+        //^-cannot have two fireleft/fireright near each other unless they are same, xscale conflict messes with fire position relative to parent
         
         //slash animations
         NSArray *slashrightex=@[[arachnustextures textureNamed:@"slash_1.png"],[arachnustextures textureNamed:@"slash_2.png"],[arachnustextures textureNamed:@"slash_3.png"],[arachnustextures textureNamed:@"slash_4.png"],[arachnustextures textureNamed:@"slash_5.png"],[arachnustextures textureNamed:@"slash_6.png"],[arachnustextures textureNamed:@"slash_7.png"],[arachnustextures textureNamed:@"slash_8.png"],[arachnustextures textureNamed:@"slash_9.png"],[arachnustextures textureNamed:@"slash_10.png"],[arachnustextures textureNamed:@"slash_11.png"],[arachnustextures textureNamed:@"slash_12.png"],[arachnustextures textureNamed:@"slash_13.png"],[arachnustextures textureNamed:@"slash_14.png"],[arachnustextures textureNamed:@"slash_15.png"]];
@@ -117,7 +134,7 @@
         NSArray *recievedamagetex=@[[arachnustextures textureNamed:@"damage_scream_1.png"],[arachnustextures textureNamed:@"damage_scream_2.png"],[arachnustextures textureNamed:@"damage_scream_3.png"],[arachnustextures textureNamed:@"damage_scream_4.png"],[arachnustextures textureNamed:@"damage_scream_5.png"]];
         SKAction *recievedamagerightanim=[SKAction animateWithTextures:recievedamagetex timePerFrame:0.15 resize:YES restore:YES];
         
-        self.testallactions=[SKAction sequence:[NSArray arrayWithObjects:morphballattackright,morphballattackleft,movebackward,moveforeward,fireattackright,/*anim,slashrightanim,turnrightanim,recievedamagerightanim,*/ nil]];
+        self.testallactions=[SKAction sequence:[NSArray arrayWithObjects:morphballattackright,morphballattackleft,movebackward,moveforeward,fireattackright,/*[SKAction waitForDuration:0.2],*/fireattackleft,/*anim,slashrightanim,turnrightanim,recievedamagerightanim,*/ nil]];
         
         //initialize attacks
         

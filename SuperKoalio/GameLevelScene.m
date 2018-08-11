@@ -570,7 +570,7 @@
 
 -(void)handleBulletEnemyCollisions{
   
-  for(sciserenemy*enemycon in [self.enemies reverseObjectEnumerator]){    //check all of this for __weak problems, due to blocks
+  for(sciserenemy*enemycon in [self.enemies reverseObjectEnumerator]){
     if(fabs(self.player.position.x-enemycon.position.x)<70){  //minimize comparisons
       //NSLog(@"in here");
     if(CGRectContainsPoint(self.player.collisionBoundingBox, CGPointAdd(enemycon.enemybullet1.position, enemycon.position))){
