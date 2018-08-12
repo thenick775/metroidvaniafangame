@@ -6,12 +6,15 @@
 
 
 #import <SpriteKit/SpriteKit.h>
+#import "JSTileMap.h"
 
 @interface arachnusboss : SKSpriteNode
 
 @property (nonatomic,assign) int health;
+@property (nonatomic,assign) BOOL active;
 @property (nonatomic,strong) SKSpriteNode *slashprojectile;
 
 @property (nonatomic,strong) SKAction*testallactions;
+
 
 @end

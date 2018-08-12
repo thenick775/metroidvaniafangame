@@ -27,10 +27,6 @@
     self.view.multipleTouchEnabled=YES;
     //self.view.shouldCullNonVisibleNodes=NO; //??? seems to help framerate for now
     
-    //SKCameraNode*mycam=[SKCameraNode new];
-    //self.camera=mycam;
-    //[self addChild:mycam];
-    
     self.backgroundColor = /*[SKColor blackColor];*/[SKColor colorWithRed:0.7259 green:0 blue:0.8863 alpha:1.0];
     self.map = [JSTileMap mapNamed:@"level1.tmx"];
     [self addChild:self.map];
@@ -55,20 +51,19 @@
     SKRange *xrange=[SKRange rangeWithLowerLimit:self.size.width/2 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-self.size.width/2];
     SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
     SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
-    
     self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint, nil];
     
     //health label initialization
     self.healthlabel=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
     self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
     self.healthlabel.fontSize=15;
-    self.healthlabel.zPosition=14;
+    self.healthlabel.zPosition=15;
     self.healthlabel.position=CGPointMake((-4*(self.size.width/10))+3, self.size.height/2-20);
     [self.camera addChild:self.healthlabel];
     
     //health bar stuff initialization
     self.healthbar=[SKSpriteNode spriteNodeWithColor:[UIColor redColor] size:CGSizeMake(200, 20)];
-    self.healthbar.zPosition=12;
+    self.healthbar.zPosition=14;
     self.healthbar.anchorPoint=CGPointMake(0.0, 0.0);
     self.healthbar.position=CGPointMake((-9*(self.size.width/20))-9.5/*self.size.width/20-10*/, self.size.height/2-24);
     [self.camera addChild:self.healthbar];
@@ -76,7 +71,7 @@
     
     self.healthbarborder=[SKSpriteNode spriteNodeWithImageNamed:@"healthbarborder.png"];
     self.healthbarborder.anchorPoint=CGPointMake(0.0, 0.0);
-    self.healthbarborder.zPosition=14;
+    self.healthbarborder.zPosition=15;
     self.healthbarborder.position=CGPointMake((-9*(self.size.width/20))-9.5/*self.size.width/20-10*/, self.size.height/2-24);
     [self.camera addChild:self.healthbarborder];
     
@@ -575,7 +570,7 @@
 
 -(void)handleBulletEnemyCollisions{
   
-  for(sciserenemy*enemycon in [self.enemies reverseObjectEnumerator]){    //check all of this for __weak problems, due to blocks
+  for(sciserenemy*enemycon in [self.enemies reverseObjectEnumerator]){
     if(fabs(self.player.position.x-enemycon.position.x)<70){  //minimize comparisons
       //NSLog(@"in here");
     if(CGRectContainsPoint(self.player.collisionBoundingBox, CGPointAdd(enemycon.enemybullet1.position, enemycon.position))){
@@ -681,7 +676,6 @@
   [_unpauselabel removeFromParent];
   self.paused=NO;
 }
-
 
 -(void) gameOver:(BOOL)didwin{
   
