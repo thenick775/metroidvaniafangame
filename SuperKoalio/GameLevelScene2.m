@@ -60,7 +60,6 @@
         boss1.position=CGPointMake(3888,56);
         [boss1 runAction:[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:boss1.testallactions,[SKAction waitForDuration:1.0], nil]]]];
         [self.map addChild:boss1];
-        //[boss1 addfiretomap:self.map];
         
     }
     return self;

@@ -34,10 +34,7 @@
         
         SKTextureAtlas *arachnustextures=[SKTextureAtlas atlasNamed:@"Arachnus"];
         __weak arachnusboss*weakself=self;
-        //initialize movements
-        
-        
-        
+      
         //initialize projectiles
         self.slashprojectile=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"arachnus_slash_1.png"]];
         self.slashprojectile.position=CGPointMake(27,0);
@@ -62,8 +59,8 @@
         dustball.alpha=0.85;
         SKAction *dustaction=[SKAction runBlock:^{[weakself addChild:dustball];[dustball runAction:dustac completion:^{[dustball removeFromParent];}];}];
       
-        morphballattackright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:1 duration:0],morphtoballrightanim,[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackrightanim count:15],dustaction,[SKAction moveByX:300 y:0 duration:2.4],[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:2.4],[morphtoballrightanim reversedAction],nil]], nil]], nil]];
-        morphballattackleft=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:-1 duration:0],morphtoballrightanim,[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackrightanim count:15],dustaction,[SKAction moveByX:-300 y:0 duration:2.4],[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:2.4],[morphtoballrightanim reversedAction],nil]], nil]], nil]];
+        morphballattackright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:1 duration:0],morphtoballrightanim,[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackrightanim count:15],dustaction,[SKAction moveByX:300 y:0 duration:2.4], nil]],[morphtoballrightanim reversedAction], nil]];
+        morphballattackleft=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:-1 duration:0],morphtoballrightanim,[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackrightanim count:15],dustaction,[SKAction moveByX:-300 y:0 duration:2.4], nil]],[morphtoballrightanim reversedAction], nil]];
         
         //move f/b animations
         NSArray *moveforewardtex=@[[arachnustextures textureNamed:@"walk_1.png"],[arachnustextures textureNamed:@"walk_2.png"],[arachnustextures textureNamed:@"walk_3.png"],[arachnustextures textureNamed:@"walk_4.png"],[arachnustextures textureNamed:@"walk_5.png"],[arachnustextures textureNamed:@"walk_6.png"],[arachnustextures textureNamed:@"walk_7.png"],[arachnustextures textureNamed:@"walk_8.png"],[arachnustextures textureNamed:@"walk_9.png"],[arachnustextures textureNamed:@"walk_10.png"],[arachnustextures textureNamed:@"walk_11.png"],[arachnustextures textureNamed:@"walk_12.png"]];
@@ -83,7 +80,7 @@
         
         SKAction *addfiretoparentblk=[SKAction runBlock:^{
             __block CGPoint pointinlevel=[weakself convertPoint:CGPointMake(49,-24) toNode:weakself.parent];
-
+            
             SKAction *blkac=[SKAction runBlock:^{
                 SKSpriteNode*firecpy=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"Fire1.png"]];
                 firecpy.position=pointinlevel;
@@ -104,6 +101,7 @@
        
         fireattackright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction group:[NSArray arrayWithObjects:[SKAction scaleXTo:1 duration:0],fireattackrightanim,firespriteac, nil]],[SKAction waitForDuration:0.15],nil]];
         
+        //below is redifinition of addfiretoparentblk,fireblk.firespriteac so as to flip for left fireattack
         addfiretoparentblk=[SKAction runBlock:^{
             __block CGPoint pointinlevel=[weakself convertPoint:CGPointMake(49,-24) toNode:weakself.parent];
             SKAction *blkac=[SKAction runBlock:^{
@@ -144,16 +142,6 @@
     
     return self;
 }
-
--(void)addfiretomap:(JSTileMap*)map{
-    CGPoint pointinlevel=[self convertPoint:CGPointMake(49,-24) toNode:map]; //point in scene to begin adding firesprites to
-    NSLog(@"firepointarachnus:%@,firepointscene:%@",NSStringFromCGPoint(CGPointMake(36,-26)),NSStringFromCGPoint(pointinlevel));
-    SKSpriteNode*firecpy=firesprite.copy;
-    firecpy.position=pointinlevel;
-    [map addChild:firecpy];//or self.parent i might make this into an action in init
-    
-}
-
 
 - (void)dealloc {
  NSLog(@"ARACHNUS DEALLOCATED");

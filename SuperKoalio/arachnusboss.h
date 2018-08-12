@@ -15,6 +15,6 @@
 @property (nonatomic,strong) SKSpriteNode *slashprojectile;
 
 @property (nonatomic,strong) SKAction*testallactions;
--(void)addfiretomap:(JSTileMap*)map;
+
 
 @end
