@@ -142,7 +142,6 @@
     
     CGPoint forewardStep=CGPointMultiplyScalar(_forewardMove, delta);
     CGPoint backwardStep=CGPointMultiplyScalar(_backwardMove, delta);
-   
     
     if (self.shouldJump)
        self.playervelocity=CGPointMake(self.playervelocity.x*0.98, self.playervelocity.y); //lets horizontall movement last longer if jumping due to onle 2% decrease in x velocity

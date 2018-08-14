@@ -17,8 +17,7 @@
     SKAction *morphballattackleft;
     SKAction *slashattackleft;
     SKAction *slashattackright;
-    SKAction *turnleft;
-    SKAction *turnright;
+    SKAction *turn;
     SKAction *recievedamage;
     
     SKAction *slashprojmoveanim;
@@ -35,16 +34,6 @@
         SKTextureAtlas *arachnustextures=[SKTextureAtlas atlasNamed:@"Arachnus"];
         __weak arachnusboss*weakself=self;
       
-        //initialize projectiles
-        self.slashprojectile=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"arachnus_slash_1.png"]];
-        self.slashprojectile.position=CGPointMake(27,0);
-        SKSpriteNode *slashprojectiletrail=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"arachnus_slashsingle.png"]];
-        slashprojectiletrail.position=CGPointMake(-15,0);
-        slashprojectiletrail.alpha=0.8;
-        [self.slashprojectile addChild:slashprojectiletrail];
-        NSArray*projtextures=@[[arachnustextures textureNamed:@"arachnus_slash_1.png"],[arachnustextures textureNamed:@"arachnus_slash_2.png"],[arachnustextures textureNamed:@"arachnus_slash_3.png"],[arachnustextures textureNamed:@"arachnus_slash_4.png"]];
-        slashprojmoveanim=[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:[SKAction animateWithTextures:projtextures timePerFrame:0.05 resize:YES restore:YES] count:10],[SKAction moveBy:CGVectorMake(300,0) duration:2.0], nil]];
-        //[self addChild:self.slashprojectile];
        
         //morphball animations
         NSArray *morphtoballrighttex=@[[arachnustextures textureNamed:@"toball_1.png"],[arachnustextures textureNamed:@"toball_2.png"],[arachnustextures textureNamed:@"toball_3.png"],[arachnustextures textureNamed:@"toball_4.png"]];
@@ -59,8 +48,8 @@
         dustball.alpha=0.85;
         SKAction *dustaction=[SKAction runBlock:^{[weakself addChild:dustball];[dustball runAction:dustac completion:^{[dustball removeFromParent];}];}];
       
-        morphballattackright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:1 duration:0],morphtoballrightanim,[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackrightanim count:15],dustaction,[SKAction moveByX:300 y:0 duration:2.4], nil]],[morphtoballrightanim reversedAction], nil]];
-        morphballattackleft=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:-1 duration:0],morphtoballrightanim,[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackrightanim count:15],dustaction,[SKAction moveByX:-300 y:0 duration:2.4], nil]],[morphtoballrightanim reversedAction], nil]];
+        morphballattackright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:1 duration:0],morphtoballrightanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackrightanim count:15],dustaction,[SKAction moveByX:300 y:0 duration:2.4], nil]],[SKAction moveByX:0 y:8 duration:0],[morphtoballrightanim reversedAction], nil]];
+        morphballattackleft=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:-1 duration:0],morphtoballrightanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackrightanim count:15],dustaction,[SKAction moveByX:-300 y:0 duration:2.4], nil]],[SKAction moveByX:0 y:8 duration:0],[morphtoballrightanim reversedAction], nil]];
         
         //move f/b animations
         NSArray *moveforewardtex=@[[arachnustextures textureNamed:@"walk_1.png"],[arachnustextures textureNamed:@"walk_2.png"],[arachnustextures textureNamed:@"walk_3.png"],[arachnustextures textureNamed:@"walk_4.png"],[arachnustextures textureNamed:@"walk_5.png"],[arachnustextures textureNamed:@"walk_6.png"],[arachnustextures textureNamed:@"walk_7.png"],[arachnustextures textureNamed:@"walk_8.png"],[arachnustextures textureNamed:@"walk_9.png"],[arachnustextures textureNamed:@"walk_10.png"],[arachnustextures textureNamed:@"walk_11.png"],[arachnustextures textureNamed:@"walk_12.png"]];
@@ -80,7 +69,6 @@
         
         SKAction *addfiretoparentblk=[SKAction runBlock:^{
             __block CGPoint pointinlevel=[weakself convertPoint:CGPointMake(49,-24) toNode:weakself.parent];
-            
             SKAction *blkac=[SKAction runBlock:^{
                 SKSpriteNode*firecpy=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"Fire1.png"]];
                 firecpy.position=pointinlevel;
@@ -101,7 +89,7 @@
        
         fireattackright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction group:[NSArray arrayWithObjects:[SKAction scaleXTo:1 duration:0],fireattackrightanim,firespriteac, nil]],[SKAction waitForDuration:0.15],nil]];
         
-        //below is redifinition of addfiretoparentblk,fireblk.firespriteac so as to flip for left fireattack
+        //below is redifinition of addfiretoparentblk,fireblk,firespriteac so as to flip for left fireattack
         addfiretoparentblk=[SKAction runBlock:^{
             __block CGPoint pointinlevel=[weakself convertPoint:CGPointMake(49,-24) toNode:weakself.parent];
             SKAction *blkac=[SKAction runBlock:^{
@@ -124,15 +112,27 @@
         NSArray *slashrightex=@[[arachnustextures textureNamed:@"slash_1.png"],[arachnustextures textureNamed:@"slash_2.png"],[arachnustextures textureNamed:@"slash_3.png"],[arachnustextures textureNamed:@"slash_4.png"],[arachnustextures textureNamed:@"slash_5.png"],[arachnustextures textureNamed:@"slash_6.png"],[arachnustextures textureNamed:@"slash_7.png"],[arachnustextures textureNamed:@"slash_8.png"],[arachnustextures textureNamed:@"slash_9.png"],[arachnustextures textureNamed:@"slash_10.png"],[arachnustextures textureNamed:@"slash_11.png"],[arachnustextures textureNamed:@"slash_12.png"],[arachnustextures textureNamed:@"slash_13.png"],[arachnustextures textureNamed:@"slash_14.png"],[arachnustextures textureNamed:@"slash_15.png"]];
         SKAction *slashrightanim=[SKAction animateWithTextures:slashrightex timePerFrame:0.09 resize:YES restore:YES];
         
+        //initialize projectiles
+        self.slashprojectile=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"arachnus_slash_1.png"]];
+        self.slashprojectile.position=CGPointMake(27,0);
+        SKSpriteNode *slashprojectiletrail=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"arachnus_slashsingle.png"]];
+        slashprojectiletrail.position=CGPointMake(-15,0);
+        slashprojectiletrail.alpha=0.8;
+        [self.slashprojectile addChild:slashprojectiletrail];
+        NSArray*projtextures=@[[arachnustextures textureNamed:@"arachnus_slash_1.png"],[arachnustextures textureNamed:@"arachnus_slash_2.png"],[arachnustextures textureNamed:@"arachnus_slash_3.png"],[arachnustextures textureNamed:@"arachnus_slash_4.png"]];
+        slashprojmoveanim=[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:[SKAction animateWithTextures:projtextures timePerFrame:0.05 resize:YES restore:YES] count:10],[SKAction moveBy:CGVectorMake(300,0) duration:2.0], nil]];
+        //[self addChild:self.slashprojectile];
+        
+        
         //turn animations
-        NSArray *turnrighttex=@[[arachnustextures textureNamed:@"turn_1.png"],[arachnustextures textureNamed:@"turn_2.png"],[arachnustextures textureNamed:@"turn_3.png"],[arachnustextures textureNamed:@"turn_4.png"]];
-        SKAction *turnrightanim=[SKAction animateWithTextures:turnrighttex timePerFrame:0.15 resize:YES restore:YES];
+        NSArray *turnrighttex=@[[arachnustextures textureNamed:@"turn_4.png"],[arachnustextures textureNamed:@"turn_3.png"],[arachnustextures textureNamed:@"turn_2.png"],[arachnustextures textureNamed:@"turn_1.png"]];
+        turn=[SKAction animateWithTextures:turnrighttex timePerFrame:0.12 resize:YES restore:YES];
         
         //recieve damage animations
         NSArray *recievedamagetex=@[[arachnustextures textureNamed:@"damage_scream_1.png"],[arachnustextures textureNamed:@"damage_scream_2.png"],[arachnustextures textureNamed:@"damage_scream_3.png"],[arachnustextures textureNamed:@"damage_scream_4.png"],[arachnustextures textureNamed:@"damage_scream_5.png"]];
         SKAction *recievedamagerightanim=[SKAction animateWithTextures:recievedamagetex timePerFrame:0.15 resize:YES restore:YES];
         
-        self.testallactions=[SKAction sequence:[NSArray arrayWithObjects:morphballattackright,morphballattackleft,movebackward,moveforeward,fireattackright,/*[SKAction waitForDuration:0.2],*/fireattackleft,/*anim,slashrightanim,turnrightanim,recievedamagerightanim,*/ nil]];
+        self.testallactions=[SKAction sequence:[NSArray arrayWithObjects:turn,morphballattackright,turn,morphballattackleft,movebackward,turn,moveforeward,fireattackright,turn,fireattackleft,/*slashrightanim,turnrightanim,recievedamagerightanim,*/ nil]];
         
         //initialize attacks
         

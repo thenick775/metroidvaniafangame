@@ -568,7 +568,7 @@
 }
 
 
--(void)handleBulletEnemyCollisions{
+-(void)handleBulletEnemyCollisions{ //might switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
   
   for(sciserenemy*enemycon in [self.enemies reverseObjectEnumerator]){
     if(fabs(self.player.position.x-enemycon.position.x)<70){  //minimize comparisons
@@ -612,7 +612,6 @@
         continue;//avoid comparing with removed bullet
       }
       
-      if(self.enemies.count!=0){
       for(sciserenemy *enemyl in self.enemies){
         //NSLog(@"bullet frame:%@",NSStringFromCGRect(currbullet.frame));
         if(CGRectIntersectsRect(CGRectInset(enemyl.frame,5,0), currbullet.frame)){
@@ -630,7 +629,6 @@
           break; //if bullet hits enemy stop checking for same bullet
         }
     }
-  }//if enemiescount!=0
 }//for currbullet
   
   
