@@ -589,9 +589,11 @@
         [self enemyhitplayerdmgmsg];
       }
     }
-    if(self.player.meleeinaction && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemycon.frame)){
+    if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemycon.frame)){
       NSLog(@"meleehit");
       enemycon.health=enemycon.health-10;
+      self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
+      [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];
       if(enemycon.health<=0){
         [enemycon removeAllActions];
         [enemycon removeAllChildren];

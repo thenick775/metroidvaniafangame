@@ -53,6 +53,7 @@
         
         //melee actions
         self.meleeinaction=NO;
+        self.meleedelay=NO;
         SKTextureAtlas *projectiles=[SKTextureAtlas atlasNamed:@"projectiles"];
         self.meleeweapon=[SKSpriteNode spriteNodeWithTexture:[projectiles textureNamed:@"samusmeleeright1.png"]];
         self.meleeweapon.position=CGPointMake(/*self.position.x+*/14, /*self.position.y+*/1);
@@ -157,11 +158,6 @@
     if(self.shouldJump && self.onGround){
         self.playervelocity=CGPointAdd(self.playervelocity, _jumpMove);
     }
-    /*else if(self.shouldJump && !self.onGround){
-        //self.texture=;
-        NSLog(@"switchtexhere");
-        self.texture=[SKTexture textureWithImageNamed:@"samusfalling.png"];
-    }*/
     if(self.goForeward){
         self.playervelocity=CGPointAdd(self.playervelocity, forewardStep);
          self.texture=self.forewards;
