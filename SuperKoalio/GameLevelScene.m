@@ -568,7 +568,7 @@
 }
 
 
--(void)handleBulletEnemyCollisions{
+-(void)handleBulletEnemyCollisions{ //might switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
   
   for(sciserenemy*enemycon in [self.enemies reverseObjectEnumerator]){
     if(fabs(self.player.position.x-enemycon.position.x)<70){  //minimize comparisons
@@ -589,9 +589,11 @@
         [self enemyhitplayerdmgmsg];
       }
     }
-    if(self.player.meleeinaction && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemycon.frame)){
+    if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemycon.frame)){
       NSLog(@"meleehit");
       enemycon.health=enemycon.health-10;
+      self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
+      [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];
       if(enemycon.health<=0){
         [enemycon removeAllActions];
         [enemycon removeAllChildren];
@@ -612,7 +614,6 @@
         continue;//avoid comparing with removed bullet
       }
       
-      if(self.enemies.count!=0){
       for(sciserenemy *enemyl in self.enemies){
         //NSLog(@"bullet frame:%@",NSStringFromCGRect(currbullet.frame));
         if(CGRectIntersectsRect(CGRectInset(enemyl.frame,5,0), currbullet.frame)){
@@ -630,7 +631,6 @@
           break; //if bullet hits enemy stop checking for same bullet
         }
     }
-  }//if enemiescount!=0
 }//for currbullet
   
   

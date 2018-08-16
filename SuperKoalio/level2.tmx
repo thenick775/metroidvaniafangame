@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="400" height="30" tilewidth="16" tileheight="16" infinite="0" nextobjectid="1">
- <tileset firstgid="1" name="asteroidsmirrorv4" tilewidth="16" tileheight="16" tilecount="3600" columns="60">
-  <image source="asteroidsmirrorv4.png" width="960" height="960"/>
- </tileset>
- <tileset firstgid="3601" name="spacefloortile" tilewidth="16" tileheight="16" tilecount="6" columns="3">
+ <tileset firstgid="1" name="spacefloortile" tilewidth="16" tileheight="16" tilecount="6" columns="3">
   <image source="spacefloortile.png" width="48" height="32"/>
  </tileset>
- <tileset firstgid="3607" name="backgroundobjects" tilewidth="16" tileheight="16" tilecount="135" columns="27">
+ <tileset firstgid="7" name="backgroundobjects" tilewidth="16" tileheight="16" tilecount="135" columns="27">
   <image source="backgroundobjects.png" width="432" height="90"/>
  </tileset>
- <tileset firstgid="3742" name="52089" tilewidth="16" tileheight="16" tilecount="56" columns="8">
+ <tileset firstgid="142" name="52089" tilewidth="16" tileheight="16" tilecount="56" columns="8">
   <image source="52089.png" width="130" height="113"/>
  </tileset>
- <tileset firstgid="3798" name="chozodiatiles" tilewidth="16" tileheight="16" tilecount="3906" columns="63">
+ <tileset firstgid="198" name="chozodiatiles" tilewidth="16" tileheight="16" tilecount="3906" columns="63">
   <image source="chozodiatiles.png" width="1015" height="1000"/>
  </tileset>
  <layer name="background" width="400" height="30" locked="1">
   <data encoding="base64" compression="zlib">
-   eJzt3E0uQ1EYBuA7k/hpqzVg4GcBNoAY+dsARgZ2gRGmWAESSzE1sgRLEZ+0jaZavY7G7W2fJ3kTp3VOvzM5J/XJzTIAAAAAAAAAgHJ6XSj+515jAEaXMxuA33J3AAAAAAAAADAJzipZdh65qAxvnV5r5vmcYdUCQD7rzluAibYT98Buwl1w4P6g5E6rRVcAjCN/1xp/7g8AUjy5P+Df9OtXD+pjwyh6c38AkGC5VnQFwCTx/Wp86H8AkEL/A4AU+h8ApND/ACCF/gcAKfQ/oFiXlSy7ilyX6P+RnhebYbLpf1CEzjMz9TmCKzFvNbL2hzWK0F3rfYwfIo+tfZRhL++LzYyLl/porFF0Db3m/7Sm/ge/Neh5gXmeJ9h5ZvZ7jmC/dfbitf3IRmQzsvXDGqOoXWt7HzeR28hdax9l2Mv2UjNlMR1n4ExkNjJX/z6eanyNq5FaZD5SjzQiCwPmT7fWaI+HWWt3PZ3vdc/rrKF7Xp7P+pzf67V+v3/i/qCkDuOcPYocl+C8BQAA8vsA7hBIAg==
+   eJzt3E1O20AYBmCTWF2AWnqAXgAqVvTnAtBVF9yidAXdtpwAKvUo3bLiCByFbSV+1H4oiWqlTnCmVsZOnkd6pUycmXzeeJR80hQFAAAAAAAAAEA/XT3L/7puDEB3eWYDsCh7BwAAAAAAAADr4FPkOPK5xXXq1mzyPW3VAkAzr3IXAEBW+5E3CfPet10ILNnRRu4KgFXkf63VZ/8AIMUP+wcszax+9VN9bOiia/sHAAmeD3JXAKwTv69Wh/4HACn0PwBIof8BQAr9DwBS6H8AkEL/A/I6iZxGvuQuZAE/N0dhvel/kEP1mZl6juCLyHbk5X+skcN0reeRi8j38bU+3MvN5iir4rLsxhq5a6ibP29N/Q8W9dR5gU3OE6w+M2edIzhrnbeRd5GdyG7k9Zw1umhS6+Q+vka+Rc7G1/pwL3tbo/TF7bAo7iL3kYfhv+Nf5d/x70gR443IIDKMlOX8+bfjNSbjNmudrqd6bXpetYbpeU2+63F+3XuzPv/R/kFPHUQOIx9yFwIAALTqDxfRZJo=
   </data>
  </layer>
  <layer name="walls" width="400" height="30" locked="1">
   <data encoding="base64" compression="zlib">
-   eJzt3T1y00AUAGCdwMF2SMkBqOAWECoauhQ5UIAU9ByKnquwDKNECbGs1d/qSd83szNSYXklz+zbt0+SqwoAAAAAAADKe3uxrAbA8hmvAcgldgCQS+wAAAAAAACi2O+q6pDacTf99hjfCcAyXKYx+XVqVwsemyP0EWALmvP5emyOQi4CUE7k+Xzkvpfw7qKq3ge89/rNq9I9gGUae/0/9xjRco5T5CLt6tjx41C6J/luA8Y8mENzDp27Pcbx1mKN5zSWZt7xK2D8+Cl+wIM1zv9z1ddgymPLRf5fszoey/Wlr9/iBzwwV340RRxxff95qd4Rcf1K/YOte55z8NSU+cgWnaqVR1y/Uv9g68yJuxFHhmu7zyri+pX6B1ukzvEoJy7sN3ydhjp3j27E9Sv1D6DpsHvamsSPfro83xFx/Ur9A2jTjCHiR76uzwZGXL9S/2Dt3DM6jPjRX85z5RHXr9Q/WDv18eHqGCJ+dJf7TpKI61fqH6zRqZxDLjKM+NFNn/dZRVy/Uv9gjU7lHHKRYcSP8/q+C/FLwPzjRvzgjDn/u2js/0Ca87zm7Hsp+wX8vrmf+5DG5Y+pXaf26TD9fl9z93Po/t/2OWDMY15D3iNYarvEec3Z96l0GZdL/765n7tLY9zX1L6l9j21+2f7Q7bvX9juq+2YS9yuG7T5A5nKopA=
+   eJzt3T1S20AUAGBjTEoOkCrcAkiVhi5FDpQABT2HoudKLJORURwsa/W3etL3zezMqrBY2cy+fftkebMBAAAAAACA8r6ezasBMH/mawByiR0A5BI7AAAAAACAKN7LGtvUzifoD/E3AZiHXWoXqX0pPZAGEcYIsAb19Xw1N0chFwEoJ/J6PvLYS/iWAu5VwHuvL7elRwDzNPT+f+45ouUcx8hFmlWx42lXeiT5fgWMeTCF+ho6tz/E+ZZiidc0lHre8RIwfjyLH7C3xPV/ruo9GPPccpH/96zOA/6zvYofsGet/GGMOOL9/euzekfE/Sv1D9buMOfgX2PmI2t0rFYecf9K/YO1syZuRxzpr+k+q4j7V+ofrJE6x4ecuGC66O7UPboR96/UP4C67UGrM1100+b7HRH3r9Q/gCb1KUL8yNf2u4ER96/UP1g694z2I350l/O98oj7V+ofLJ36eH9VDDFdtJf7TJKI+1fqHyzRsZxDLtKP6aKdLs+zirh/pf7BEh3LOeQi/Ygfp3V9FuJdwPzjp/jBCVP+dtHQv4E05XVNOfZSzjblP9/c112nefkmtdvUvu/GP+5q6nH2PX5vPwLGPKbV5zmCpfolrmvKsY+lzbxc+vPNfd3vdPAntfvUHlJ7PDju03/8pN9V0znn2K8aNHkD1VZQxA==
   </data>
  </layer>
  <layer name="hazards" width="400" height="30" locked="1">
@@ -32,7 +29,7 @@
  </layer>
  <layer name="mysteryboxes" width="400" height="30" locked="1">
   <data encoding="base64" compression="zlib">
-   eJzt1KENAEAIBEG6oAz67+71B0cIaiZZefYiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBNlX9XWwBmfC8AAAAAAABA9wAPXwNJ
+   eJzt1KENAEAIBEEsVdB/l68/OEJQM8nKsxcBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGyq/LvaAjDjewEAAAAAAAC6B6J2AeE=
   </data>
  </layer>
  <layer name="objects_interactive" width="400" height="30" locked="1">

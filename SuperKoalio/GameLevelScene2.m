@@ -67,7 +67,7 @@
 
 -(void)replaybuttonpush:(id)sender{
     [[self.view viewWithTag:666] removeFromSuperview];
-    [self.view presentScene:[[GameLevelScene alloc] initWithSize:self.size]];
+    [self.view presentScene:[[GameLevelScene2 alloc] initWithSize:self.size]];
 }
 
 
