@@ -7,3 +7,5 @@ Example gif:
 
 
 ![](readmesamus_ex.gif)
+
+![](menu_ex.gif)
