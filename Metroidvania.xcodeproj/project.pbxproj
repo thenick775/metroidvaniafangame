@@ -40,9 +40,6 @@
 		F275B68C186E0B06009F6E6B /* GameLevelScene.m in Sources */ = {isa = PBXBuildFile; fileRef = F275B68B186E0B06009F6E6B /* GameLevelScene.m */; };
 		F275B690186E0B06009F6E6B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F275B68F186E0B06009F6E6B /* Images.xcassets */; };
 		F275B6AE186E0B8D009F6E6B /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = F275B6AD186E0B8D009F6E6B /* Player.m */; };
-		F275B6BC186E21CB009F6E6B /* hurt.wav in Resources */ = {isa = PBXBuildFile; fileRef = F275B6B8186E21CB009F6E6B /* hurt.wav */; };
-		F275B6BD186E21CB009F6E6B /* jump.wav in Resources */ = {isa = PBXBuildFile; fileRef = F275B6B9186E21CB009F6E6B /* jump.wav */; };
-		F275B6BE186E21CB009F6E6B /* level1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F275B6BA186E21CB009F6E6B /* level1.mp3 */; };
 		F275B6BF186E21CB009F6E6B /* level1.tmx in Resources */ = {isa = PBXBuildFile; fileRef = F275B6BB186E21CB009F6E6B /* level1.tmx */; };
 		F275B6CB186E2497009F6E6B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B6CA186E2497009F6E6B /* libz.dylib */; };
 		F275B6DE186E25C1009F6E6B /* SKAction+SKTExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = F275B6CE186E25C1009F6E6B /* SKAction+SKTExtras.m */; };
@@ -107,9 +104,6 @@
 		F275B696186E0B06009F6E6B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F275B6AC186E0B8D009F6E6B /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		F275B6AD186E0B8D009F6E6B /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
-		F275B6B8186E21CB009F6E6B /* hurt.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hurt.wav; sourceTree = "<group>"; };
-		F275B6B9186E21CB009F6E6B /* jump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jump.wav; sourceTree = "<group>"; };
-		F275B6BA186E21CB009F6E6B /* level1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = level1.mp3; sourceTree = "<group>"; };
 		F275B6BB186E21CB009F6E6B /* level1.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = level1.tmx; sourceTree = "<group>"; };
 		F275B6CA186E2497009F6E6B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F275B6CD186E25C1009F6E6B /* SKAction+SKTExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKAction+SKTExtras.h"; sourceTree = "<group>"; };
@@ -236,16 +230,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		F275B6C0186E21D1009F6E6B /* Audio */ = {
-			isa = PBXGroup;
-			children = (
-				F275B6B8186E21CB009F6E6B /* hurt.wav */,
-				F275B6B9186E21CB009F6E6B /* jump.wav */,
-				F275B6BA186E21CB009F6E6B /* level1.mp3 */,
-			);
-			name = Audio;
-			sourceTree = "<group>";
-		};
 		F275B6C1186E21D9009F6E6B /* TMX Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -270,7 +254,6 @@
 			isa = PBXGroup;
 			children = (
 				59028E6420B742D0007F4C4E /* replay.png */,
-				F275B6C0186E21D1009F6E6B /* Audio */,
 				F275B6C1186E21D9009F6E6B /* TMX Files */,
 			);
 			name = Resources;
@@ -358,7 +341,6 @@
 				596F2DAB20C07CF100B32C47 /* floortilesimple.png in Resources */,
 				5952F877210AFDEF00F3BC5B /* Main.storyboard in Resources */,
 				594F558720CE1874000E476E /* asteroidsmirrorv4.png in Resources */,
-				F275B6BE186E21CB009F6E6B /* level1.mp3 in Resources */,
 				F275B6F1186E2749009F6E6B /* tileSet@2x.png in Resources */,
 				595C42EA20FDC66C00A47BB8 /* chozodiatiles.png in Resources */,
 				594F558520CE16A9000E476E /* spacefloortile.png in Resources */,
@@ -366,9 +348,7 @@
 				59028E6120B74062007F4C4E /* replay@2x.png in Resources */,
 				F275B67D186E0B06009F6E6B /* InfoPlist.strings in Resources */,
 				F275B690186E0B06009F6E6B /* Images.xcassets in Resources */,
-				F275B6BD186E21CB009F6E6B /* jump.wav in Resources */,
 				596F2DA620BF5FBA00B32C47 /* roombackround.png in Resources */,
-				F275B6BC186E21CB009F6E6B /* hurt.wav in Resources */,
 				595C42DD20FD418100A47BB8 /* brokendoors.png in Resources */,
 				594F559320CE1CA0000E476E /* level2.tmx in Resources */,
 				F275B6F0186E2749009F6E6B /* tileSet.png in Resources */,

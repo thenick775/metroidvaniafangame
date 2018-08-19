@@ -19,7 +19,7 @@
  </layer>
  <layer name="walls" width="400" height="30" locked="1">
   <data encoding="base64" compression="zlib">
-   eJzt3T1S20AUAGBjTEoOkCrcAkiVhi5FDpQABT2HoudKLJORURwsa/W3etL3zezMqrBY2cy+fftkebMBAAAAAACA8r6ezasBMH/mawByiR0A5BI7AAAAAACAKN7LGtvUzifoD/E3AZiHXWoXqX0pPZAGEcYIsAb19Xw1N0chFwEoJ/J6PvLYS/iWAu5VwHuvL7elRwDzNPT+f+45ouUcx8hFmlWx42lXeiT5fgWMeTCF+ho6tz/E+ZZiidc0lHre8RIwfjyLH7C3xPV/ruo9GPPccpH/96zOA/6zvYofsGet/GGMOOL9/euzekfE/Sv1D9buMOfgX2PmI2t0rFYecf9K/YO1syZuRxzpr+k+q4j7V+ofrJE6x4ecuGC66O7UPboR96/UP4C67UGrM1100+b7HRH3r9Q/gCb1KUL8yNf2u4ER96/UP1g694z2I350l/O98oj7V+ofLJ36eH9VDDFdtJf7TJKI+1fqHyzRsZxDLtKP6aKdLs+zirh/pf7BEh3LOeQi/Ygfp3V9FuJdwPzjp/jBCVP+dtHQv4E05XVNOfZSzjblP9/c112nefkmtdvUvu/GP+5q6nH2PX5vPwLGPKbV5zmCpfolrmvKsY+lzbxc+vPNfd3vdPAntfvUHlJ7PDju03/8pN9V0znn2K8aNHkD1VZQxA==
+   eJzt3Tty2zAQAFBJVlL6AKnsW+RTpXHnIgeKbRXuc6j0uVKgydCmFYsi+AOXfG8GM2AhCpQ0WGKXpDYbAAAAAAAAKO/Tdl4NgPkzXwOQS+wAIJfYAQAAAAAARHEsa+xSu5qgP8R7AjAP+9Q+pPax9EAaRBgjwBrUz+eruTkKaxGAciKfz0ceewk3KeDeBrz2+npXegQwT0Pn/3P3EW3NcY61SLMqdjzvS48k34+AMQ+mUD+Hzu0Psb+lWOIxDaW+7vgdMH78Ej/gxRLP/3NVn8GY+7YW+T9ndRXwx/ZH/IAXzpVfjRFHfL7/vFfviJi/Uv9g7U7XHLw15npkjc7VyiPmr9Q/WDvnxO2II/01XWcVMX+l/sEaqXO8yokLpovuLl2jGzF/pf4B1O1OWp3pops293dEzF+pfwBN6lOE+JGv7b2BEfNX6h+sgdx9d+JHdzn3lUfMX6l/sAZrr3H0VcUQ00V7uc8kiZi/Uv9gyap1RxU/3L/Wj+minS7Ps4qYv1L/YIlO40bFtbr9iB+XdX0W4l3A9ce9+MEFU/530VD9Nvmqod936P9vmqPtpvz3m/u6z+nH8CW1r6l924+/3dXU4+y7fWzfA8Y8ptXnOYKl+iWOa8qxj6XNvFz6+8193c+08ZDaY2pPqR1Otvv0D+/0u2ra5xz7VYMmfwF1JlDH
   </data>
  </layer>
  <layer name="hazards" width="400" height="30" locked="1">
@@ -29,7 +29,7 @@
  </layer>
  <layer name="mysteryboxes" width="400" height="30" locked="1">
   <data encoding="base64" compression="zlib">
-   eJzt1KENAEAIBEEsVdB/l68/OEJQM8nKsxcBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGyq/LvaAjDjewEAAAAAAAC6B6J2AeE=
+   eJzt1DEKACAMA8CufYX//6Vzd5UId5AxkClVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMBJq2dedRMkbU/aAmT7/XsBAAAAAAAAbthGQALR
   </data>
  </layer>
  <layer name="objects_interactive" width="400" height="30" locked="1">

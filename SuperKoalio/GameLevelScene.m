@@ -185,7 +185,7 @@
       _repeating=YES;
     }
     if(fncplayer.position.x<0){
-      NSLog(@"off screen resetting pos");
+      //NSLog(@"off screen resetting pos");
       self.player.desiredPosition=CGPointMake(0,47.49);
     }
     else if(fncplayer.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-32){
