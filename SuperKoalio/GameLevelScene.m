@@ -568,7 +568,7 @@
 }
 
 
--(void)handleBulletEnemyCollisions{ //might switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
+-(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
   
   for(sciserenemy*enemycon in [self.enemies reverseObjectEnumerator]){
     if(fabs(self.player.position.x-enemycon.position.x)<70){  //minimize comparisons

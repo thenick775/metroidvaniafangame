@@ -111,7 +111,7 @@
         firespriteac=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.52],fireblk, nil]];
         
         fireattackleft=[SKAction sequence:[NSArray arrayWithObjects:[SKAction group:[NSArray arrayWithObjects:[SKAction scaleXTo:-1 duration:0],[SKAction moveByX:0 y:3 duration:0],fireattackrightanim,firespriteac, nil]],[SKAction moveByX:0 y:-3 duration:0],[SKAction waitForDuration:0.15],nil]];
-        //^-cannot have two fireleft/fireright near each other unless they are same, xscale conflict messes with fire position relative to parent
+        
         
         //slash animations
         NSArray *slashrightex=@[[arachnustextures textureNamed:@"slash_1.png"],[arachnustextures textureNamed:@"slash_2.png"],[arachnustextures textureNamed:@"slash_3.png"],[arachnustextures textureNamed:@"slash_4.png"],[arachnustextures textureNamed:@"slash_5.png"],[arachnustextures textureNamed:@"slash_6.png"],[arachnustextures textureNamed:@"slash_7.png"],[arachnustextures textureNamed:@"slash_8.png"],[arachnustextures textureNamed:@"slash_9.png"],[arachnustextures textureNamed:@"slash_10.png"],[arachnustextures textureNamed:@"slash_11.png"],[arachnustextures textureNamed:@"slash_12.png"],[arachnustextures textureNamed:@"slash_13.png"],[arachnustextures textureNamed:@"slash_14.png"],[arachnustextures textureNamed:@"slash_15.png"]];
@@ -125,13 +125,24 @@
         slashprojectiletrail.alpha=0.6;
         [self.slashprojectile addChild:slashprojectiletrail];
         NSArray*projtextures=@[[arachnustextures textureNamed:@"arachnus_slash_1.png"],[arachnustextures textureNamed:@"arachnus_slash_2.png"],[arachnustextures textureNamed:@"arachnus_slash_3.png"],[arachnustextures textureNamed:@"arachnus_slash_4.png"]];
-        SKAction *slashprojmoveanim=[SKAction group:[NSArray arrayWithObjects:/*[SKAction repeatAction:[SKAction animateWithTextures:projtextures timePerFrame:0.025 resize:YES restore:YES] count:20],*/[SKAction moveBy:CGVectorMake(400,0) duration:1.8], nil]];
+        SKAction *slashprojmove=[SKAction moveBy:CGVectorMake(400,0) duration:1.8];
         
-        slashattackright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:1 duration:0],[SKAction group:[NSArray arrayWithObjects:slashrightanim,[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.17],[SKAction runBlock:^{__block CGPoint pointinlevel=[weakself convertPoint:CGPointMake(27,0) toNode:weakself.parent];
-            self.slashprojectile.position=pointinlevel;
-            [self.parent addChild:self.slashprojectile];
-            [self.slashprojectile runAction:slashprojmoveanim completion:^{[self.slashprojectile removeFromParent];
-                self.slashprojectile.position=CGPointMake(27,0);}];}], nil]],nil]], nil]];
+        slashattackright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:1 duration:0],[SKAction group:[NSArray arrayWithObjects:slashrightanim,[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.17],[SKAction runBlock:^{CGPoint pointinlevel=[weakself convertPoint:CGPointMake(27,0) toNode:weakself.parent];
+            SKSpriteNode*slashcpy=weakself.slashprojectile.copy;
+            slashcpy.position=pointinlevel;
+            [weakself.parent addChild:slashcpy];
+            [slashcpy runAction:slashprojmove completion:^{[slashcpy removeFromParent];
+                slashcpy.position=CGPointMake(27,0);}];}], nil]],nil]], nil]];
+        
+        slashprojmove=[SKAction moveBy:CGVectorMake(-400,0) duration:1.8];
+        
+        slashattackleft=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:-1 duration:0],[SKAction group:[NSArray arrayWithObjects:slashrightanim,[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.17],[SKAction runBlock:^{CGPoint pointinlevel=[weakself convertPoint:CGPointMake(27,0) toNode:weakself.parent];
+            SKSpriteNode*slashcpy=weakself.slashprojectile.copy;
+            [slashcpy setXScale:-1];
+            slashcpy.position=pointinlevel;
+            [weakself.parent addChild:slashcpy];
+            [slashcpy runAction:slashprojmove completion:^{[slashcpy removeFromParent];
+                slashcpy.position=CGPointMake(27,0);}];}], nil]],nil]], nil]];
         
         //turn animations
         NSArray *turnrighttex=@[[arachnustextures textureNamed:@"turn_4.png"],[arachnustextures textureNamed:@"turn_3.png"],[arachnustextures textureNamed:@"turn_2.png"],[arachnustextures textureNamed:@"turn_1.png"]];
@@ -157,10 +168,7 @@
         recievedamageright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:1 duration:0],[SKAction moveByX:0 y:5 duration:0],[SKAction group:[NSArray arrayWithObjects:recievedamagerightanim,[SKAction repeatAction:adddmgfire count:3], nil]],[SKAction moveByX:0 y:-5 duration:0], nil]];
         recievedamageleft=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:-1 duration:0],[SKAction moveByX:0 y:5 duration:0],[SKAction group:[NSArray arrayWithObjects:recievedamagerightanim,[SKAction repeatAction:adddmgfire count:3], nil]],[SKAction moveByX:0 y:-5 duration:0], nil]];
         
-        self.testallactions=[SKAction sequence:[NSArray arrayWithObjects:morphballattackright,turn,morphballattackleft,movebackward,turn,moveforeward,fireattackright,turn,fireattackleft,turn,recievedamageright,turn,recievedamageleft,turn,slashattackright,/*slashrightanim,*/ nil]];
-        
-        //initialize attacks
-        
+        self.testallactions=[SKAction sequence:[NSArray arrayWithObjects:morphballattackright,turn,morphballattackleft,movebackward,turn,moveforeward,fireattackright,turn,fireattackleft,turn,recievedamageright,turn,recievedamageleft,slashattackleft,turn,slashattackright, nil]];
         
         
     }
