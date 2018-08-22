@@ -58,7 +58,7 @@
         
         arachnusboss *boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
         boss1.position=CGPointMake(3888,56);
-        [boss1 runAction:[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:boss1.testallactions,[SKAction waitForDuration:1.0], nil]]]];
+        [boss1 runAction:[SKAction repeatActionForever:boss1.testallactions]];
         [self.map addChild:boss1];
         
     }

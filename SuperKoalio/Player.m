@@ -39,7 +39,7 @@
         self.damageaction=[SKAction sequence:[NSArray arrayWithObjects:[SKAction colorizeWithColor:[UIColor redColor] colorBlendFactor:0.7 duration:0.1],[SKAction colorizeWithColorBlendFactor:0.0 duration:0.1], nil]];
         
         //case for jumping to stay jumping until on ground
-        SKAction *jmpblk=[SKAction runBlock:^{NSLog(@"checkingjmpblk");if(weakself.onGround){
+        SKAction *jmpblk=[SKAction runBlock:^{/*NSLog(@"checkingjmpblk");*/if(weakself.onGround){
             if(weakself.goForeward)
             [weakself runAction:[SKAction repeatActionForever:weakself.runAnimation] withKey:@"runf"];
             else if(weakself.goBackward)

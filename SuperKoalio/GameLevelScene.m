@@ -185,7 +185,7 @@
       _repeating=YES;
     }
     if(fncplayer.position.x<0){
-      NSLog(@"off screen resetting pos");
+      //NSLog(@"off screen resetting pos");
       self.player.desiredPosition=CGPointMake(0,47.49);
     }
     else if(fncplayer.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-32){
@@ -568,7 +568,7 @@
 }
 
 
--(void)handleBulletEnemyCollisions{ //might switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
+-(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
   
   for(sciserenemy*enemycon in [self.enemies reverseObjectEnumerator]){
     if(fabs(self.player.position.x-enemycon.position.x)<70){  //minimize comparisons
