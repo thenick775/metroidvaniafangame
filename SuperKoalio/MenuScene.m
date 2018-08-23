@@ -152,13 +152,15 @@
     for(UITouch*touch in touches){
         if((CGRectContainsPoint(_playlabel.frame,[touch locationInNode:self])) || (CGRectContainsPoint(_playbutton.frame,[touch locationInNode:self]))){
             self.userInteractionEnabled=NO;
-            SKScene * scene = /*[[GameLevelScene2 alloc]initWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];*/[GameLevelScene sceneWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];  //was skView.bounds.size
+            SKScene * scene = [[GameLevelScene2 alloc]initWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];//[GameLevelScene sceneWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];  //was skView.bounds.size
             SKTransition *menutolvl1tran=[SKTransition fadeWithDuration:1.5];
             scene.scaleMode = SKSceneScaleModeAspectFill;
             NSArray *shipgrp=@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.8]];
             [shipflamesright2 runAction:flameflicker];
             [shipflamesleft2 runAction:flameflicker];
-            [samusgunship runAction:[SKAction group:shipgrp] completion:^{ [self.view presentScene:scene transition:menutolvl1tran];}];
+            SKAction*shipflyac=[SKAction group:shipgrp];
+            [shipflyac setTimingMode:SKActionTimingEaseIn];
+            [samusgunship runAction:shipflyac completion:^{ [self.view presentScene:scene transition:menutolvl1tran];}];
         }
     }
 }

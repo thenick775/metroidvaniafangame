@@ -23,6 +23,7 @@
     
     SKAction *addfiretoparentmap;
     SKSpriteNode *firesprite;
+    CGPoint prevcoorddist;
 }
 
 -(instancetype)initWithImageNamed:(NSString *)name{
@@ -35,8 +36,10 @@
         __weak arachnusboss*weakself=self;
         
         //position constraints
+        SKConstraint*xconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:3488 upperLimit:4208]];
+        xconst.referenceNode=self.parent;
+        self.constraints=[NSArray arrayWithObjects:xconst, nil];
         
-       
         //morphball animations
         NSArray *morphtoballrighttex=@[[arachnustextures textureNamed:@"toball_1.png"],[arachnustextures textureNamed:@"toball_2.png"],[arachnustextures textureNamed:@"toball_3.png"],[arachnustextures textureNamed:@"toball_4.png"]];
         SKAction *morphtoballrightanim=[SKAction animateWithTextures:morphtoballrighttex timePerFrame:0.1 resize:YES restore:YES];
@@ -125,7 +128,7 @@
         slashprojectiletrail.alpha=0.6;
         [self.slashprojectile addChild:slashprojectiletrail];
         NSArray*projtextures=@[[arachnustextures textureNamed:@"arachnus_slash_1.png"],[arachnustextures textureNamed:@"arachnus_slash_2.png"],[arachnustextures textureNamed:@"arachnus_slash_3.png"],[arachnustextures textureNamed:@"arachnus_slash_4.png"]];
-        SKAction *slashprojmove=[SKAction moveBy:CGVectorMake(400,0) duration:1.8];
+        SKAction *slashprojmove=[SKAction moveBy:CGVectorMake(430,0) duration:1.8];
         
         slashattackright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:1 duration:0],[SKAction group:[NSArray arrayWithObjects:slashrightanim,[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.17],[SKAction runBlock:^{CGPoint pointinlevel=[weakself convertPoint:CGPointMake(27,0) toNode:weakself.parent];
             SKSpriteNode*slashcpy=weakself.slashprojectile.copy;
@@ -134,7 +137,7 @@
             [slashcpy runAction:slashprojmove completion:^{[slashcpy removeFromParent];
                 slashcpy.position=CGPointMake(27,0);}];}], nil]],nil]], nil]];
         
-        slashprojmove=[SKAction moveBy:CGVectorMake(-400,0) duration:1.8];
+        slashprojmove=[SKAction moveBy:CGVectorMake(-430,0) duration:1.8];
         
         slashattackleft=[SKAction sequence:[NSArray arrayWithObjects:[SKAction scaleXTo:-1 duration:0],[SKAction group:[NSArray arrayWithObjects:slashrightanim,[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.17],[SKAction runBlock:^{CGPoint pointinlevel=[weakself convertPoint:CGPointMake(27,0) toNode:weakself.parent];
             SKSpriteNode*slashcpy=weakself.slashprojectile.copy;
@@ -175,6 +178,48 @@
     
     return self;
 }
+
+
+-(void)handleanimswithfocuspos:(CGPoint)focuspos{
+    
+    if(![self hasActions]){//potential approach to handling one action at a time
+       
+        SKAction *actoexecute;
+        CGPoint coorddist=CGPointSubtract(focuspos, self.position);
+        
+        NSLog(@"coorddist:%@",NSStringFromCGPoint(coorddist));
+        
+        if((coorddist.x<0 && prevcoorddist.x>0) || (coorddist.x>0 && prevcoorddist.x<0))
+            actoexecute=turn;
+        else if(coorddist.x<-200)
+            actoexecute=morphballattackleft;
+        else if(coorddist.x<-150)
+            actoexecute=slashattackleft;
+        else if(coorddist.x<-100)
+            actoexecute=fireattackleft;
+        else if(coorddist.x<0)
+            actoexecute=movebackward;
+        else if(coorddist.x>200)
+            actoexecute=morphballattackright;
+        else if(coorddist.x>150)
+            actoexecute=slashattackright;
+        else if(coorddist.x>100)
+            actoexecute=fireattackright;
+        else if(coorddist.x<100)
+            actoexecute=moveforeward;
+        
+      
+        prevcoorddist=coorddist;
+        if(actoexecute==turn)
+        [self runAction:actoexecute];
+        else
+        [self runAction:[SKAction sequence:[NSArray arrayWithObjects:actoexecute,[SKAction waitForDuration:0.5], nil]]];
+        
+    }
+
+}
+
+
 
 - (void)dealloc {
  NSLog(@"ARACHNUS DEALLOCATED");

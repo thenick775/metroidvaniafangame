@@ -19,11 +19,17 @@
 @property (nonatomic,strong) SKLabelNode *healthlabel;
 @property (nonatomic,strong) SKSpriteNode *healthbar,*healthbarborder;
 @property (nonatomic,strong) NSMutableArray *enemies,*bullets;
-
 @property (nonatomic,assign) double healthbarsize;
 @property (nonatomic,strong) TravelPortal * travelportal;
 @property (nonatomic,assign) BOOL repeating;
 @property (nonatomic,strong) SKSpriteNode *buttonup,*buttonright,*buttonleft,*startbutton;
 @property (nonatomic,strong) SKSpriteNode*pauselabel,*unpauselabel;
+
+-(void)damageRecievedMsg;
+-(void)enemyhitplayerdmgmsg;
+-(void) gameOver:(BOOL)didwin;
+-(void)replaybuttonpush:(id)sender;
+-(void)continuebuttonpush:(id)sender;
+
 
 @end

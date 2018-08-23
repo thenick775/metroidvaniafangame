@@ -39,6 +39,11 @@
     self.player = [[Player alloc] initWithImageNamed:@"samus_fusion_walking3_v1.png"];
     self.player.position = CGPointMake(100, 150);
     self.player.zPosition = 15;
+    
+    SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33]];
+    plyrconst.referenceNode=self.parent;
+    self.player.constraints=[NSArray arrayWithObjects:plyrconst, nil];
+    
     [self.map addChild:self.player];
     
     self.player.forwardtrack=YES;
@@ -176,20 +181,12 @@
     if(playercoordinate.y >= self.map.mapSize.height-1 ){ //sets gameover if you go below the bottom of the maps y max-1
       [self gameOver:0];
       return;
-    }else if(fncplayer.position.y>self.map.tileSize.height*self.map.mapSize.height-20)//opposite of-^
-      self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x,self.map.tileSize.height*self.map.mapSize.height-20);
+    }
     if(fncplayer.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-220 && !_repeating){
       _travelportal=[[TravelPortal alloc] initWithStuff:@"travelmirror.png"];
       _travelportal.position=CGPointMake((self.map.mapSize.width * self.map.tileSize.width)-120, 95.0);
       [self.map addChild:_travelportal];
       _repeating=YES;
-    }
-    if(fncplayer.position.x<0){
-      //NSLog(@"off screen resetting pos");
-      self.player.desiredPosition=CGPointMake(0,47.49);
-    }
-    else if(fncplayer.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-32){
-      self.player.desiredPosition=CGPointMake((self.map.mapSize.width*self.map.tileSize.width)-33, self.player.desiredPosition.y);
     }
     if(_travelportal!=NULL && CGRectIntersectsRect(CGRectInset(playerrect,4,6),[_travelportal collisionBoundingBox])){
       SKAction *moveplayeraction=[SKAction moveTo:_travelportal.position duration:1.5];
