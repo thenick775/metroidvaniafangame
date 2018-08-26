@@ -16,7 +16,7 @@
 
 -(instancetype)initWithSize:(CGSize)size {
     if (self = [super initWithSize:size]) {
-        
+        //self.view.multipleTouchEnabled=YES;
         //self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
         [self.map removeFromParent]; //gets rid of super's implementation of my map
         self.backgroundColor = [SKColor blackColor];
@@ -80,13 +80,13 @@
 }
 
 
-- (void)dealloc {
+/*- (void)dealloc {
     NSLog(@"LVL2 SCENE DEALLOCATED");
-}
+}*/
 
 -(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
     
-    [boss1 handleanimswithfocuspos:self.player.position];
+    [boss1 handleanimswithfocuspos:self.player.position.x];   //evaluate boss actions/attacks
     
     for(sciserenemy*enemycon in [self.enemies reverseObjectEnumerator]){
         if(fabs(self.player.position.x-enemycon.position.x)<70){  //minimize comparisons

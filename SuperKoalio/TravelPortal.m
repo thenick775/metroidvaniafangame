@@ -26,7 +26,8 @@
         
         _appearaction=[SKAction animateWithTextures:appeararray timePerFrame:0.15];
         _repeataction=[SKAction animateWithTextures:repeatarray timePerFrame:0.15];
-        [self runAction:_appearaction completion:^{[self runAction:[SKAction repeatActionForever:_repeataction]];}];
+        __weak SKAction*weakrepeataction=_repeataction;
+        [self runAction:_appearaction completion:^{[self runAction:[SKAction repeatActionForever:weakrepeataction]];}];
         
     }
     

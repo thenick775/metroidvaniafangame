@@ -507,6 +507,17 @@
   for(UITouch *touch in touches){
   CGPoint fnctouchlocation=[touch locationInNode:self.camera];
   
+    if(fnctouchlocation.x>self.camera.frame.size.width/2 && fnctouchlocation.y<self.camera.frame.size.height/2){//maybe if this is moved before the removeactions set above
+      self.player.fireProjectile=NO;
+      //call build projectile/set it going right ->
+      if(self.player.forwardtrack)
+        [self firePlayerProjectilewithdirection:TRUE];
+      else
+        [self firePlayerProjectilewithdirection:FALSE];
+      
+      return;
+    }
+    
     [self.player removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
     [self.player removeActionForKey:@"runf"];
     [self.player removeActionForKey:@"runb"];
@@ -540,7 +551,7 @@
     else if(CGRectContainsPoint(_startbutton.frame, fnctouchlocation)){
       //NSLog(@"do nothing hit the pause");
     }
-    else if(fnctouchlocation.x>self.camera.frame.size.width/2 && fnctouchlocation.y<self.camera.frame.size.height/2){
+    /*else if(fnctouchlocation.x>self.camera.frame.size.width/2 && fnctouchlocation.y<self.camera.frame.size.height/2){//maybe if this is moved before the removeactions set above
       self.player.fireProjectile=NO;
       //call build projectile/set it going right ->
       if(self.player.forwardtrack)
@@ -548,7 +559,7 @@
       else
         [self firePlayerProjectilewithdirection:FALSE];
       //NSLog(@"done firing weapon");
-    }
+    }*/
     else if(fnctouchlocation.x>self.camera.frame.size.width/2 && fnctouchlocation.y>self.camera.frame.size.height/2){
       [self.player runAction:self.player.meleeactionright];
     }
