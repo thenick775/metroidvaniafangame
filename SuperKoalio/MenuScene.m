@@ -73,6 +73,19 @@
         pixelstar7.position=CGPointMake(445,258);
         [self addChild:pixelstar7];
         
+        UIBezierPath*starbez=[UIBezierPath bezierPath];
+        [starbez moveToPoint:CGPointMake(-20,self.size.height+5)];
+        [starbez addQuadCurveToPoint:CGPointMake(self.size.width-70,-100) controlPoint:CGPointMake(self.size.width/2+80,self.size.height-20)];
+        SKEmitterNode*shootingstar=[SKEmitterNode nodeWithFileNamed:@"shootingstar.sks"];
+        shootingstar.targetNode=self;
+        SKAction*shootstarblk=[SKAction runBlock:^{
+            [self addChild:shootingstar];
+            [shootingstar runAction:[SKAction followPath:starbez.CGPath asOffset:NO orientToPath:NO duration:1.8] completion:^{[shootingstar resetSimulation];[shootingstar removeFromParent];}];
+        }];
+        SKAction*shootingstarac=[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:2],shootstarblk,[SKAction waitForDuration:8.0], nil]]];
+        [self runAction:shootingstarac];
+        
+        
         SKSpriteNode *bigplanet=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"parallax-space-big-planet.png"] size:CGSizeMake(100,99)];
         bigplanet.position=CGPointMake(self.size.width/2+60,self.size.height/2+30);
         bigplanet.zPosition=2;
@@ -152,8 +165,9 @@
     for(UITouch*touch in touches){
         if((CGRectContainsPoint(_playlabel.frame,[touch locationInNode:self])) || (CGRectContainsPoint(_playbutton.frame,[touch locationInNode:self]))){
             self.userInteractionEnabled=NO;
-            SKScene * scene = /*[[GameLevelScene2 alloc]initWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];*/[GameLevelScene sceneWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];  //was skView.bounds.size
+            SKScene * scene = [[GameLevelScene2 alloc]initWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];//[GameLevelScene sceneWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];  //was skView.bounds.size
             SKTransition *menutolvl1tran=[SKTransition fadeWithDuration:1.5];
+            menutolvl1tran.pausesOutgoingScene=NO;
             scene.scaleMode = SKSceneScaleModeAspectFill;
             NSArray *shipgrp=@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.8]];
             [shipflamesright2 runAction:flameflicker];

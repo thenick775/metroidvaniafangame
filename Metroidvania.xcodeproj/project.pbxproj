@@ -7,12 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		59028E6120B74062007F4C4E /* replay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59028E6020B74062007F4C4E /* replay@2x.png */; };
 		59028E6520B742D0007F4C4E /* replay.png in Resources */ = {isa = PBXBuildFile; fileRef = 59028E6420B742D0007F4C4E /* replay.png */; };
 		592B389D20DB008400C62977 /* MenuScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 592B389C20DB008400C62977 /* MenuScene.m */; };
 		594F557B20CDE911000E476E /* GameLevelScene2.m in Sources */ = {isa = PBXBuildFile; fileRef = 594F557A20CDE911000E476E /* GameLevelScene2.m */; };
 		594F558520CE16A9000E476E /* spacefloortile.png in Resources */ = {isa = PBXBuildFile; fileRef = 594F558420CE16A9000E476E /* spacefloortile.png */; };
-		594F558720CE1874000E476E /* asteroidsmirrorv4.png in Resources */ = {isa = PBXBuildFile; fileRef = 594F558620CE1874000E476E /* asteroidsmirrorv4.png */; };
 		594F559320CE1CA0000E476E /* level2.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 594F559220CE1CA0000E476E /* level2.tmx */; };
 		5952F8752106AAB600F3BC5B /* arachnusboss.m in Sources */ = {isa = PBXBuildFile; fileRef = 5952F8742106AAB600F3BC5B /* arachnusboss.m */; };
 		5952F877210AFDEF00F3BC5B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5952F876210AFDEF00F3BC5B /* Main.storyboard */; };
@@ -29,6 +27,8 @@
 		596F2DAF20C1496400B32C47 /* backgroundobjects.png in Resources */ = {isa = PBXBuildFile; fileRef = 596F2DAE20C1496400B32C47 /* backgroundobjects.png */; };
 		596F2DB220C1C44700B32C47 /* TravelPortal.m in Sources */ = {isa = PBXBuildFile; fileRef = 596F2DB120C1C44700B32C47 /* TravelPortal.m */; };
 		596F2DB420C1ECAB00B32C47 /* pipesroom.png in Resources */ = {isa = PBXBuildFile; fileRef = 596F2DB320C1ECAB00B32C47 /* pipesroom.png */; };
+		5979C72F2133E0D400965A50 /* shootingstar.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5979C72D2133E0D400965A50 /* shootingstar.sks */; };
+		5979C74C2134BA6E00965A50 /* replay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5979C74B2134BA6E00965A50 /* replay@2x.png */; };
 		59C0DE1420B91F25008999C3 /* PlayerProjectile.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C0DE1320B91F25008999C3 /* PlayerProjectile.m */; };
 		F275B671186E0B06009F6E6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B670186E0B06009F6E6B /* Foundation.framework */; };
 		F275B673186E0B06009F6E6B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B672186E0B06009F6E6B /* CoreGraphics.framework */; };
@@ -56,14 +56,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		59028E6020B74062007F4C4E /* replay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "replay@2x.png"; sourceTree = "<group>"; };
 		59028E6420B742D0007F4C4E /* replay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = replay.png; sourceTree = "<group>"; };
 		592B389B20DB008400C62977 /* MenuScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MenuScene.h; sourceTree = "<group>"; };
 		592B389C20DB008400C62977 /* MenuScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MenuScene.m; sourceTree = "<group>"; };
 		594F557920CDE911000E476E /* GameLevelScene2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameLevelScene2.h; sourceTree = "<group>"; };
 		594F557A20CDE911000E476E /* GameLevelScene2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameLevelScene2.m; sourceTree = "<group>"; };
 		594F558420CE16A9000E476E /* spacefloortile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spacefloortile.png; sourceTree = "<group>"; };
-		594F558620CE1874000E476E /* asteroidsmirrorv4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = asteroidsmirrorv4.png; sourceTree = "<group>"; };
 		594F559220CE1CA0000E476E /* level2.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = level2.tmx; sourceTree = "<group>"; };
 		5952F8732106AAB600F3BC5B /* arachnusboss.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = arachnusboss.h; sourceTree = "<group>"; };
 		5952F8742106AAB600F3BC5B /* arachnusboss.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = arachnusboss.m; sourceTree = "<group>"; };
@@ -85,6 +83,8 @@
 		596F2DB020C1C44700B32C47 /* TravelPortal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TravelPortal.h; sourceTree = "<group>"; };
 		596F2DB120C1C44700B32C47 /* TravelPortal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TravelPortal.m; sourceTree = "<group>"; };
 		596F2DB320C1ECAB00B32C47 /* pipesroom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pipesroom.png; sourceTree = "<group>"; };
+		5979C72D2133E0D400965A50 /* shootingstar.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = shootingstar.sks; sourceTree = "<group>"; };
+		5979C74B2134BA6E00965A50 /* replay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "replay@2x.png"; path = "../../replay@2x.png"; sourceTree = "<group>"; };
 		59C0DE1220B91F25008999C3 /* PlayerProjectile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerProjectile.h; sourceTree = "<group>"; };
 		59C0DE1320B91F25008999C3 /* PlayerProjectile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerProjectile.m; sourceTree = "<group>"; };
 		F275B66D186E0B06009F6E6B /* Metroidvania.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metroidvania.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,6 +157,15 @@
 			name = JStileMap;
 			sourceTree = "<group>";
 		};
+		5979C7332133F76900965A50 /* ParticleEmitters */ = {
+			isa = PBXGroup;
+			children = (
+				5952F878210E76B000F3BC5B /* starsbackground.sks */,
+				5979C72D2133E0D400965A50 /* shootingstar.sks */,
+			);
+			name = ParticleEmitters;
+			sourceTree = "<group>";
+		};
 		F275B664186E0B06009F6E6B = {
 			isa = PBXGroup;
 			children = (
@@ -213,11 +222,9 @@
 				F275B682186E0B06009F6E6B /* AppDelegate.m */,
 				F275B687186E0B06009F6E6B /* ViewController.h */,
 				F275B688186E0B06009F6E6B /* ViewController.m */,
-				5952F876210AFDEF00F3BC5B /* Main.storyboard */,
-				5952F878210E76B000F3BC5B /* starsbackground.sks */,
+				5979C7332133F76900965A50 /* ParticleEmitters */,
 				F275B6C2186E21EB009F6E6B /* Resources */,
 				F275B68F186E0B06009F6E6B /* Images.xcassets */,
-				59028E6020B74062007F4C4E /* replay@2x.png */,
 				F275B679186E0B06009F6E6B /* Supporting Files */,
 			);
 			path = SuperKoalio;
@@ -226,6 +233,7 @@
 		F275B679186E0B06009F6E6B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5952F876210AFDEF00F3BC5B /* Main.storyboard */,
 				F275B67A186E0B06009F6E6B /* Metroidvania-Info.plist */,
 				F275B67B186E0B06009F6E6B /* InfoPlist.strings */,
 				F275B67E186E0B06009F6E6B /* main.m */,
@@ -241,7 +249,6 @@
 				594F558420CE16A9000E476E /* spacefloortile.png */,
 				596F2DB320C1ECAB00B32C47 /* pipesroom.png */,
 				595C42E920FDC66C00A47BB8 /* chozodiatiles.png */,
-				594F558620CE1874000E476E /* asteroidsmirrorv4.png */,
 				596F2DAE20C1496400B32C47 /* backgroundobjects.png */,
 				596F2DAA20C07CF100B32C47 /* floortilesimple.png */,
 				596F2DA520BF5FBA00B32C47 /* roombackround.png */,
@@ -257,6 +264,7 @@
 		F275B6C2186E21EB009F6E6B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5979C74B2134BA6E00965A50 /* replay@2x.png */,
 				59028E6420B742D0007F4C4E /* replay.png */,
 				F275B6C1186E21D9009F6E6B /* TMX Files */,
 			);
@@ -349,13 +357,13 @@
 				596F2DAF20C1496400B32C47 /* backgroundobjects.png in Resources */,
 				596F2DAB20C07CF100B32C47 /* floortilesimple.png in Resources */,
 				5952F877210AFDEF00F3BC5B /* Main.storyboard in Resources */,
-				594F558720CE1874000E476E /* asteroidsmirrorv4.png in Resources */,
 				F275B6F1186E2749009F6E6B /* tileSet@2x.png in Resources */,
 				595C42EA20FDC66C00A47BB8 /* chozodiatiles.png in Resources */,
 				594F558520CE16A9000E476E /* spacefloortile.png in Resources */,
 				5952F87A210E76B000F3BC5B /* starsbackground.sks in Resources */,
-				59028E6120B74062007F4C4E /* replay@2x.png in Resources */,
 				F275B67D186E0B06009F6E6B /* InfoPlist.strings in Resources */,
+				5979C74C2134BA6E00965A50 /* replay@2x.png in Resources */,
+				5979C72F2133E0D400965A50 /* shootingstar.sks in Resources */,
 				F275B690186E0B06009F6E6B /* Images.xcassets in Resources */,
 				596F2DA620BF5FBA00B32C47 /* roombackround.png in Resources */,
 				595C42DD20FD418100A47BB8 /* brokendoors.png in Resources */,

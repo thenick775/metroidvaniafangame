@@ -26,7 +26,7 @@
 @property (nonatomic,strong) SKSpriteNode*pauselabel,*unpauselabel;
 
 -(void)damageRecievedMsg;
--(void)enemyhitplayerdmgmsg;
+-(void)enemyhitplayerdmgmsg:(int)hit;
 -(void) gameOver:(BOOL)didwin;
 -(void)replaybuttonpush:(id)sender;
 -(void)continuebuttonpush:(id)sender;

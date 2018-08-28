@@ -42,6 +42,7 @@
         
         SKTextureAtlas *arachnustextures=[SKTextureAtlas atlasNamed:@"Arachnus"];
         __weak arachnusboss*weakself=self;
+        self.projectilesinaction=[[NSMutableArray alloc]init];
         
         //position constraints
         SKConstraint*xconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:3488 upperLimit:4208]];
@@ -98,10 +99,11 @@
             SKAction *blkac=[SKAction runBlock:^{
                 SKSpriteNode*firecpy=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"Fire1.png"]];
                 firecpy.position=pointinlevel;
+                [weakself.projectilesinaction addObject:firecpy];
                 [firecpy runAction:[SKAction repeatActionForever:fireburnanim]];
                 pointinlevel=CGPointAdd(pointinlevel,CGPointMake(13,0));
                 [weakself.parent addChild:firecpy];
-                [firecpy runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:4.0],fireendanim,[SKAction runBlock:^{[firecpy removeFromParent];[firecpy removeAllActions];}], nil]]];
+                [firecpy runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:4.0],fireendanim,[SKAction runBlock:^{[firecpy removeFromParent];[weakself.projectilesinaction removeObject:firecpy];[firecpy removeAllActions];}], nil]]];
             }];
             [weakself runAction:[SKAction repeatAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.07],blkac, nil]] count:10]];
         }];
@@ -121,10 +123,11 @@
             SKAction *blkac=[SKAction runBlock:^{
                 SKSpriteNode*firecpy=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"Fire1.png"]];
                 firecpy.position=pointinlevel;
+                [weakself.projectilesinaction addObject:firecpy];
                 [firecpy runAction:[SKAction repeatActionForever:fireburnanim]];
                 pointinlevel=CGPointSubtract(pointinlevel,CGPointMake(13,0));
                 [weakself.parent addChild:firecpy];
-                [firecpy runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:4.0],fireendanim,[SKAction runBlock:^{[firecpy removeFromParent];[firecpy removeAllActions];}], nil]]];
+                [firecpy runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:4.0],fireendanim,[SKAction runBlock:^{[firecpy removeFromParent];[weakself.projectilesinaction removeObject:firecpy];[firecpy removeAllActions];}], nil]]];
             }];
             [weakself runAction:[SKAction repeatAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.07],blkac, nil]] count:10]];
         }];
@@ -157,8 +160,10 @@
         slashattackright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction group:[NSArray arrayWithObjects:slashrightanim,[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.17],[SKAction runBlock:^{CGPoint pointinlevel=[weakself convertPoint:CGPointMake(27,0) toNode:weakself.parent];
             SKSpriteNode*slashcpy=weakself.slashprojectile.copy;
             slashcpy.position=pointinlevel;
+            [weakself.projectilesinaction addObject:slashcpy];
             [weakself.parent addChild:slashcpy];
             [slashcpy runAction:slashprojmove completion:^{[slashcpy removeFromParent];
+                [weakself.projectilesinaction removeObject:slashcpy];
                 slashcpy.position=CGPointMake(27,0);}];}], nil]],nil]], nil]];
         
         slashprojmove=[SKAction moveBy:CGVectorMake(-430,0) duration:1.8];
@@ -167,8 +172,10 @@
             SKSpriteNode*slashcpy=weakself.slashprojectile.copy;
             [slashcpy setXScale:-1];
             slashcpy.position=pointinlevel;
+            [weakself.projectilesinaction addObject:slashcpy];
             [weakself.parent addChild:slashcpy];
             [slashcpy runAction:slashprojmove completion:^{[slashcpy removeFromParent];
+                [weakself.projectilesinaction removeObject:slashcpy];
                 slashcpy.position=CGPointMake(-27,0);}];}], nil]],nil]], nil]];
         
         //turn animations
@@ -246,6 +253,15 @@
         GKRule *moveforwardsrule=[GKRule ruleWithPredicate:moveforwardspred assertingFact:@"moveforward" grade:1.0];
         [arachnusrs addRule:moveforwardsrule];
         
+        NSPredicate*dmgfwdpred=[NSPredicate predicateWithFormat:@"$currenthealth+20<=$prevhealth && $coorddist>0"];
+        GKRule *dmgfwdrule=[GKRule ruleWithPredicate:dmgfwdpred assertingFact:@"damageright" grade:1.0];
+        [arachnusrs addRule:dmgfwdrule];
+        
+        NSPredicate*dmgbkwdpred=[NSPredicate predicateWithFormat:@"$currenthealth+20<=$prevhealth && $coorddist<0"];
+        GKRule *dmgbkwdrule=[GKRule ruleWithPredicate:dmgbkwdpred assertingFact:@"damageleft" grade:1.0];
+        [arachnusrs addRule:dmgbkwdrule];
+        arachnusrs.state[@"currenthealth"]=@(self.health);
+        arachnusrs.state[@"prevhealth"]=@(self.health);
         
         rndsrc=[[GKLinearCongruentialRandomSource alloc] init];;
     }
@@ -260,12 +276,21 @@
        
         SKAction *actoexecute;
         arachnusrs.state[@"coorddist"]=@(focuspos-self.position.x);
-        NSLog(@"coorddist:%f",[arachnusrs.state[@"coorddist"] floatValue]);
+        arachnusrs.state[@"currenthealth"]=@(self.health);
+        //NSLog(@"coorddist:%f",[arachnusrs.state[@"coorddist"] floatValue]);
         
         [arachnusrs reset];
         [arachnusrs evaluate];
         
-        if([arachnusrs gradeForFact:@"turnright"]==1)
+        if([arachnusrs gradeForFact:@"damageright"]==1){
+            arachnusrs.state[@"prevhealth"]=@(self.health);
+            actoexecute=recievedamageright;
+        }
+        else if([arachnusrs gradeForFact:@"damageleft"]==1){
+            arachnusrs.state[@"prevhealth"]=@(self.health);
+            actoexecute=recievedamageleft;
+        }
+        else if([arachnusrs gradeForFact:@"turnright"]==1)
             actoexecute=turnright;
         else if([arachnusrs gradeForFact:@"turnleft"]==1)
             actoexecute=turnleft;
@@ -286,12 +311,12 @@
         else if([arachnusrs gradeForFact:@"moveforward"]==1)
             actoexecute=moveforeward;
         if(prevac==actoexecute){
-            NSLog(@"ac's are same");
             if([arachnusrs.state[@"coorddist"] floatValue]<0)
                 actoexecute=[leftattacks objectAtIndex:[rndsrc nextIntWithUpperBound:leftattacks.count]];
             else
                 actoexecute=[rightattacks objectAtIndex:[rndsrc nextIntWithUpperBound:rightattacks.count]];
         }
+        
         
         arachnusrs.state[@"prevcoorddist"]=arachnusrs.state[@"coorddist"];
         
@@ -303,9 +328,9 @@
 
 
 
-/*- (void)dealloc {
+- (void)dealloc {
  NSLog(@"ARACHNUS DEALLOCATED");
- }*/
+ }
 
 
 @end

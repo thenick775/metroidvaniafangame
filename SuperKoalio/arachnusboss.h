@@ -13,8 +13,9 @@
 @property (nonatomic,assign) int health;
 @property (nonatomic,assign) BOOL active;
 @property (nonatomic,strong) SKSpriteNode *slashprojectile;
+@property (nonatomic,strong) NSMutableArray *projectilesinaction;
 
-@property (nonatomic,strong) SKAction*testallactions;
+//@property (nonatomic,strong) SKAction*testallactions;
 -(void)handleanimswithfocuspos:(CGFloat)focuspos;
 
 @end
