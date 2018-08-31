@@ -22,16 +22,17 @@
     SKAction *turnleft;
     SKAction *recievedamageright;
     SKAction *recievedamageleft;
+    SKAction *death;
     
     SKAction *addfiretoparentmap;
     SKSpriteNode *firesprite;
     SKSpriteNode *firespritel;
     CGPoint prevcoorddist;
     GKRuleSystem*arachnusrs;//
-    NSArray *rightattacks;//
-    NSArray *leftattacks;//
+    NSArray *rightattacks;
+    NSArray *leftattacks;
     GKLinearCongruentialRandomSource*rndsrc;//
-    SKAction*prevac;//
+    SKAction*prevac;
 }
 
 -(instancetype)initWithImageNamed:(NSString *)name{
@@ -206,6 +207,9 @@
         recievedamageright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction moveByX:0 y:5 duration:0],[SKAction group:[NSArray arrayWithObjects:recievedamagerightanim,[SKAction repeatAction:adddmgfire count:3], nil]],[SKAction moveByX:0 y:-5 duration:0], nil]];
         recievedamageleft=[SKAction sequence:[NSArray arrayWithObjects:[SKAction moveByX:0 y:5 duration:0],[SKAction group:[NSArray arrayWithObjects:recievedamageleftanim,[SKAction repeatAction:adddmgfire count:3], nil]],[SKAction moveByX:0 y:-5 duration:0], nil]];
         
+        //death animation
+        death=[SKAction sequence:[NSArray arrayWithObjects:[SKAction repeatAction:[SKAction sequence:[NSArray arrayWithObjects:recievedamageleft,recievedamageright, nil]] count:6],[SKAction fadeOutWithDuration:0.4],[SKAction runBlock:^{[self removeAllChildren];[self removeAllActions];[self removeFromParent];}], nil]];
+        
         rightattacks=[NSArray arrayWithObjects:moveforeward,morphballattackright,fireattackright,slashattackright, nil];
         leftattacks=[NSArray arrayWithObjects:movebackward,morphballattackleft,fireattackleft,slashattackleft, nil];
         //self.testallactions=[SKAction sequence:[NSArray arrayWithObjects:morphballattackright,turnleft,morphballattackleft,movebackward,turnright,moveforeward,fireattackright,turnleft,fireattackleft,turnright,recievedamageright,turnleft,recievedamageleft,slashattackleft,turnright,slashattackright, nil]];
@@ -263,6 +267,10 @@
         arachnusrs.state[@"currenthealth"]=@(self.health);
         arachnusrs.state[@"prevhealth"]=@(self.health);
         
+        NSPredicate*deathpred=[NSPredicate predicateWithFormat:@"$currenthealth<=0"];
+        GKRule *deathrule=[GKRule ruleWithPredicate:deathpred assertingFact:@"death" grade:1.0];
+        [arachnusrs addRule:deathrule];
+        
         rndsrc=[[GKLinearCongruentialRandomSource alloc] init];;
     }
     
@@ -282,7 +290,10 @@
         [arachnusrs reset];
         [arachnusrs evaluate];
         
-        if([arachnusrs gradeForFact:@"damageright"]==1){
+        if([arachnusrs gradeForFact:@"death"]==1){
+            actoexecute=death;
+        }
+        else if([arachnusrs gradeForFact:@"damageright"]==1){
             arachnusrs.state[@"prevhealth"]=@(self.health);
             actoexecute=recievedamageright;
         }

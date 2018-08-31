@@ -474,7 +474,7 @@
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
     }
     else if(!CGRectContainsPoint(_buttonup.frame, currtouchlocation) && !CGRectContainsPoint(_buttonright.frame, currtouchlocation) && !CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && currtouchlocation.x<self.camera.frame.size.width/2){
-      NSLog(@"not in dpad");
+      //NSLog(@"not in dpad");
       self.player.shouldJump=NO;
       self.player.goForeward=NO;
       self.player.goBackward=NO;
@@ -672,7 +672,7 @@
           }
         }
         if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
-          NSLog(@"meleehit");
+          //NSLog(@"meleehit");
           enemyconcop.health=enemyconcop.health-10;
           self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
           [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];

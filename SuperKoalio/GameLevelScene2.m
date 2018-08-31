@@ -111,7 +111,7 @@
                 }
             }
             if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
-                NSLog(@"meleehit");
+                //NSLog(@"meleehit");
                 enemyconcop.health=enemyconcop.health-10;
                 self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
                 [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];
@@ -175,12 +175,12 @@
                 if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
                     //NSLog(@"hit an enemy");
                     enemylcop.health--;
-                    if(enemylcop.health<=0){
+                    /*if(enemylcop.health<=0){
                         [enemyl removeAllActions];
                         [enemyl removeAllChildren];//??dont know if i want for boss
                         [enemyl removeFromParent];
                         [self.enemies removeObject:enemyl];
-                    }
+                    }*/
                     [currbullet removeAllActions];
                     [currbullet removeFromParent];
                     [self.bullets removeObject:currbullet];
