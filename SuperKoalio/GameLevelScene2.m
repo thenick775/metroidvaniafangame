@@ -4,15 +4,19 @@
 //
 //  Created by nick vancise on 6/10/18.
 
-#include "GameLevelScene2.h"
-#include "sciserenemy.h"
-#include "arachnusboss.h"
+#import "GameLevelScene2.h"
+#import "sciserenemy.h"
+#import "arachnusboss.h"
+#import "SKTUtils.h"
+#import "PlayerProjectile.h"
 
-@implementation GameLevelScene2
+@implementation GameLevelScene2{
+    arachnusboss*boss1;
+}
 
 -(instancetype)initWithSize:(CGSize)size {
     if (self = [super initWithSize:size]) {
-        
+        //self.view.multipleTouchEnabled=YES;
         //self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
         [self.map removeFromParent]; //gets rid of super's implementation of my map
         self.backgroundColor = [SKColor blackColor];
@@ -27,6 +31,11 @@
         self.player = [[Player alloc] initWithImageNamed:@"samus_fusion_walking3_v1.png"];
         self.player.position = CGPointMake(100, 150);
         self.player.zPosition = 15;
+        
+        SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33] Y:[SKRange rangeWithUpperLimit:(self.map.tileSize.height*self.map.mapSize.height)-22]];
+        plyrconst.referenceNode=self.parent;
+        self.player.constraints=[NSArray arrayWithObjects:plyrconst, nil];
+        
         [self.map addChild:self.player];
         
         self.player.forwardtrack=YES;
@@ -56,9 +65,9 @@
         [self.enemies addObject:enemy];
         [self.map addChild:enemy];
         
-        arachnusboss *boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
-        boss1.position=CGPointMake(3888,56);
-        [boss1 runAction:[SKAction repeatActionForever:boss1.testallactions]];
+        boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
+        boss1.position=CGPointMake(3980,56);
+        [self.enemies addObject:boss1];
         [self.map addChild:boss1];
         
     }
@@ -74,5 +83,119 @@
 - (void)dealloc {
     NSLog(@"LVL2 SCENE DEALLOCATED");
 }
+
+-(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
+    
+    [boss1 handleanimswithfocuspos:self.player.position.x];   //evaluate boss actions/attacks
+    
+    for(id enemycon in [self.enemies reverseObjectEnumerator]){
+        
+        if([enemycon isKindOfClass:[sciserenemy class]]){
+            sciserenemy*enemyconcop=(sciserenemy*)enemycon;
+        if(fabs(self.player.position.x-enemyconcop.position.x)<70){  //minimize comparisons
+            //NSLog(@"in here");
+            if(CGRectContainsPoint(self.player.collisionBoundingBox, CGPointAdd(enemyconcop.enemybullet1.position, enemyconcop.position))){
+                //NSLog(@"enemy hit player bullet#1");
+                [enemyconcop.enemybullet1 setHidden:YES];
+                if(!self.player.plyrrecievingdmg){
+                    self.player.plyrrecievingdmg=YES;
+                    [self enemyhitplayerdmgmsg:10];
+                }
+            }
+            else if(CGRectContainsPoint(self.player.collisionBoundingBox,CGPointAdd(enemyconcop.enemybullet2.position, enemyconcop.position))){
+                //NSLog(@"enemy hit player buller#2");
+                [enemyconcop.enemybullet2 setHidden:YES];
+                if(!self.player.plyrrecievingdmg){
+                    self.player.plyrrecievingdmg=YES;
+                    [self enemyhitplayerdmgmsg:10];
+                }
+            }
+            if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
+                //NSLog(@"meleehit");
+                enemyconcop.health=enemyconcop.health-10;
+                self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
+                [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];
+                if(enemyconcop.health<=0){
+                    [enemyconcop removeAllActions];
+                    [enemyconcop removeAllChildren];
+                    [enemyconcop removeFromParent];
+                    [self.enemies removeObject:enemyconcop];
+                }
+            }
+        }
+    }
+    else if([enemycon isKindOfClass:[arachnusboss class]]){
+        arachnusboss*enemyconcop=(arachnusboss*)enemycon;
+        if(fabs(self.player.position.x-enemyconcop.position.x)<370){
+        if(CGRectContainsPoint(CGRectInset(enemyconcop.frame,3,0), self.player.position) && !self.player.plyrrecievingdmg){
+                self.player.plyrrecievingdmg=YES;
+                [self enemyhitplayerdmgmsg:10];
+        }
+        for(SKSpriteNode*arachchild in [enemyconcop.projectilesinaction reverseObjectEnumerator]){
+            if(CGRectIntersectsRect(self.player.collisionBoundingBox,arachchild.frame) && !self.player.plyrrecievingdmg){
+                self.player.plyrrecievingdmg=YES;
+                [self enemyhitplayerdmgmsg:15];
+            }
+        }
+    }
+  }
+}
+    
+    
+    for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){
+        
+        if(currbullet.cleanup){//here to avoid another run through of arr
+            //NSLog(@"removing from array");
+            [self.bullets removeObject:currbullet];
+            [currbullet removeFromParent];
+            continue;//avoid comparing with removed bullet
+        }
+        
+        for(id enemyl in self.enemies){
+            //NSLog(@"bullet frame:%@",NSStringFromCGRect(currbullet.frame));
+            if([enemyl isKindOfClass:[sciserenemy class]]){
+                sciserenemy*enemylcop=(sciserenemy*)enemyl;
+            if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
+                //NSLog(@"hit an enemy");
+                enemylcop.health--;
+                if(enemylcop.health<=0){
+                    [enemyl removeAllActions];
+                    [enemyl removeAllChildren];
+                    [enemyl removeFromParent];
+                    [self.enemies removeObject:enemyl];
+                }
+                [currbullet removeAllActions];
+                [currbullet removeFromParent];
+                [self.bullets removeObject:currbullet];
+                break; //if bullet hits enemy stop checking for same bullet
+            }
+        }
+            else if([enemyl isKindOfClass:[arachnusboss class]]){
+                arachnusboss*enemylcop=(arachnusboss*)enemyl;
+                if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
+                    //NSLog(@"hit an enemy");
+                    enemylcop.health--;
+                    /*if(enemylcop.health<=0){
+                        [enemyl removeAllActions];
+                        [enemyl removeAllChildren];//??dont know if i want for boss
+                        [enemyl removeFromParent];
+                        [self.enemies removeObject:enemyl];
+                    }*/
+                    [currbullet removeAllActions];
+                    [currbullet removeFromParent];
+                    [self.bullets removeObject:currbullet];
+                    break; //if bullet hits enemy stop checking for same bullet
+                }
+                
+            }
+      }
+    }//for currbullet
+    
+    
+    
+}
+
+
+
 
 @end

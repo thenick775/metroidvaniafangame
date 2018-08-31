@@ -24,7 +24,6 @@
   if (self = [super initWithSize:size]) {
     /* Setup scene here */
     self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
-    self.view.multipleTouchEnabled=YES;
     //self.view.shouldCullNonVisibleNodes=NO; //??? seems to help framerate for now
     
     self.backgroundColor = /*[SKColor blackColor];*/[SKColor colorWithRed:0.7259 green:0 blue:0.8863 alpha:1.0];
@@ -39,6 +38,11 @@
     self.player = [[Player alloc] initWithImageNamed:@"samus_fusion_walking3_v1.png"];
     self.player.position = CGPointMake(100, 150);
     self.player.zPosition = 15;
+    
+    SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33]];
+    plyrconst.referenceNode=self.parent;
+    self.player.constraints=[NSArray arrayWithObjects:plyrconst, nil];
+    
     [self.map addChild:self.player];
     
     self.player.forwardtrack=YES;
@@ -176,20 +180,12 @@
     if(playercoordinate.y >= self.map.mapSize.height-1 ){ //sets gameover if you go below the bottom of the maps y max-1
       [self gameOver:0];
       return;
-    }else if(fncplayer.position.y>self.map.tileSize.height*self.map.mapSize.height-20)//opposite of-^
-      self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x,self.map.tileSize.height*self.map.mapSize.height-20);
+    }
     if(fncplayer.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-220 && !_repeating){
       _travelportal=[[TravelPortal alloc] initWithStuff:@"travelmirror.png"];
       _travelportal.position=CGPointMake((self.map.mapSize.width * self.map.tileSize.width)-120, 95.0);
       [self.map addChild:_travelportal];
       _repeating=YES;
-    }
-    if(fncplayer.position.x<0){
-      //NSLog(@"off screen resetting pos");
-      self.player.desiredPosition=CGPointMake(0,47.49);
-    }
-    else if(fncplayer.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-32){
-      self.player.desiredPosition=CGPointMake((self.map.mapSize.width*self.map.tileSize.width)-33, self.player.desiredPosition.y);
     }
     if(_travelportal!=NULL && CGRectIntersectsRect(CGRectInset(playerrect,4,6),[_travelportal collisionBoundingBox])){
       SKAction *moveplayeraction=[SKAction moveTo:_travelportal.position duration:1.5];
@@ -343,9 +339,12 @@
   
   if(self.gameOver)
     return;
+  if(self.player.meleeinaction)
+    return;
+  
   
   for(UITouch *touch in touches){
-    
+    //NSLog(@"touchbegan");
     CGPoint touchlocation=[touch locationInNode:self.camera];  //location of the touch
     
     //start delegating parts of the screen to specific movements
@@ -383,10 +382,10 @@
     else if(CGRectContainsPoint(_startbutton.frame, touchlocation)){
       [self pausegame];
     }
-    else if(touchlocation.x>self.size.width/2 && touchlocation.y<self.size.height/2){
+    /*else if(touchlocation.x>self.size.width/2 && touchlocation.y<self.size.height/2){
       self.player.fireProjectile=YES;
       //NSLog(@"firing weapon");
-    }
+    }*/
     
   
   }//uitouch iteration end
@@ -411,7 +410,7 @@
       self.player.shouldJump=NO;
       self.player.goForeward=NO;
       self.player.goBackward=NO;
-      self.player.fireProjectile=YES;
+      //self.player.fireProjectile=YES;
     }
     else if(CGRectContainsPoint(_buttonup.frame, currtouchlocation) && CGRectContainsPoint(_buttonright.frame, previoustouchlocation)){
     //NSLog(@"moving from move right to jumping");
@@ -474,13 +473,13 @@
       [self.player runAction:[SKAction repeatActionForever:self.player.jumpBackwardsAnimation] withKey:@"jmpb"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
     }
-    else if(!CGRectContainsPoint(_buttonup.frame, currtouchlocation) && !CGRectContainsPoint(_buttonright.frame, currtouchlocation) && !CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && currtouchlocation.x<self.size.width/2){
+    else if(!CGRectContainsPoint(_buttonup.frame, currtouchlocation) && !CGRectContainsPoint(_buttonright.frame, currtouchlocation) && !CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && currtouchlocation.x<self.camera.frame.size.width/2){
       //NSLog(@"not in dpad");
       self.player.shouldJump=NO;
       self.player.goForeward=NO;
       self.player.goBackward=NO;
       self.player.fireProjectile=NO;
-      //[self.player removeAllActions];
+      
       [self.player removeActionForKey:@"runf"];
       [self.player removeActionForKey:@"runb"];
       [self.player removeActionForKey:@"jmpf"];
@@ -506,6 +505,17 @@
 
   if(self.gameOver || self.paused)
     return;
+  if(self.player.meleeinaction){
+    [self.player removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
+    self.player.shouldJump=NO;
+    [self.player removeActionForKey:@"runf"];
+    self.player.goForeward=NO;
+    [self.player removeActionForKey:@"runb"];
+    self.player.goBackward=NO;
+    [self.player removeActionForKey:@"jmpf"];
+    [self.player removeActionForKey:@"jmpb"];
+    return;
+  }
   
   for(UITouch *touch in touches){
   CGPoint fnctouchlocation=[touch locationInNode:self.camera];
@@ -550,10 +560,11 @@
         [self firePlayerProjectilewithdirection:TRUE];
       else
         [self firePlayerProjectilewithdirection:FALSE];
-      //NSLog(@"done firing weapon");
+     // NSLog(@"start firing weapon");
     }
     else if(fnctouchlocation.x>self.camera.frame.size.width/2 && fnctouchlocation.y>self.camera.frame.size.height/2){
-      [self.player runAction:self.player.meleeactionright];
+      [self.player runAction:self.player.meleeactionright withKey:@"melee"];
+      //NSLog(@"start melee");
     }
     
     
@@ -568,7 +579,7 @@
 }
 
 
--(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
+/*-(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
   
   for(sciserenemy*enemycon in [self.enemies reverseObjectEnumerator]){
     if(fabs(self.player.position.x-enemycon.position.x)<70){  //minimize comparisons
@@ -635,6 +646,81 @@
   
   
   
+}*/
+-(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
+  
+  for(id enemycon in [self.enemies reverseObjectEnumerator]){
+    
+    if([enemycon isKindOfClass:[sciserenemy class]]){
+      sciserenemy*enemyconcop=(sciserenemy*)enemycon;
+      if(fabs(self.player.position.x-enemyconcop.position.x)<70){  //minimize comparisons
+        //NSLog(@"in here");
+        if(CGRectContainsPoint(self.player.collisionBoundingBox, CGPointAdd(enemyconcop.enemybullet1.position, enemyconcop.position))){
+          //NSLog(@"enemy hit player bullet#1");
+          [enemyconcop.enemybullet1 setHidden:YES];
+          if(!self.player.plyrrecievingdmg){
+            self.player.plyrrecievingdmg=YES;
+            [self enemyhitplayerdmgmsg:10];
+          }
+        }
+        else if(CGRectContainsPoint(self.player.collisionBoundingBox,CGPointAdd(enemyconcop.enemybullet2.position, enemyconcop.position))){
+          //NSLog(@"enemy hit player buller#2");
+          [enemyconcop.enemybullet2 setHidden:YES];
+          if(!self.player.plyrrecievingdmg){
+            self.player.plyrrecievingdmg=YES;
+            [self enemyhitplayerdmgmsg:10];
+          }
+        }
+        if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
+          //NSLog(@"meleehit");
+          enemyconcop.health=enemyconcop.health-10;
+          self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
+          [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];
+          if(enemyconcop.health<=0){
+            [enemycon removeAllActions];
+            [enemycon removeAllChildren];
+            [enemycon removeFromParent];
+            [self.enemies removeObject:enemycon];
+          }
+        }
+      }
+    }
+  }
+  
+  
+  for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){
+    
+    if(currbullet.cleanup){//here to avoid another run through of arr
+      //NSLog(@"removing from array");
+      [self.bullets removeObject:currbullet];
+      [currbullet removeFromParent];
+      continue;//avoid comparing with removed bullet
+    }
+    
+    for(id enemyl in self.enemies){
+      //NSLog(@"bullet frame:%@",NSStringFromCGRect(currbullet.frame));
+      if([enemyl isKindOfClass:[sciserenemy class]]){
+        sciserenemy*enemylcop=(sciserenemy*)enemyl;
+        if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
+          //NSLog(@"hit an enemy");
+          enemylcop.health--;
+          if(enemylcop.health<=0){
+            [enemyl removeAllActions];
+            [enemyl removeAllChildren];
+            [enemyl removeFromParent];
+            [self.enemies removeObject:enemyl];
+          }
+          [currbullet removeAllActions];
+          [currbullet removeFromParent];
+          [self.bullets removeObject:currbullet];
+          break; //if bullet hits enemy stop checking for same bullet
+        }
+      }
+    }
+  }//for currbullet
+  
+  
+  
 }
 
 -(void)damageRecievedMsg{
@@ -644,8 +730,8 @@
   self.healthbar.size=CGSizeMake((self.healthbar.size.width-(_healthbarsize/100)), self.healthbar.size.height);
   
 }
--(void)enemyhitplayerdmgmsg{
-  self.player.health=self.player.health-10;
+-(void)enemyhitplayerdmgmsg:(int)hit{
+  self.player.health=self.player.health-hit;
   if(self.player.health<=0){
     self.player.health=0;
     [self gameOver:0];

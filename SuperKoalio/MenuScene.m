@@ -20,6 +20,8 @@
     SKAction *shipreducesize;
     SKAction *flameflicker;
     UIBezierPath *shippath;
+    SKAction *shipflyac;
+    SKTransition *menutolvl1tran;
 }
 
 -(instancetype)initWithSize:(CGSize)size {
@@ -72,6 +74,19 @@
         SKSpriteNode *pixelstar7=pixelstar.copy;
         pixelstar7.position=CGPointMake(445,258);
         [self addChild:pixelstar7];
+        
+        UIBezierPath*starbez=[UIBezierPath bezierPath];
+        [starbez moveToPoint:CGPointMake(-20,self.size.height+5)];
+        [starbez addQuadCurveToPoint:CGPointMake(self.size.width-70,-100) controlPoint:CGPointMake(self.size.width/2+80,self.size.height-20)];
+        SKEmitterNode*shootingstar=[SKEmitterNode nodeWithFileNamed:@"shootingstar.sks"];
+        shootingstar.targetNode=self;
+        SKAction*shootstarblk=[SKAction runBlock:^{
+            [self addChild:shootingstar];
+            [shootingstar runAction:[SKAction followPath:starbez.CGPath asOffset:NO orientToPath:NO duration:1.8] completion:^{[shootingstar resetSimulation];[shootingstar removeFromParent];}];
+        }];
+        SKAction*shootingstarac=[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:2],shootstarblk,[SKAction waitForDuration:8.0], nil]]];
+        [self runAction:shootingstarac];
+        
         
         SKSpriteNode *bigplanet=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"parallax-space-big-planet.png"] size:CGSizeMake(100,99)];
         bigplanet.position=CGPointMake(self.size.width/2+60,self.size.height/2+30);
@@ -128,7 +143,7 @@
         shipflamesleft2=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"gunshipflamesleft2.png"]];
         
         
-        shipreducesize=[SKAction scaleTo:0 duration:1.9];
+        shipreducesize=[SKAction scaleTo:0 duration:1.8];
         flameflicker=[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeAlphaTo:0 duration:0.08],[SKAction fadeAlphaTo:1 duration:0.08], nil]]];
         
         shippath=[UIBezierPath bezierPath];
@@ -143,6 +158,12 @@
         [samusgunship addChild:shipflamesright2];
         [samusgunship addChild:shipflamesleft2];
         [self addChild:samusgunship];
+        
+        menutolvl1tran=[SKTransition fadeWithDuration:1.5];
+        menutolvl1tran.pausesOutgoingScene=NO;
+        
+        shipflyac=[SKAction group:@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.7]]];
+        [shipflyac setTimingMode:SKActionTimingEaseIn];
        
     }
     return self;
@@ -153,12 +174,11 @@
         if((CGRectContainsPoint(_playlabel.frame,[touch locationInNode:self])) || (CGRectContainsPoint(_playbutton.frame,[touch locationInNode:self]))){
             self.userInteractionEnabled=NO;
             SKScene * scene = /*[[GameLevelScene2 alloc]initWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];*/[GameLevelScene sceneWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];  //was skView.bounds.size
-            SKTransition *menutolvl1tran=[SKTransition fadeWithDuration:1.5];
             scene.scaleMode = SKSceneScaleModeAspectFill;
-            NSArray *shipgrp=@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.8]];
             [shipflamesright2 runAction:flameflicker];
             [shipflamesleft2 runAction:flameflicker];
-            [samusgunship runAction:[SKAction group:shipgrp] completion:^{ [self.view presentScene:scene transition:menutolvl1tran];}];
+            __weak SKTransition*weakmenutolvl1tran=menutolvl1tran;
+            [samusgunship runAction:shipflyac completion:^{ [self.view presentScene:scene transition:weakmenutolvl1tran];}];
         }
     }
 }
