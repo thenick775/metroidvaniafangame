@@ -6,6 +6,6 @@ This game is targeted for iphone 5 through 8+.
 
 
 
-![](samus_ex.gif)
+![](samus_exv2.gif)
 
 ![](menu_ex.gif)
