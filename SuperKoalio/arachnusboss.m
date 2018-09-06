@@ -208,7 +208,7 @@
         recievedamageleft=[SKAction sequence:[NSArray arrayWithObjects:[SKAction moveByX:0 y:5 duration:0],[SKAction group:[NSArray arrayWithObjects:recievedamageleftanim,[SKAction repeatAction:adddmgfire count:3], nil]],[SKAction moveByX:0 y:-5 duration:0], nil]];
         
         //death animation
-        death=[SKAction sequence:[NSArray arrayWithObjects:[SKAction repeatAction:[SKAction sequence:[NSArray arrayWithObjects:recievedamageleft,recievedamageright, nil]] count:6],[SKAction fadeOutWithDuration:0.4],[SKAction runBlock:^{[self removeAllChildren];[self removeAllActions];[self removeFromParent];}], nil]];
+        death=[SKAction sequence:[NSArray arrayWithObjects:[SKAction repeatAction:[SKAction sequence:[NSArray arrayWithObjects:recievedamageleft,recievedamageright, nil]] count:5],[SKAction fadeOutWithDuration:0.4],[SKAction runBlock:^{[weakself removeAllChildren];[weakself removeAllActions];[weakself removeFromParent];}], nil]];
         
         rightattacks=[NSArray arrayWithObjects:moveforeward,morphballattackright,fireattackright,slashattackright, nil];
         leftattacks=[NSArray arrayWithObjects:movebackward,morphballattackleft,fireattackleft,slashattackleft, nil];
@@ -339,9 +339,9 @@
 
 
 
-- (void)dealloc {
+/*- (void)dealloc {
  NSLog(@"ARACHNUS DEALLOCATED");
- }
+ }*/
 
 
 @end

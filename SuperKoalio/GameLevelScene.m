@@ -8,7 +8,7 @@
 //  Metroidvania
 //  jun 11 2018
 //  this is a game for fun and experience, nothing serious
-//  ill give sprite credit when polished
+//  ill give sprite credit in the gameplay when polished
 
 
 #import "GameLevelScene.h"
@@ -18,7 +18,13 @@
 #import "sciserenemy.h"
 
 
-@implementation GameLevelScene
+@implementation GameLevelScene{
+  NSString *fintext;
+  SKLabelNode *endgamelabel;
+  UIButton *replaybutton;
+  UIButton *continuebutton;
+  SKSpriteNode*_pauselabel,*_unpauselabel;
+}
 
 -(instancetype)initWithSize:(CGSize)size {
   if (self = [super initWithSize:size]) {
@@ -78,6 +84,35 @@
     self.healthbarborder.zPosition=15;
     self.healthbarborder.position=CGPointMake((-9*(self.size.width/20))-9.5/*self.size.width/20-10*/, self.size.height/2-24);
     [self.camera addChild:self.healthbarborder];
+    
+    //gameover buttons/labels
+    endgamelabel=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
+    endgamelabel.fontSize=40;
+    endgamelabel.position=CGPointMake(0,35);
+
+    replaybutton=[UIButton buttonWithType:UIButtonTypeCustom];
+    replaybutton.tag=666;
+    UIImage *replayimage=[UIImage imageNamed:@"replay"];
+    [replaybutton setImage:replayimage forState:UIControlStateNormal];
+    [replaybutton addTarget:self action:@selector(replaybuttonpush:) forControlEvents:UIControlEventTouchUpInside];
+    replaybutton.frame=CGRectMake(self.size.width/2.0-replayimage.size.width/4.0+5, self.size.height/2.0-replayimage.size.height/4.0+5, replayimage.size.width, replayimage.size.height);
+    
+    continuebutton=[UIButton buttonWithType:UIButtonTypeCustom];
+    continuebutton.tag=888;
+    UIImage *continueimage=[UIImage imageNamed:@"continuebutton.png"];
+    [continuebutton setImage:continueimage forState:UIControlStateNormal];
+    [continuebutton addTarget:self action:@selector(continuebuttonpush:) forControlEvents:UIControlEventTouchUpInside];
+    continuebutton.frame=CGRectMake(self.size.width/2.0-continueimage.size.width/4.0-15, self.size.height/2.0-continueimage.size.height/4.0+7, continueimage.size.width, continueimage.size.height);
+    
+    //pause-unpause buttons/labels
+    _pauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"pauselabel.png"];
+    _pauselabel.position=CGPointMake(0,35);
+    _unpauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"unpauselabel.png"];
+    _unpauselabel.position=CGPointMake(0,10);
+    
+    //portal stuff
+    _travelportal=[[TravelPortal alloc] initWithStuff:@"travelmirror.png"];
+    _travelportal.position=CGPointMake((self.map.mapSize.width * self.map.tileSize.width)-120, 95.0);
     
     //button stuff unless i find a better place to put it...
     _buttonup=[SKSpriteNode spriteNodeWithImageNamed:@"buttonupv4real.png"];
@@ -181,15 +216,12 @@
       [self gameOver:0];
       return;
     }
-    if(fncplayer.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-220 && !_repeating){
-      _travelportal=[[TravelPortal alloc] initWithStuff:@"travelmirror.png"];
-      _travelportal.position=CGPointMake((self.map.mapSize.width * self.map.tileSize.width)-120, 95.0);
+    if(fncplayer.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-220 && !_repeating){//make function so can be overridden
       [self.map addChild:_travelportal];
       _repeating=YES;
     }
-    if(_travelportal!=NULL && CGRectIntersectsRect(CGRectInset(playerrect,4,6),[_travelportal collisionBoundingBox])){
-      SKAction *moveplayeraction=[SKAction moveTo:_travelportal.position duration:1.5];
-      [fncplayer runAction:moveplayeraction completion:^{[self gameOver:1];}];
+    if(_travelportal!=NULL && CGRectIntersectsRect(CGRectInset(playerrect,4,6),[_travelportal collisionBoundingBox])){      
+      [fncplayer runAction:[SKAction moveTo:_travelportal.position duration:1.5] completion:^{[self gameOver:1];}];
       return;
     }
     
@@ -353,6 +385,9 @@
       [self unpausegame];
     else if(self.paused)
       return;
+    else if(CGRectContainsPoint(_startbutton.frame, touchlocation)){
+      [self pausegame];
+    }
     else if(CGRectContainsPoint(_buttonright.frame, touchlocation)){
       //NSLog(@"touching right control");
       self.player.goForeward=YES;
@@ -378,9 +413,6 @@
         [self.player runAction:[SKAction repeatActionForever:self.player.jumpForewardsAnimation] withKey:@"jmpf"];
       else
         [self.player runAction:[SKAction repeatActionForever:self.player.jumpBackwardsAnimation] withKey:@"jmpb"];
-    }
-    else if(CGRectContainsPoint(_startbutton.frame, touchlocation)){
-      [self pausegame];
     }
     /*else if(touchlocation.x>self.size.width/2 && touchlocation.y<self.size.height/2){
       self.player.fireProjectile=YES;
@@ -478,7 +510,7 @@
       self.player.shouldJump=NO;
       self.player.goForeward=NO;
       self.player.goBackward=NO;
-      self.player.fireProjectile=NO;
+      //self.player.fireProjectile=NO;
       
       [self.player removeActionForKey:@"runf"];
       [self.player removeActionForKey:@"runb"];
@@ -554,7 +586,7 @@
       //NSLog(@"do nothing hit the pause");
     }
     else if(fnctouchlocation.x>self.camera.frame.size.width/2 && fnctouchlocation.y<self.camera.frame.size.height/2){
-      self.player.fireProjectile=NO;
+      //self.player.fireProjectile=NO;
       //call build projectile/set it going right ->
       if(self.player.forwardtrack)
         [self firePlayerProjectilewithdirection:TRUE];
@@ -707,7 +739,7 @@
           if(enemylcop.health<=0){
             [enemyl removeAllActions];
             [enemyl removeAllChildren];
-            [enemyl removeFromParent];
+            [enemyl runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}], nil]]];
             [self.enemies removeObject:enemyl];
           }
           [currbullet removeAllActions];
@@ -739,19 +771,12 @@
   self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
   self.healthbar.size=CGSizeMake((((float)self.player.health/100)*_healthbarsize), self.healthbar.size.height);
   
-  [self.player runAction:self.player.plyrdmgwaitlock];
-  [self.player runAction:[SKAction repeatAction:self.player.damageaction count:15]];
+  [self.player runAction:[SKAction group:[NSArray arrayWithObjects:self.player.plyrdmgwaitlock,[SKAction repeatAction:self.player.damageaction count:15], nil]]];
 }
 
 -(void)pausegame{
   //NSLog(@"game paused");
-  
-  _pauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"pauselabel.png"];
-  _pauselabel.position=CGPointMake(0,35);
   [self.camera addChild:_pauselabel];
-  
-  _unpauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"unpauselabel.png"];
-  _unpauselabel.position=CGPointMake(0,10);
   [self.camera addChild: _unpauselabel];
   
   self.paused=YES;
@@ -768,31 +793,12 @@
   self.gameOver=YES;
   [self.player removeAllActions];
   
-  NSString *fintext;
-  //label setup for end of game message
-  SKLabelNode *endgamelabel=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
-  endgamelabel.fontSize=40;
-  endgamelabel.position=CGPointMake(0,35);
-  
-  //setup replay message/reset the screen stuff
-  UIButton *replaybutton=[UIButton buttonWithType:UIButtonTypeCustom];
-  replaybutton.tag=666;
-  UIImage *replayimage=[UIImage imageNamed:@"replay"];
-  [replaybutton setImage:replayimage forState:UIControlStateNormal];
-  [replaybutton addTarget:self action:@selector(replaybuttonpush:) forControlEvents:UIControlEventTouchUpInside];
-  replaybutton.frame=CGRectMake(self.size.width/2.0-replayimage.size.width/4.0+5, self.size.height/2.0-replayimage.size.height/4.0+5, replayimage.size.width, replayimage.size.height);
-  
-  UIButton *continuebutton=[UIButton buttonWithType:UIButtonTypeCustom];
-  continuebutton.tag=888;
-  UIImage *continueimage=[UIImage imageNamed:@"continuebutton.png"];
-  [continuebutton setImage:continueimage forState:UIControlStateNormal];
-  [continuebutton addTarget:self action:@selector(continuebuttonpush:) forControlEvents:UIControlEventTouchUpInside];
-  continuebutton.frame=CGRectMake(self.size.width/2.0-continueimage.size.width/4.0-15, self.size.height/2.0-continueimage.size.height/4.0+7, continueimage.size.width, continueimage.size.height);
-  
   if(didwin){
     fintext=@"You Won!";
     endgamelabel.text=fintext;
-    [self.player runAction:self.player.travelthruportalAnimation completion:^{[self.camera addChild:endgamelabel];[self.view addSubview:continuebutton];}];
+    __weak SKLabelNode *weakendgamelabel=endgamelabel;
+    __weak UIButton *weakcontinuebutton=continuebutton;
+    [self.player runAction:self.player.travelthruportalAnimation completion:^{[self.camera addChild:weakendgamelabel];[self.view addSubview:weakcontinuebutton];}];
   }
   else{
     fintext=@"You Died :(";

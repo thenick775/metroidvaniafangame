@@ -18,9 +18,6 @@
 		5952F88D212F71DD00F3BC5B /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5952F88C212F71DD00F3BC5B /* GameplayKit.framework */; };
 		595C42D720FD3CCE00A47BB8 /* 52089.png in Resources */ = {isa = PBXBuildFile; fileRef = 595C42D620FD3CCD00A47BB8 /* 52089.png */; };
 		595C42DD20FD418100A47BB8 /* brokendoors.png in Resources */ = {isa = PBXBuildFile; fileRef = 595C42DC20FD418100A47BB8 /* brokendoors.png */; };
-		595C42E720FDA6AC00A47BB8 /* JSTileMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 595C42E320FDA6AC00A47BB8 /* JSTileMap.m */; };
-		595C42E820FDA6AC00A47BB8 /* LFCGzipUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 595C42E420FDA6AC00A47BB8 /* LFCGzipUtility.m */; };
-		595C42EA20FDC66C00A47BB8 /* chozodiatiles.png in Resources */ = {isa = PBXBuildFile; fileRef = 595C42E920FDC66C00A47BB8 /* chozodiatiles.png */; };
 		596F2DA620BF5FBA00B32C47 /* roombackround.png in Resources */ = {isa = PBXBuildFile; fileRef = 596F2DA520BF5FBA00B32C47 /* roombackround.png */; };
 		596F2DA920BFAFAE00B32C47 /* sciserenemy.m in Sources */ = {isa = PBXBuildFile; fileRef = 596F2DA820BFAFAE00B32C47 /* sciserenemy.m */; };
 		596F2DAB20C07CF100B32C47 /* floortilesimple.png in Resources */ = {isa = PBXBuildFile; fileRef = 596F2DAA20C07CF100B32C47 /* floortilesimple.png */; };
@@ -29,6 +26,9 @@
 		596F2DB420C1ECAB00B32C47 /* pipesroom.png in Resources */ = {isa = PBXBuildFile; fileRef = 596F2DB320C1ECAB00B32C47 /* pipesroom.png */; };
 		5979C72F2133E0D400965A50 /* shootingstar.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5979C72D2133E0D400965A50 /* shootingstar.sks */; };
 		5979C74C2134BA6E00965A50 /* replay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5979C74B2134BA6E00965A50 /* replay@2x.png */; };
+		5979C750213B368A00965A50 /* JSTileMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 5979C74F213B368A00965A50 /* JSTileMap.m */; };
+		5979C753213B36BA00965A50 /* LFCGzipUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 5979C752213B36BA00965A50 /* LFCGzipUtility.m */; };
+		5979C75A213C79A100965A50 /* crateriaTileSet.png in Resources */ = {isa = PBXBuildFile; fileRef = 5979C759213C79A100965A50 /* crateriaTileSet.png */; };
 		59C0DE1420B91F25008999C3 /* PlayerProjectile.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C0DE1320B91F25008999C3 /* PlayerProjectile.m */; };
 		F275B671186E0B06009F6E6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B670186E0B06009F6E6B /* Foundation.framework */; };
 		F275B673186E0B06009F6E6B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B672186E0B06009F6E6B /* CoreGraphics.framework */; };
@@ -70,11 +70,6 @@
 		5952F88C212F71DD00F3BC5B /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
 		595C42D620FD3CCD00A47BB8 /* 52089.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 52089.png; sourceTree = "<group>"; };
 		595C42DC20FD418100A47BB8 /* brokendoors.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brokendoors.png; sourceTree = "<group>"; };
-		595C42E320FDA6AC00A47BB8 /* JSTileMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSTileMap.m; sourceTree = "<group>"; };
-		595C42E420FDA6AC00A47BB8 /* LFCGzipUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFCGzipUtility.m; sourceTree = "<group>"; };
-		595C42E520FDA6AC00A47BB8 /* LFCGzipUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFCGzipUtility.h; sourceTree = "<group>"; };
-		595C42E620FDA6AC00A47BB8 /* JSTileMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSTileMap.h; sourceTree = "<group>"; };
-		595C42E920FDC66C00A47BB8 /* chozodiatiles.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chozodiatiles.png; sourceTree = "<group>"; };
 		596F2DA520BF5FBA00B32C47 /* roombackround.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = roombackround.png; sourceTree = "<group>"; };
 		596F2DA720BFAFAE00B32C47 /* sciserenemy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sciserenemy.h; sourceTree = "<group>"; };
 		596F2DA820BFAFAE00B32C47 /* sciserenemy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = sciserenemy.m; sourceTree = "<group>"; };
@@ -85,6 +80,11 @@
 		596F2DB320C1ECAB00B32C47 /* pipesroom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pipesroom.png; sourceTree = "<group>"; };
 		5979C72D2133E0D400965A50 /* shootingstar.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = shootingstar.sks; sourceTree = "<group>"; };
 		5979C74B2134BA6E00965A50 /* replay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "replay@2x.png"; path = "../../replay@2x.png"; sourceTree = "<group>"; };
+		5979C74E213B368A00965A50 /* JSTileMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSTileMap.h; sourceTree = "<group>"; };
+		5979C74F213B368A00965A50 /* JSTileMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSTileMap.m; sourceTree = "<group>"; };
+		5979C751213B36B900965A50 /* LFCGzipUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFCGzipUtility.h; sourceTree = "<group>"; };
+		5979C752213B36BA00965A50 /* LFCGzipUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFCGzipUtility.m; sourceTree = "<group>"; };
+		5979C759213C79A100965A50 /* crateriaTileSet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crateriaTileSet.png; sourceTree = "<group>"; };
 		59C0DE1220B91F25008999C3 /* PlayerProjectile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerProjectile.h; sourceTree = "<group>"; };
 		59C0DE1320B91F25008999C3 /* PlayerProjectile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerProjectile.m; sourceTree = "<group>"; };
 		F275B66D186E0B06009F6E6B /* Metroidvania.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metroidvania.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,10 +149,10 @@
 		595C42E220FDA68700A47BB8 /* JStileMap */ = {
 			isa = PBXGroup;
 			children = (
-				595C42E620FDA6AC00A47BB8 /* JSTileMap.h */,
-				595C42E320FDA6AC00A47BB8 /* JSTileMap.m */,
-				595C42E520FDA6AC00A47BB8 /* LFCGzipUtility.h */,
-				595C42E420FDA6AC00A47BB8 /* LFCGzipUtility.m */,
+				5979C74E213B368A00965A50 /* JSTileMap.h */,
+				5979C74F213B368A00965A50 /* JSTileMap.m */,
+				5979C751213B36B900965A50 /* LFCGzipUtility.h */,
+				5979C752213B36BA00965A50 /* LFCGzipUtility.m */,
 			);
 			name = JStileMap;
 			sourceTree = "<group>";
@@ -248,9 +248,9 @@
 				F275B6EE186E2749009F6E6B /* tileSet.png */,
 				594F558420CE16A9000E476E /* spacefloortile.png */,
 				596F2DB320C1ECAB00B32C47 /* pipesroom.png */,
-				595C42E920FDC66C00A47BB8 /* chozodiatiles.png */,
 				596F2DAE20C1496400B32C47 /* backgroundobjects.png */,
 				596F2DAA20C07CF100B32C47 /* floortilesimple.png */,
+				5979C759213C79A100965A50 /* crateriaTileSet.png */,
 				596F2DA520BF5FBA00B32C47 /* roombackround.png */,
 				F275B6EF186E2749009F6E6B /* tileSet@2x.png */,
 				595C42D620FD3CCD00A47BB8 /* 52089.png */,
@@ -356,9 +356,9 @@
 				F275B6BF186E21CB009F6E6B /* level1.tmx in Resources */,
 				596F2DAF20C1496400B32C47 /* backgroundobjects.png in Resources */,
 				596F2DAB20C07CF100B32C47 /* floortilesimple.png in Resources */,
+				5979C75A213C79A100965A50 /* crateriaTileSet.png in Resources */,
 				5952F877210AFDEF00F3BC5B /* Main.storyboard in Resources */,
 				F275B6F1186E2749009F6E6B /* tileSet@2x.png in Resources */,
-				595C42EA20FDC66C00A47BB8 /* chozodiatiles.png in Resources */,
 				594F558520CE16A9000E476E /* spacefloortile.png in Resources */,
 				5952F87A210E76B000F3BC5B /* starsbackground.sks in Resources */,
 				F275B67D186E0B06009F6E6B /* InfoPlist.strings in Resources */,
@@ -384,13 +384,13 @@
 				F275B68C186E0B06009F6E6B /* GameLevelScene.m in Sources */,
 				592B389D20DB008400C62977 /* MenuScene.m in Sources */,
 				F275B6E2186E25C1009F6E6B /* SKNode+SKTExtras.m in Sources */,
+				5979C750213B368A00965A50 /* JSTileMap.m in Sources */,
+				5979C753213B36BA00965A50 /* LFCGzipUtility.m in Sources */,
 				F275B689186E0B06009F6E6B /* ViewController.m in Sources */,
 				F275B683186E0B06009F6E6B /* AppDelegate.m in Sources */,
 				5952F8752106AAB600F3BC5B /* arachnusboss.m in Sources */,
 				F275B67F186E0B06009F6E6B /* main.m in Sources */,
-				595C42E820FDA6AC00A47BB8 /* LFCGzipUtility.m in Sources */,
 				F275B6E5186E25C1009F6E6B /* SKTTimingFunctions.m in Sources */,
-				595C42E720FDA6AC00A47BB8 /* JSTileMap.m in Sources */,
 				F275B6AE186E0B8D009F6E6B /* Player.m in Sources */,
 				596F2DB220C1C44700B32C47 /* TravelPortal.m in Sources */,
 				F275B6E3186E25C1009F6E6B /* SKTAudio.m in Sources */,
