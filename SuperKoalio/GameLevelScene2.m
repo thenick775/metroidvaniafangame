@@ -12,11 +12,12 @@
 
 @implementation GameLevelScene2{
     arachnusboss*boss1;
+    SKAction *handlebridge;
+    SKAction *idlecheck;
 }
 
 -(instancetype)initWithSize:(CGSize)size {
     if (self = [super initWithSize:size]) {
-        //self.view.multipleTouchEnabled=YES;
         //self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
         [self.map removeFromParent]; //gets rid of super's implementation of my map
         self.backgroundColor = [SKColor blackColor];
@@ -26,6 +27,7 @@
         self.walls=[self.map layerNamed:@"walls"];
         self.hazards=[self.map layerNamed:@"hazards"];
         self.mysteryboxes=[self.map layerNamed:@"mysteryboxes"];
+        self.background=[self.map layerNamed:@"background"];
         
         //player initializiation stuff
         self.player = [[Player alloc] initWithImageNamed:@"samus_fusion_walking3_v1.png"];
@@ -48,11 +50,14 @@
         
         self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint, nil];
         
-        //star parallax initialization here
+        //star background initialization here
         SKEmitterNode *starbackground=[SKEmitterNode nodeWithFileNamed:@"starsbackground.sks"];
         starbackground.position=CGPointMake(2400,(self.map.mapSize.height*self.map.tileSize.height));
         [starbackground advanceSimulationTime:180.0];
         [self.map addChild: starbackground];
+        
+        //portal adjust position to suit this level
+        self.travelportal.position=CGPointMake(self.map.tileSize.width*391,self.map.tileSize.height*8);
         
         //mutable arrays here
         self.bullets=nil;
@@ -67,8 +72,68 @@
         
         boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
         boss1.position=CGPointMake(3980,56);
-        [self.enemies addObject:boss1];
+        boss1.zPosition=-81.0;
+        //[self.enemies addObject:boss1];
         [self.map addChild:boss1];
+        
+        __weak GameLevelScene2*weakself=self;
+        SKAction* bridgeblk=[SKAction runBlock:^{
+            int plyrtilecoordx=[weakself.walls coordForPoint:weakself.player.position].x;
+            if(plyrtilecoordx>296){
+                //NSLog(@"bridge done");
+                //remove all the tiles for the bridge
+                for(int i=264;i<=296;i++){
+                    [weakself.walls removeTileAtCoord:CGPointMake(i,28)];
+                }
+                [weakself removeActionForKey:@"handlebridge"];
+            }
+            else if(plyrtilecoordx>263){
+                [weakself.walls setTileGid:1 at:CGPointMake(plyrtilecoordx,28)];
+                if(plyrtilecoordx+1<297)
+                    [weakself.walls setTileGid:1 at:CGPointMake(plyrtilecoordx+1,28)];
+                if(plyrtilecoordx-1>263)
+                    [weakself.walls setTileGid:1 at:CGPointMake(plyrtilecoordx-1,28)];
+                if(plyrtilecoordx-2>263)
+                    [weakself.walls setTileGid:3063 at:CGPointMake(plyrtilecoordx-2,28)];
+                if(plyrtilecoordx+2<297)
+                    [weakself.walls setTileGid:3063 at:CGPointMake(plyrtilecoordx+2,28)];
+            }
+            
+            
+        }];
+        SKAction* removebosswall=[SKAction runBlock:^{
+            for(int i=23;i<28;i++){
+                [weakself.walls removeTileAtCoord:CGPointMake(263,i)];
+                [weakself.background removeTileAtCoord:CGPointMake(262,i)];
+            }}];
+        
+        handlebridge=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:8.5],removebosswall,[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.1],bridgeblk, nil]]],nil]];
+        
+        SKEmitterNode*bossintro=[SKEmitterNode nodeWithFileNamed:@"arachnusintroduction.sks"];
+        bossintro.zPosition=16;
+        bossintro.position=CGPointMake(249*self.map.tileSize.width,2*self.map.tileSize.height);
+        __weak arachnusboss*weakboss1=boss1;
+        SKAction*idleblk=[SKAction runBlock:^{
+            NSLog(@"checking boss idle");
+            if(weakself.player.meleeinaction && CGRectIntersectsRect(CGRectMake(weakself.player.meleeweapon.frame.origin.x+weakself.player.frame.origin.x, weakself.player.meleeweapon.frame.origin.y+weakself.player.frame.origin.y, weakself.player.meleeweapon.frame.size.width, weakself.player.meleeweapon.frame.size.height),weakboss1.frame)){
+                [weakself addChild:bossintro];
+                [weakself runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:3.0],[SKAction runBlock:^{
+                    weakboss1.zPosition=0.0;
+                    for(int i=247;i<=250;i++){
+                        for(int k=25;k<=27;k++){
+                            [weakself.walls removeTileAtCoord:CGPointMake(i,k)];
+                        }
+                    }
+                    [bossintro removeFromParent];
+                    weakboss1.zPosition=0.0;
+                    [weakself.enemies addObject:weakboss1];
+                    weakboss1.active=YES;
+                    [weakself removeActionForKey:@"idlecheck"];
+                }], nil]]];
+            }
+        }];
+        idlecheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:48],[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1],idleblk, nil]]], nil]];
+        [self runAction:idlecheck withKey:@"idlecheck"]; 
         
     }
     return self;
@@ -80,12 +145,9 @@
 }
 
 
-- (void)dealloc {
-    NSLog(@"LVL2 SCENE DEALLOCATED");
-}
-
--(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
+-(void)handleBulletEnemyCollisions{
     
+    if(boss1.active)
     [boss1 handleanimswithfocuspos:self.player.position.x];   //evaluate boss actions/attacks
     
     for(id enemycon in [self.enemies reverseObjectEnumerator]){
@@ -114,7 +176,7 @@
                 //NSLog(@"meleehit");
                 enemyconcop.health=enemyconcop.health-10;
                 self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
-                [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];
+                [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];//encapsulate in playerclass (ex meleedelayac or something)
                 if(enemyconcop.health<=0){
                     [enemyconcop removeAllActions];
                     [enemyconcop removeAllChildren];
@@ -126,7 +188,7 @@
     }
     else if([enemycon isKindOfClass:[arachnusboss class]]){
         arachnusboss*enemyconcop=(arachnusboss*)enemycon;
-        if(fabs(self.player.position.x-enemyconcop.position.x)<370){
+        if(fabs(self.player.position.x-enemyconcop.position.x)<440){
         if(CGRectContainsPoint(CGRectInset(enemyconcop.frame,3,0), self.player.position) && !self.player.plyrrecievingdmg){
                 self.player.plyrrecievingdmg=YES;
                 [self enemyhitplayerdmgmsg:10];
@@ -161,7 +223,7 @@
                 if(enemylcop.health<=0){
                     [enemyl removeAllActions];
                     [enemyl removeAllChildren];
-                    [enemyl removeFromParent];
+                    [enemyl runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}], nil]]];
                     [self.enemies removeObject:enemyl];
                 }
                 [currbullet removeAllActions];
@@ -175,12 +237,10 @@
                 if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
                     //NSLog(@"hit an enemy");
                     enemylcop.health--;
-                    /*if(enemylcop.health<=0){
-                        [enemyl removeAllActions];
-                        [enemyl removeAllChildren];//??dont know if i want for boss
-                        [enemyl removeFromParent];
-                        [self.enemies removeObject:enemyl];
-                    }*/
+                    if(enemylcop.health<=0){
+                        [self.enemies removeObject:enemylcop];
+                        [self runAction:handlebridge withKey:@"handlebridge"];
+                    }
                     [currbullet removeAllActions];
                     [currbullet removeFromParent];
                     [self.bullets removeObject:currbullet];
@@ -196,6 +256,8 @@
 }
 
 
-
+/*- (void)dealloc {
+    NSLog(@"LVL2 SCENE DEALLOCATED");
+}*/
 
 @end

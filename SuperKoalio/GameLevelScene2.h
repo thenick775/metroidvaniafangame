@@ -11,5 +11,6 @@
 @interface GameLevelScene2 : GameLevelScene /*SKScene*/
 
 -(instancetype)initWithSize:(CGSize)size;
+@property (nonatomic,strong) TMXLayer*background;
 
 @end

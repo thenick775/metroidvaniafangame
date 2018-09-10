@@ -23,7 +23,7 @@
 @property (nonatomic,strong) TravelPortal * travelportal;
 @property (nonatomic,assign) BOOL repeating;
 @property (nonatomic,strong) SKSpriteNode *buttonup,*buttonright,*buttonleft,*startbutton;
-@property (nonatomic,strong) SKSpriteNode*pauselabel,*unpauselabel;
+
 
 -(void)damageRecievedMsg;
 -(void)enemyhitplayerdmgmsg:(int)hit;

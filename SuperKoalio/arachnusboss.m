@@ -65,10 +65,11 @@
         SKAction *dustac=[SKAction repeatAction:[SKAction animateWithTextures:[NSArray arrayWithObjects:[arachnustextures textureNamed:@"Dust1.png"],[arachnustextures textureNamed:@"Dust2.png"],[arachnustextures textureNamed:@"Dust3.png"],[arachnustextures textureNamed:@"Dust4.png"], nil] timePerFrame:0.1 resize:NO restore:YES] count:6];
         dustball.position=CGPointMake(-10,-11);
         dustball.alpha=0.85;
-        SKAction *dustaction=[SKAction runBlock:^{[weakself addChild:dustball];[dustball runAction:dustac completion:^{[dustball removeFromParent];}];}];
+        SKAction *dustactionright=[SKAction runBlock:^{dustball.position=CGPointMake(-10,-11);[weakself addChild:dustball];[dustball runAction:dustac completion:^{[dustball removeFromParent];}];}];
+        SKAction *dustactionleft=[SKAction runBlock:^{dustball.position=CGPointMake(10,-11);[weakself addChild:dustball];[dustball runAction:dustac completion:^{[dustball removeFromParent];}];}];
       
-        morphballattackright=[SKAction sequence:[NSArray arrayWithObjects:morphtoballrightanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackrightanim count:15],dustaction,[SKAction moveByX:350 y:0 duration:2.4], nil]],[SKAction moveByX:0 y:8 duration:0],[morphtoballrightanim reversedAction], nil]];
-        morphballattackleft=[SKAction sequence:[NSArray arrayWithObjects:morphtoballleftanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackleftanim count:15],dustaction,[SKAction moveByX:-350 y:0 duration:2.4], nil]],[SKAction moveByX:0 y:8 duration:0],[morphtoballleftanim reversedAction], nil]];
+        morphballattackright=[SKAction sequence:[NSArray arrayWithObjects:morphtoballrightanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackrightanim count:15],dustactionright,[SKAction moveByX:350 y:0 duration:2.4], nil]],[SKAction moveByX:0 y:8 duration:0],[morphtoballrightanim reversedAction], nil]];
+        morphballattackleft=[SKAction sequence:[NSArray arrayWithObjects:morphtoballleftanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackleftanim count:15],dustactionleft,[SKAction moveByX:-350 y:0 duration:2.4], nil]],[SKAction moveByX:0 y:8 duration:0],[morphtoballleftanim reversedAction], nil]];
         
         //move f/b animations
         NSArray *moveforewardtex=@[[arachnustextures textureNamed:@"walk_1.png"],[arachnustextures textureNamed:@"walk_2.png"],[arachnustextures textureNamed:@"walk_3.png"],[arachnustextures textureNamed:@"walk_4.png"],[arachnustextures textureNamed:@"walk_5.png"],[arachnustextures textureNamed:@"walk_6.png"],[arachnustextures textureNamed:@"walk_7.png"],[arachnustextures textureNamed:@"walk_8.png"],[arachnustextures textureNamed:@"walk_9.png"],[arachnustextures textureNamed:@"walk_10.png"],[arachnustextures textureNamed:@"walk_11.png"],[arachnustextures textureNamed:@"walk_12.png"]];
@@ -208,7 +209,7 @@
         recievedamageleft=[SKAction sequence:[NSArray arrayWithObjects:[SKAction moveByX:0 y:5 duration:0],[SKAction group:[NSArray arrayWithObjects:recievedamageleftanim,[SKAction repeatAction:adddmgfire count:3], nil]],[SKAction moveByX:0 y:-5 duration:0], nil]];
         
         //death animation
-        death=[SKAction sequence:[NSArray arrayWithObjects:[SKAction repeatAction:[SKAction sequence:[NSArray arrayWithObjects:recievedamageleft,recievedamageright, nil]] count:6],[SKAction fadeOutWithDuration:0.4],[SKAction runBlock:^{[self removeAllChildren];[self removeAllActions];[self removeFromParent];}], nil]];
+        death=[SKAction sequence:[NSArray arrayWithObjects:[SKAction repeatAction:[SKAction sequence:[NSArray arrayWithObjects:recievedamageleft,recievedamageright, nil]] count:5],[SKAction fadeOutWithDuration:0.4],[SKAction runBlock:^{weakself.active=NO;[weakself removeAllChildren];[weakself removeAllActions];[weakself removeFromParent];}], nil]];
         
         rightattacks=[NSArray arrayWithObjects:moveforeward,morphballattackright,fireattackright,slashattackright, nil];
         leftattacks=[NSArray arrayWithObjects:movebackward,morphballattackleft,fireattackleft,slashattackleft, nil];
@@ -339,9 +340,9 @@
 
 
 
-- (void)dealloc {
+/*- (void)dealloc {
  NSLog(@"ARACHNUS DEALLOCATED");
- }
+ }*/
 
 
 @end
