@@ -13,6 +13,7 @@
 @implementation GameLevelScene2{
     arachnusboss*boss1;
     SKAction *handlebridge;
+    SKAction *idlecheck;
 }
 
 -(instancetype)initWithSize:(CGSize)size {
@@ -71,14 +72,15 @@
         
         boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
         boss1.position=CGPointMake(3980,56);
-        [self.enemies addObject:boss1];
+        boss1.zPosition=-81.0;
+        //[self.enemies addObject:boss1];
         [self.map addChild:boss1];
         
         __weak GameLevelScene2*weakself=self;
         SKAction* bridgeblk=[SKAction runBlock:^{
             int plyrtilecoordx=[weakself.walls coordForPoint:weakself.player.position].x;
             if(plyrtilecoordx>296){
-                NSLog(@"bridge done");
+                //NSLog(@"bridge done");
                 //remove all the tiles for the bridge
                 for(int i=264;i<=296;i++){
                     [weakself.walls removeTileAtCoord:CGPointMake(i,28)];
@@ -107,6 +109,31 @@
         
         handlebridge=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:8.5],removebosswall,[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.1],bridgeblk, nil]]],nil]];
         
+        SKEmitterNode*bossintro=[SKEmitterNode nodeWithFileNamed:@"arachnusintroduction.sks"];
+        bossintro.zPosition=16;
+        bossintro.position=CGPointMake(249*self.map.tileSize.width,2*self.map.tileSize.height);
+        __weak arachnusboss*weakboss1=boss1;
+        SKAction*idleblk=[SKAction runBlock:^{
+            NSLog(@"checking boss idle");
+            if(weakself.player.meleeinaction && CGRectIntersectsRect(CGRectMake(weakself.player.meleeweapon.frame.origin.x+weakself.player.frame.origin.x, weakself.player.meleeweapon.frame.origin.y+weakself.player.frame.origin.y, weakself.player.meleeweapon.frame.size.width, weakself.player.meleeweapon.frame.size.height),weakboss1.frame)){
+                [weakself addChild:bossintro];
+                [weakself runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:3.0],[SKAction runBlock:^{
+                    weakboss1.zPosition=0.0;
+                    for(int i=247;i<=250;i++){
+                        for(int k=25;k<=27;k++){
+                            [weakself.walls removeTileAtCoord:CGPointMake(i,k)];
+                        }
+                    }
+                    [bossintro removeFromParent];
+                    weakboss1.zPosition=0.0;
+                    [weakself.enemies addObject:weakboss1];
+                    weakboss1.active=YES;
+                    [weakself removeActionForKey:@"idlecheck"];
+                }], nil]]];
+            }
+        }];
+        idlecheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:48],[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1],idleblk, nil]]], nil]];
+        [self runAction:idlecheck withKey:@"idlecheck"]; 
         
     }
     return self;
@@ -120,6 +147,7 @@
 
 -(void)handleBulletEnemyCollisions{
     
+    if(boss1.active)
     [boss1 handleanimswithfocuspos:self.player.position.x];   //evaluate boss actions/attacks
     
     for(id enemycon in [self.enemies reverseObjectEnumerator]){
@@ -201,7 +229,7 @@
                 [currbullet removeAllActions];
                 [currbullet removeFromParent];
                 [self.bullets removeObject:currbullet];
-                break; //if bullet hits enemy stop checking for same bullet, maybe cont instead??
+                break; //if bullet hits enemy stop checking for same bullet
             }
         }
             else if([enemyl isKindOfClass:[arachnusboss class]]){

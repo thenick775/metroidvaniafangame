@@ -216,7 +216,7 @@
       [self gameOver:0];
       return;
     }
-    if(fncplayer.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-220 && !_repeating){//make function so can be overridden
+    if(fncplayer.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-220 && !_repeating){
       [self.map addChild:_travelportal];
       _repeating=YES;
     }
@@ -237,7 +237,7 @@
     NSInteger mysteryboxgid=[self tileGIDAtTileCoord:tilecoordinate forLayer:self.mysteryboxes];
     
   
-    if(thetileGID !=0 ){
+    if(thetileGID !=0 || mysteryboxgid!=0){
       CGRect tilerect=[self tileRectFromTileCoords:tilecoordinate];
       //NSLog(@"TILE GID: %ld Tile coordinate: %@ Tile rect: %@ Player Rect: %@",(long)thetileGID,NSStringFromCGPoint(tilecoordinate),NSStringFromCGRect(tilerect),NSStringFromCGRect(playerrect));
       //collision detection here
@@ -254,8 +254,15 @@
         }
         else if(tileindex==1){
           //tile above the sprite
+          if(mysteryboxgid!=0){
+            //NSLog(@"hit a mysterybox!!");
+            [self.mysteryboxes removeTileAtCoord:tilecoordinate];
+            [self hitHealthBox]; //adjusts player healthlabel/healthbar
+          }
+          else{
           fncplayer.desiredPosition=CGPointMake(fncplayer.desiredPosition.x, fncplayer.desiredPosition.y-pl_tl_intersection.size.height);
           fncplayer.playervelocity=CGPointMake(fncplayer.playervelocity.x, 0.0);
+          }
         }
         else if(tileindex==3){
           //tile back left of sprite
@@ -269,7 +276,9 @@
           if(pl_tl_intersection.size.width>pl_tl_intersection.size.height){
             //this is for resolving collision up or down due to ^
             float intersectionheight;
+            if(thetileGID!=0){
             fncplayer.playervelocity=CGPointMake(fncplayer.playervelocity.x, 0.0);
+            }
             
             if(tileindex>4){
               intersectionheight=pl_tl_intersection.size.height;
@@ -307,7 +316,8 @@
       }//if rects intersect
     }//if hazard tile
     
-    if(mysteryboxgid!=0){//for mysterybox layer
+    //might have reduced code duplication by incorporating check into ^^
+    /*if(mysteryboxgid!=0){//for mysterybox layer
      CGRect mysboxtilerect=[self tileRectFromTileCoords:tilecoordinate];
       
       if(CGRectIntersectsRect(playerrect, mysboxtilerect)){
@@ -359,7 +369,7 @@
       }
       }//if mysboxrect intersects playerrect
     }//if mysterybox
-    
+    */
     
   }//for loop bracket
   fncplayer.position=fncplayer.desiredPosition;

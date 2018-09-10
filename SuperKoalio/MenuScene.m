@@ -77,7 +77,7 @@
         
         UIBezierPath*starbez=[UIBezierPath bezierPath];
         [starbez moveToPoint:CGPointMake(-20,self.size.height+5)];
-        [starbez addQuadCurveToPoint:CGPointMake(self.size.width-70,-100) controlPoint:CGPointMake(self.size.width/2+80,self.size.height-20)];
+        [starbez addQuadCurveToPoint:CGPointMake(self.size.width-60,-180) controlPoint:CGPointMake(self.size.width/2+90,self.size.height-20)];
         SKEmitterNode*shootingstar=[SKEmitterNode nodeWithFileNamed:@"shootingstar.sks"];
         shootingstar.targetNode=self;
         SKAction*shootstarblk=[SKAction runBlock:^{

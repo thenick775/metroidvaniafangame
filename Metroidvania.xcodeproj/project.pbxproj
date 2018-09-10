@@ -29,6 +29,7 @@
 		5979C750213B368A00965A50 /* JSTileMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 5979C74F213B368A00965A50 /* JSTileMap.m */; };
 		5979C753213B36BA00965A50 /* LFCGzipUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 5979C752213B36BA00965A50 /* LFCGzipUtility.m */; };
 		5979C75A213C79A100965A50 /* crateriaTileSet.png in Resources */ = {isa = PBXBuildFile; fileRef = 5979C759213C79A100965A50 /* crateriaTileSet.png */; };
+		5979C75D21447BF700965A50 /* arachnusintroduction.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5979C75B21447BF700965A50 /* arachnusintroduction.sks */; };
 		59C0DE1420B91F25008999C3 /* PlayerProjectile.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C0DE1320B91F25008999C3 /* PlayerProjectile.m */; };
 		F275B671186E0B06009F6E6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B670186E0B06009F6E6B /* Foundation.framework */; };
 		F275B673186E0B06009F6E6B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B672186E0B06009F6E6B /* CoreGraphics.framework */; };
@@ -85,6 +86,7 @@
 		5979C751213B36B900965A50 /* LFCGzipUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFCGzipUtility.h; sourceTree = "<group>"; };
 		5979C752213B36BA00965A50 /* LFCGzipUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFCGzipUtility.m; sourceTree = "<group>"; };
 		5979C759213C79A100965A50 /* crateriaTileSet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crateriaTileSet.png; sourceTree = "<group>"; };
+		5979C75B21447BF700965A50 /* arachnusintroduction.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = arachnusintroduction.sks; sourceTree = "<group>"; };
 		59C0DE1220B91F25008999C3 /* PlayerProjectile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerProjectile.h; sourceTree = "<group>"; };
 		59C0DE1320B91F25008999C3 /* PlayerProjectile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerProjectile.m; sourceTree = "<group>"; };
 		F275B66D186E0B06009F6E6B /* Metroidvania.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metroidvania.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,6 +148,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		590F803E2146312E00C09169 /* player/scene */ = {
+			isa = PBXGroup;
+			children = (
+				F275B6AC186E0B8D009F6E6B /* Player.h */,
+				F275B6AD186E0B8D009F6E6B /* Player.m */,
+				59C0DE1220B91F25008999C3 /* PlayerProjectile.h */,
+				59C0DE1320B91F25008999C3 /* PlayerProjectile.m */,
+				596F2DB020C1C44700B32C47 /* TravelPortal.h */,
+				596F2DB120C1C44700B32C47 /* TravelPortal.m */,
+			);
+			name = player/scene;
+			sourceTree = "<group>";
+		};
+		590F803F2146318F00C09169 /* enemies */ = {
+			isa = PBXGroup;
+			children = (
+				596F2DA720BFAFAE00B32C47 /* sciserenemy.h */,
+				596F2DA820BFAFAE00B32C47 /* sciserenemy.m */,
+				5952F8732106AAB600F3BC5B /* arachnusboss.h */,
+				5952F8742106AAB600F3BC5B /* arachnusboss.m */,
+			);
+			name = enemies;
+			sourceTree = "<group>";
+		};
 		595C42E220FDA68700A47BB8 /* JStileMap */ = {
 			isa = PBXGroup;
 			children = (
@@ -162,8 +188,22 @@
 			children = (
 				5952F878210E76B000F3BC5B /* starsbackground.sks */,
 				5979C72D2133E0D400965A50 /* shootingstar.sks */,
+				5979C75B21447BF700965A50 /* arachnusintroduction.sks */,
 			);
 			name = ParticleEmitters;
+			sourceTree = "<group>";
+		};
+		5979C75F214630F500965A50 /* levels */ = {
+			isa = PBXGroup;
+			children = (
+				592B389B20DB008400C62977 /* MenuScene.h */,
+				592B389C20DB008400C62977 /* MenuScene.m */,
+				F275B68A186E0B06009F6E6B /* GameLevelScene.h */,
+				F275B68B186E0B06009F6E6B /* GameLevelScene.m */,
+				594F557920CDE911000E476E /* GameLevelScene2.h */,
+				594F557A20CDE911000E476E /* GameLevelScene2.m */,
+			);
+			name = levels;
 			sourceTree = "<group>";
 		};
 		F275B664186E0B06009F6E6B = {
@@ -202,26 +242,9 @@
 			children = (
 				F275B6CC186E25C1009F6E6B /* SKTUtils */,
 				595C42E220FDA68700A47BB8 /* JStileMap */,
-				F275B6AC186E0B8D009F6E6B /* Player.h */,
-				F275B6AD186E0B8D009F6E6B /* Player.m */,
-				59C0DE1220B91F25008999C3 /* PlayerProjectile.h */,
-				59C0DE1320B91F25008999C3 /* PlayerProjectile.m */,
-				596F2DB020C1C44700B32C47 /* TravelPortal.h */,
-				596F2DB120C1C44700B32C47 /* TravelPortal.m */,
-				596F2DA720BFAFAE00B32C47 /* sciserenemy.h */,
-				596F2DA820BFAFAE00B32C47 /* sciserenemy.m */,
-				592B389B20DB008400C62977 /* MenuScene.h */,
-				592B389C20DB008400C62977 /* MenuScene.m */,
-				5952F8732106AAB600F3BC5B /* arachnusboss.h */,
-				5952F8742106AAB600F3BC5B /* arachnusboss.m */,
-				F275B68A186E0B06009F6E6B /* GameLevelScene.h */,
-				F275B68B186E0B06009F6E6B /* GameLevelScene.m */,
-				594F557920CDE911000E476E /* GameLevelScene2.h */,
-				594F557A20CDE911000E476E /* GameLevelScene2.m */,
-				F275B681186E0B06009F6E6B /* AppDelegate.h */,
-				F275B682186E0B06009F6E6B /* AppDelegate.m */,
-				F275B687186E0B06009F6E6B /* ViewController.h */,
-				F275B688186E0B06009F6E6B /* ViewController.m */,
+				590F803E2146312E00C09169 /* player/scene */,
+				590F803F2146318F00C09169 /* enemies */,
+				5979C75F214630F500965A50 /* levels */,
 				5979C7332133F76900965A50 /* ParticleEmitters */,
 				F275B6C2186E21EB009F6E6B /* Resources */,
 				F275B68F186E0B06009F6E6B /* Images.xcassets */,
@@ -233,6 +256,10 @@
 		F275B679186E0B06009F6E6B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F275B687186E0B06009F6E6B /* ViewController.h */,
+				F275B688186E0B06009F6E6B /* ViewController.m */,
+				F275B681186E0B06009F6E6B /* AppDelegate.h */,
+				F275B682186E0B06009F6E6B /* AppDelegate.m */,
 				5952F876210AFDEF00F3BC5B /* Main.storyboard */,
 				F275B67A186E0B06009F6E6B /* Metroidvania-Info.plist */,
 				F275B67B186E0B06009F6E6B /* InfoPlist.strings */,
@@ -371,6 +398,7 @@
 				F275B6F0186E2749009F6E6B /* tileSet.png in Resources */,
 				59028E6520B742D0007F4C4E /* replay.png in Resources */,
 				596F2DB420C1ECAB00B32C47 /* pipesroom.png in Resources */,
+				5979C75D21447BF700965A50 /* arachnusintroduction.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
