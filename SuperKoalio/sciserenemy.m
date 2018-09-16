@@ -50,8 +50,8 @@
         [projpath2 moveToPoint:CGPointMake(0,0)];
         [projpath2 addQuadCurveToPoint:CGPointMake(-42, -15) controlPoint:CGPointMake(-40, 35)];
         
-       
-        SKAction *letknowaction=[SKAction runBlock:^{[self addChild:enemybullet1];[self addChild:enemybullet2];[enemybullet1 runAction:[SKAction followPath:projpath1.CGPath duration:0.75] completion:^{[enemybullet1 removeFromParent];enemybullet1.position=CGPointMake(12,4);}];[enemybullet2 runAction:[SKAction followPath:projpath2.CGPath duration:0.75] completion:^{[enemybullet2 removeFromParent];enemybullet2.position=CGPointMake(-12,4);}];[enemybullet1 setHidden:NO];[enemybullet2 setHidden:NO];}];
+        __weak sciserenemy*weakself=self;
+        SKAction *letknowaction=[SKAction runBlock:^{[weakself addChild:enemybullet1];[weakself addChild:enemybullet2];[enemybullet1 runAction:[SKAction followPath:projpath1.CGPath duration:0.75] completion:^{[enemybullet1 removeFromParent];enemybullet1.position=CGPointMake(12,4);}];[enemybullet2 runAction:[SKAction followPath:projpath2.CGPath duration:0.75] completion:^{[enemybullet2 removeFromParent];enemybullet2.position=CGPointMake(-12,4);}];[enemybullet1 setHidden:NO];[enemybullet2 setHidden:NO];}];
         SKAction *waitac=[SKAction waitForDuration:1.0];
         NSArray  *waitletknow=@[waitac,letknowaction,waitac];
         SKAction *group=[SKAction group:[NSArray arrayWithObjects:_fireaction,waitletknow, nil]];

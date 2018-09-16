@@ -70,6 +70,10 @@
         [self.enemies addObject:enemy];
         [self.map addChild:enemy];
         
+        sciserenemy *enemy1=[[sciserenemy alloc] initWithPos:CGPointMake(110*self.map.tileSize.width,20*self.map.tileSize.height-7)];
+        [self.enemies addObject:enemy1];
+        [self.map addChild:enemy1];
+        
         boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
         boss1.position=CGPointMake(3980,56);
         boss1.zPosition=-81.0;
@@ -80,7 +84,6 @@
         SKAction* bridgeblk=[SKAction runBlock:^{
             int plyrtilecoordx=[weakself.walls coordForPoint:weakself.player.position].x;
             if(plyrtilecoordx>296){
-                //NSLog(@"bridge done");
                 //remove all the tiles for the bridge
                 for(int i=264;i<=296;i++){
                     [weakself.walls removeTileAtCoord:CGPointMake(i,28)];
@@ -132,7 +135,7 @@
                 }], nil]]];
             }
         }];
-        idlecheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:48],[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1],idleblk, nil]]], nil]];
+        idlecheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:47],[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1],idleblk, nil]]], nil]];
         [self runAction:idlecheck withKey:@"idlecheck"]; 
         
     }

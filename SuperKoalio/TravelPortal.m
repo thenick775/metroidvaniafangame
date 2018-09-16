@@ -26,8 +26,9 @@
         
         _appearaction=[SKAction animateWithTextures:appeararray timePerFrame:0.15];
         _repeataction=[SKAction animateWithTextures:repeatarray timePerFrame:0.15];
+        __weak TravelPortal*weakself=self;
         __weak SKAction*weakrepeataction=_repeataction;
-        [self runAction:_appearaction completion:^{[self runAction:[SKAction repeatActionForever:weakrepeataction]];}];
+        [self runAction:_appearaction completion:^{[weakself runAction:[SKAction repeatActionForever:weakrepeataction]];}];
         
     }
     

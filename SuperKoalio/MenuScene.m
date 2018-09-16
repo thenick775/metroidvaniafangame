@@ -12,6 +12,9 @@
 @implementation MenuScene{
     SKSpriteNode *_playlabel;
     SKSpriteNode *_playbutton;
+    SKSpriteNode *_cntrllabel;
+    SKSpriteNode *_cntrlbkrnd;
+    BOOL viewingcntrls;
     SKAction *shipflyact;
     SKSpriteNode *samusgunship;
     SKSpriteNode *shipflames1;
@@ -136,6 +139,36 @@
         _playbutton.zPosition=4;
         [self addChild:_playbutton];
         
+        _cntrllabel=[SKSpriteNode spriteNodeWithImageNamed:@"controllabel.png"];
+        _cntrllabel.position=CGPointMake(self.size.width/2-130,self.size.height/2-110);
+        [self addChild:_cntrllabel];
+        
+        _cntrlbkrnd=[SKSpriteNode spriteNodeWithColor:[UIColor darkGrayColor] size:CGSizeMake(self.size.width-185,95)];
+        _cntrlbkrnd.alpha=0;
+        _cntrlbkrnd.position=CGPointMake(self.size.width/2,self.size.height/2);
+        _cntrlbkrnd.zPosition=5;
+        [self addChild:_cntrlbkrnd];
+        
+        SKLabelNode *cntrll1=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
+        SKLabelNode *cntrll2=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
+        SKLabelNode *cntrll3=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
+        cntrll1.zPosition=6;
+        cntrll1.fontSize=16;
+        cntrll1.text=@"Use the Dpad to move around,";
+        cntrll1.position=CGPointMake(0,20);
+        cntrll2.zPosition=6;
+        cntrll2.fontSize=16;
+        cntrll2.text=@"Tap the upper right half of the screen to melee,";
+        cntrll2.position=CGPointMake(0,-5);
+        cntrll3.zPosition=6;
+        cntrll3.fontSize=16;
+        cntrll3.text=@"Tap the lower right half of the screen to fire your weapon";
+        cntrll3.position=CGPointMake(0,-30);
+        
+        [_cntrlbkrnd addChild:cntrll1];
+        [_cntrlbkrnd addChild:cntrll2];
+        [_cntrlbkrnd addChild:cntrll3];
+        
         //ship fly to planet
         samusgunship=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"samusgunship.png"]];
         shipflames1=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"gunshipflames1.png"]];
@@ -173,12 +206,20 @@
     for(UITouch*touch in touches){
         if((CGRectContainsPoint(_playlabel.frame,[touch locationInNode:self])) || (CGRectContainsPoint(_playbutton.frame,[touch locationInNode:self]))){
             self.userInteractionEnabled=NO;
-            SKScene * scene = /*[[GameLevelScene2 alloc]initWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];*/[GameLevelScene sceneWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];  //was skView.bounds.size
+            SKScene * scene = [[GameLevelScene2 alloc]initWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];//[GameLevelScene sceneWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];  //was skView.bounds.size
             scene.scaleMode = SKSceneScaleModeAspectFill;
             [shipflamesright2 runAction:flameflicker];
             [shipflamesleft2 runAction:flameflicker];
             __weak SKTransition*weakmenutolvl1tran=menutolvl1tran;
             [samusgunship runAction:shipflyac completion:^{ [self.view presentScene:scene transition:weakmenutolvl1tran];}];
+        }
+        else if(CGRectContainsPoint(_cntrllabel.frame,[touch locationInNode:self]) && !viewingcntrls){
+            [_cntrlbkrnd runAction:[SKAction fadeInWithDuration:0.2]];
+            viewingcntrls=YES;
+        }
+        else if(viewingcntrls){
+            [_cntrlbkrnd runAction:[SKAction fadeOutWithDuration:0.2]];
+            viewingcntrls=NO;
         }
     }
 }

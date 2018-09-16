@@ -213,10 +213,10 @@
         
         rightattacks=[NSArray arrayWithObjects:moveforeward,morphballattackright,fireattackright,slashattackright, nil];
         leftattacks=[NSArray arrayWithObjects:movebackward,morphballattackleft,fireattackleft,slashattackleft, nil];
-        //self.testallactions=[SKAction sequence:[NSArray arrayWithObjects:morphballattackright,turnleft,morphballattackleft,movebackward,turnright,moveforeward,fireattackright,turnleft,fireattackleft,turnright,recievedamageright,turnleft,recievedamageleft,slashattackleft,turnright,slashattackright, nil]];
         
         //GKRulresystem & rule initializations
         arachnusrs=[[GKRuleSystem alloc] init];
+        arachnusrs.state[@"orighealth"]=@(self.health);
         
         NSPredicate*turnrightpred=[NSPredicate predicateWithFormat:@"($coorddist>0 && $prevcoorddist<0)"];
         GKRule *turnrightrule=[GKRule ruleWithPredicate:turnrightpred assertingFact:@"turnright" grade:1.0];
@@ -329,6 +329,12 @@
                 actoexecute=[rightattacks objectAtIndex:[rndsrc nextIntWithUpperBound:rightattacks.count]];
         }
         
+        if(actoexecute!=death){
+            [actoexecute setSpeed:(CGFloat)1.0+(CGFloat)([arachnusrs.state[@"orighealth"] floatValue]-self.health)/(3*[arachnusrs.state[@"orighealth"] floatValue])];
+        }
+        else
+            [actoexecute setSpeed:(CGFloat)1.0];
+        NSLog(@"%f",(CGFloat)1.0+(CGFloat)([arachnusrs.state[@"orighealth"] floatValue]-self.health)/(3*[arachnusrs.state[@"orighealth"] floatValue]));
         
         arachnusrs.state[@"prevcoorddist"]=arachnusrs.state[@"coorddist"];
         
