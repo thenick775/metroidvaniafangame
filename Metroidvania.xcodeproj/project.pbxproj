@@ -209,7 +209,7 @@
 		F275B664186E0B06009F6E6B = {
 			isa = PBXGroup;
 			children = (
-				F275B678186E0B06009F6E6B /* SuperKoalio */,
+				F275B678186E0B06009F6E6B /* Metroidvania */,
 				F275B66F186E0B06009F6E6B /* Frameworks */,
 				F275B66E186E0B06009F6E6B /* Products */,
 			);
@@ -237,7 +237,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		F275B678186E0B06009F6E6B /* SuperKoalio */ = {
+		F275B678186E0B06009F6E6B /* Metroidvania */ = {
 			isa = PBXGroup;
 			children = (
 				F275B6CC186E25C1009F6E6B /* SKTUtils */,
@@ -250,7 +250,7 @@
 				F275B68F186E0B06009F6E6B /* Images.xcassets */,
 				F275B679186E0B06009F6E6B /* Supporting Files */,
 			);
-			path = SuperKoalio;
+			path = Metroidvania;
 			sourceTree = "<group>";
 		};
 		F275B679186E0B06009F6E6B /* Supporting Files */ = {
@@ -552,8 +552,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = 527ET46V8M;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SuperKoalio/Metroidvania-Prefix.pch";
-				INFOPLIST_FILE = "SuperKoalio/Metroidvania-Info.plist";
+				GCC_PREFIX_HEADER = "Metroidvania/Metroidvania-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/Metroidvania/Metroidvania-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
@@ -568,8 +568,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = 527ET46V8M;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SuperKoalio/Metroidvania-Prefix.pch";
-				INFOPLIST_FILE = "SuperKoalio/Metroidvania-Info.plist";
+				GCC_PREFIX_HEADER = "Metroidvania/Metroidvania-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/Metroidvania/Metroidvania-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
