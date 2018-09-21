@@ -5,7 +5,9 @@ I have written the event driven animation scheme, collission detection, scene ar
 This game is targeted for iphone 5 through 8+, and uses a MVC pattern.
 
 
+
 Technical details:
+
 To minimize code duplication, the scenes are set up using inheritance and encapsulation. Everything needed for the scene to function is initialized in lvl1. If the demands of the level require different logic, the base functions should be overridden. If this is unfeasable, the new logic should be encapsulated with the object it relates to and should be added to an overridden base function.
 
 This app uses a fuzzy logic rule system (GKRuleSystem) to quickly evaluate standard game logic for enemies and provide the framework for fuzzy logic if more complex enemy action is needed.
