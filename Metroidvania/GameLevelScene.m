@@ -316,60 +316,7 @@
       }//if rects intersect
     }//if hazard tile
     
-    //might have reduced code duplication by incorporating check into ^^
-    /*if(mysteryboxgid!=0){//for mysterybox layer
-     CGRect mysboxtilerect=[self tileRectFromTileCoords:tilecoordinate];
-      
-      if(CGRectIntersectsRect(playerrect, mysboxtilerect)){
-        CGRect playermysbox_intersection=CGRectIntersection(playerrect, mysboxtilerect);
-        
-      if(tileindex==1){
-        //NSLog(@"hit a mysterybox!!");
-        [self.mysteryboxes removeTileAtCoord:tilecoordinate];
-        [self hitHealthBox]; //adjusts player healthlabel/healthbar
-      
-      }
-      if(tileindex==7){
-        fncplayer.desiredPosition=CGPointMake(fncplayer.desiredPosition.x, fncplayer.desiredPosition.y+playermysbox_intersection.size.height);
-        
-        fncplayer.playervelocity=CGPointMake(fncplayer.playervelocity.x, 0.0);
-        fncplayer.onGround=YES;
-      }
-      else if(tileindex==3){
-        fncplayer.desiredPosition=CGPointMake(fncplayer.desiredPosition.x+playermysbox_intersection.size.width, fncplayer.desiredPosition.y);
-      }
-      else if(tileindex==5){
-        fncplayer.desiredPosition=CGPointMake(fncplayer.desiredPosition.x-playermysbox_intersection.size.width, fncplayer.desiredPosition.y);
-      }
-      else{
-        if(playermysbox_intersection.size.width>playermysbox_intersection.size.height){
-          //this is for resolving collision up or down due to ^
-          float intersectionheight;
-          //fncplayer.playervelocity=CGPointMake(fncplayer.playervelocity.x, 0.0); // so as to avoid rough jumping collisions
-          
-          if(tileindex>4){
-            intersectionheight=playermysbox_intersection.size.height;
-            fncplayer.onGround=YES;
-          }
-          else
-            intersectionheight=-playermysbox_intersection.size.height;
-          fncplayer.desiredPosition=CGPointMake(fncplayer.desiredPosition.x, fncplayer.desiredPosition.y+intersectionheight);
-        }
-        else{
-          //this is for resolving collisions left or right due to ^
-          float intersectionheight;
-          
-          if(tileindex==0 || tileindex==6)
-            intersectionheight=playermysbox_intersection.size.width;
-          else
-            intersectionheight=-playermysbox_intersection.size.width;
-          
-          fncplayer.desiredPosition=CGPointMake(fncplayer.desiredPosition.x+intersectionheight, fncplayer.desiredPosition.y);
-        }
-      }
-      }//if mysboxrect intersects playerrect
-    }//if mysterybox
-    */
+    
     
   }//for loop bracket
   fncplayer.position=fncplayer.desiredPosition;
@@ -381,8 +328,8 @@
   
   if(self.gameOver)
     return;
-  if(self.player.meleeinaction)
-    return;
+  //if(self.player.meleeinaction)
+    //return;
   
   
   for(UITouch *touch in touches){
@@ -424,10 +371,6 @@
       else
         [self.player runAction:[SKAction repeatActionForever:self.player.jumpBackwardsAnimation] withKey:@"jmpb"];
     }
-    /*else if(touchlocation.x>self.size.width/2 && touchlocation.y<self.size.height/2){
-      self.player.fireProjectile=YES;
-      //NSLog(@"firing weapon");
-    }*/
     
   
   }//uitouch iteration end
@@ -452,7 +395,6 @@
       self.player.shouldJump=NO;
       self.player.goForeward=NO;
       self.player.goBackward=NO;
-      //self.player.fireProjectile=YES;
     }
     else if(CGRectContainsPoint(_buttonup.frame, currtouchlocation) && CGRectContainsPoint(_buttonright.frame, previoustouchlocation)){
     //NSLog(@"moving from move right to jumping");
@@ -520,7 +462,7 @@
       self.player.shouldJump=NO;
       self.player.goForeward=NO;
       self.player.goBackward=NO;
-      //self.player.fireProjectile=NO;
+
       
       [self.player removeActionForKey:@"runf"];
       [self.player removeActionForKey:@"runb"];
@@ -529,12 +471,14 @@
       //[self.player removeActionForKey:@"jmpblk"];
       
       if(self.player.forwardtrack){
-        self.player.texture=self.player.forewards;
-        [self.player runAction:[SKAction repeatAction:self.player.standAnimation count:3]];
+        //self.player.texture=self.player.forewards;
+        //[self.player runAction:[SKAction repeatAction:self.player.standAnimation count:3]];
+        [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
       }
       else{
-        self.player.texture=self.player.backwards;
-        [self.player runAction:[SKAction repeatAction:self.player.standbackwardsAnimation count:3]];
+        //self.player.texture=self.player.backwards;
+        //[self.player runAction:[SKAction repeatAction:self.player.standbackwardsAnimation count:3]];
+        [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
       }
     }
     
@@ -573,24 +517,31 @@
       //NSLog(@"done touching up");
       self.player.shouldJump=NO;
       if(self.player.backwardtrack)
-      [self.player runAction:[SKAction repeatAction:self.player.standbackwardsAnimation count:3]];
+        [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
+        //self.player.texture=self.player.backwards;
+      //[self.player runAction:[SKAction repeatAction:self.player.standbackwardsAnimation count:3]];
       else
-      [self.player runAction:[SKAction repeatAction:self.player.standAnimation count:3]];
+        [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
+        //self.player.texture=self.player.forewards;
+      //[self.player runAction:[SKAction repeatAction:self.player.standAnimation count:3]];
     }
     else if(CGRectContainsPoint(_buttonright.frame, fnctouchlocation)){
       //NSLog(@"done touching right");
       self.player.goForeward=NO;
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
-      [self.player runAction:[SKAction repeatAction:self.player.standAnimation count:3]];
-      
+      //[self.player runAction:[SKAction repeatAction:self.player.standAnimation count:3]];
+      [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
+      //self.player.texture=self.player.forewards;
     }
     else if(CGRectContainsPoint(_buttonleft.frame, fnctouchlocation)){
       //NSLog(@"done touching left");
       self.player.goBackward=NO;
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
-      [self.player runAction:[SKAction repeatAction:self.player.standbackwardsAnimation count:3]];
+      //[self.player runAction:[SKAction repeatAction:self.player.standbackwardsAnimation count:3]];
+      [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
+      //self.player.texture=self.player.backwards;
     }
     else if(CGRectContainsPoint(_startbutton.frame, fnctouchlocation)){
       //NSLog(@"do nothing hit the pause");

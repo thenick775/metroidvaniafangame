@@ -25,13 +25,13 @@
         self.cleanup=NO;
         
         if(direction){
-            self.position=CGPointMake(pos.x+12, pos.y+2.3);
+            self.position=CGPointMake(pos.x+12, pos.y+4);
             _bulletframes=@[[bullet textureNamed:@"samus_projectile1.png"],[bullet textureNamed:@"samus_projectile2.png"],[bullet textureNamed:@"samus_projectileoddsright.png"]];
             _bullettexswitch=@[[bullet textureNamed:@"samus_projectileoddsright.png"],[bullet textureNamed:@"samus_projectileevensright.png"]];
         }
         else if(!direction){
             projvector=CGVectorMake(-180,0);
-            self.position=CGPointMake(pos.x-12, pos.y+2.3);
+            self.position=CGPointMake(pos.x-12, pos.y+4);
             _bulletframes=@[[bullet textureNamed:@"samus_projectile1.png"],[bullet textureNamed:@"samus_projectile2.png"]];
             _bullettexswitch=@[[bullet textureNamed:@"samus_projectileoddsleft.png"],[bullet textureNamed:@"samus_projectileevensleft.png"]];
         }

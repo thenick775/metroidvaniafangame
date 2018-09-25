@@ -68,8 +68,8 @@
         SKAction *dustactionright=[SKAction runBlock:^{dustball.position=CGPointMake(-10,-11);[weakself addChild:dustball];[dustball runAction:dustac completion:^{[dustball removeFromParent];}];}];
         SKAction *dustactionleft=[SKAction runBlock:^{dustball.position=CGPointMake(10,-11);[weakself addChild:dustball];[dustball runAction:dustac completion:^{[dustball removeFromParent];}];}];
       
-        morphballattackright=[SKAction sequence:[NSArray arrayWithObjects:morphtoballrightanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackrightanim count:15],dustactionright,[SKAction moveByX:350 y:0 duration:2.4], nil]],[SKAction moveByX:0 y:8 duration:0],[morphtoballrightanim reversedAction], nil]];
-        morphballattackleft=[SKAction sequence:[NSArray arrayWithObjects:morphtoballleftanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackleftanim count:15],dustactionleft,[SKAction moveByX:-350 y:0 duration:2.4], nil]],[SKAction moveByX:0 y:8 duration:0],[morphtoballleftanim reversedAction], nil]];
+        morphballattackright=[SKAction sequence:[NSArray arrayWithObjects:morphtoballrightanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackrightanim count:15],dustactionright,[SKAction moveByX:360 y:0 duration:2.4], nil]],[SKAction moveByX:0 y:8 duration:0],[morphtoballrightanim reversedAction], nil]];
+        morphballattackleft=[SKAction sequence:[NSArray arrayWithObjects:morphtoballleftanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:[NSArray arrayWithObjects:[SKAction repeatAction:ballattackleftanim count:15],dustactionleft,[SKAction moveByX:-360 y:0 duration:2.4], nil]],[SKAction moveByX:0 y:8 duration:0],[morphtoballleftanim reversedAction], nil]];
         
         //move f/b animations
         NSArray *moveforewardtex=@[[arachnustextures textureNamed:@"walk_1.png"],[arachnustextures textureNamed:@"walk_2.png"],[arachnustextures textureNamed:@"walk_3.png"],[arachnustextures textureNamed:@"walk_4.png"],[arachnustextures textureNamed:@"walk_5.png"],[arachnustextures textureNamed:@"walk_6.png"],[arachnustextures textureNamed:@"walk_7.png"],[arachnustextures textureNamed:@"walk_8.png"],[arachnustextures textureNamed:@"walk_9.png"],[arachnustextures textureNamed:@"walk_10.png"],[arachnustextures textureNamed:@"walk_11.png"],[arachnustextures textureNamed:@"walk_12.png"]];
@@ -107,7 +107,7 @@
                 [weakself.parent addChild:firecpy];
                 [firecpy runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:4.0],fireendanim,[SKAction runBlock:^{[firecpy removeFromParent];[weakself.projectilesinaction removeObject:firecpy];[firecpy removeAllActions];}], nil]]];
             }];
-            [weakself runAction:[SKAction repeatAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.07],blkac, nil]] count:10]];
+            [weakself runAction:[SKAction repeatAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.07],blkac, nil]] count:13]];
         }];
         
         UIBezierPath *firepathright=[UIBezierPath bezierPath];
@@ -131,7 +131,7 @@
                 [weakself.parent addChild:firecpy];
                 [firecpy runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:4.0],fireendanim,[SKAction runBlock:^{[firecpy removeFromParent];[weakself.projectilesinaction removeObject:firecpy];[firecpy removeAllActions];}], nil]]];
             }];
-            [weakself runAction:[SKAction repeatAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.07],blkac, nil]] count:10]];
+            [weakself runAction:[SKAction repeatAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.07],blkac, nil]] count:13]];
         }];
         UIBezierPath *firepathleft=[UIBezierPath bezierPath];
         [firepathleft moveToPoint:CGPointZero];
@@ -157,7 +157,7 @@
         slashprojectiletrail.position=CGPointMake(-25,0);
         slashprojectiletrail.alpha=0.6;
         [self.slashprojectile addChild:slashprojectiletrail];
-        SKAction *slashprojmove=[SKAction moveBy:CGVectorMake(430,0) duration:1.8];
+        SKAction *slashprojmove=[SKAction moveBy:CGVectorMake(460,0) duration:1.8];
         
         slashattackright=[SKAction sequence:[NSArray arrayWithObjects:[SKAction group:[NSArray arrayWithObjects:slashrightanim,[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.17],[SKAction runBlock:^{CGPoint pointinlevel=[weakself convertPoint:CGPointMake(27,0) toNode:weakself.parent];
             SKSpriteNode*slashcpy=weakself.slashprojectile.copy;
@@ -168,7 +168,7 @@
                 [weakself.projectilesinaction removeObject:slashcpy];
                 slashcpy.position=CGPointMake(27,0);}];}], nil]],nil]], nil]];
         
-        slashprojmove=[SKAction moveBy:CGVectorMake(-430,0) duration:1.8];
+        slashprojmove=[SKAction moveBy:CGVectorMake(-460,0) duration:1.8];
         
         slashattackleft=[SKAction sequence:[NSArray arrayWithObjects:[SKAction group:[NSArray arrayWithObjects:slashleftanim,[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.17],[SKAction runBlock:^{CGPoint pointinlevel=[weakself convertPoint:CGPointMake(-27,0) toNode:weakself.parent];
             SKSpriteNode*slashcpy=weakself.slashprojectile.copy;

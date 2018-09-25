@@ -82,8 +82,10 @@
         [starbez moveToPoint:CGPointMake(-20,self.size.height+5)];
         [starbez addQuadCurveToPoint:CGPointMake(self.size.width-60,-180) controlPoint:CGPointMake(self.size.width/2+90,self.size.height-20)];
         SKEmitterNode*shootingstar=[SKEmitterNode nodeWithFileNamed:@"shootingstar.sks"];
+        shootingstar.particleRenderOrder=SKParticleRenderOrderDontCare;
         shootingstar.targetNode=self;
         SKAction*shootstarblk=[SKAction runBlock:^{
+            [shootingstar resetSimulation];
             [self addChild:shootingstar];
             [shootingstar runAction:[SKAction followPath:starbez.CGPath asOffset:NO orientToPath:NO duration:1.8] completion:^{[shootingstar resetSimulation];[shootingstar removeFromParent];}];
         }];

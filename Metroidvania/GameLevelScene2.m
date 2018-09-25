@@ -29,8 +29,11 @@
         self.mysteryboxes=[self.map layerNamed:@"mysteryboxes"];
         self.background=[self.map layerNamed:@"background"];
         
+        __weak GameLevelScene2*weakself=self;
+        self.userInteractionEnabled=NO; //for use with player enter scene
+        
         //player initializiation stuff
-        self.player = [[Player alloc] initWithImageNamed:@"samus_fusion_walking3_v1.png"];
+        self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];//_fusion_walking3_v1.png"];
         self.player.position = CGPointMake(100, 150);
         self.player.zPosition = 15;
         
@@ -39,6 +42,7 @@
         self.player.constraints=[NSArray arrayWithObjects:plyrconst, nil];
         
         [self.map addChild:self.player];
+        [self.player runAction:self.player.travelthruportalAnimation completion:^{[weakself.player runAction:[SKAction setTexture:weakself.player.forewards resize:YES]];weakself.userInteractionEnabled=YES;}];//need to modify to turn player when entering map, rename entermap/have seperate for travelthruportal
         
         self.player.forwardtrack=YES;
         self.player.backwardtrack=NO;
@@ -47,9 +51,8 @@
         SKRange *xrange=[SKRange rangeWithLowerLimit:self.size.width/2 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-self.size.width/2];
         SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
         SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
-        
-        self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint, nil];
-        
+        self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithUpperLimit:5/*rangeWithConstantValue:0.0*/] toNode:self.player],edgeconstraint, nil];
+       
         //star background initialization here
         SKEmitterNode *starbackground=[SKEmitterNode nodeWithFileNamed:@"starsbackground.sks"];
         starbackground.position=CGPointMake(2400,(self.map.mapSize.height*self.map.tileSize.height));
@@ -80,7 +83,6 @@
         //[self.enemies addObject:boss1];
         [self.map addChild:boss1];
         
-        __weak GameLevelScene2*weakself=self;
         SKAction* bridgeblk=[SKAction runBlock:^{
             int plyrtilecoordx=[weakself.walls coordForPoint:weakself.player.position].x;
             if(plyrtilecoordx>296){
