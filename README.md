@@ -24,6 +24,9 @@ To minimize tile collisions, instead of using a physics based tile collision sys
 
 
 Credits for art assets ripped by:
+
 Garact Jownson-some background objects from metroid fusion
+
 Midiwaffle-crateria tileset
+
 B Hopkins & Captain Invictus-samus normal suit
