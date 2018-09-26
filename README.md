@@ -17,6 +17,6 @@ This app utilizes the NSPredicate query language to access state information abo
 To minimize tile collisions, instead of using a physics based tile collision system (SpriteKit), I have utilized a tile collision algorithm that only checks if a collision has occured with the 8 adjacent tiles to the player, thus the only information needed is the players position and the layers where collisions may occur (no physicsbodies required, and no alternate array required).
 
 
-![](samus_exv2.gif)
+![](menuscenedemo.gif)
 
-![](menu_ex.gif)
+![](metroidvaniademo.gif)
