@@ -23,6 +23,7 @@ The collision system I have written has two main components, player contact with
 
 ![](metroidvaniademo.gif)
 
+![](boss1demo.gif)
 
 
 Credits for art assets ripped by:
