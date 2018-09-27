@@ -18,6 +18,8 @@ To minimize tile collisions, instead of using a physics based tile collision sys
 
 The collision system I have written has two main components, player contact with enemies, and enemy contact with player. This allows different types of collisions from the player to enemies, and enemies to player (different attacks/projectiles with different specifications for each).
 
+The gif's may take some time to load due to the filesize,
+
 
 ![](menuscenedemo.gif)
 
