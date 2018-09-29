@@ -25,6 +25,7 @@ The gif's may take some time to load due to the filesize,
 
 ![](metroidvaniademo.gif)
 
+![](bossdemo.gif)
 
 
 Credits for art assets ripped by:
