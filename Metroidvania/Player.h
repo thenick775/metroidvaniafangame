@@ -32,7 +32,7 @@
 @property (nonatomic,strong) SKAction *jmptomfmbcheck;
 @property (nonatomic,strong) SKAction *meleeactionright;
 @property (nonatomic,strong) SKSpriteNode *meleeweapon;
- @property (nonatomic,assign) BOOL meleeinaction;
+@property (nonatomic,assign) BOOL meleeinaction;
 @property (nonatomic,assign) BOOL forwardtrack;  //to tell which direction player is facing
 @property (nonatomic,assign) BOOL backwardtrack;
 

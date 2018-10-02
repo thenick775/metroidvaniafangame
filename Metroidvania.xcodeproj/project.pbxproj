@@ -24,6 +24,7 @@
 		596F2DAF20C1496400B32C47 /* backgroundobjects.png in Resources */ = {isa = PBXBuildFile; fileRef = 596F2DAE20C1496400B32C47 /* backgroundobjects.png */; };
 		596F2DB220C1C44700B32C47 /* TravelPortal.m in Sources */ = {isa = PBXBuildFile; fileRef = 596F2DB120C1C44700B32C47 /* TravelPortal.m */; };
 		596F2DB420C1ECAB00B32C47 /* pipesroom.png in Resources */ = {isa = PBXBuildFile; fileRef = 596F2DB320C1ECAB00B32C47 /* pipesroom.png */; };
+		5971B78F215F831C00A65C6E /* honeypot.m in Sources */ = {isa = PBXBuildFile; fileRef = 5971B78E215F831C00A65C6E /* honeypot.m */; };
 		5979C72F2133E0D400965A50 /* shootingstar.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5979C72D2133E0D400965A50 /* shootingstar.sks */; };
 		5979C74C2134BA6E00965A50 /* replay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5979C74B2134BA6E00965A50 /* replay@2x.png */; };
 		5979C750213B368A00965A50 /* JSTileMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 5979C74F213B368A00965A50 /* JSTileMap.m */; };
@@ -79,6 +80,8 @@
 		596F2DB020C1C44700B32C47 /* TravelPortal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TravelPortal.h; sourceTree = "<group>"; };
 		596F2DB120C1C44700B32C47 /* TravelPortal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TravelPortal.m; sourceTree = "<group>"; };
 		596F2DB320C1ECAB00B32C47 /* pipesroom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pipesroom.png; sourceTree = "<group>"; };
+		5971B78D215F831000A65C6E /* honeypot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = honeypot.h; sourceTree = "<group>"; };
+		5971B78E215F831C00A65C6E /* honeypot.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = honeypot.m; sourceTree = "<group>"; };
 		5979C72D2133E0D400965A50 /* shootingstar.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = shootingstar.sks; sourceTree = "<group>"; };
 		5979C74B2134BA6E00965A50 /* replay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "replay@2x.png"; path = "../../replay@2x.png"; sourceTree = "<group>"; };
 		5979C74E213B368A00965A50 /* JSTileMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSTileMap.h; sourceTree = "<group>"; };
@@ -166,6 +169,8 @@
 			children = (
 				596F2DA720BFAFAE00B32C47 /* sciserenemy.h */,
 				596F2DA820BFAFAE00B32C47 /* sciserenemy.m */,
+				5971B78D215F831000A65C6E /* honeypot.h */,
+				5971B78E215F831C00A65C6E /* honeypot.m */,
 				5952F8732106AAB600F3BC5B /* arachnusboss.h */,
 				5952F8742106AAB600F3BC5B /* arachnusboss.m */,
 			);
@@ -420,6 +425,7 @@
 				F275B67F186E0B06009F6E6B /* main.m in Sources */,
 				F275B6E5186E25C1009F6E6B /* SKTTimingFunctions.m in Sources */,
 				F275B6AE186E0B8D009F6E6B /* Player.m in Sources */,
+				5971B78F215F831C00A65C6E /* honeypot.m in Sources */,
 				596F2DB220C1C44700B32C47 /* TravelPortal.m in Sources */,
 				F275B6E3186E25C1009F6E6B /* SKTAudio.m in Sources */,
 				F275B6E4186E25C1009F6E6B /* SKTEffects.m in Sources */,

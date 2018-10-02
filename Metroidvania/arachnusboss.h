@@ -7,6 +7,7 @@
 
 #import <SpriteKit/SpriteKit.h>
 #import "JSTileMap.h"
+#import <GameplayKit/GameplayKit.h>
 
 @interface arachnusboss : SKSpriteNode
 

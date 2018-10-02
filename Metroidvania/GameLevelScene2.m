@@ -6,6 +6,7 @@
 
 #import "GameLevelScene2.h"
 #import "sciserenemy.h"
+#import "honeypot.h"
 #import "arachnusboss.h"
 #import "SKTUtils.h"
 #import "PlayerProjectile.h"
@@ -51,7 +52,7 @@
         SKRange *xrange=[SKRange rangeWithLowerLimit:self.size.width/2 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-self.size.width/2];
         SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
         SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
-        self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithUpperLimit:5/*rangeWithConstantValue:0.0*/] toNode:self.player],edgeconstraint, nil];
+        self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithLowerLimit:0 upperLimit:4] toNode:self.player],edgeconstraint, nil];
        
         //star background initialization here
         SKEmitterNode *starbackground=[SKEmitterNode nodeWithFileNamed:@"starsbackground.sks"];
@@ -73,14 +74,24 @@
         [self.enemies addObject:enemy];
         [self.map addChild:enemy];
         
-        sciserenemy *enemy1=[[sciserenemy alloc] initWithPos:CGPointMake(110*self.map.tileSize.width,20*self.map.tileSize.height-7)];
+        sciserenemy *enemy1=[[sciserenemy alloc] initWithPos:CGPointMake(64*self.map.tileSize.width,16*self.map.tileSize.height-7)];
         [self.enemies addObject:enemy1];
         [self.map addChild:enemy1];
+        
+        
+        honeypot *enemy2=[[honeypot alloc] initcomplete];
+        enemy2.position=CGPointMake(179*self.map.tileSize.width,3*self.map.tileSize.height-3);
+        [self.enemies addObject:enemy2];
+        [self addChild:enemy2];
+        
+        honeypot *enemy3=[[honeypot alloc] initcomplete];
+        enemy3.position=CGPointMake(110*self.map.tileSize.width,20*self.map.tileSize.height-3);
+        [self.enemies addObject:enemy3];
+        [self addChild:enemy3];
         
         boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
         boss1.position=CGPointMake(3980,56);
         boss1.zPosition=-81.0;
-        //[self.enemies addObject:boss1];
         [self.map addChild:boss1];
         
         SKAction* bridgeblk=[SKAction runBlock:^{
@@ -151,7 +162,6 @@
 
 
 -(void)handleBulletEnemyCollisions{
-    
     if(boss1.active)
     [boss1 handleanimswithfocuspos:self.player.position.x];   //evaluate boss actions/attacks
     
@@ -206,6 +216,34 @@
         }
     }
   }
+    else if([enemycon isKindOfClass:[honeypot class]]){
+        honeypot*enemyconcop=(honeypot*)enemycon;
+        if(enemyconcop.dead){
+            [enemyconcop updateWithDeltaTime:0.16];
+            CGPoint realpos=[self convertPoint:self.player.position toNode:enemyconcop];
+            enemyconcop.target.position=vector2((float)realpos.x,(float)realpos.y);
+        }
+            
+        if(CGRectIntersectsRect(self.player.frame,enemyconcop.frame) && !self.player.plyrrecievingdmg && !enemyconcop.dead){
+            self.player.plyrrecievingdmg=YES;
+            [self enemyhitplayerdmgmsg:10];
+        }
+        if(enemyconcop.dead){
+            for(honeypotproj *child in [enemyconcop.children reverseObjectEnumerator]){
+                if(CGRectContainsPoint(self.player.frame,[self convertPoint:child.position fromNode:enemyconcop]) && !self.player.plyrrecievingdmg){
+                    self.player.plyrrecievingdmg=YES;
+                    [self enemyhitplayerdmgmsg:10];
+                }
+            }
+            if(enemyconcop.agentSystem.components.count==0){
+                [enemyconcop removeAllActions];
+                [enemyconcop removeAllChildren];
+                [enemyconcop removeFromParent];
+                [self.enemies removeObject:enemyconcop];
+            }
+        }
+    }
+        
 }
     
     
@@ -251,7 +289,20 @@
                     [self.bullets removeObject:currbullet];
                     break; //if bullet hits enemy stop checking for same bullet
                 }
-                
+            }
+            else if([enemyl isKindOfClass:[honeypot class]]){
+                honeypot*enemylcop=(honeypot*)enemyl;
+                if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0),currbullet.frame) && !enemylcop.dead){
+                    enemylcop.health--;
+                    if(enemylcop.health<=0 && !enemylcop.dead){
+                        __weak honeypot*weakenemylcop=enemylcop;
+                        [enemylcop runAction:enemylcop.explode completion:^{weakenemylcop.texture=nil;[weakenemylcop removeActionForKey:@"walk"];enemylcop.dead=YES;}];
+                    }
+                    [currbullet removeAllActions];
+                    [currbullet removeFromParent];
+                    [self.bullets removeObject:currbullet];
+                    break; //if bullet hits enemy stop checking for same bullet
+                }
             }
       }
     }//for currbullet

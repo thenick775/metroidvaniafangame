@@ -7,7 +7,6 @@
 
 #import "arachnusboss.h"
 #import "SKTUtils.h"
-#import <GameplayKit/GameplayKit.h>
 
 @implementation arachnusboss{
     SKAction *moveforeward;
@@ -328,7 +327,6 @@
             else
                 actoexecute=[rightattacks objectAtIndex:[rndsrc nextIntWithUpperBound:rightattacks.count]];
         }
-        
         if(actoexecute!=death){
             [actoexecute setSpeed:(CGFloat)1.0+(CGFloat)([arachnusrs.state[@"orighealth"] floatValue]-self.health)/(3*[arachnusrs.state[@"orighealth"] floatValue])];
         }
