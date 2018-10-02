@@ -18,6 +18,8 @@ To minimize tile collisions, instead of using a physics based tile collision sys
 
 The collision system I have written has two main components, player contact with enemies, and enemy contact with player. This allows different types of collisions from the player to enemies, and enemies to player (different attacks/projectiles with different specifications for each).
 
+GKAgent's (GameplayKit) are used in conjunction with spritekit to create event driven autonomous flocking behavior that simulates real-world physical movemnt (ex. honeypot enemy). This behavoir is lightweight and required no physicsbodies/external nodes attatched to the target.
+
 The gif's may take some time to load due to the filesize,
 
 
