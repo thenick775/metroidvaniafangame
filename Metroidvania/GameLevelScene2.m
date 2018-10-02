@@ -222,13 +222,7 @@
             [enemyconcop updateWithDeltaTime:0.16];
             CGPoint realpos=[self convertPoint:self.player.position toNode:enemyconcop];
             enemyconcop.target.position=vector2((float)realpos.x,(float)realpos.y);
-        }
-            
-        if(CGRectIntersectsRect(self.player.frame,enemyconcop.frame) && !self.player.plyrrecievingdmg && !enemyconcop.dead){
-            self.player.plyrrecievingdmg=YES;
-            [self enemyhitplayerdmgmsg:10];
-        }
-        if(enemyconcop.dead){
+        
             for(honeypotproj *child in [enemyconcop.children reverseObjectEnumerator]){
                 if(CGRectContainsPoint(self.player.frame,[self convertPoint:child.position fromNode:enemyconcop]) && !self.player.plyrrecievingdmg){
                     self.player.plyrrecievingdmg=YES;
@@ -241,7 +235,14 @@
                 [enemyconcop removeFromParent];
                 [self.enemies removeObject:enemyconcop];
             }
+        
         }
+            
+        if(CGRectIntersectsRect(self.player.frame,enemyconcop.frame) && !self.player.plyrrecievingdmg && !enemyconcop.dead){
+            self.player.plyrrecievingdmg=YES;
+            [self enemyhitplayerdmgmsg:10];
+        }
+        
     }
         
 }
