@@ -40,8 +40,10 @@
     self.hazards=[self.map layerNamed:@"hazards"];
     self.mysteryboxes=[self.map layerNamed:@"mysteryboxes"];
     
+    __weak GameLevelScene *weakself=self;
+    self.userInteractionEnabled=NO; //for use with player enter scene
     //player initializiation stuff
-    self.player = [[Player alloc] initWithImageNamed:@"samus_fusion_walking3_v1.png"];
+    self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];//_fusion_walking3_v1.png"];
     self.player.position = CGPointMake(100, 150);
     self.player.zPosition = 15;
     
@@ -50,6 +52,7 @@
     self.player.constraints=[NSArray arrayWithObjects:plyrconst, nil];
     
     [self.map addChild:self.player];
+    [self.player runAction:self.player.travelthruportalAnimation completion:^{[weakself.player runAction:[SKAction setTexture:weakself.player.forewards resize:YES]];weakself.userInteractionEnabled=YES;}];//need to modify to turn player when entering map, rename entermap/have seperate for travelthruportal
     
     self.player.forwardtrack=YES;
     self.player.backwardtrack=NO;
@@ -61,7 +64,7 @@
     SKRange *xrange=[SKRange rangeWithLowerLimit:self.size.width/2 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-self.size.width/2];
     SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
     SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
-    self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint, nil];
+    self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithUpperLimit:4] toNode:self.player],edgeconstraint, nil];/*=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint, nil];*/
     
     //health label initialization
     self.healthlabel=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
@@ -328,8 +331,8 @@
   
   if(self.gameOver)
     return;
-  //if(self.player.meleeinaction)
-    //return;
+  if(self.player.meleeinaction)
+    return;
   
   
   for(UITouch *touch in touches){
@@ -381,6 +384,8 @@
 -(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{ //need to modify to fit ^v asap
   
   if(self.gameOver || self.paused)
+    return;
+  if(self.player.meleeinaction)
     return;
   
   
