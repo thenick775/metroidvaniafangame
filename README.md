@@ -25,7 +25,7 @@ The gif's may take some time to load due to the filesize,
 
 ![](menuscenedemo.gif)
 
-![](metroidvaniademo.gif)
+![](honeypottrackdemo.gif)
 
 ![](bossdemo.gif)
 
