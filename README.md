@@ -10,6 +10,8 @@ Technical details:
 
 To minimize code duplication, the scenes are set up using inheritance and encapsulation. Everything needed for the scene to function is initialized in lvl1. If the demands of the level require different logic, the base functions should be overridden. If this is unfeasable, the new logic should be encapsulated with the object it relates to and should be added to an overridden base function.
 
+Multithreading (Grand Central Dispatch) is used to smoothly transition between scenes, and to preload assets that are not immediately needed.
+
 This app uses a fuzzy logic rule system (GKRuleSystem) to quickly evaluate standard game logic for more complex enemies and provide the framework for fuzzy logic if more complex enemy action is needed.
 
 This app utilizes the NSPredicate query language to access state information about enemies using the fuzzy logic system decribed above. 
