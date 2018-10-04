@@ -29,7 +29,7 @@
 
 -(instancetype)initWithSize:(CGSize)size {
     if(self=[super initWithSize:size]){
-       
+        
         SKTextureAtlas *backgroundtexatl=[SKTextureAtlas atlasNamed:@"menusceneitems"];
         SKTexture *backgroundtex=[backgroundtexatl textureNamed:@"parallax-space-backgound.png"];
         SKSpriteNode *background=[SKSpriteNode spriteNodeWithTexture:backgroundtex size:self.size];
@@ -78,6 +78,7 @@
         pixelstar7.position=CGPointMake(445,258);
         [self addChild:pixelstar7];
         
+         __weak MenuScene *weakself=self;
         UIBezierPath*starbez=[UIBezierPath bezierPath];
         [starbez moveToPoint:CGPointMake(-20,self.size.height+5)];
         [starbez addQuadCurveToPoint:CGPointMake(self.size.width-60,-180) controlPoint:CGPointMake(self.size.width/2+90,self.size.height-20)];
@@ -86,7 +87,7 @@
         shootingstar.targetNode=self;
         SKAction*shootstarblk=[SKAction runBlock:^{
             [shootingstar resetSimulation];
-            [self addChild:shootingstar];
+            [weakself addChild:shootingstar];
             [shootingstar runAction:[SKAction followPath:starbez.CGPath asOffset:NO orientToPath:NO duration:1.8] completion:^{[shootingstar resetSimulation];[shootingstar removeFromParent];}];
         }];
         SKAction*shootingstarac=[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:2],shootstarblk,[SKAction waitForDuration:8.0], nil]]];
@@ -208,12 +209,30 @@
     for(UITouch*touch in touches){
         if((CGRectContainsPoint(_playlabel.frame,[touch locationInNode:self])) || (CGRectContainsPoint(_playbutton.frame,[touch locationInNode:self]))){
             self.userInteractionEnabled=NO;
-            SKScene * scene = /*[[GameLevelScene2 alloc]initWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];*/[GameLevelScene sceneWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];  //was skView.bounds.size
-            scene.scaleMode = SKSceneScaleModeAspectFill;
-            [shipflamesright2 runAction:flameflicker];
-            [shipflamesleft2 runAction:flameflicker];
+            
+            __weak MenuScene *weakself = self;
             __weak SKTransition*weakmenutolvl1tran=menutolvl1tran;
-            [samusgunship runAction:shipflyac completion:^{ [self.view presentScene:scene transition:weakmenutolvl1tran];}];
+            __weak SKSpriteNode*weakshipflamesright2=shipflamesright2;
+            __weak SKSpriteNode*weakshipflamesleft2=shipflamesleft2;
+            __weak SKAction *weakflameflicker=flameflicker;
+            __weak SKSpriteNode *weaksamusgunship=samusgunship;
+            __weak SKAction *weakshipflyac=shipflyac;
+            CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10);
+            
+            dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+                //Background thread, preloading the scene here
+                GameLevelScene*preload=[[GameLevelScene alloc]initWithSize:nextSceneSize];
+                preload.scaleMode = SKSceneScaleModeAspectFill;
+                
+                dispatch_async(dispatch_get_main_queue(), ^(void){
+                    NSLog(@"preloaded lvl2");
+                    [weakshipflamesright2 runAction:weakflameflicker];
+                    [weakshipflamesleft2 runAction:weakflameflicker];
+                    [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
+                });
+            });
+            
+            
         }
         else if(CGRectContainsPoint(_cntrllabel.frame,[touch locationInNode:self]) && !viewingcntrls){
             [_cntrlbkrnd runAction:[SKAction fadeInWithDuration:0.2]];

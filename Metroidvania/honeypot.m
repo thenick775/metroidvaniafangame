@@ -20,7 +20,7 @@
         self.agent.delegate=self;
         self.agent.maxSpeed=18;
         self.agent.maxAcceleration=12;
-        self.agent.mass=3;
+        self.agent.mass=2;
     }
     return self;
 }
@@ -57,8 +57,9 @@
     __weak honeypot*weakself=self;
     self.agentSystem=[[GKComponentSystem alloc] initWithComponentClass:[GKAgent2D class]];
     self.target=[[GKAgent2D alloc]init];
+    self.target.radius=7;
     self.target.delegate=nil;
-    self.target.radius=1;
+   
         
     SKAction *walkanim=[SKAction animateWithTextures:[NSArray arrayWithObjects:[honeypotatlas textureNamed:@"honeypot1.png"],[honeypotatlas textureNamed:@"honeypot2.png"],[honeypotatlas textureNamed:@"honeypot3.png"],[honeypotatlas textureNamed:@"honeypot4.png"],[honeypotatlas textureNamed:@"honeypot5.png"],[honeypotatlas textureNamed:@"honeypot6.png"],[honeypotatlas textureNamed:@"honeypot7.png"],[honeypotatlas textureNamed:@"honeypot8.png"], nil] timePerFrame:0.2 resize:YES restore:NO];
     
@@ -98,7 +99,7 @@
         [self addChild:tmproj];
         [self.agentSystem addComponent:tmproj.agent];
     }
-    GKBehavior *flock=[GKBehavior behaviorWithGoals:[NSArray arrayWithObjects:[GKGoal goalToInterceptAgent:(GKAgent*)self.target maxPredictionTime:2.0],[GKGoal goalToCohereWithAgents:self.agentSystem.components maxDistance:10000 maxAngle:M_PI_4],[GKGoal goalToAlignWithAgents:self.agentSystem.components maxDistance:0 maxAngle:M_PI_4],[GKGoal goalToSeparateFromAgents:self.agentSystem.components maxDistance:15 maxAngle:M_PI_4], nil] andWeights:[NSArray arrayWithObjects:@10,@100,@10,@28,nil]];
+    GKBehavior *flock=[GKBehavior behaviorWithGoals:[NSArray arrayWithObjects:[GKGoal goalToSeekAgent:(GKAgent*)self.target],/*[GKGoal goalToCohereWithAgents:self.agentSystem.components maxDistance:15 maxAngle:M_PI_4],[GKGoal goalToAlignWithAgents:self.agentSystem.components maxDistance:0 maxAngle:M_PI_4],*/[GKGoal goalToSeparateFromAgents:self.agentSystem.components maxDistance:1 maxAngle:M_PI_4], nil] andWeights:[NSArray arrayWithObjects:@14,/*@0,@0,*/@150,nil]];
     
     for(GKAgent2D *thisagent in self.agentSystem.components){
             thisagent.behavior=flock;
