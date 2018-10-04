@@ -59,12 +59,8 @@
         self.meleedelay=NO;
         SKTextureAtlas *projectiles=[SKTextureAtlas atlasNamed:@"projectiles"];
         self.meleeweapon=[SKSpriteNode spriteNodeWithTexture:[projectiles textureNamed:@"samusmeleeright1.png"]];
-        self.meleeweapon.position=CGPointMake(/*self.position.x+*/16, /*self.position.y+*/4);
-        //[self.meleeweapon setXScale:0.88];
-        //[self.meleeweapon setYScale:0.88];
+        self.meleeweapon.position=CGPointMake(16,4);
         self.meleeweapon.alpha=0;
-        //meleeweapon.anchorPoint=CGPointZero;
-        //[self addChild:self.meleeweapon];
         SKAction *meleeanimatemove=[SKAction group:[NSArray arrayWithObjects:[SKAction animateWithTextures:[NSArray arrayWithObjects:[projectiles textureNamed:@"samusmeleeright1.png"],[projectiles textureNamed:@"samusmeleeright2.png"],[projectiles textureNamed:@"samusmeleeright3.png"],[projectiles textureNamed:@"samusmeleeright4.png"], nil] timePerFrame:0.18 resize:YES restore:YES],[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.41],[SKAction moveBy:CGVectorMake(6,21) duration:0.2],[SKAction moveBy:CGVectorMake(-6,-21) duration:0.01],nil]], nil] ];
         
         //NSArray *plrymeleearr=@[[animation textureNamed:@"samusmelee1.png"],[animation textureNamed:@"samusmelee2.png"]];
@@ -110,31 +106,21 @@
         }];
         
         
-        //self.backwards=[animation textureNamed:@"samus_fusion_backwards_orig3_v1.png"];
-        //self.forewards=[animation textureNamed:@"samus_fusion_walking3_v1.png"];
         self.backwards=[samusregsuit textureNamed:@"samus_standb.png"];
         self.forewards=[samusregsuit textureNamed:@"samus_standf.png"];
         
-        //NSArray *standArray=@[[animation textureNamed:@"samus_fusion_walking3_v1.png"],[animation textureNamed:@"samus_fusion_walking1_v2.png"],[animation textureNamed:@"samus_fusion_walking2_v2.png"]];
-        
-        //NSArray*standingbackwardsarray=@[[animation textureNamed:@"samus_fusion_standingbackwards3_v1.png"],[animation textureNamed:@"samus_fusion_standingbackwards1_v2.png"],[animation textureNamed:@"samus_fusion_standingbackwards2_v2.png"]];
-        
-        //NSArray *runarray=@[[animation textureNamed:@"samus_run1_v1_edited.png"],[animation textureNamed:@"samus_run2_v1_edited.png"],[animation textureNamed:@"samus_run3_v1_edited.png"],[animation textureNamed:@"samus_run4_v1_edited.png"],[animation textureNamed:@"samus_run5_v1_edited.png"],[animation textureNamed:@"samus_run6_v1_edited.png"],[animation textureNamed:@"samus_run7_v1_edited.png"],[animation textureNamed:@"samus_run8_v1_edited.png"],[animation textureNamed:@"samus_run9_v1_edited.png"],[animation textureNamed:@"samus_run10_v1_edited.png"]];
         NSArray *runarray=@[[samusregsuit textureNamed:@"samus_runf1.png"],[samusregsuit textureNamed:@"samus_runf2.png"],[samusregsuit textureNamed:@"samus_runf5.png"],[samusregsuit textureNamed:@"samus_runf3.png"],[samusregsuit textureNamed:@"samus_runf4.png"],[samusregsuit textureNamed:@"samus_runf7.png"],[samusregsuit textureNamed:@"samus_runf6.png"],[samusregsuit textureNamed:@"samus_runf8.png"],[samusregsuit textureNamed:@"samus_runf9.png"],[samusregsuit textureNamed:@"samus_runf10.png"]];
         
-        //NSArray *runbackwardsarray=@[[animation textureNamed:@"samus_runningbackwards1_v1_edited.png"],[animation textureNamed:@"samus_runningbackwards2_v1_edited.png"],[animation textureNamed:@"samus_runningbackwards3_v1_edited.png"],[animation textureNamed:@"samus_runningbackwards4_v1_edited.png"],[animation textureNamed:@"samus_runningbackwards5_v1_edited.png"],[animation textureNamed:@"samus_runningbackwards6_v1_edited.png"],[animation textureNamed:@"samus_runningbackwards7_v1_edited.png"],[animation textureNamed:@"samus_runningbackwards8_v1_edited.png"],[animation textureNamed:@"samus_runningbackwards9_v1_edited.png"],[animation textureNamed:@"samus_runningbackwards10_v1_edited.png"]];
         NSArray *runbackwardsarray=@[[samusregsuit textureNamed:@"samus_runb1.png"],[samusregsuit textureNamed:@"samus_runb2.png"],[samusregsuit textureNamed:@"samus_runb3.png"],[samusregsuit textureNamed:@"samus_runb4.png"],[samusregsuit textureNamed:@"samus_runb5.png"],[samusregsuit textureNamed:@"samus_runb6.png"],[samusregsuit textureNamed:@"samus_runb7.png"],[samusregsuit textureNamed:@"samus_runb8.png"],[samusregsuit textureNamed:@"samus_runb9.png"],[samusregsuit textureNamed:@"samus_runb10.png"]];
         
-        //NSArray *jumpforewardsarray=@[[animation textureNamed:@"samus_jump2_v1_edited.png"],[animation textureNamed:@"samus_jump3_v1_edited.png"],[animation textureNamed:@"samus_jump4_v1_edited.png"],[animation textureNamed:@"samus_jump5_v1_edited.png"],[animation textureNamed:@"samus_jump6_v1_edited.png"],[animation textureNamed:@"samus_jump7_v1_edited.png"],[animation textureNamed:@"samus_jump8_v1_edited.png"],[animation textureNamed:@"samus_jump9_v1_edited.png"],[animation textureNamed:@"samus_jump10_v1_edited.png"]];
         NSArray *jumpforwardsstartarray=@[[samusregsuit textureNamed:@"samus_jumpr1.png"],[samusregsuit textureNamed:@"samus_jumpr2.png"]];
         NSArray *jumpforewardsarray=@[[samusregsuit textureNamed:@"samus_jumpr3.png"],[samusregsuit textureNamed:@"samus_jumpr4.png"],[samusregsuit textureNamed:@"samus_jumpr5.png"],[samusregsuit textureNamed:@"samus_jumpr6.png"],[samusregsuit textureNamed:@"samus_jumpr7.png"],[samusregsuit textureNamed:@"samus_jumpr8.png"],[samusregsuit textureNamed:@"samus_jumpr9.png"],[samusregsuit textureNamed:@"samus_jumpr10.png"]];
         
-        //NSArray *jumpbackwardsarray=@[[animation textureNamed:@"samus_jumpbackwards1_v1_edited.png"],[animation textureNamed:@"samus_jumpbackwards2_v1_edited.png"],[animation textureNamed:@"samus_jumpbackwards3_v1_edited.png"],[animation textureNamed:@"samus_jumpbackwards4_v1_edited.png"],[animation textureNamed:@"samus_jumpbackwards5_v1_edited.png"],[animation textureNamed:@"samus_jumpbackwards6_v1_edited.png"],[animation textureNamed:@"samus_jumpbackwards7_v1_edited.png"],[animation textureNamed:@"samus_jumpbackwards8_v1_edited.png"],[animation textureNamed:@"samus_jumpbackwards9_v1_edited.png"],[animation textureNamed:@"samus_jumpbackwards10_v1_edited.png"]];
         NSArray *jumpbackwardsstartarray=@[[samusregsuit textureNamed:@"samus_jumpb1.png"],[samusregsuit textureNamed:@"samus_jumpb2.png"]];
         NSArray *jumpbackwardsarray=@[[samusregsuit textureNamed:@"samus_jumpb3.png"],[samusregsuit textureNamed:@"samus_jumpb4.png"],[samusregsuit textureNamed:@"samus_jumpb5.png"],[samusregsuit textureNamed:@"samus_jumpb6.png"],[samusregsuit textureNamed:@"samus_jumpb7.png"],[samusregsuit textureNamed:@"samus_jumpb8.png"],[samusregsuit textureNamed:@"samus_jumpb9.png"],[samusregsuit textureNamed:@"samus_jumpb10.png"]];
         
-        //NSArray *travelthruportalarray=@[[animation textureNamed:@"travel1_edited.png"],[animation textureNamed:@"travel2_edited.png"],[animation textureNamed:@"travel3_edited.png"],[animation textureNamed:@"travel4_edited.png"],[animation textureNamed:@"travel5_edited.png"],[animation textureNamed:@"travel6_edited.png"],[animation textureNamed:@"travel7_edited.png"]];
-        NSArray *travelthruportalarray=@[[samusregsuit textureNamed:@"samus_travel1.png"],[samusregsuit textureNamed:@"samus_travel2.png"],[samusregsuit textureNamed:@"samus_travel3.png"],[samusregsuit textureNamed:@"samus_travel4.png"],[samusregsuit textureNamed:@"samus_travel5.png"],[samusregsuit textureNamed:@"samus_travel6.png"],[samusregsuit textureNamed:@"samus_travel7.png"],[samusregsuit textureNamed:@"samus_travel8.png"],[samusregsuit textureNamed:@"samus_travel9.png"],[samusregsuit textureNamed:@"samus_travel10.png"]/*,[samusregsuit textureNamed:@"samus_turnr1.png"],[samusregsuit textureNamed:@"samus_turnr2.png"]*/];
+        NSArray *travelthruportalarray=@[[samusregsuit textureNamed:@"samus_travel1.png"],[samusregsuit textureNamed:@"samus_travel2.png"],[samusregsuit textureNamed:@"samus_travel3.png"],[samusregsuit textureNamed:@"samus_travel4.png"],[samusregsuit textureNamed:@"samus_travel5.png"],[samusregsuit textureNamed:@"samus_travel6.png"],[samusregsuit textureNamed:@"samus_travel7.png"],[samusregsuit textureNamed:@"samus_travel8.png"],[samusregsuit textureNamed:@"samus_travel9.png"],[samusregsuit textureNamed:@"samus_travel10.png"]];
+        
         
         //self.standAnimation=[SKAction animateWithTextures:standArray timePerFrame:(NSTimeInterval)0.40 resize:YES restore:NO];
         self.runAnimation=[SKAction animateWithTextures:runarray timePerFrame:0.075 resize:YES restore:NO];
@@ -142,8 +128,9 @@
         //self.standbackwardsAnimation=[SKAction animateWithTextures:standingbackwardsarray timePerFrame:0.40 resize:YES restore:NO];
         self.jumpForewardsAnimation=[SKAction animateWithTextures:jumpforewardsarray timePerFrame:0.045 resize:YES restore:NO];
         self.jumpBackwardsAnimation=[SKAction animateWithTextures:jumpbackwardsarray timePerFrame:0.045 resize:YES restore:NO];
-        self.travelthruportalAnimation=[SKAction sequence:[NSArray arrayWithObjects:[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2],[SKAction animateWithTextures:[NSArray arrayWithObjects:[samusregsuit textureNamed:@"samus_turnr1.png"],[samusregsuit textureNamed:@"samus_turnr2.png"],[samusregsuit textureNamed:@"samus_turnr3.png"], nil] timePerFrame:0.1 resize:NO restore:NO],nil]];
-        
+        self.enterfromportalAnimation=[SKAction sequence:[NSArray arrayWithObjects:[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2],[SKAction animateWithTextures:[NSArray arrayWithObjects:[samusregsuit textureNamed:@"samus_turnr1.png"],[samusregsuit textureNamed:@"samus_turnr2.png"],[samusregsuit textureNamed:@"samus_turnr3.png"], nil] timePerFrame:0.1 resize:NO restore:NO],nil]];
+        self.travelthruportalAnimation=[SKAction sequence:[NSArray arrayWithObjects:[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2 resize:YES restore:NO],[SKAction group:[NSArray arrayWithObjects:[SKAction animateWithTextures:[NSArray arrayWithObjects:[samusregsuit textureNamed:@"samusfade.png"], nil] timePerFrame:1.5 resize:YES restore:NO],[SKAction fadeOutWithDuration:1.4], nil]],nil]];
+    
     }
     
     

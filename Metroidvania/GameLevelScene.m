@@ -52,7 +52,7 @@
     self.player.constraints=[NSArray arrayWithObjects:plyrconst, nil];
     
     [self.map addChild:self.player];
-    [self.player runAction:self.player.travelthruportalAnimation completion:^{[weakself.player runAction:[SKAction setTexture:weakself.player.forewards resize:YES]];weakself.userInteractionEnabled=YES;}];//need to modify to turn player when entering map, rename entermap/have seperate for travelthruportal
+    [self.player runAction:self.player.enterfromportalAnimation completion:^{[weakself.player runAction:[SKAction setTexture:weakself.player.forewards resize:YES]];weakself.userInteractionEnabled=YES;}];//need to modify to turn player when entering map, rename entermap/have seperate for travelthruportal
     
     self.player.forwardtrack=YES;
     self.player.backwardtrack=NO;
@@ -143,7 +143,7 @@
     [self.enemies addObject:enemy];
     [self.map addChild:enemy];
     
-    sciserenemy *enemy2=[[sciserenemy alloc] initWithPos:CGPointMake(self.map.mapSize.width * self.map.tileSize.width-400, self.player.position.y-120)];
+    sciserenemy *enemy2=[[sciserenemy alloc] initWithPos:CGPointMake(self.map.mapSize.width * self.map.tileSize.width-400, self.player.position.y-125)];
     [self.enemies addObject:enemy2];
     [self.map addChild:enemy2];
     
@@ -577,74 +577,6 @@
 }
 
 
-/*-(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
-  
-  for(sciserenemy*enemycon in [self.enemies reverseObjectEnumerator]){
-    if(fabs(self.player.position.x-enemycon.position.x)<70){  //minimize comparisons
-      //NSLog(@"in here");
-    if(CGRectContainsPoint(self.player.collisionBoundingBox, CGPointAdd(enemycon.enemybullet1.position, enemycon.position))){
-      //NSLog(@"enemy hit player bullet#1");
-      [enemycon.enemybullet1 setHidden:YES];
-      if(!self.player.plyrrecievingdmg){
-        self.player.plyrrecievingdmg=YES;
-        [self enemyhitplayerdmgmsg];
-      }
-    }
-    else if(CGRectContainsPoint(self.player.collisionBoundingBox,CGPointAdd(enemycon.enemybullet2.position, enemycon.position))){
-      //NSLog(@"enemy hit player buller#2");
-      [enemycon.enemybullet2 setHidden:YES];
-      if(!self.player.plyrrecievingdmg){
-        self.player.plyrrecievingdmg=YES;
-        [self enemyhitplayerdmgmsg];
-      }
-    }
-    if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemycon.frame)){
-      NSLog(@"meleehit");
-      enemycon.health=enemycon.health-10;
-      self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
-      [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];
-      if(enemycon.health<=0){
-        [enemycon removeAllActions];
-        [enemycon removeAllChildren];
-        [enemycon removeFromParent];
-        [self.enemies removeObject:enemycon];
-      }
-    }
-  }
-}
- 
-  
-  for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){
-    
-      if(currbullet.cleanup){//here to avoid another run through of arr
-        //NSLog(@"removing from array");
-        [self.bullets removeObject:currbullet];
-        [currbullet removeFromParent];
-        continue;//avoid comparing with removed bullet
-      }
-      
-      for(sciserenemy *enemyl in self.enemies){
-        //NSLog(@"bullet frame:%@",NSStringFromCGRect(currbullet.frame));
-        if(CGRectIntersectsRect(CGRectInset(enemyl.frame,5,0), currbullet.frame)){
-          //NSLog(@"hit an enemy");
-          enemyl.health--;
-          if(enemyl.health<=0){
-            [enemyl removeAllActions];
-            [enemyl removeAllChildren];
-            [enemyl removeFromParent];
-            [self.enemies removeObject:enemyl];
-          }
-          [currbullet removeAllActions];
-          [currbullet removeFromParent];
-          [self.bullets removeObject:currbullet];
-          break; //if bullet hits enemy stop checking for same bullet
-        }
-    }
-}//for currbullet
-  
-  
-  
-}*/
 -(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
   
   for(id enemycon in [self.enemies reverseObjectEnumerator]){

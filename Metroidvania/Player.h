@@ -23,6 +23,7 @@
 @property (nonatomic,strong) SKAction *jumpForewardsAnimation;
 @property (nonatomic,strong) SKAction *jumpBackwardsAnimation;
 @property (nonatomic,strong) SKAction *travelthruportalAnimation;
+@property (nonatomic,strong) SKAction *enterfromportalAnimation;
 @property (nonatomic,strong) SKTexture *backwards;
 @property (nonatomic,strong) SKTexture *forewards;
 @property (nonatomic,assign) BOOL plyrrecievingdmg;

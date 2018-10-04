@@ -43,7 +43,7 @@
         self.player.constraints=[NSArray arrayWithObjects:plyrconst, nil];
         
         [self.map addChild:self.player];
-        [self.player runAction:self.player.travelthruportalAnimation completion:^{[weakself.player runAction:[SKAction setTexture:weakself.player.forewards resize:YES]];weakself.userInteractionEnabled=YES;}];//need to modify to turn player when entering map, rename entermap/have seperate for travelthruportal
+        [self.player runAction:self.player.enterfromportalAnimation completion:^{[weakself.player runAction:[SKAction setTexture:weakself.player.forewards resize:YES]];weakself.userInteractionEnabled=YES;}];//need to modify to turn player when entering map, rename entermap/have seperate for travelthruportal
         
         self.player.forwardtrack=YES;
         self.player.backwardtrack=NO;

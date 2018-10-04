@@ -217,11 +217,11 @@
             __weak SKAction *weakflameflicker=flameflicker;
             __weak SKSpriteNode *weaksamusgunship=samusgunship;
             __weak SKAction *weakshipflyac=shipflyac;
-            CGSize nextSceneSize=CGSizeMake(weakself.view.bounds.size.width/1.2,weakself.view.bounds.size.height/1.2-10);
+            CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10);
             
             dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
                 //Background thread, preloading the scene here
-                GameLevelScene2*preload=[[GameLevelScene2 alloc]initWithSize:nextSceneSize];
+                GameLevelScene*preload=[[GameLevelScene alloc]initWithSize:nextSceneSize];
                 preload.scaleMode = SKSceneScaleModeAspectFill;
                 
                 dispatch_async(dispatch_get_main_queue(), ^(void){
@@ -233,12 +233,6 @@
             });
             
             
-            /*SKScene * scene = [[GameLevelScene2 alloc]initWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];//[GameLevelScene sceneWithSize:CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10)];  //was skView.bounds.size
-            scene.scaleMode = SKSceneScaleModeAspectFill;
-            [shipflamesright2 runAction:flameflicker];
-            [shipflamesleft2 runAction:flameflicker];
-            __weak SKTransition*weakmenutolvl1tran=menutolvl1tran;
-            [samusgunship runAction:shipflyac completion:^{ [weakself.view presentScene:scene transition:weakmenutolvl1tran];}];*/
         }
         else if(CGRectContainsPoint(_cntrllabel.frame,[touch locationInNode:self]) && !viewingcntrls){
             [_cntrlbkrnd runAction:[SKAction fadeInWithDuration:0.2]];
@@ -251,8 +245,8 @@
     }
 }
 
-- (void)dealloc {
+/*- (void)dealloc {
  NSLog(@"MENU SCENE DEALLOCATED");
- }
+ }*/
 
 @end
