@@ -12,7 +12,7 @@ Technical details:
 
 -This app makes use of the third party library JSTileMap to make use of Tiled TMX tile maps.
 
--Multithreading (Grand Central Dispatch) is used to smoothly transition between scenes, and to preload assets that are not immediately needed.
+-Multithreading (background tasks provided by Spritekit was used over GCD in this case) is used to smoothly transition between scenes, and to preload assets without blocking the UI while transitioning.
 
 -This app uses a fuzzy logic rule system (GKRuleSystem) to quickly evaluate standard game logic for more complex enemies and provide the framework for fuzzy logic if more complex enemy action is needed.
 
@@ -46,5 +46,7 @@ Ray Wenderlich.com-Base super mario assets (1st lvl)
 
 Tommy Lee-"honeypot" walking cactus enemy
 
-N-finity-Arachnus
+N-finity-Arachnus boss, Waver enemy
+
+ansimuz-space parallax backround (menu scene background)
 
