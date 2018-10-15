@@ -29,7 +29,7 @@
 -(instancetype)initWithSize:(CGSize)size {
   if (self = [super initWithSize:size]) {
     /* Setup scene here */
-    self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
+    //self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
     //self.view.shouldCullNonVisibleNodes=NO; //??? seems to help framerate for now
     
     self.backgroundColor = /*[SKColor blackColor];*/[SKColor colorWithRed:0.7259 green:0 blue:0.8863 alpha:1.0];
@@ -150,7 +150,7 @@
     //door stuff here
     _repeating=NO;
     
-    self.userInteractionEnabled=YES;
+    //self.userInteractionEnabled=YES;
 
   }
   return self;
@@ -712,7 +712,14 @@
 }
 -(void)continuebuttonpush:(id)sender{
   [[self.view viewWithTag:888] removeFromSuperview];
-  [self.view presentScene:[[GameLevelScene2 alloc] initWithSize:self.size]];
+  //[self.view presentScene:[[GameLevelScene2 alloc] initWithSize:self.size]];
+  __weak GameLevelScene*weakself=self;
+  [SKTextureAtlas preloadTextureAtlasesNamed:[NSArray arrayWithObjects:@"honeypot",@"Arachnus", nil] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
+      GameLevelScene2*preload=[[GameLevelScene2 alloc]initWithSize:weakself.size];
+      preload.scaleMode = SKSceneScaleModeAspectFill;
+        NSLog(@"preloaded lvl2");
+        [weakself.view presentScene:preload];
+    }];
 }
 
 
