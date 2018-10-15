@@ -22,7 +22,7 @@ Technical details:
 
 -The collision system I have written has two main components, player contact with enemies, and enemy contact with player. This allows different types of collisions from the player to enemies, and enemies to player (different attacks/projectiles with different specifications for each).
 
--This app uses GKAgent's (GameplayKit) in conjunction with SpriteKit to create event driven autonomous flocking behavior that simulates real-world physical movement and targeting using GKAgents (ex. honeypot enemy). This behavoir is lightweight and requires no physicsbodies/external nodes attatched to the target, and is integrated with my collision detection system for applicable enemies.
+-This app uses GKAgent's (GameplayKit) in conjunction with SpriteKit to create event driven autonomous flocking behavior that simulates real-world physical movement and targeting using GKAgents, and dynamic wandering (ex. honeypot enemy, wavrt). This behavoir is lightweight and requires no physicsbodies/external nodes attatched to the target, and is integrated with my collision detection system for applicable enemies.
 
 The gifs may take some time to load due to the filesize, any FPS tags are slower than on actual device (gifs captured on simulator)
 
@@ -46,7 +46,7 @@ Ray Wenderlich.com-Base super mario assets (1st lvl)
 
 Tommy Lee-"honeypot" walking cactus enemy
 
-N-finity-Arachnus boss, Waver enemy
+N-finity-Arachnus boss, Waver enemy , Sciser enemy
 
 ansimuz-space parallax backround (menu scene background)
 
