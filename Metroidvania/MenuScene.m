@@ -10,9 +10,6 @@
 #import "GameLevelScene2.h"
 
 @implementation MenuScene{
-    SKSpriteNode *_playlabel;
-    SKSpriteNode *_playbutton;
-    SKSpriteNode *_cntrllabel;
     SKSpriteNode *_cntrlbkrnd;
     BOOL viewingcntrls;
     SKAction *shipflyact;
@@ -25,11 +22,13 @@
     UIBezierPath *shippath;
     SKAction *shipflyac;
     SKTransition *menutolvl1tran;
+    NSArray *texturesforlvl1;
+    NSArray *texturesforlvl2;//here for testing and convience at the moment
 }
 
 -(instancetype)initWithSize:(CGSize)size {
     if(self=[super initWithSize:size]){
-        
+        self.userInteractionEnabled=NO;
         SKTextureAtlas *backgroundtexatl=[SKTextureAtlas atlasNamed:@"menusceneitems"];
         SKTexture *backgroundtex=[backgroundtexatl textureNamed:@"parallax-space-backgound.png"];
         SKSpriteNode *background=[SKSpriteNode spriteNodeWithTexture:backgroundtex size:self.size];
@@ -109,10 +108,11 @@
         farplanets.zPosition=3;
         [self addChild:farplanets];
         
-        SKSpriteNode *titlelabel=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"titlelabelv2.png"] size:CGSizeMake(453,24)];
-        titlelabel.position=CGPointMake(self.size.width/2,self.size.height/2+25);
-        titlelabel.zPosition=4;
-        [self addChild:titlelabel];
+        self.titlelabel=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"titlelabelv2.png"] size:CGSizeMake(453,24)];
+        self.titlelabel.position=CGPointMake(self.size.width/2,self.size.height/2+25);
+        self.titlelabel.zPosition=4;
+        self.titlelabel.alpha=0;
+        [self addChild:self.titlelabel];
         
         
         SKSpriteNode *referencepoint=[[SKSpriteNode alloc] init];
@@ -132,19 +132,22 @@
         [alienship runAction:[SKAction repeatActionForever:thrustact]];
         
         
-        _playlabel=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"playlabel.png"] size:CGSizeMake(120,30)];
-        _playlabel.position=CGPointMake(self.size.width/2+110,self.size.height/2-110);
-        _playlabel.zPosition=4;
-        [self addChild:_playlabel];
+        self._playlabel=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"playlabel.png"] size:CGSizeMake(120,30)];
+        self._playlabel.position=CGPointMake(self.size.width/2+110,self.size.height/2-110);
+        self._playlabel.zPosition=4;
+        self._playlabel.alpha=0;
+        [self addChild:self._playlabel];
         
-        _playbutton=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"buttonplay.png"] size:CGSizeMake(64,64)];
-        _playbutton.position=CGPointMake(self.size.width/2+200,self.size.height/2-110);
-        _playbutton.zPosition=4;
-        [self addChild:_playbutton];
+        self._playbutton=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"buttonplay.png"] size:CGSizeMake(64,64)];
+        self._playbutton.position=CGPointMake(self.size.width/2+200,self.size.height/2-110);
+        self._playbutton.zPosition=4;
+        self._playbutton.alpha=0;
+        [self addChild:self._playbutton];
         
-        _cntrllabel=[SKSpriteNode spriteNodeWithImageNamed:@"controllabel.png"];
-        _cntrllabel.position=CGPointMake(self.size.width/2-130,self.size.height/2-110);
-        [self addChild:_cntrllabel];
+        self._cntrllabel=[SKSpriteNode spriteNodeWithImageNamed:@"controllabel.png"];
+        self._cntrllabel.position=CGPointMake(self.size.width/2-130,self.size.height/2-110);
+        self._cntrllabel.alpha=0;
+        [self addChild:self._cntrllabel];
         
         _cntrlbkrnd=[SKSpriteNode spriteNodeWithColor:[UIColor darkGrayColor] size:CGSizeMake(self.size.width-185,95)];
         _cntrlbkrnd.alpha=0;
@@ -201,13 +204,20 @@
         shipflyac=[SKAction group:@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.7]]];
         [shipflyac setTimingMode:SKActionTimingEaseIn];
        
+        texturesforlvl2=[NSArray arrayWithObjects:@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver", nil];
+        texturesforlvl1=[NSArray arrayWithObjects:@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror", nil];
+     
+        
+        self.labelsin=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.5],[SKAction fadeInWithDuration:1.5],nil]];
+        [self runAction:[SKAction runBlock:^{[weakself.titlelabel runAction:weakself.labelsin completion:^{weakself.labelsin.speed=3;[weakself._playlabel runAction:weakself.labelsin];[weakself._playbutton runAction:weakself.labelsin];[weakself._cntrllabel runAction:weakself.labelsin completion:^{weakself.userInteractionEnabled=YES;}];}];}]];
+        
     }
     return self;
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     for(UITouch*touch in touches){
-        if((CGRectContainsPoint(_playlabel.frame,[touch locationInNode:self])) || (CGRectContainsPoint(_playbutton.frame,[touch locationInNode:self]))){
+        if((CGRectContainsPoint(self._playlabel.frame,[touch locationInNode:self])) || (CGRectContainsPoint(self._playbutton.frame,[touch locationInNode:self]))){
             self.userInteractionEnabled=NO;
             
             __weak MenuScene *weakself = self;
@@ -217,24 +227,21 @@
             __weak SKAction *weakflameflicker=flameflicker;
             __weak SKSpriteNode *weaksamusgunship=samusgunship;
             __weak SKAction *weakshipflyac=shipflyac;
+            //__weak NSArray *weaktexturesforlvl2=texturesforlvl2;
+            __weak NSArray *weaktexturesforlvl1=texturesforlvl1;
             CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10);
             
-            dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-                //Background thread, preloading the scene here
-                GameLevelScene*preload=[[GameLevelScene alloc]initWithSize:nextSceneSize];
-                preload.scaleMode = SKSceneScaleModeAspectFill;
-                
-                dispatch_async(dispatch_get_main_queue(), ^(void){
-                    NSLog(@"preloaded lvl2");
-                    [weakshipflamesright2 runAction:weakflameflicker];
-                    [weakshipflamesleft2 runAction:weakflameflicker];
-                    [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
-                });
-            });
-            
+            [SKTextureAtlas preloadTextureAtlasesNamed:weaktexturesforlvl1 withCompletionHandler:^(NSError*error,NSArray*foundatlases){
+                    GameLevelScene*preload=[[GameLevelScene alloc]initWithSize:nextSceneSize];
+                    preload.scaleMode = SKSceneScaleModeAspectFill;
+                        NSLog(@"preloaded lvl1");
+                        [weakshipflamesright2 runAction:weakflameflicker];
+                        [weakshipflamesleft2 runAction:weakflameflicker];
+                        [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
+                }];
             
         }
-        else if(CGRectContainsPoint(_cntrllabel.frame,[touch locationInNode:self]) && !viewingcntrls){
+        else if(CGRectContainsPoint(self._cntrllabel.frame,[touch locationInNode:self]) && !viewingcntrls){
             [_cntrlbkrnd runAction:[SKAction fadeInWithDuration:0.2]];
             viewingcntrls=YES;
         }

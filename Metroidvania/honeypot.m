@@ -89,6 +89,7 @@
 }
 
 -(void)projectileAttack{
+    NSLog(@"initiating projectile attack");
     for(int i=0;i<30;i++){
         __weak GKComponentSystem *weakagentSystem=self.agentSystem;
         honeypotproj *tmproj=[[honeypotproj alloc] initWithPosition:CGPointZero andTex:[honeypotatlas textureNamed:@"honeypotprojectiler.png"]];
@@ -99,7 +100,7 @@
         [self addChild:tmproj];
         [self.agentSystem addComponent:tmproj.agent];
     }
-    GKBehavior *flock=[GKBehavior behaviorWithGoals:[NSArray arrayWithObjects:[GKGoal goalToSeekAgent:(GKAgent*)self.target],/*[GKGoal goalToCohereWithAgents:self.agentSystem.components maxDistance:15 maxAngle:M_PI_4],[GKGoal goalToAlignWithAgents:self.agentSystem.components maxDistance:0 maxAngle:M_PI_4],*/[GKGoal goalToSeparateFromAgents:self.agentSystem.components maxDistance:1 maxAngle:M_PI_4], nil] andWeights:[NSArray arrayWithObjects:@14,/*@0,@0,*/@150,nil]];
+    GKBehavior *flock=[GKBehavior behaviorWithGoals:[NSArray arrayWithObjects:[GKGoal goalToSeekAgent:(GKAgent*)self.target],[GKGoal goalToSeparateFromAgents:self.agentSystem.components maxDistance:1 maxAngle:M_PI_4], nil] andWeights:[NSArray arrayWithObjects:@14,@150,nil]];
     
     for(GKAgent2D *thisagent in self.agentSystem.components){
             thisagent.behavior=flock;
@@ -107,9 +108,12 @@
     
 }
 
--(void)dealloc{
+
+
+
+/*-(void)dealloc{
     NSLog(@"honeypot deallocated");
-}
+}*/
 
 @end
 

@@ -37,7 +37,7 @@
 -(instancetype)initWithImageNamed:(NSString *)name{
     __weak NSString *weakname=name;
     if(self == [super initWithImageNamed:weakname]){
-        self.health=150;
+        self.health=150;//5;for testing
         self.active=NO;
         
         SKTextureAtlas *arachnustextures=[SKTextureAtlas atlasNamed:@"Arachnus"];
@@ -333,7 +333,7 @@
         else
             [actoexecute setSpeed:(CGFloat)1.0];
         
-        NSLog(@"%f",(CGFloat)1.0+(CGFloat)([arachnusrs.state[@"orighealth"] floatValue]-self.health)/(3*[arachnusrs.state[@"orighealth"] floatValue]));
+        NSLog(@"%f",(CGFloat)1.0+(CGFloat)([arachnusrs.state[@"orighealth"] floatValue]-self.health)/(2.5*[arachnusrs.state[@"orighealth"] floatValue]));
         
         arachnusrs.state[@"prevcoorddist"]=arachnusrs.state[@"coorddist"];
         

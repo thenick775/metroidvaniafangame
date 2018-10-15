@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "samusfade.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "replay@2x.png",
       "scale" : "2x"
     },
     {

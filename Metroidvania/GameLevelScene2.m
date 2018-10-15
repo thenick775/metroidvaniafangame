@@ -10,6 +10,7 @@
 #import "arachnusboss.h"
 #import "SKTUtils.h"
 #import "PlayerProjectile.h"
+#import "waver.h"
 
 @implementation GameLevelScene2{
     arachnusboss*boss1;
@@ -78,16 +79,24 @@
         [self.enemies addObject:enemy1];
         [self.map addChild:enemy1];
         
-        
         honeypot *enemy2=[[honeypot alloc] initcomplete];
         enemy2.position=CGPointMake(179*self.map.tileSize.width,3*self.map.tileSize.height-3);
         [self.enemies addObject:enemy2];
-        [self addChild:enemy2];
+        [self.map addChild:enemy2];
         
         honeypot *enemy3=[[honeypot alloc] initcomplete];
         enemy3.position=CGPointMake(110*self.map.tileSize.width,20*self.map.tileSize.height-3);
         [self.enemies addObject:enemy3];
-        [self addChild:enemy3];
+        [self.map addChild:enemy3];
+        
+        honeypot *enemy4=[[honeypot alloc] initcomplete];
+        enemy4.position=CGPointMake(367*self.map.tileSize.width,18*self.map.tileSize.height-3);
+        [self.enemies addObject:enemy4];
+        [self.map addChild:enemy4];
+        
+        waver*enemy5=[[waver alloc] initWithPosition:CGPointMake(31*self.map.tileSize.width, 8*self.map.tileSize.height)];
+        [self.enemies addObject:enemy5];
+        [self addChild:enemy5];
         
         boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
         boss1.position=CGPointMake(3980,56);
@@ -117,6 +126,7 @@
             
             
         }];
+        
         SKAction* removebosswall=[SKAction runBlock:^{
             for(int i=23;i<28;i++){
                 [weakself.walls removeTileAtCoord:CGPointMake(263,i)];
@@ -129,9 +139,11 @@
         bossintro.zPosition=16;
         bossintro.position=CGPointMake(249*self.map.tileSize.width,2*self.map.tileSize.height);
         __weak arachnusboss*weakboss1=boss1;
+        __block BOOL bossdidenter=NO;
         SKAction*idleblk=[SKAction runBlock:^{
             NSLog(@"checking boss idle");
-            if(weakself.player.meleeinaction && CGRectIntersectsRect(CGRectMake(weakself.player.meleeweapon.frame.origin.x+weakself.player.frame.origin.x, weakself.player.meleeweapon.frame.origin.y+weakself.player.frame.origin.y, weakself.player.meleeweapon.frame.size.width, weakself.player.meleeweapon.frame.size.height),weakboss1.frame)){
+            if(weakself.player.meleeinaction && CGRectIntersectsRect(CGRectMake(weakself.player.meleeweapon.frame.origin.x+weakself.player.frame.origin.x, weakself.player.meleeweapon.frame.origin.y+weakself.player.frame.origin.y, weakself.player.meleeweapon.frame.size.width, weakself.player.meleeweapon.frame.size.height),weakboss1.frame) && !bossdidenter){
+                bossdidenter=YES;
                 [weakself addChild:bossintro];
                 [weakself runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:3.0],[SKAction runBlock:^{
                     weakboss1.zPosition=0.0;
@@ -148,7 +160,7 @@
                 }], nil]]];
             }
         }];
-        idlecheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:47],[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1],idleblk, nil]]], nil]];
+        idlecheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:90],[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1],idleblk, nil]]], nil]];
         [self runAction:idlecheck withKey:@"idlecheck"]; 
         
     }
@@ -238,11 +250,28 @@
         
         }
             
-        if(CGRectIntersectsRect(self.player.frame,enemyconcop.frame) && !self.player.plyrrecievingdmg && !enemyconcop.dead){
+        else if(CGRectIntersectsRect(self.player.frame,enemyconcop.frame) && !self.player.plyrrecievingdmg && !enemyconcop.dead){
             self.player.plyrrecievingdmg=YES;
             [self enemyhitplayerdmgmsg:10];
         }
+        if(self.player.position.x>enemyconcop.position.x+150 && [enemyconcop actionForKey:@"walk"]){
+            NSLog(@"past position of player");
+            __weak honeypot*weakenemyconcop=enemyconcop;
+            [enemyconcop removeActionForKey:@"walk"];
+            [enemyconcop runAction:enemyconcop.explode completion:^{weakenemyconcop.texture=nil;enemyconcop.dead=YES;}];
+        }
         
+    }
+    else if([enemycon isKindOfClass:[waver class]]){
+        waver*enemyconcop=(waver*)enemycon;
+        [enemyconcop updateWithDeltaTime:0.16 andPlayerpos:self.player.position];
+        if(fabs(self.player.position.x-enemyconcop.position.x)<40 && fabs(self.player.position.y-enemyconcop.position.y)<60 && !enemyconcop.attacking){
+            [enemyconcop attack];
+        }
+        if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0)) && !self.player.plyrrecievingdmg){
+            self.player.plyrrecievingdmg=YES;
+            [self enemyhitplayerdmgmsg:8];
+        }
     }
         
 }
@@ -293,16 +322,33 @@
             }
             else if([enemyl isKindOfClass:[honeypot class]]){
                 honeypot*enemylcop=(honeypot*)enemyl;
-                if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0),currbullet.frame) && !enemylcop.dead){
+                if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0),currbullet.frame) && [enemylcop actionForKey:@"walk"]/*!enemylcop.dead*/){
                     enemylcop.health--;
-                    if(enemylcop.health<=0 && !enemylcop.dead){
+                    if(enemylcop.health<=0 && /*!enemylcop.dead*/[enemylcop actionForKey:@"walk"]){
                         __weak honeypot*weakenemylcop=enemylcop;
-                        [enemylcop runAction:enemylcop.explode completion:^{weakenemylcop.texture=nil;[weakenemylcop removeActionForKey:@"walk"];enemylcop.dead=YES;}];
+                        [weakenemylcop removeActionForKey:@"walk"];
+                        [enemylcop runAction:enemylcop.explode completion:^{weakenemylcop.texture=nil;enemylcop.dead=YES;}];
                     }
                     [currbullet removeAllActions];
                     [currbullet removeFromParent];
                     [self.bullets removeObject:currbullet];
                     break; //if bullet hits enemy stop checking for same bullet
+                }
+            }
+            else if([enemyl isKindOfClass:[waver class]]){
+                waver*enemylcop=(waver*)enemyl;
+                if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
+                    enemylcop.health--;
+                    if(enemylcop.health<=0){
+                        [enemyl removeAllActions];
+                        [enemyl removeAllChildren];
+                        [enemyl runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}], nil]]];
+                        [self.enemies removeObject:enemyl];
+                    }
+                [currbullet removeAllActions];
+                [currbullet removeFromParent];
+                [self.bullets removeObject:currbullet];
+                break; //if bullet hits enemy stop checking for same bullet
                 }
             }
       }
