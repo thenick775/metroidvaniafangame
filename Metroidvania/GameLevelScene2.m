@@ -177,7 +177,7 @@
     if(boss1.active)
     [boss1 handleanimswithfocuspos:self.player.position.x];   //evaluate boss actions/attacks
     
-    for(id enemycon in [self.enemies reverseObjectEnumerator]){
+    for(id enemycon in [self.enemies reverseObjectEnumerator]){//enemy to player (also including melee to enemy for convienence)
         
         if([enemycon isKindOfClass:[sciserenemy class]]){
             sciserenemy*enemyconcop=(sciserenemy*)enemycon;
@@ -272,12 +272,24 @@
             self.player.plyrrecievingdmg=YES;
             [self enemyhitplayerdmgmsg:8];
         }
+        if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
+            //NSLog(@"meleehit");
+            enemyconcop.health=enemyconcop.health-10;
+            self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
+            [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];//encapsulate in playerclass (ex meleedelayac or something)
+            if(enemyconcop.health<=0){
+                [enemyconcop removeAllActions];
+                [enemyconcop removeAllChildren];
+                [enemyconcop removeFromParent];
+                [self.enemies removeObject:enemyconcop];
+            }
+        }
     }
         
 }
     
     
-    for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){
+    for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){//bullet to enemy
         
         if(currbullet.cleanup){//here to avoid another run through of arr
             //NSLog(@"removing from array");
