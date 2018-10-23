@@ -123,11 +123,11 @@
         
         
         //self.standAnimation=[SKAction animateWithTextures:standArray timePerFrame:(NSTimeInterval)0.40 resize:YES restore:NO];
-        self.runAnimation=[SKAction animateWithTextures:runarray timePerFrame:0.075 resize:YES restore:NO];
-        self.runBackwardsAnimation=[SKAction animateWithTextures:runbackwardsarray timePerFrame:0.075 resize:YES restore:NO];
+        self.runAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:runarray timePerFrame:0.075 resize:YES restore:NO]];
+        self.runBackwardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:runbackwardsarray timePerFrame:0.075 resize:YES restore:NO]];
         //self.standbackwardsAnimation=[SKAction animateWithTextures:standingbackwardsarray timePerFrame:0.40 resize:YES restore:NO];
-        self.jumpForewardsAnimation=[SKAction animateWithTextures:jumpforewardsarray timePerFrame:0.045 resize:YES restore:NO];
-        self.jumpBackwardsAnimation=[SKAction animateWithTextures:jumpbackwardsarray timePerFrame:0.045 resize:YES restore:NO];
+        self.jumpForewardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:jumpforewardsarray timePerFrame:0.045 resize:YES restore:NO]];
+        self.jumpBackwardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:jumpbackwardsarray timePerFrame:0.045 resize:YES restore:NO]];
         self.enterfromportalAnimation=[SKAction sequence:[NSArray arrayWithObjects:[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2],[SKAction animateWithTextures:[NSArray arrayWithObjects:[samusregsuit textureNamed:@"samus_turnr1.png"],[samusregsuit textureNamed:@"samus_turnr2.png"],[samusregsuit textureNamed:@"samus_turnr3.png"], nil] timePerFrame:0.1 resize:NO restore:NO],nil]];
         self.travelthruportalAnimation=[SKAction sequence:[NSArray arrayWithObjects:[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2 resize:YES restore:NO],[SKAction group:[NSArray arrayWithObjects:[SKAction animateWithTextures:[NSArray arrayWithObjects:[samusregsuit textureNamed:@"samusfade.png"], nil] timePerFrame:1.5 resize:YES restore:NO],[SKAction fadeOutWithDuration:1.4], nil]],nil]];
     

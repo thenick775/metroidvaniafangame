@@ -25,9 +25,14 @@
   /*SKScene * scene = [GameLevelScene sceneWithSize:CGSizeMake((CGFloat)skView.bounds.size.width/1.2, ((CGFloat)skView.bounds.size.height/1.2))];  //was skView.bounds.size
   scene.scaleMode = SKSceneScaleModeAspectFill;*/
   // Present the scene.
-  SKScene *menuscenep=[[MenuScene alloc] initWithSize:skView.bounds.size];
-  [skView presentScene:menuscenep];
-  
+  NSArray *texturesformenuscene=@[@"menusceneitems"];
+  [SKTextureAtlas preloadTextureAtlasesNamed:texturesformenuscene withCompletionHandler:^(NSError*error,NSArray*foundatlases){
+    dispatch_async(dispatch_get_main_queue(), ^{
+    NSLog(@"preloaded menuscene");
+    SKScene *menuscenep=[[MenuScene alloc] initWithSize:skView.bounds.size];
+    [skView presentScene:menuscenep];
+    });
+  }];
   
 }
 

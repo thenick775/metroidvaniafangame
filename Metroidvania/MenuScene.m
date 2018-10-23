@@ -204,7 +204,7 @@
         shipflyac=[SKAction group:@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.7]]];
         [shipflyac setTimingMode:SKActionTimingEaseIn];
        
-        texturesforlvl2=[NSArray arrayWithObjects:@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver", nil];
+        //texturesforlvl2=[NSArray arrayWithObjects:@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver", nil];
         texturesforlvl1=[NSArray arrayWithObjects:@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror", nil];
      
         

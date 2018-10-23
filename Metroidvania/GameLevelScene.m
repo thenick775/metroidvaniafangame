@@ -355,7 +355,7 @@
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
       
-      [self.player runAction:[SKAction repeatActionForever:self.player.runAnimation] withKey:@"runf"];
+      [self.player runAction:self.player.runAnimation withKey:@"runf"];
     }
     else if(CGRectContainsPoint(_buttonleft.frame, touchlocation)){
       //NSLog(@"touching left control");
@@ -364,15 +364,15 @@
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
       
-      [self.player runAction:[SKAction repeatActionForever:self.player.runBackwardsAnimation] withKey:@"runb"];
+      [self.player runAction:self.player.runBackwardsAnimation withKey:@"runb"];
     }
     else if(CGRectContainsPoint(_buttonup.frame,touchlocation)){
       //NSLog(@"touching up control");
       self.player.shouldJump=YES;
       if(self.player.forwardtrack)
-        [self.player runAction:[SKAction repeatActionForever:self.player.jumpForewardsAnimation] withKey:@"jmpf"];
+        [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       else
-        [self.player runAction:[SKAction repeatActionForever:self.player.jumpBackwardsAnimation] withKey:@"jmpb"];
+        [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
     }
     
   
@@ -406,7 +406,7 @@
       self.player.shouldJump=YES;
       self.player.goForeward=NO;
       
-      [self.player runAction:[SKAction repeatActionForever:self.player.jumpForewardsAnimation] withKey:@"jmpf"];
+      [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       [self.player removeActionForKey:@"runf"];
     }
     else if(CGRectContainsPoint(_buttonup.frame, currtouchlocation) && CGRectContainsPoint(_buttonleft.frame, previoustouchlocation)){
@@ -415,7 +415,7 @@
       self.player.shouldJump=YES;
       self.player.goBackward=NO;
       
-      [self.player runAction:[SKAction repeatActionForever:self.player.jumpBackwardsAnimation] withKey:@"jmpb"];
+      [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
       [self.player removeActionForKey:@"runb"];
     }
     else if(CGRectContainsPoint(_buttonright.frame, currtouchlocation) && CGRectContainsPoint(_buttonleft.frame, previoustouchlocation)){
@@ -426,7 +426,7 @@
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
       
-      [self.player runAction:[SKAction repeatActionForever:self.player.runAnimation] withKey:@"runf"];
+      [self.player runAction:self.player.runAnimation withKey:@"runf"];
       [self.player removeActionForKey:@"runb"];
     }
     else if(CGRectContainsPoint(_buttonright.frame, currtouchlocation) && CGRectContainsPoint(_buttonup.frame, previoustouchlocation)){
@@ -437,7 +437,7 @@
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
       
-      [self.player runAction:[SKAction repeatActionForever:self.player.jumpForewardsAnimation] withKey:@"jmpf"];
+      [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
     }
     else if(CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && CGRectContainsPoint(_buttonright.frame, previoustouchlocation)){
@@ -448,7 +448,7 @@
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
       
-      [self.player runAction:[SKAction repeatActionForever:self.player.runBackwardsAnimation] withKey:@"runb"];
+      [self.player runAction:self.player.runBackwardsAnimation withKey:@"runb"];
       [self.player removeActionForKey:@"runf"];
     }
     else if(CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && CGRectContainsPoint(_buttonup.frame, previoustouchlocation)){
@@ -459,7 +459,7 @@
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
       
-      [self.player runAction:[SKAction repeatActionForever:self.player.jumpBackwardsAnimation] withKey:@"jmpb"];
+      [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
     }
     else if(!CGRectContainsPoint(_buttonup.frame, currtouchlocation) && !CGRectContainsPoint(_buttonright.frame, currtouchlocation) && !CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && currtouchlocation.x<self.camera.frame.size.width/2){
@@ -714,7 +714,7 @@
   [[self.view viewWithTag:888] removeFromSuperview];
   //[self.view presentScene:[[GameLevelScene2 alloc] initWithSize:self.size]];
   __weak GameLevelScene*weakself=self;
-  [SKTextureAtlas preloadTextureAtlasesNamed:[NSArray arrayWithObjects:@"honeypot",@"Arachnus", nil] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
+  [SKTextureAtlas preloadTextureAtlasesNamed:[NSArray arrayWithObjects:@"honeypot",@"Arachnus",@"Waver", nil] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
       GameLevelScene2*preload=[[GameLevelScene2 alloc]initWithSize:weakself.size];
       preload.scaleMode = SKSceneScaleModeAspectFill;
         NSLog(@"preloaded lvl2");
