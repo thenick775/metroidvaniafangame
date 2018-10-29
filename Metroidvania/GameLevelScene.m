@@ -16,6 +16,7 @@
 #import "SKTUtils.h"
 #import "PlayerProjectile.h"
 #import "sciserenemy.h"
+#import "waver.h"
 
 
 @implementation GameLevelScene{
@@ -147,6 +148,10 @@
     [self.enemies addObject:enemy2];
     [self.map addChild:enemy2];
     
+    waver*enemy3=[[waver alloc] initWithPosition:CGPointMake(160*self.map.tileSize.width, 8*self.map.tileSize.height)];
+    [self.enemies addObject:enemy3];
+    [self addChild:enemy3];
+    
     //door stuff here
     _repeating=NO;
     
@@ -156,7 +161,11 @@
   return self;
 }
 
-
+-(void)didMoveToView:(SKView *)view{
+  //setup sound
+  self.audiomanager=[gameaudio alloc];
+  [self.audiomanager runBkgrndMusicForlvl:1];
+}
 
 - (void)update:(NSTimeInterval)currentTime{
   
@@ -615,6 +624,29 @@
         }
       }
     }
+    else if([enemycon isKindOfClass:[waver class]]){
+      waver*enemyconcop=(waver*)enemycon;
+      [enemyconcop updateWithDeltaTime:0.16 andPlayerpos:self.player.position];
+      if(fabs(self.player.position.x-enemyconcop.position.x)<40 && fabs(self.player.position.y-enemyconcop.position.y)<60 && !enemyconcop.attacking){
+        [enemyconcop attack];
+      }
+      if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0)) && !self.player.plyrrecievingdmg){
+        self.player.plyrrecievingdmg=YES;
+        [self enemyhitplayerdmgmsg:8];
+      }
+      if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
+        //NSLog(@"meleehit");
+        enemyconcop.health=enemyconcop.health-10;
+        self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
+        [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];//encapsulate in playerclass (ex meleedelayac or something)
+        if(enemyconcop.health<=0){
+          [enemyconcop removeAllActions];
+          [enemyconcop removeAllChildren];
+          [enemyconcop removeFromParent];
+          [self.enemies removeObject:enemyconcop];
+        }
+      }
+    }
   }
   
   
@@ -646,6 +678,22 @@
           break; //if bullet hits enemy stop checking for same bullet
         }
       }
+      else if([enemyl isKindOfClass:[waver class]]){
+        waver*enemylcop=(waver*)enemyl;
+        if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
+          enemylcop.health--;
+          if(enemylcop.health<=0){
+            [enemyl removeAllActions];
+            [enemyl removeAllChildren];
+            [enemyl runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}], nil]]];
+            [self.enemies removeObject:enemyl];
+          }
+          [currbullet removeAllActions];
+          [currbullet removeFromParent];
+          [self.bullets removeObject:currbullet];
+          break; //if bullet hits enemy stop checking for same bullet
+        }
+      }
     }
   }//for currbullet
   
@@ -662,7 +710,7 @@
 }
 -(void)enemyhitplayerdmgmsg:(int)hit{
   self.player.health=self.player.health-hit;
-  if(self.player.health<=0){
+  if(self.player.health<=0 && !self.gameOver){
     self.player.health=0;
     [self gameOver:0];
   }
@@ -679,11 +727,13 @@
   
   self.paused=YES;
   self.player.playervelocity=CGPointMake(0,18);
+  [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
 -(void)unpausegame{
   [_pauselabel removeFromParent];
   [_unpauselabel removeFromParent];
   self.paused=NO;
+  [gameaudio playSound:self.audiomanager.bkgrndmusic];
 }
 
 -(void) gameOver:(BOOL)didwin{
@@ -709,17 +759,19 @@
 -(void)replaybuttonpush:(id)sender{
   [[self.view viewWithTag:666] removeFromSuperview];
   [self.view presentScene:[[GameLevelScene alloc] initWithSize:self.size]];
+  [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
 -(void)continuebuttonpush:(id)sender{
   [[self.view viewWithTag:888] removeFromSuperview];
   //[self.view presentScene:[[GameLevelScene2 alloc] initWithSize:self.size]];
   __weak GameLevelScene*weakself=self;
-  [SKTextureAtlas preloadTextureAtlasesNamed:[NSArray arrayWithObjects:@"honeypot",@"Arachnus",@"Waver", nil] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
+  [SKTextureAtlas preloadTextureAtlasesNamed:[NSArray arrayWithObjects:@"honeypot",@"Arachnus", nil] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
       GameLevelScene2*preload=[[GameLevelScene2 alloc]initWithSize:weakself.size];
       preload.scaleMode = SKSceneScaleModeAspectFill;
         NSLog(@"preloaded lvl2");
         [weakself.view presentScene:preload];
     }];
+  [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
 
 

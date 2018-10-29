@@ -8,6 +8,7 @@
 #import "MenuScene.h"
 #import "GameLevelScene.h"
 #import "GameLevelScene2.h"
+#import "gameaudio.h"
 
 @implementation MenuScene{
     SKSpriteNode *_cntrlbkrnd;
@@ -24,6 +25,8 @@
     SKTransition *menutolvl1tran;
     NSArray *texturesforlvl1;
     NSArray *texturesforlvl2;//here for testing and convience at the moment
+    //AVAudioPlayer*backgroundmusic;
+    gameaudio*audiomanager;
 }
 
 -(instancetype)initWithSize:(CGSize)size {
@@ -85,9 +88,10 @@
         shootingstar.particleRenderOrder=SKParticleRenderOrderDontCare;
         shootingstar.targetNode=self;
         SKAction*shootstarblk=[SKAction runBlock:^{
+            [shootingstar setPaused:NO];
             [shootingstar resetSimulation];
             [weakself addChild:shootingstar];
-            [shootingstar runAction:[SKAction followPath:starbez.CGPath asOffset:NO orientToPath:NO duration:1.8] completion:^{[shootingstar resetSimulation];[shootingstar removeFromParent];}];
+            [shootingstar runAction:[SKAction followPath:starbez.CGPath asOffset:NO orientToPath:NO duration:1.8] completion:^{[shootingstar setPaused:YES];[shootingstar removeFromParent];}];
         }];
         SKAction*shootingstarac=[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:2],shootstarblk,[SKAction waitForDuration:8.0], nil]]];
         [self runAction:shootingstarac];
@@ -204,13 +208,17 @@
         shipflyac=[SKAction group:@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.7]]];
         [shipflyac setTimingMode:SKActionTimingEaseIn];
        
-        //texturesforlvl2=[NSArray arrayWithObjects:@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver", nil];
-        texturesforlvl1=[NSArray arrayWithObjects:@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror", nil];
+       //texturesforlvl2=[NSArray arrayWithObjects:@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver", nil];
+        texturesforlvl1=[NSArray arrayWithObjects:@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"Waver", nil];
      
         
         self.labelsin=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.5],[SKAction fadeInWithDuration:1.5],nil]];
         [self runAction:[SKAction runBlock:^{[weakself.titlelabel runAction:weakself.labelsin completion:^{weakself.labelsin.speed=3;[weakself._playlabel runAction:weakself.labelsin];[weakself._playbutton runAction:weakself.labelsin];[weakself._cntrllabel runAction:weakself.labelsin completion:^{weakself.userInteractionEnabled=YES;}];}];}]];
         
+       // backgroundmusic=[gameaudio setupRepeatingSound:@"titlescreen_dystopian-future.wav" volume:0.6];
+       // [gameaudio playSound:backgroundmusic];
+        audiomanager=[gameaudio alloc];
+        [audiomanager runBkgrndMusicForlvl:0];
     }
     return self;
 }
@@ -237,7 +245,7 @@
                         NSLog(@"preloaded lvl1");
                         [weakshipflamesright2 runAction:weakflameflicker];
                         [weakshipflamesleft2 runAction:weakflameflicker];
-                        [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
+                [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
                 }];
             
         }

@@ -11,6 +11,7 @@
 #import "SKTUtils.h"
 #import "PlayerProjectile.h"
 #import "waver.h"
+#import "gameaudio.h"
 
 @implementation GameLevelScene2{
     arachnusboss*boss1;
@@ -22,6 +23,7 @@
     if (self = [super initWithSize:size]) {
         //self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
         [self.map removeFromParent]; //gets rid of super's implementation of my map
+        self.map=nil;
         self.backgroundColor = [SKColor blackColor];
         self.map = [JSTileMap mapNamed:@"level2.tmx"];
         [self addChild:self.map];
@@ -33,6 +35,9 @@
         
         __weak GameLevelScene2*weakself=self;
         self.userInteractionEnabled=NO; //for use with player enter scene
+        
+        //audio setup (get rid of reference to previous audio manager)
+        self.audiomanager=nil;
         
         //player initializiation stuff
         self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];//_fusion_walking3_v1.png"];
@@ -160,16 +165,23 @@
                 }], nil]]];
             }
         }];
-        idlecheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:90],[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1],idleblk, nil]]], nil]];
+        idlecheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:85],[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1],idleblk, nil]]], nil]];
         [self runAction:idlecheck withKey:@"idlecheck"]; 
-        
+     
     }
     return self;
+}
+
+-(void)didMoveToView:(SKView *)view{
+    //setup sound
+    self.audiomanager=[gameaudio alloc];
+    [self.audiomanager runBkgrndMusicForlvl:2];
 }
 
 -(void)replaybuttonpush:(id)sender{
     [[self.view viewWithTag:666] removeFromSuperview];
     [self.view presentScene:[[GameLevelScene2 alloc] initWithSize:self.size]];
+    [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
 
 
