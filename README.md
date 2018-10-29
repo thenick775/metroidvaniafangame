@@ -26,6 +26,8 @@ Technical details:
 
 -This app uses GKAgent's (GameplayKit) in conjunction with SpriteKit to create event driven autonomous flocking behavior that simulates real-world physical movement and targeting using GKAgents, and dynamic wandering (ex. honeypot enemy, wavrt). This behavoir is lightweight and requires no physicsbodies/external nodes attatched to the target, and is integrated with my collision detection system for applicable enemies.
 
+-Audio management of this game has been encapsulated in a class specifically designed to manage the audio of each scene. This class makes use of AVFoundation, specifically AVAudioPlayer and its related functions, along with GCD to play sounds asychronously. This allows relevent audio to be preloaded with each scene, and the load on the main thread and memory is as small as possible.
+
 The gifs may take some time to load due to the filesize, any FPS tags are slower than on actual device (gifs captured on simulator)
 
 
