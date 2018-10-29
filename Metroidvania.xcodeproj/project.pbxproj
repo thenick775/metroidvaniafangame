@@ -31,6 +31,12 @@
 		5979C75A213C79A100965A50 /* crateriaTileSet.png in Resources */ = {isa = PBXBuildFile; fileRef = 5979C759213C79A100965A50 /* crateriaTileSet.png */; };
 		5979C75D21447BF700965A50 /* arachnusintroduction.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5979C75B21447BF700965A50 /* arachnusintroduction.sks */; };
 		59C0DE1420B91F25008999C3 /* PlayerProjectile.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C0DE1320B91F25008999C3 /* PlayerProjectile.m */; };
+		59DAC084218278330077E10C /* gameaudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 59DAC083218278330077E10C /* gameaudio.m */; };
+		59DAC086218278800077E10C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59DAC085218278800077E10C /* AVFoundation.framework */; };
+		59DAC08D2183BFEE0077E10C /* titlescreen_dystopian-future.wav in Resources */ = {isa = PBXBuildFile; fileRef = 59DAC08C2183BFEE0077E10C /* titlescreen_dystopian-future.wav */; };
+		59DAC08F2183C92A0077E10C /* lvl2_newbit2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 59DAC08E2183C92A0077E10C /* lvl2_newbit2.wav */; };
+		59DAC09121857CFF0077E10C /* level3.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 59DAC09021857CFF0077E10C /* level3.tmx */; };
+		59DAC09321878F710077E10C /* lvl1-lost-moon.wav in Resources */ = {isa = PBXBuildFile; fileRef = 59DAC09221878F710077E10C /* lvl1-lost-moon.wav */; };
 		F275B671186E0B06009F6E6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B670186E0B06009F6E6B /* Foundation.framework */; };
 		F275B673186E0B06009F6E6B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B672186E0B06009F6E6B /* CoreGraphics.framework */; };
 		F275B675186E0B06009F6E6B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B674186E0B06009F6E6B /* UIKit.framework */; };
@@ -91,6 +97,13 @@
 		5979C75B21447BF700965A50 /* arachnusintroduction.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = arachnusintroduction.sks; sourceTree = "<group>"; };
 		59C0DE1220B91F25008999C3 /* PlayerProjectile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerProjectile.h; sourceTree = "<group>"; };
 		59C0DE1320B91F25008999C3 /* PlayerProjectile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerProjectile.m; sourceTree = "<group>"; };
+		59DAC082218278220077E10C /* gameaudio.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gameaudio.h; sourceTree = "<group>"; };
+		59DAC083218278330077E10C /* gameaudio.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = gameaudio.m; sourceTree = "<group>"; };
+		59DAC085218278800077E10C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		59DAC08C2183BFEE0077E10C /* titlescreen_dystopian-future.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "titlescreen_dystopian-future.wav"; path = "../../titlescreen_dystopian-future.wav"; sourceTree = "<group>"; };
+		59DAC08E2183C92A0077E10C /* lvl2_newbit2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = lvl2_newbit2.wav; path = ../../lvl2_newbit2.wav; sourceTree = "<group>"; };
+		59DAC09021857CFF0077E10C /* level3.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = level3.tmx; sourceTree = "<group>"; };
+		59DAC09221878F710077E10C /* lvl1-lost-moon.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "lvl1-lost-moon.wav"; path = "../../lvl1-lost-moon.wav"; sourceTree = "<group>"; };
 		F275B66D186E0B06009F6E6B /* Metroidvania.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metroidvania.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F275B670186E0B06009F6E6B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F275B672186E0B06009F6E6B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -138,6 +151,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59DAC086218278800077E10C /* AVFoundation.framework in Frameworks */,
 				5952F88D212F71DD00F3BC5B /* GameplayKit.framework in Frameworks */,
 				F275B6CB186E2497009F6E6B /* libz.dylib in Frameworks */,
 				F275B673186E0B06009F6E6B /* CoreGraphics.framework in Frameworks */,
@@ -159,6 +173,8 @@
 				59C0DE1320B91F25008999C3 /* PlayerProjectile.m */,
 				596F2DB020C1C44700B32C47 /* TravelPortal.h */,
 				596F2DB120C1C44700B32C47 /* TravelPortal.m */,
+				59DAC082218278220077E10C /* gameaudio.h */,
+				59DAC083218278330077E10C /* gameaudio.m */,
 			);
 			name = player/scene;
 			sourceTree = "<group>";
@@ -212,6 +228,16 @@
 			name = levels;
 			sourceTree = "<group>";
 		};
+		59DAC07F21825B3D0077E10C /* audiofiles */ = {
+			isa = PBXGroup;
+			children = (
+				59DAC08E2183C92A0077E10C /* lvl2_newbit2.wav */,
+				59DAC09221878F710077E10C /* lvl1-lost-moon.wav */,
+				59DAC08C2183BFEE0077E10C /* titlescreen_dystopian-future.wav */,
+			);
+			name = audiofiles;
+			sourceTree = "<group>";
+		};
 		F275B664186E0B06009F6E6B = {
 			isa = PBXGroup;
 			children = (
@@ -232,6 +258,7 @@
 		F275B66F186E0B06009F6E6B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				59DAC085218278800077E10C /* AVFoundation.framework */,
 				5952F88C212F71DD00F3BC5B /* GameplayKit.framework */,
 				F275B6CA186E2497009F6E6B /* libz.dylib */,
 				F275B670186E0B06009F6E6B /* Foundation.framework */,
@@ -251,7 +278,6 @@
 				590F803E2146312E00C09169 /* player/scene */,
 				590F803F2146318F00C09169 /* enemies */,
 				5979C75F214630F500965A50 /* levels */,
-				5979C7332133F76900965A50 /* ParticleEmitters */,
 				F275B6C2186E21EB009F6E6B /* Resources */,
 				F275B68F186E0B06009F6E6B /* Images.xcassets */,
 				F275B679186E0B06009F6E6B /* Supporting Files */,
@@ -290,6 +316,7 @@
 				595C42DC20FD418100A47BB8 /* brokendoors.png */,
 				F275B6BB186E21CB009F6E6B /* level1.tmx */,
 				594F559220CE1CA0000E476E /* level2.tmx */,
+				59DAC09021857CFF0077E10C /* level3.tmx */,
 			);
 			name = "TMX Files";
 			sourceTree = "<group>";
@@ -297,6 +324,8 @@
 		F275B6C2186E21EB009F6E6B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				59DAC07F21825B3D0077E10C /* audiofiles */,
+				5979C7332133F76900965A50 /* ParticleEmitters */,
 				F275B6C1186E21D9009F6E6B /* TMX Files */,
 			);
 			name = Resources;
@@ -384,12 +413,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				595C42D720FD3CCE00A47BB8 /* 52089.png in Resources */,
+				59DAC09121857CFF0077E10C /* level3.tmx in Resources */,
 				F275B6BF186E21CB009F6E6B /* level1.tmx in Resources */,
 				596F2DAF20C1496400B32C47 /* backgroundobjects.png in Resources */,
 				596F2DAB20C07CF100B32C47 /* floortilesimple.png in Resources */,
 				5979C75A213C79A100965A50 /* crateriaTileSet.png in Resources */,
 				5952F877210AFDEF00F3BC5B /* Main.storyboard in Resources */,
+				59DAC08F2183C92A0077E10C /* lvl2_newbit2.wav in Resources */,
 				F275B6F1186E2749009F6E6B /* tileSet@2x.png in Resources */,
+				59DAC08D2183BFEE0077E10C /* titlescreen_dystopian-future.wav in Resources */,
 				594F558520CE16A9000E476E /* spacefloortile.png in Resources */,
 				5952F87A210E76B000F3BC5B /* starsbackground.sks in Resources */,
 				F275B67D186E0B06009F6E6B /* InfoPlist.strings in Resources */,
@@ -398,6 +430,7 @@
 				596F2DA620BF5FBA00B32C47 /* roombackround.png in Resources */,
 				595C42DD20FD418100A47BB8 /* brokendoors.png in Resources */,
 				594F559320CE1CA0000E476E /* level2.tmx in Resources */,
+				59DAC09321878F710077E10C /* lvl1-lost-moon.wav in Resources */,
 				F275B6F0186E2749009F6E6B /* tileSet.png in Resources */,
 				596F2DB420C1ECAB00B32C47 /* pipesroom.png in Resources */,
 				5979C75D21447BF700965A50 /* arachnusintroduction.sks in Resources */,
@@ -421,6 +454,7 @@
 				5952F8752106AAB600F3BC5B /* arachnusboss.m in Sources */,
 				F275B67F186E0B06009F6E6B /* main.m in Sources */,
 				F275B6E5186E25C1009F6E6B /* SKTTimingFunctions.m in Sources */,
+				59DAC084218278330077E10C /* gameaudio.m in Sources */,
 				F275B6AE186E0B8D009F6E6B /* Player.m in Sources */,
 				5971B78F215F831C00A65C6E /* honeypot.m in Sources */,
 				596F2DB220C1C44700B32C47 /* TravelPortal.m in Sources */,
