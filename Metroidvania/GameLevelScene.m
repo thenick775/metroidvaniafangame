@@ -150,7 +150,7 @@
     
     waver*enemy3=[[waver alloc] initWithPosition:CGPointMake(160*self.map.tileSize.width, 8*self.map.tileSize.height)];
     [self.enemies addObject:enemy3];
-    [self addChild:enemy3];
+    [self.map addChild:enemy3];
     
     //door stuff here
     _repeating=NO;
@@ -786,8 +786,8 @@
   self.healthbar.size=CGSizeMake((((float)self.player.health/100)*_healthbarsize), self.healthbar.size.height);
 }
 
-/*-(void)dealloc {
+-(void)dealloc {
   NSLog(@"LVL1 SCENE DEALLOCATED");
-}*/
+}
 
 @end

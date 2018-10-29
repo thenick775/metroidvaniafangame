@@ -83,7 +83,7 @@
 }
 
 -(void)attack{
-    NSLog(@"attack");
+    //NSLog(@"attack");
     self.attacking=YES;
     [agent.behavior setWeight:20.0 forGoal:seektarget];
     [agent.behavior setWeight:0.0 forGoal:stayonpath];

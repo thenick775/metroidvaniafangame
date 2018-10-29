@@ -70,8 +70,8 @@
         self.travelportal.position=CGPointMake(self.map.tileSize.width*391,self.map.tileSize.height*8);
         
         //mutable arrays here
-        self.bullets=nil;
-        self.enemies=nil;
+        [self.bullets removeAllObjects];
+        [self.enemies removeAllObjects];
         self.bullets=[[NSMutableArray alloc]init];
         self.enemies=[[NSMutableArray alloc]init];
         
@@ -101,7 +101,7 @@
         
         waver*enemy5=[[waver alloc] initWithPosition:CGPointMake(31*self.map.tileSize.width, 8*self.map.tileSize.height)];
         [self.enemies addObject:enemy5];
-        [self addChild:enemy5];
+        [self.map addChild:enemy5];
         
         boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
         boss1.position=CGPointMake(3980,56);
