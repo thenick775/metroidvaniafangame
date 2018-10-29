@@ -52,3 +52,10 @@ N-finity-Arachnus boss, Waver enemy , Sciser enemy
 
 ansimuz-space parallax backround (menu scene background)
 
+Credit for music:
+
+BurghRecords-Dystopian Future Fx Sounds (used in menuscene, background music) liscensed under Creative Commons 0 Liscense
+
+Micah Young-Lost Moon's Grateful Eights (used in lvl1, background music) liscensed under Creative Commons Attribution Liscense
+
+deleted_user_38815-newbit2 (used in lvl2, background music) liscensed under Creative Commons Attribution Liscense
