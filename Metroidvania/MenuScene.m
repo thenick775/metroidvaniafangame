@@ -9,6 +9,7 @@
 #import "GameLevelScene.h"
 #import "GameLevelScene2.h"
 #import "gameaudio.h"
+#import "GameLevelScene3.h"
 
 @implementation MenuScene{
     SKSpriteNode *_cntrlbkrnd;
@@ -214,9 +215,7 @@
         
         self.labelsin=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.5],[SKAction fadeInWithDuration:1.5],nil]];
         [self runAction:[SKAction runBlock:^{[weakself.titlelabel runAction:weakself.labelsin completion:^{weakself.labelsin.speed=3;[weakself._playlabel runAction:weakself.labelsin];[weakself._playbutton runAction:weakself.labelsin];[weakself._cntrllabel runAction:weakself.labelsin completion:^{weakself.userInteractionEnabled=YES;}];}];}]];
-        
-       // backgroundmusic=[gameaudio setupRepeatingSound:@"titlescreen_dystopian-future.wav" volume:0.6];
-       // [gameaudio playSound:backgroundmusic];
+      
         audiomanager=[gameaudio alloc];
         [audiomanager runBkgrndMusicForlvl:0];
     }

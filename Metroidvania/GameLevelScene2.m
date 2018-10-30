@@ -5,6 +5,7 @@
 //  Created by nick vancise on 6/10/18.
 
 #import "GameLevelScene2.h"
+#import "GameLevelScene3.h"
 #import "sciserenemy.h"
 #import "honeypot.h"
 #import "arachnusboss.h"
@@ -70,8 +71,8 @@
         self.travelportal.position=CGPointMake(self.map.tileSize.width*391,self.map.tileSize.height*8);
         
         //mutable arrays here
-        self.bullets=nil;
-        self.enemies=nil;
+        [self.bullets removeAllObjects];
+        [self.enemies removeAllObjects];
         self.bullets=[[NSMutableArray alloc]init];
         self.enemies=[[NSMutableArray alloc]init];
         
@@ -101,7 +102,7 @@
         
         waver*enemy5=[[waver alloc] initWithPosition:CGPointMake(31*self.map.tileSize.width, 8*self.map.tileSize.height)];
         [self.enemies addObject:enemy5];
-        [self addChild:enemy5];
+        [self.map addChild:enemy5];
         
         boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
         boss1.position=CGPointMake(3980,56);
@@ -165,7 +166,7 @@
                 }], nil]]];
             }
         }];
-        idlecheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:85],[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1],idleblk, nil]]], nil]];
+        idlecheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:75],[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1],idleblk, nil]]], nil]];
         [self runAction:idlecheck withKey:@"idlecheck"]; 
      
     }
@@ -183,6 +184,18 @@
     [self.view presentScene:[[GameLevelScene2 alloc] initWithSize:self.size]];
     [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
+-(void)continuebuttonpush:(id)sender{
+    [[self.view viewWithTag:888] removeFromSuperview];
+    __weak GameLevelScene2*weakself=self;
+    [SKTextureAtlas preloadTextureAtlasesNamed:[NSArray arrayWithObjects:@"honeypot", nil] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
+        GameLevelScene3*preload=[[GameLevelScene3 alloc]initWithSize:weakself.size];
+        preload.scaleMode = SKSceneScaleModeAspectFill;
+        NSLog(@"preloaded lvl3");
+        [weakself.view presentScene:preload];
+    }];
+    [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
+}
+
 
 
 -(void)handleBulletEnemyCollisions{
