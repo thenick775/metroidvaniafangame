@@ -9,6 +9,7 @@
 #import "GameLevelScene.h"
 #import "GameLevelScene2.h"
 #import "gameaudio.h"
+#import "GameLevelScene3.h"
 
 @implementation MenuScene{
     SKSpriteNode *_cntrlbkrnd;

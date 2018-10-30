@@ -5,6 +5,7 @@
 //  Created by nick vancise on 6/10/18.
 
 #import "GameLevelScene2.h"
+#import "GameLevelScene3.h"
 #import "sciserenemy.h"
 #import "honeypot.h"
 #import "arachnusboss.h"
@@ -165,7 +166,7 @@
                 }], nil]]];
             }
         }];
-        idlecheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:85],[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1],idleblk, nil]]], nil]];
+        idlecheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:75],[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1],idleblk, nil]]], nil]];
         [self runAction:idlecheck withKey:@"idlecheck"]; 
      
     }
@@ -183,6 +184,18 @@
     [self.view presentScene:[[GameLevelScene2 alloc] initWithSize:self.size]];
     [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
+-(void)continuebuttonpush:(id)sender{
+    [[self.view viewWithTag:888] removeFromSuperview];
+    __weak GameLevelScene2*weakself=self;
+    [SKTextureAtlas preloadTextureAtlasesNamed:[NSArray arrayWithObjects:@"honeypot", nil] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
+        GameLevelScene3*preload=[[GameLevelScene3 alloc]initWithSize:weakself.size];
+        preload.scaleMode = SKSceneScaleModeAspectFill;
+        NSLog(@"preloaded lvl3");
+        [weakself.view presentScene:preload];
+    }];
+    [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
+}
+
 
 
 -(void)handleBulletEnemyCollisions{

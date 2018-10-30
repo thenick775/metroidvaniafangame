@@ -763,7 +763,6 @@
 }
 -(void)continuebuttonpush:(id)sender{
   [[self.view viewWithTag:888] removeFromSuperview];
-  //[self.view presentScene:[[GameLevelScene2 alloc] initWithSize:self.size]];
   __weak GameLevelScene*weakself=self;
   [SKTextureAtlas preloadTextureAtlasesNamed:[NSArray arrayWithObjects:@"honeypot",@"Arachnus", nil] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
       GameLevelScene2*preload=[[GameLevelScene2 alloc]initWithSize:weakself.size];
