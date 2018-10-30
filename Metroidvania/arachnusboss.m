@@ -37,7 +37,7 @@
 -(instancetype)initWithImageNamed:(NSString *)name{
     __weak NSString *weakname=name;
     if(self == [super initWithImageNamed:weakname]){
-        self.health=/*150;*/5;//for testing
+        self.health=150;//5;//for testing
         self.active=NO;
         
         SKTextureAtlas *arachnustextures=[SKTextureAtlas atlasNamed:@"Arachnus"];
