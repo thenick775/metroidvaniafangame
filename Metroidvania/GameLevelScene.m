@@ -44,16 +44,16 @@
     __weak GameLevelScene *weakself=self;
     self.userInteractionEnabled=NO; //for use with player enter scene
     //player initializiation stuff
-    self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];//_fusion_walking3_v1.png"];
+    self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];
     self.player.position = CGPointMake(100, 150);
     self.player.zPosition = 15;
     
     SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33]];
     plyrconst.referenceNode=self.parent;
-    self.player.constraints=[NSArray arrayWithObjects:plyrconst, nil];
+    self.player.constraints=@[plyrconst];
     
     [self.map addChild:self.player];
-    [self.player runAction:self.player.enterfromportalAnimation completion:^{[weakself.player runAction:[SKAction setTexture:weakself.player.forewards resize:YES]];weakself.userInteractionEnabled=YES;}];//need to modify to turn player when entering map, rename entermap/have seperate for travelthruportal
+    [self.player runAction:self.player.enterfromportalAnimation completion:^{[weakself.player runAction:[SKAction setTexture:weakself.player.forewards resize:YES]];weakself.userInteractionEnabled=YES;}];
     
     self.player.forwardtrack=YES;
     self.player.backwardtrack=NO;
@@ -65,7 +65,7 @@
     SKRange *xrange=[SKRange rangeWithLowerLimit:self.size.width/2 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-self.size.width/2];
     SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
     SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
-    self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithUpperLimit:4] toNode:self.player],edgeconstraint, nil];/*=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint, nil];*/
+    self.camera.constraints=@[[SKConstraint distance:[SKRange rangeWithUpperLimit:4] toNode:self.player],edgeconstraint];/*=@[[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint];*/
     
     //health label initialization
     self.healthlabel=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
@@ -614,7 +614,7 @@
           //NSLog(@"meleehit");
           enemyconcop.health=enemyconcop.health-10;
           self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
-          [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];
+          [self runAction:[SKAction sequence:@[[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}]]]];
           if(enemyconcop.health<=0){
             [enemycon removeAllActions];
             [enemycon removeAllChildren];
@@ -638,7 +638,7 @@
         //NSLog(@"meleehit");
         enemyconcop.health=enemyconcop.health-10;
         self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
-        [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];//encapsulate in playerclass (ex meleedelayac or something)
+        [self runAction:[SKAction sequence:@[[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}]]]];//encapsulate in playerclass (ex meleedelayac or something)
         if(enemyconcop.health<=0){
           [enemyconcop removeAllActions];
           [enemyconcop removeAllChildren];
@@ -669,7 +669,7 @@
           if(enemylcop.health<=0){
             [enemyl removeAllActions];
             [enemyl removeAllChildren];
-            [enemyl runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}], nil]]];
+            [enemyl runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}]]]];
             [self.enemies removeObject:enemyl];
           }
           [currbullet removeAllActions];
@@ -685,7 +685,7 @@
           if(enemylcop.health<=0){
             [enemyl removeAllActions];
             [enemyl removeAllChildren];
-            [enemyl runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}], nil]]];
+            [enemyl runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}]]]];
             [self.enemies removeObject:enemyl];
           }
           [currbullet removeAllActions];
@@ -717,7 +717,7 @@
   self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
   self.healthbar.size=CGSizeMake((((float)self.player.health/100)*_healthbarsize), self.healthbar.size.height);
   
-  [self.player runAction:[SKAction group:[NSArray arrayWithObjects:self.player.plyrdmgwaitlock,[SKAction repeatAction:self.player.damageaction count:15], nil]]];
+  [self.player runAction:[SKAction group:@[self.player.plyrdmgwaitlock,[SKAction repeatAction:self.player.damageaction count:15]]]];
 }
 
 -(void)pausegame{
@@ -764,7 +764,7 @@
 -(void)continuebuttonpush:(id)sender{
   [[self.view viewWithTag:888] removeFromSuperview];
   __weak GameLevelScene*weakself=self;
-  [SKTextureAtlas preloadTextureAtlasesNamed:[NSArray arrayWithObjects:@"honeypot",@"Arachnus", nil] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
+  [SKTextureAtlas preloadTextureAtlasesNamed:@[@"honeypot",@"Arachnus"] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
       GameLevelScene2*preload=[[GameLevelScene2 alloc]initWithSize:weakself.size];
       preload.scaleMode = SKSceneScaleModeAspectFill;
         NSLog(@"preloaded lvl2");
@@ -785,8 +785,8 @@
   self.healthbar.size=CGSizeMake((((float)self.player.health/100)*_healthbarsize), self.healthbar.size.height);
 }
 
--(void)dealloc {
+/*-(void)dealloc {
   NSLog(@"LVL1 SCENE DEALLOCATED");
-}
+}*/
 
 @end

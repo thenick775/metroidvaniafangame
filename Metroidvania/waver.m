@@ -26,8 +26,8 @@
         self.position=position;
         SKTextureAtlas*waveratlas=[SKTextureAtlas atlasNamed:@"Waver"];
         
-       SKAction *weaveanim=[SKAction animateWithTextures:[NSArray arrayWithObjects:[waveratlas textureNamed:@"waver_r1.png"],[waveratlas textureNamed:@"waver_r2.png"],[waveratlas textureNamed:@"waver_r3.png"],[waveratlas textureNamed:@"waver_r4.png"],[waveratlas textureNamed:@"waver_r5.png"]/*,[waveratlas textureNamed:@"waver_r6.png"]*/, nil] timePerFrame:0.27 resize:YES restore:NO];
-        SKAction *weave=[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:weaveanim,[weaveanim reversedAction], nil]]];
+       SKAction *weaveanim=[SKAction animateWithTextures:@[[waveratlas textureNamed:@"waver_r1.png"],[waveratlas textureNamed:@"waver_r2.png"],[waveratlas textureNamed:@"waver_r3.png"],[waveratlas textureNamed:@"waver_r4.png"],[waveratlas textureNamed:@"waver_r5.png"]/*,[waveratlas textureNamed:@"waver_r6.png"]*/] timePerFrame:0.27 resize:YES restore:NO];
+        SKAction *weave=[SKAction repeatActionForever:[SKAction sequence:@[weaveanim,[weaveanim reversedAction]]]];
         
         agent=[[GKAgent2D alloc] init];
         agent.radius=self.size.width-4;
@@ -51,7 +51,7 @@
         wander=[GKGoal goalToWander:1];
         stayonpath=[GKGoal goalToStayOnPath:[GKPath pathWithPoints:myVectors count:2 radius:50 cyclical:YES] maxPredictionTime:0.5];
         seektarget=[GKGoal goalToInterceptAgent:(GKAgent2D*)target maxPredictionTime:2];
-        GKBehavior *wanderbeh=[GKBehavior behaviorWithGoals:[NSArray arrayWithObjects:stayonpath,wander,seektarget, nil] andWeights:[NSArray arrayWithObjects:@10,@15,@0,nil]];
+        GKBehavior *wanderbeh=[GKBehavior behaviorWithGoals:@[stayonpath,wander,seektarget] andWeights:@[@10,@15,@0]];
         
         agent.behavior=wanderbeh;
         

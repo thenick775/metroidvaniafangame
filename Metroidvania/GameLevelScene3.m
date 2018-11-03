@@ -6,7 +6,9 @@
 //
 #import "GameLevelScene3.h"
 
-@implementation GameLevelScene3
+@implementation GameLevelScene3{
+    SKTextureAtlas*lvl3assets;
+}
 
 -(instancetype)initWithSize:(CGSize)size{
     if (self = [super initWithSize:size]) {
@@ -21,7 +23,11 @@
         self.hazards=[self.map layerNamed:@"hazards"];
         self.mysteryboxes=[self.map layerNamed:@"mysteryboxes"];
         self.background=[self.map layerNamed:@"background"];
-    
+        self.foreground=[self.map layerNamed:@"foreground"];
+        self.foreground.zPosition=17;
+        
+        lvl3assets=[SKTextureAtlas atlasNamed:@"lvl3assets"];
+        
         __weak GameLevelScene3*weakself=self;
         self.userInteractionEnabled=NO; //for use with player enter scene
         
@@ -35,7 +41,7 @@
         
         SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33] Y:[SKRange rangeWithUpperLimit:(self.map.tileSize.height*self.map.mapSize.height)-22]];
         plyrconst.referenceNode=self.parent;
-        self.player.constraints=[NSArray arrayWithObjects:plyrconst, nil];
+        self.player.constraints=@[plyrconst];
         
         [self.map addChild:self.player];
         [self.player runAction:self.player.enterfromportalAnimation completion:^{[weakself.player runAction:[SKAction setTexture:weakself.player.forewards resize:YES]];weakself.userInteractionEnabled=YES;}];//need to modify to turn player when entering map, rename entermap/have seperate for travelthruportal
@@ -43,12 +49,11 @@
         self.player.forwardtrack=YES;
         self.player.backwardtrack=NO;
         
-        
         //camera initialization
         SKRange *xrange=[SKRange rangeWithLowerLimit:self.size.width/2 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-self.size.width/2];
         SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
         SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
-        self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithLowerLimit:0 upperLimit:4] toNode:self.player],edgeconstraint, nil];
+        self.camera.constraints=@[[SKConstraint distance:[SKRange rangeWithLowerLimit:0 upperLimit:4] toNode:self.player],edgeconstraint];
         
         //mutable arrays here
         [self.bullets removeAllObjects];
@@ -56,6 +61,12 @@
         self.bullets=[[NSMutableArray alloc]init];
         self.enemies=[[NSMutableArray alloc]init];
         
+        //scene items here
+        SKSpriteNode*powerupstatue=[SKSpriteNode spriteNodeWithTexture:[lvl3assets textureNamed:@"powerupstatuelvl3.png"]];
+        powerupstatue.position=CGPointMake(17*self.map.tileSize.width, 5*self.map.tileSize.height);
+        [powerupstatue setScale:0.7];
+        powerupstatue.zPosition=0;
+        [self.map addChild:powerupstatue];
         
         
         
@@ -74,5 +85,9 @@
     [self.view presentScene:[[GameLevelScene3 alloc] initWithSize:self.size]];
     [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
+
+/*- (void)dealloc {
+    NSLog(@"LVL3 SCENE DEALLOCATED");
+}*/
 
 @end

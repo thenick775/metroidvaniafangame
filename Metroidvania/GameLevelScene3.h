@@ -14,5 +14,6 @@
 
 -(instancetype)initWithSize:(CGSize)size;
 @property (nonatomic,strong) TMXLayer*background;
+@property (nonatomic,strong) TMXLayer*foreground;
 
 @end
