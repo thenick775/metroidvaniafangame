@@ -48,7 +48,7 @@ B Hopkins & Captain Invictus-samus normal suit
 
 Ray Wenderlich.com-Base super mario assets (1st lvl)
 
-Tommy Lee-"honeypot" walking cactus enemy
+Tommy Lee-"honeypot" walking cactus enemy, metroid sprite (used as volume slider)
 
 N-finity-Arachnus boss, Waver enemy , Sciser enemy
 
