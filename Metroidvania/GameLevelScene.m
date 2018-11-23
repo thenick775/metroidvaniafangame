@@ -25,6 +25,7 @@
   UIButton *replaybutton;
   UIButton *continuebutton;
   SKSpriteNode*_pauselabel,*_unpauselabel;
+  UISlider*_volumeslider;
 }
 
 -(instancetype)initWithSize:(CGSize)size {
@@ -108,14 +109,15 @@
     [continuebutton addTarget:self action:@selector(continuebuttonpush:) forControlEvents:UIControlEventTouchUpInside];
     continuebutton.frame=CGRectMake(self.size.width/2.0-continueimage.size.width/4.0-15, self.size.height/2.0-continueimage.size.height/4.0+7, continueimage.size.width, continueimage.size.height);
     
-    //pause-unpause buttons/labels
+    //pause-unpause buttons/labels & pause screen items
     _pauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"pauselabel.png"];
     _pauselabel.position=CGPointMake(0,35);
     _unpauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"unpauselabel.png"];
     _unpauselabel.position=CGPointMake(0,10);
+    self.volumeslider=[[UISlider alloc] initWithFrame:CGRectMake(weakself.size.width/2+200,weakself.size.height/2+15, weakself.size.height-40, 15.0)];
     
     //portal stuff
-    _travelportal=[[TravelPortal alloc] initWithStuff:@"travelmirror.png"];
+    _travelportal=[[TravelPortal alloc] initWithImage:@"travelmirror.png"];
     _travelportal.position=CGPointMake((self.map.mapSize.width * self.map.tileSize.width)-120, 95.0);
     
     //button stuff unless i find a better place to put it...
@@ -155,8 +157,6 @@
     //door stuff here
     _repeating=NO;
     
-    //self.userInteractionEnabled=YES;
-
   }
   return self;
 }
@@ -165,6 +165,22 @@
   //setup sound
   self.audiomanager=[gameaudio alloc];
   [self.audiomanager runBkgrndMusicForlvl:1];
+  
+  __weak GameLevelScene*weakself=self;
+  dispatch_async(dispatch_get_main_queue(), ^{ //deal with certain ui on main thread only
+  weakself.volumeslider.minimumValue=0;
+  weakself.volumeslider.maximumValue=100.0;
+  weakself.volumeslider.continuous=YES;
+  weakself.volumeslider.value=70;
+  weakself.volumeslider.hidden=YES;
+  weakself.volumeslider.minimumTrackTintColor=[UIColor redColor];
+  weakself.volumeslider.maximumTrackTintColor=[UIColor darkGrayColor];
+  [weakself.volumeslider setThumbImage:[UIImage imageNamed:@"supermetroid_sliderbar.png"] forState:UIControlStateNormal];
+  [weakself.volumeslider setTransform:CGAffineTransformRotate(weakself.volumeslider.transform, M_PI_2)];
+  [weakself.volumeslider setBackgroundColor:[UIColor clearColor]];
+  [weakself.volumeslider addTarget:weakself action:@selector(slideraction:) forControlEvents:UIControlEventValueChanged];
+  [weakself.view addSubview:weakself.volumeslider];
+  });
 }
 
 - (void)update:(NSTimeInterval)currentTime{
@@ -613,8 +629,7 @@
         if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
           //NSLog(@"meleehit");
           enemyconcop.health=enemyconcop.health-10;
-          self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
-          [self runAction:[SKAction sequence:@[[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}]]]];
+          [self.player runAction:self.player.meleedelayac];
           if(enemyconcop.health<=0){
             [enemycon removeAllActions];
             [enemycon removeAllChildren];
@@ -637,8 +652,7 @@
       if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
         //NSLog(@"meleehit");
         enemyconcop.health=enemyconcop.health-10;
-        self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
-        [self runAction:[SKAction sequence:@[[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}]]]];//encapsulate in playerclass (ex meleedelayac or something)
+        [self.player runAction:self.player.meleedelayac];
         if(enemyconcop.health<=0){
           [enemyconcop removeAllActions];
           [enemyconcop removeAllChildren];
@@ -724,16 +738,24 @@
   //NSLog(@"game paused");
   [self.camera addChild:_pauselabel];
   [self.camera addChild: _unpauselabel];
-  
+  self.volumeslider.hidden=NO;
   self.paused=YES;
   self.player.playervelocity=CGPointMake(0,18);
-  [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
+  //[gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
 -(void)unpausegame{
   [_pauselabel removeFromParent];
   [_unpauselabel removeFromParent];
+  self.volumeslider.hidden=YES;
+  
   self.paused=NO;
-  [gameaudio playSound:self.audiomanager.bkgrndmusic];
+  //[gameaudio playSound:self.audiomanager.bkgrndmusic];
+}
+
+-(void)slideraction:(id)sender{
+  UISlider*tmpslider=(UISlider*)sender;
+  
+  self.audiomanager.bkgrndmusic.volume=tmpslider.value/100;
 }
 
 -(void) gameOver:(BOOL)didwin{

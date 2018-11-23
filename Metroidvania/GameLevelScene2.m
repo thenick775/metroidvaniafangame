@@ -68,7 +68,7 @@
         [self.map addChild: starbackground];
         
         //portal adjust position to suit this level
-        self.travelportal.position=CGPointMake(self.map.tileSize.width*391,self.map.tileSize.height*8);
+    self.travelportal.position=CGPointMake(self.map.tileSize.width*391,self.map.tileSize.height*8);
         
         //mutable arrays here
         [self.bullets removeAllObjects];
@@ -177,6 +177,22 @@
     //setup sound
     self.audiomanager=[gameaudio alloc];
     [self.audiomanager runBkgrndMusicForlvl:2];
+    
+    __weak GameLevelScene2*weakself=self;
+    dispatch_async(dispatch_get_main_queue(), ^{//deal with certain ui on main thread only
+    weakself.volumeslider.minimumValue=0;
+    weakself.volumeslider.maximumValue=100.0;
+    weakself.volumeslider.continuous=YES;
+    weakself.volumeslider.value=70;
+    weakself.volumeslider.hidden=YES;
+    weakself.volumeslider.minimumTrackTintColor=[UIColor redColor];
+    weakself.volumeslider.maximumTrackTintColor=[UIColor darkGrayColor];
+    [weakself.volumeslider setThumbImage:[UIImage imageNamed:@"supermetroid_sliderbar.png"] forState:UIControlStateNormal];
+    [weakself.volumeslider setTransform:CGAffineTransformRotate(weakself.volumeslider.transform, M_PI_2)];
+    [weakself.volumeslider setBackgroundColor:[UIColor clearColor]];
+    [weakself.volumeslider addTarget:weakself action:@selector(slideraction:) forControlEvents:UIControlEventValueChanged];
+    [weakself.view addSubview:weakself.volumeslider];
+    });
 }
 
 -(void)replaybuttonpush:(id)sender{
@@ -187,7 +203,7 @@
 -(void)continuebuttonpush:(id)sender{
     [[self.view viewWithTag:888] removeFromSuperview];
     __weak GameLevelScene2*weakself=self;
-    [SKTextureAtlas preloadTextureAtlasesNamed:@[@"honeypot"] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
+    [SKTextureAtlas preloadTextureAtlasesNamed:@[@"lvl3assets"] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
         GameLevelScene3*preload=[[GameLevelScene3 alloc]initWithSize:weakself.size];
         preload.scaleMode = SKSceneScaleModeAspectFill;
         NSLog(@"preloaded lvl3");
@@ -227,8 +243,7 @@
             if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
                 //NSLog(@"meleehit");
                 enemyconcop.health=enemyconcop.health-10;
-                self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
-                [self runAction:[SKAction sequence:@[[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}]]]];//encapsulate in playerclass (ex meleedelayac or something)
+                [self.player runAction:self.player.meleedelayac];
                 if(enemyconcop.health<=0){
                     [enemyconcop removeAllActions];
                     [enemyconcop removeAllChildren];
@@ -280,9 +295,7 @@
         }
         if(self.player.position.x>enemyconcop.position.x+150 && [enemyconcop actionForKey:@"walk"]){
             NSLog(@"past position of player");
-            __weak honeypot*weakenemyconcop=enemyconcop;
-            [enemyconcop removeActionForKey:@"walk"];
-            [enemyconcop runAction:enemyconcop.explode completion:^{weakenemyconcop.texture=nil;enemyconcop.dead=YES;}];
+            [enemyconcop runAction:enemyconcop.explodeangry];
         }
         
     }
@@ -299,8 +312,7 @@
         if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
             //NSLog(@"meleehit");
             enemyconcop.health=enemyconcop.health-10;
-            self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
-            [self runAction:[SKAction sequence:@[[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}]]]];//encapsulate in playerclass (ex meleedelayac or something)
+            [self.player runAction:self.player.meleedelayac];
             if(enemyconcop.health<=0){
                 [enemyconcop removeAllActions];
                 [enemyconcop removeAllChildren];
@@ -361,9 +373,7 @@
                 if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0),currbullet.frame) && [enemylcop actionForKey:@"walk"]/*!enemylcop.dead*/){
                     enemylcop.health--;
                     if(enemylcop.health<=0 && /*!enemylcop.dead*/[enemylcop actionForKey:@"walk"]){
-                        __weak honeypot*weakenemylcop=enemylcop;
-                        [weakenemylcop removeActionForKey:@"walk"];
-                        [enemylcop runAction:enemylcop.explode completion:^{weakenemylcop.texture=nil;enemylcop.dead=YES;}];
+                        [enemylcop runAction:enemylcop.explode];
                     }
                     [currbullet removeAllActions];
                     [currbullet removeFromParent];

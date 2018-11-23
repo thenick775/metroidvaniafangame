@@ -17,7 +17,6 @@
     else if(lvlnum==2)
         self.bkgrndmusic=[gameaudio setupRepeatingSound:@"lvl2_newbit2.wav" volume:0.8];
     
-    
     [gameaudio playSound:self.bkgrndmusic];
 }
 
@@ -31,7 +30,8 @@
 //class functions
 // get a repeating sound
 +(AVAudioPlayer*)setupRepeatingSound:(NSString*)file volume:(float)volume {
-    AVAudioPlayer *s = [self setupSound:file volume:volume];
+    __weak NSString*weakfile=file;
+    AVAudioPlayer *s = [self setupSound:weakfile volume:volume];
     s.numberOfLoops = -1;
     return s;
 }
@@ -39,7 +39,8 @@
 // setup a sound
 +(AVAudioPlayer*)setupSound:(NSString*)file volume:(float)volume{
     NSError *error;
-    NSURL *url = [[NSBundle mainBundle] URLForResource:file withExtension:nil];
+    __weak NSString*weakfile=file;
+    __weak NSURL *url = [[NSBundle mainBundle] URLForResource:weakfile withExtension:nil];
     AVAudioPlayer *s = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
     s.numberOfLoops = 0;
     s.volume = volume;
@@ -49,9 +50,10 @@
 
 // play a sound now through GCD
 +(void)playSound:(AVAudioPlayer*)player {
-    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [player play];
-    //});
+    __weak AVAudioPlayer*weakplayer=player;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [weakplayer play];
+    });
 }
 
 // play a sound later through GCD

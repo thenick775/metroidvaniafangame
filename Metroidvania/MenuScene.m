@@ -25,8 +25,7 @@
     SKAction *shipflyac;
     SKTransition *menutolvl1tran;
     NSArray *texturesforlvl1;
-    NSArray *texturesforlvl2;//here for testing and convience at the moment
-    //AVAudioPlayer*backgroundmusic;
+    //NSArray *texturesforlvl2;//here for testing and convience at the moment
     gameaudio*audiomanager;
 }
 
@@ -209,7 +208,7 @@
         shipflyac=[SKAction group:@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.7]]];
         [shipflyac setTimingMode:SKActionTimingEaseIn];
        
-       //texturesforlvl2=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver"];
+    //texturesforlvl2=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver"];
         texturesforlvl1=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"Waver"];
      
         self.labelsin=[SKAction sequence:@[[SKAction waitForDuration:1.5],[SKAction fadeInWithDuration:1.5]]];
@@ -243,7 +242,7 @@
                         NSLog(@"preloaded lvl1");
                         [weakshipflamesright2 runAction:weakflameflicker];
                         [weakshipflamesleft2 runAction:weakflameflicker];
-                [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
+                        [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
                 }];
             
         }

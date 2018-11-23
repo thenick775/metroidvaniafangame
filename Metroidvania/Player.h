@@ -29,6 +29,7 @@
 @property (nonatomic,assign) BOOL plyrrecievingdmg;
 @property (nonatomic,strong) SKAction *plyrdmgwaitlock;
 @property (nonatomic,assign) BOOL meleedelay;
+@property (nonatomic,strong) SKAction *meleedelayac;
 @property (nonatomic,strong) SKAction *damageaction;
 @property (nonatomic,strong) SKAction *jmptomfmbcheck;
 @property (nonatomic,strong) SKAction *meleeactionright;

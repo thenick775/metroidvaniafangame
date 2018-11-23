@@ -78,6 +78,22 @@
     //setup sound
     self.audiomanager=[gameaudio alloc];
     //[self.audiomanager runBkgrndMusicForlvl:2];
+    
+    __weak GameLevelScene3*weakself=self;
+    dispatch_async(dispatch_get_main_queue(), ^{//deal with certain ui on main thread only
+        weakself.volumeslider.minimumValue=0;
+        weakself.volumeslider.maximumValue=100.0;
+        weakself.volumeslider.continuous=YES;
+        weakself.volumeslider.value=70;
+        weakself.volumeslider.hidden=YES;
+        weakself.volumeslider.minimumTrackTintColor=[UIColor redColor];
+        weakself.volumeslider.maximumTrackTintColor=[UIColor darkGrayColor];
+        [weakself.volumeslider setThumbImage:[UIImage imageNamed:@"supermetroid_sliderbar.png"] forState:UIControlStateNormal];
+        [weakself.volumeslider setTransform:CGAffineTransformRotate(weakself.volumeslider.transform, M_PI_2)];
+        [weakself.volumeslider setBackgroundColor:[UIColor clearColor]];
+        [weakself.volumeslider addTarget:weakself action:@selector(slideraction:) forControlEvents:UIControlEventValueChanged];
+        [weakself.view addSubview:weakself.volumeslider];
+    });
 }
 
 -(void)replaybuttonpush:(id)sender{

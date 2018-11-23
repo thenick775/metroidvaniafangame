@@ -38,6 +38,8 @@
         self.plyrrecievingdmg=NO;
         self.plyrdmgwaitlock=[SKAction sequence:@[[SKAction waitForDuration:3.0],[SKAction runBlock:^{weakself.plyrrecievingdmg=NO;}]]];
         self.damageaction=[SKAction sequence:@[[SKAction colorizeWithColor:[UIColor redColor] colorBlendFactor:0.7 duration:0.1],[SKAction colorizeWithColorBlendFactor:0.0 duration:0.1]]];
+        self.meleedelayac=[SKAction sequence:@[[SKAction runBlock:^{weakself.meleedelay=YES;}],[SKAction waitForDuration:1.2],[SKAction runBlock:^{weakself.meleedelay=NO;}]]];
+        
         
         //case for jumping to stay jumping until on ground
         SKAction *jmpblk=[SKAction runBlock:^{/*NSLog(@"checkingjmpblk");*/if(weakself.onGround){
@@ -54,7 +56,7 @@
         
         //melee actions
         self.meleeinaction=NO;
-        self.meleedelay=NO;
+        self.meleedelay=NO; //this variable locks melee to 1 hit every 1.2 sec
         SKTextureAtlas *projectiles=[SKTextureAtlas atlasNamed:@"projectiles"];
         self.meleeweapon=[SKSpriteNode spriteNodeWithTexture:[projectiles textureNamed:@"samusmeleeright1.png"]];
         self.meleeweapon.position=CGPointMake(16,4);
@@ -105,10 +107,10 @@
         
         NSArray *runbackwardsarray=@[[samusregsuit textureNamed:@"samus_runb1.png"],[samusregsuit textureNamed:@"samus_runb2.png"],[samusregsuit textureNamed:@"samus_runb3.png"],[samusregsuit textureNamed:@"samus_runb4.png"],[samusregsuit textureNamed:@"samus_runb5.png"],[samusregsuit textureNamed:@"samus_runb6.png"],[samusregsuit textureNamed:@"samus_runb7.png"],[samusregsuit textureNamed:@"samus_runb8.png"],[samusregsuit textureNamed:@"samus_runb9.png"],[samusregsuit textureNamed:@"samus_runb10.png"]];
         
-        NSArray *jumpforwardsstartarray=@[[samusregsuit textureNamed:@"samus_jumpr1.png"],[samusregsuit textureNamed:@"samus_jumpr2.png"]];
+       // NSArray *jumpforwardsstartarray=@[[samusregsuit textureNamed:@"samus_jumpr1.png"],[samusregsuit textureNamed:@"samus_jumpr2.png"]];
         NSArray *jumpforewardsarray=@[[samusregsuit textureNamed:@"samus_jumpr3.png"],[samusregsuit textureNamed:@"samus_jumpr4.png"],[samusregsuit textureNamed:@"samus_jumpr5.png"],[samusregsuit textureNamed:@"samus_jumpr6.png"],[samusregsuit textureNamed:@"samus_jumpr7.png"],[samusregsuit textureNamed:@"samus_jumpr8.png"],[samusregsuit textureNamed:@"samus_jumpr9.png"],[samusregsuit textureNamed:@"samus_jumpr10.png"]];
         
-        NSArray *jumpbackwardsstartarray=@[[samusregsuit textureNamed:@"samus_jumpb1.png"],[samusregsuit textureNamed:@"samus_jumpb2.png"]];
+       // NSArray *jumpbackwardsstartarray=@[[samusregsuit textureNamed:@"samus_jumpb1.png"],[samusregsuit textureNamed:@"samus_jumpb2.png"]];
         NSArray *jumpbackwardsarray=@[[samusregsuit textureNamed:@"samus_jumpb3.png"],[samusregsuit textureNamed:@"samus_jumpb4.png"],[samusregsuit textureNamed:@"samus_jumpb5.png"],[samusregsuit textureNamed:@"samus_jumpb6.png"],[samusregsuit textureNamed:@"samus_jumpb7.png"],[samusregsuit textureNamed:@"samus_jumpb8.png"],[samusregsuit textureNamed:@"samus_jumpb9.png"],[samusregsuit textureNamed:@"samus_jumpb10.png"]];
         
         NSArray *travelthruportalarray=@[[samusregsuit textureNamed:@"samus_travel1.png"],[samusregsuit textureNamed:@"samus_travel2.png"],[samusregsuit textureNamed:@"samus_travel3.png"],[samusregsuit textureNamed:@"samus_travel4.png"],[samusregsuit textureNamed:@"samus_travel5.png"],[samusregsuit textureNamed:@"samus_travel6.png"],[samusregsuit textureNamed:@"samus_travel7.png"],[samusregsuit textureNamed:@"samus_travel8.png"],[samusregsuit textureNamed:@"samus_travel9.png"],[samusregsuit textureNamed:@"samus_travel10.png"]];

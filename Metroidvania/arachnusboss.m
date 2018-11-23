@@ -271,6 +271,12 @@
         GKRule *deathrule=[GKRule ruleWithPredicate:deathpred assertingFact:@"death" grade:1.0];
         [arachnusrs addRule:deathrule];
         
+       /* NSPredicate*fleepred=[NSPredicate predicateWithFormat:@"$prevacflee==0 && $currenthealth<($orighealth/3) && $coorddist between %@",@[@-100,@100]];
+        GKRule *fleerule=[GKRule ruleWithPredicate:fleepred assertingFact:@"flee" grade:1.0];
+        arachnusrs.state[@"prevacflee"]=@(NO);
+        [arachnusrs addRule:fleerule];*/
+        
+        
         rndsrc=[[GKLinearCongruentialRandomSource alloc] init];;
     }
     
@@ -321,6 +327,17 @@
             actoexecute=fireattackright;
         else if([arachnusrs gradeForFact:@"moveforward"]==1)
             actoexecute=moveforeward;
+        /*if([arachnusrs gradeForFact:@"flee"]==1){
+            NSLog(@"fleeing");
+            if(arachnusrs.state[@"coorddist"]<0)
+                actoexecute=morphballattackright;
+            else
+                actoexecute=morphballattackleft;
+            arachnusrs.state[@"prevacflee"]=@(YES);
+        }
+        else{
+            arachnusrs.state[@"prevacflee"]=@(NO);
+        }*/
         if(prevac==actoexecute){
             if([arachnusrs.state[@"coorddist"] floatValue]<0)
                 actoexecute=[leftattacks objectAtIndex:[rndsrc nextIntWithUpperBound:leftattacks.count]];

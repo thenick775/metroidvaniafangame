@@ -11,16 +11,24 @@
 
 @implementation honeypotproj
 
--(instancetype)initWithPosition:(CGPoint)position andTex:(SKTexture*)tex{
+-(instancetype)initWithPosition:(CGPoint)position andTex:(SKTexture*)tex andAnger:(BOOL)angry{
     __weak SKTexture *weaktex=tex;
     if(self == [super initWithTexture:weaktex]){
         self.agent=[[GKAgent2D alloc] init];
         self.agent.radius=self.size.height;
         self.agent.position=(vector_float2){(float)position.x,(float)position.y};
         self.agent.delegate=self;
-        self.agent.maxSpeed=18;
-        self.agent.maxAcceleration=12;
-        self.agent.mass=2;
+        if(!angry){
+            self.agent.maxSpeed=18;
+            self.agent.maxAcceleration=12;
+            self.agent.mass=2;
+        }
+        else{
+            [self runAction:[SKAction colorizeWithColor:[UIColor redColor] colorBlendFactor:0.6 duration:0]];
+            self.agent.maxSpeed=45;
+            self.agent.maxAcceleration=30;
+            self.agent.mass=3.5;
+        }
     }
     return self;
 }
@@ -67,7 +75,9 @@
     
     walkf=[SKAction group:@[[SKAction repeatAction:walkanim count:4],walkmove]];
     walkb=[SKAction group:@[[SKAction repeatAction:[walkanim reversedAction] count:4],[walkmove reversedAction]]];
-    self.explode=[SKAction sequence:@[[SKAction animateWithTextures:@[[honeypotatlas textureNamed:@"honeypot9.png"],[honeypotatlas textureNamed:@"honeypot10.png"]] timePerFrame:0.1],[SKAction runBlock:^{[weakself projectileAttack];}]]];
+    SKAction*honeypotanimex=[SKAction animateWithTextures:@[[honeypotatlas textureNamed:@"honeypot9.png"],[honeypotatlas textureNamed:@"honeypot10.png"]] timePerFrame:0.1];
+    self.explode=[SKAction sequence:@[[SKAction runBlock:^{[weakself removeActionForKey:@"walk"];}],honeypotanimex,[SKAction runBlock:^{[weakself projectileAttack:NO];}]]];
+    self.explodeangry=[SKAction sequence:@[[SKAction runBlock:^{[weakself removeActionForKey:@"walk"];}],honeypotanimex,[SKAction runBlock:^{[weakself projectileAttack:YES];}]]];
     projectileexplode=[SKAction animateWithTextures:@[[arachnusatlas textureNamed:@"Fire3.png"],[arachnusatlas textureNamed:@"Fire4.png"]] timePerFrame:0.13 resize:YES restore:NO];
     
         
@@ -88,15 +98,25 @@
     [self.agentSystem updateWithDeltaTime:delta];
 }
 
--(void)projectileAttack{
+-(void)projectileAttack:(BOOL)angrily{
     NSLog(@"initiating projectile attack");
+    NSTimeInterval deathtime;
+    if(!angrily)
+        deathtime=12.0;
+    else
+        deathtime=8.0;
+    
+    float xposconst=-2;
+    
     for(int i=0;i<30;i++){
         __weak GKComponentSystem *weakagentSystem=self.agentSystem;
-        honeypotproj *tmproj=[[honeypotproj alloc] initWithPosition:CGPointZero andTex:[honeypotatlas textureNamed:@"honeypotprojectiler.png"]];
+        honeypotproj *tmproj=[[honeypotproj alloc] initWithPosition:CGPointZero andTex:[honeypotatlas textureNamed:@"honeypotprojectiler.png"] andAnger:angrily];
         __weak honeypotproj*weaktmproj=tmproj;
-        [tmproj runAction:[SKAction sequence:@[[SKAction waitForDuration:12.0],projectileexplode,[SKAction runBlock:^{[weakagentSystem removeComponent:tmproj.agent];[weaktmproj removeFromParent];}]]]];
+            
+        [tmproj runAction:[SKAction sequence:@[[SKAction waitForDuration:deathtime],projectileexplode,[SKAction runBlock:^{[weakagentSystem removeComponent:weaktmproj.agent];[weaktmproj removeFromParent];}]]]];
         
-        tmproj.position=CGPointMake(0,i+2);
+        tmproj.position=CGPointMake(xposconst,(-2*pow(xposconst,2)+4));
+        xposconst=xposconst+(float)4/30;
         [self addChild:tmproj];
         [self.agentSystem addComponent:tmproj.agent];
     }
@@ -105,6 +125,9 @@
     for(GKAgent2D *thisagent in self.agentSystem.components){
             thisagent.behavior=flock;
     }
+    
+    self.texture=nil;
+    self.dead=YES;
     
 }
 
