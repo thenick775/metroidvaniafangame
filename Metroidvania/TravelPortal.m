@@ -14,7 +14,7 @@
 }
 
 
--(instancetype)initWithStuff:(NSString *)name{
+-(instancetype)initWithImage:(NSString *)name{
     __weak NSString *weakname=name;
     if(self==[super initWithImageNamed:weakname]){
         SKTextureAtlas *portalatlas=[SKTextureAtlas atlasNamed:@"travelmirror"];

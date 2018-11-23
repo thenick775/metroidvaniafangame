@@ -25,6 +25,7 @@
   UIButton *replaybutton;
   UIButton *continuebutton;
   SKSpriteNode*_pauselabel,*_unpauselabel;
+  UISlider*_volumeslider;
 }
 
 -(instancetype)initWithSize:(CGSize)size {
@@ -44,16 +45,16 @@
     __weak GameLevelScene *weakself=self;
     self.userInteractionEnabled=NO; //for use with player enter scene
     //player initializiation stuff
-    self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];//_fusion_walking3_v1.png"];
+    self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];
     self.player.position = CGPointMake(100, 150);
     self.player.zPosition = 15;
     
     SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33]];
     plyrconst.referenceNode=self.parent;
-    self.player.constraints=[NSArray arrayWithObjects:plyrconst, nil];
+    self.player.constraints=@[plyrconst];
     
     [self.map addChild:self.player];
-    [self.player runAction:self.player.enterfromportalAnimation completion:^{[weakself.player runAction:[SKAction setTexture:weakself.player.forewards resize:YES]];weakself.userInteractionEnabled=YES;}];//need to modify to turn player when entering map, rename entermap/have seperate for travelthruportal
+    [self.player runAction:self.player.enterfromportalAnimation completion:^{[weakself.player runAction:[SKAction setTexture:weakself.player.forewards resize:YES]];weakself.userInteractionEnabled=YES;}];
     
     self.player.forwardtrack=YES;
     self.player.backwardtrack=NO;
@@ -65,7 +66,7 @@
     SKRange *xrange=[SKRange rangeWithLowerLimit:self.size.width/2 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-self.size.width/2];
     SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
     SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
-    self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithUpperLimit:4] toNode:self.player],edgeconstraint, nil];/*=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint, nil];*/
+    self.camera.constraints=@[[SKConstraint distance:[SKRange rangeWithUpperLimit:4] toNode:self.player],edgeconstraint];/*=@[[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint];*/
     
     //health label initialization
     self.healthlabel=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
@@ -108,14 +109,15 @@
     [continuebutton addTarget:self action:@selector(continuebuttonpush:) forControlEvents:UIControlEventTouchUpInside];
     continuebutton.frame=CGRectMake(self.size.width/2.0-continueimage.size.width/4.0-15, self.size.height/2.0-continueimage.size.height/4.0+7, continueimage.size.width, continueimage.size.height);
     
-    //pause-unpause buttons/labels
+    //pause-unpause buttons/labels & pause screen items
     _pauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"pauselabel.png"];
     _pauselabel.position=CGPointMake(0,35);
     _unpauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"unpauselabel.png"];
     _unpauselabel.position=CGPointMake(0,10);
+    self.volumeslider=[[UISlider alloc] initWithFrame:CGRectMake(weakself.size.width/2+200,weakself.size.height/2+15, weakself.size.height-40, 15.0)];
     
     //portal stuff
-    _travelportal=[[TravelPortal alloc] initWithStuff:@"travelmirror.png"];
+    _travelportal=[[TravelPortal alloc] initWithImage:@"travelmirror.png"];
     _travelportal.position=CGPointMake((self.map.mapSize.width * self.map.tileSize.width)-120, 95.0);
     
     //button stuff unless i find a better place to put it...
@@ -155,8 +157,6 @@
     //door stuff here
     _repeating=NO;
     
-    //self.userInteractionEnabled=YES;
-
   }
   return self;
 }
@@ -165,6 +165,22 @@
   //setup sound
   self.audiomanager=[gameaudio alloc];
   [self.audiomanager runBkgrndMusicForlvl:1];
+  
+  __weak GameLevelScene*weakself=self;
+  dispatch_async(dispatch_get_main_queue(), ^{ //deal with certain ui on main thread only
+  weakself.volumeslider.minimumValue=0;
+  weakself.volumeslider.maximumValue=100.0;
+  weakself.volumeslider.continuous=YES;
+  weakself.volumeslider.value=70;
+  weakself.volumeslider.hidden=YES;
+  weakself.volumeslider.minimumTrackTintColor=[UIColor redColor];
+  weakself.volumeslider.maximumTrackTintColor=[UIColor darkGrayColor];
+  [weakself.volumeslider setThumbImage:[UIImage imageNamed:@"supermetroid_sliderbar.png"] forState:UIControlStateNormal];
+  [weakself.volumeslider setTransform:CGAffineTransformRotate(weakself.volumeslider.transform, M_PI_2)];
+  [weakself.volumeslider setBackgroundColor:[UIColor clearColor]];
+  [weakself.volumeslider addTarget:weakself action:@selector(slideraction:) forControlEvents:UIControlEventValueChanged];
+  [weakself.view addSubview:weakself.volumeslider];
+  });
 }
 
 - (void)update:(NSTimeInterval)currentTime{
@@ -613,8 +629,7 @@
         if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
           //NSLog(@"meleehit");
           enemyconcop.health=enemyconcop.health-10;
-          self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
-          [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];
+          [self.player runAction:self.player.meleedelayac];
           if(enemyconcop.health<=0){
             [enemycon removeAllActions];
             [enemycon removeAllChildren];
@@ -637,8 +652,7 @@
       if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
         //NSLog(@"meleehit");
         enemyconcop.health=enemyconcop.health-10;
-        self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
-        [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];//encapsulate in playerclass (ex meleedelayac or something)
+        [self.player runAction:self.player.meleedelayac];
         if(enemyconcop.health<=0){
           [enemyconcop removeAllActions];
           [enemyconcop removeAllChildren];
@@ -669,7 +683,7 @@
           if(enemylcop.health<=0){
             [enemyl removeAllActions];
             [enemyl removeAllChildren];
-            [enemyl runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}], nil]]];
+            [enemyl runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}]]]];
             [self.enemies removeObject:enemyl];
           }
           [currbullet removeAllActions];
@@ -685,7 +699,7 @@
           if(enemylcop.health<=0){
             [enemyl removeAllActions];
             [enemyl removeAllChildren];
-            [enemyl runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}], nil]]];
+            [enemyl runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}]]]];
             [self.enemies removeObject:enemyl];
           }
           [currbullet removeAllActions];
@@ -717,23 +731,31 @@
   self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
   self.healthbar.size=CGSizeMake((((float)self.player.health/100)*_healthbarsize), self.healthbar.size.height);
   
-  [self.player runAction:[SKAction group:[NSArray arrayWithObjects:self.player.plyrdmgwaitlock,[SKAction repeatAction:self.player.damageaction count:15], nil]]];
+  [self.player runAction:[SKAction group:@[self.player.plyrdmgwaitlock,[SKAction repeatAction:self.player.damageaction count:15]]]];
 }
 
 -(void)pausegame{
   //NSLog(@"game paused");
   [self.camera addChild:_pauselabel];
   [self.camera addChild: _unpauselabel];
-  
+  self.volumeslider.hidden=NO;
   self.paused=YES;
   self.player.playervelocity=CGPointMake(0,18);
-  [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
+  //[gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
 -(void)unpausegame{
   [_pauselabel removeFromParent];
   [_unpauselabel removeFromParent];
+  self.volumeslider.hidden=YES;
+  
   self.paused=NO;
-  [gameaudio playSound:self.audiomanager.bkgrndmusic];
+  //[gameaudio playSound:self.audiomanager.bkgrndmusic];
+}
+
+-(void)slideraction:(id)sender{
+  UISlider*tmpslider=(UISlider*)sender;
+  
+  self.audiomanager.bkgrndmusic.volume=tmpslider.value/100;
 }
 
 -(void) gameOver:(BOOL)didwin{
@@ -764,7 +786,7 @@
 -(void)continuebuttonpush:(id)sender{
   [[self.view viewWithTag:888] removeFromSuperview];
   __weak GameLevelScene*weakself=self;
-  [SKTextureAtlas preloadTextureAtlasesNamed:[NSArray arrayWithObjects:@"honeypot",@"Arachnus", nil] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
+  [SKTextureAtlas preloadTextureAtlasesNamed:@[@"honeypot",@"Arachnus"] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
       GameLevelScene2*preload=[[GameLevelScene2 alloc]initWithSize:weakself.size];
       preload.scaleMode = SKSceneScaleModeAspectFill;
         NSLog(@"preloaded lvl2");
@@ -785,8 +807,8 @@
   self.healthbar.size=CGSizeMake((((float)self.player.health/100)*_healthbarsize), self.healthbar.size.height);
 }
 
--(void)dealloc {
+/*-(void)dealloc {
   NSLog(@"LVL1 SCENE DEALLOCATED");
-}
+}*/
 
 @end

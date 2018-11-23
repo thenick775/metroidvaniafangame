@@ -47,7 +47,7 @@
         
         SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33] Y:[SKRange rangeWithUpperLimit:(self.map.tileSize.height*self.map.mapSize.height)-22]];
         plyrconst.referenceNode=self.parent;
-        self.player.constraints=[NSArray arrayWithObjects:plyrconst, nil];
+        self.player.constraints=@[plyrconst];
         
         [self.map addChild:self.player];
         [self.player runAction:self.player.enterfromportalAnimation completion:^{[weakself.player runAction:[SKAction setTexture:weakself.player.forewards resize:YES]];weakself.userInteractionEnabled=YES;}];//need to modify to turn player when entering map, rename entermap/have seperate for travelthruportal
@@ -59,7 +59,7 @@
         SKRange *xrange=[SKRange rangeWithLowerLimit:self.size.width/2 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-self.size.width/2];
         SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
         SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
-        self.camera.constraints=[NSArray arrayWithObjects:[SKConstraint distance:[SKRange rangeWithLowerLimit:0 upperLimit:4] toNode:self.player],edgeconstraint, nil];
+        self.camera.constraints=@[[SKConstraint distance:[SKRange rangeWithLowerLimit:0 upperLimit:4] toNode:self.player],edgeconstraint];
        
         //star background initialization here
         SKEmitterNode *starbackground=[SKEmitterNode nodeWithFileNamed:@"starsbackground.sks"];
@@ -68,7 +68,7 @@
         [self.map addChild: starbackground];
         
         //portal adjust position to suit this level
-        self.travelportal.position=CGPointMake(self.map.tileSize.width*391,self.map.tileSize.height*8);
+    self.travelportal.position=CGPointMake(self.map.tileSize.width*391,self.map.tileSize.height*8);
         
         //mutable arrays here
         [self.bullets removeAllObjects];
@@ -139,7 +139,7 @@
                 [weakself.background removeTileAtCoord:CGPointMake(262,i)];
             }}];
         
-        handlebridge=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:8.5],removebosswall,[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.1],bridgeblk, nil]]],nil]];
+        handlebridge=[SKAction sequence:@[[SKAction waitForDuration:8.5],removebosswall,[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:0.1],bridgeblk]]]]];
         
         SKEmitterNode*bossintro=[SKEmitterNode nodeWithFileNamed:@"arachnusintroduction.sks"];
         bossintro.zPosition=16;
@@ -151,7 +151,7 @@
             if(weakself.player.meleeinaction && CGRectIntersectsRect(CGRectMake(weakself.player.meleeweapon.frame.origin.x+weakself.player.frame.origin.x, weakself.player.meleeweapon.frame.origin.y+weakself.player.frame.origin.y, weakself.player.meleeweapon.frame.size.width, weakself.player.meleeweapon.frame.size.height),weakboss1.frame) && !bossdidenter){
                 bossdidenter=YES;
                 [weakself addChild:bossintro];
-                [weakself runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:3.0],[SKAction runBlock:^{
+                [weakself runAction:[SKAction sequence:@[[SKAction waitForDuration:3.0],[SKAction runBlock:^{
                     weakboss1.zPosition=0.0;
                     for(int i=247;i<=250;i++){
                         for(int k=25;k<=27;k++){
@@ -163,10 +163,10 @@
                     [weakself.enemies addObject:weakboss1];
                     weakboss1.active=YES;
                     [weakself removeActionForKey:@"idlecheck"];
-                }], nil]]];
+                }]]]];
             }
         }];
-        idlecheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:75],[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1],idleblk, nil]]], nil]];
+        idlecheck=[SKAction sequence:@[[SKAction waitForDuration:75],[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:1],idleblk]]]]];
         [self runAction:idlecheck withKey:@"idlecheck"]; 
      
     }
@@ -177,6 +177,22 @@
     //setup sound
     self.audiomanager=[gameaudio alloc];
     [self.audiomanager runBkgrndMusicForlvl:2];
+    
+    __weak GameLevelScene2*weakself=self;
+    dispatch_async(dispatch_get_main_queue(), ^{//deal with certain ui on main thread only
+    weakself.volumeslider.minimumValue=0;
+    weakself.volumeslider.maximumValue=100.0;
+    weakself.volumeslider.continuous=YES;
+    weakself.volumeslider.value=70;
+    weakself.volumeslider.hidden=YES;
+    weakself.volumeslider.minimumTrackTintColor=[UIColor redColor];
+    weakself.volumeslider.maximumTrackTintColor=[UIColor darkGrayColor];
+    [weakself.volumeslider setThumbImage:[UIImage imageNamed:@"supermetroid_sliderbar.png"] forState:UIControlStateNormal];
+    [weakself.volumeslider setTransform:CGAffineTransformRotate(weakself.volumeslider.transform, M_PI_2)];
+    [weakself.volumeslider setBackgroundColor:[UIColor clearColor]];
+    [weakself.volumeslider addTarget:weakself action:@selector(slideraction:) forControlEvents:UIControlEventValueChanged];
+    [weakself.view addSubview:weakself.volumeslider];
+    });
 }
 
 -(void)replaybuttonpush:(id)sender{
@@ -187,7 +203,7 @@
 -(void)continuebuttonpush:(id)sender{
     [[self.view viewWithTag:888] removeFromSuperview];
     __weak GameLevelScene2*weakself=self;
-    [SKTextureAtlas preloadTextureAtlasesNamed:[NSArray arrayWithObjects:@"honeypot", nil] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
+    [SKTextureAtlas preloadTextureAtlasesNamed:@[@"lvl3assets"] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
         GameLevelScene3*preload=[[GameLevelScene3 alloc]initWithSize:weakself.size];
         preload.scaleMode = SKSceneScaleModeAspectFill;
         NSLog(@"preloaded lvl3");
@@ -227,8 +243,7 @@
             if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
                 //NSLog(@"meleehit");
                 enemyconcop.health=enemyconcop.health-10;
-                self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
-                [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];//encapsulate in playerclass (ex meleedelayac or something)
+                [self.player runAction:self.player.meleedelayac];
                 if(enemyconcop.health<=0){
                     [enemyconcop removeAllActions];
                     [enemyconcop removeAllChildren];
@@ -274,16 +289,13 @@
             }
         
         }
-            
         else if(CGRectIntersectsRect(self.player.frame,enemyconcop.frame) && !self.player.plyrrecievingdmg && !enemyconcop.dead){
             self.player.plyrrecievingdmg=YES;
             [self enemyhitplayerdmgmsg:10];
         }
         if(self.player.position.x>enemyconcop.position.x+150 && [enemyconcop actionForKey:@"walk"]){
             NSLog(@"past position of player");
-            __weak honeypot*weakenemyconcop=enemyconcop;
-            [enemyconcop removeActionForKey:@"walk"];
-            [enemyconcop runAction:enemyconcop.explode completion:^{weakenemyconcop.texture=nil;enemyconcop.dead=YES;}];
+            [enemyconcop runAction:enemyconcop.explodeangry];
         }
         
     }
@@ -300,8 +312,7 @@
         if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
             //NSLog(@"meleehit");
             enemyconcop.health=enemyconcop.health-10;
-            self.player.meleedelay=YES; //this variable locks melee to 1 hit every 1.2 sec, might need a weakself
-            [self runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.2],[SKAction runBlock:^{self.player.meleedelay=NO;}], nil]]];//encapsulate in playerclass (ex meleedelayac or something)
+            [self.player runAction:self.player.meleedelayac];
             if(enemyconcop.health<=0){
                 [enemyconcop removeAllActions];
                 [enemyconcop removeAllChildren];
@@ -333,7 +344,7 @@
                 if(enemylcop.health<=0){
                     [enemyl removeAllActions];
                     [enemyl removeAllChildren];
-                    [enemyl runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}], nil]]];
+                    [enemyl runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}]]]];
                     [self.enemies removeObject:enemyl];
                 }
                 [currbullet removeAllActions];
@@ -362,9 +373,7 @@
                 if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0),currbullet.frame) && [enemylcop actionForKey:@"walk"]/*!enemylcop.dead*/){
                     enemylcop.health--;
                     if(enemylcop.health<=0 && /*!enemylcop.dead*/[enemylcop actionForKey:@"walk"]){
-                        __weak honeypot*weakenemylcop=enemylcop;
-                        [weakenemylcop removeActionForKey:@"walk"];
-                        [enemylcop runAction:enemylcop.explode completion:^{weakenemylcop.texture=nil;enemylcop.dead=YES;}];
+                        [enemylcop runAction:enemylcop.explode];
                     }
                     [currbullet removeAllActions];
                     [currbullet removeFromParent];
@@ -379,7 +388,7 @@
                     if(enemylcop.health<=0){
                         [enemyl removeAllActions];
                         [enemyl removeAllChildren];
-                        [enemyl runAction:[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}], nil]]];
+                        [enemyl runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}]]]];
                         [self.enemies removeObject:enemyl];
                     }
                 [currbullet removeAllActions];

@@ -11,7 +11,7 @@
 @interface honeypotproj:SKSpriteNode<GKAgentDelegate>
 @property (nonatomic,strong) GKAgent2D *agent;
 
--(instancetype)initWithPosition:(CGPoint)position andTex:(SKTexture*)tex;
+-(instancetype)initWithPosition:(CGPoint)position andTex:(SKTexture*)tex andAnger:(BOOL)angry;
 @end
 
 
@@ -19,6 +19,7 @@
 @interface honeypot : SKSpriteNode
 @property (nonatomic,assign) int health;
 @property (nonatomic,strong) SKAction *explode;
+@property (nonatomic,strong) SKAction *explodeangry;
 @property (nonatomic,assign) BOOL dead;
 @property (nonatomic,strong) GKComponentSystem *agentSystem;
 @property (nonatomic,strong) GKAgent2D *target;

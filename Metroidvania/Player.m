@@ -30,16 +30,16 @@
         _maxmovement=CGPointMake(120.0, 250.0);
         
         __weak Player*weakself=self;
-        //SKTextureAtlas *animation=[SKTextureAtlas atlasNamed:@"Samus"];
         SKTextureAtlas *samusregsuit=[SKTextureAtlas atlasNamed:@"Samusregsuit"];
         self.xScale=0.75;
         self.yScale=0.75;
         
         //damage related items
         self.plyrrecievingdmg=NO;
-        NSArray *plrydmgarr=@[[SKAction waitForDuration:3.0],[SKAction runBlock:^{weakself.plyrrecievingdmg=NO;}]];
-        self.plyrdmgwaitlock=[SKAction sequence:plrydmgarr];
-        self.damageaction=[SKAction sequence:[NSArray arrayWithObjects:[SKAction colorizeWithColor:[UIColor redColor] colorBlendFactor:0.7 duration:0.1],[SKAction colorizeWithColorBlendFactor:0.0 duration:0.1], nil]];
+        self.plyrdmgwaitlock=[SKAction sequence:@[[SKAction waitForDuration:3.0],[SKAction runBlock:^{weakself.plyrrecievingdmg=NO;}]]];
+        self.damageaction=[SKAction sequence:@[[SKAction colorizeWithColor:[UIColor redColor] colorBlendFactor:0.7 duration:0.1],[SKAction colorizeWithColorBlendFactor:0.0 duration:0.1]]];
+        self.meleedelayac=[SKAction sequence:@[[SKAction runBlock:^{weakself.meleedelay=YES;}],[SKAction waitForDuration:1.2],[SKAction runBlock:^{weakself.meleedelay=NO;}]]];
+        
         
         //case for jumping to stay jumping until on ground
         SKAction *jmpblk=[SKAction runBlock:^{/*NSLog(@"checkingjmpblk");*/if(weakself.onGround){
@@ -49,53 +49,47 @@
                 [weakself runAction:[SKAction repeatActionForever:weakself.runBackwardsAnimation] withKey:@"runb"];
             [weakself removeActionForKey:@"jmpblk"];}}];
        
-        self.jmptomfmbcheck=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.1],jmpblk, nil]];
+        self.jmptomfmbcheck=[SKAction sequence:@[[SKAction waitForDuration:0.1],jmpblk]];
         
         self.forwardtrack=YES;
         self.backwardtrack=NO;
         
         //melee actions
         self.meleeinaction=NO;
-        self.meleedelay=NO;
+        self.meleedelay=NO; //this variable locks melee to 1 hit every 1.2 sec
         SKTextureAtlas *projectiles=[SKTextureAtlas atlasNamed:@"projectiles"];
         self.meleeweapon=[SKSpriteNode spriteNodeWithTexture:[projectiles textureNamed:@"samusmeleeright1.png"]];
         self.meleeweapon.position=CGPointMake(16,4);
         self.meleeweapon.alpha=0;
-        SKAction *meleeanimatemove=[SKAction group:[NSArray arrayWithObjects:[SKAction animateWithTextures:[NSArray arrayWithObjects:[projectiles textureNamed:@"samusmeleeright1.png"],[projectiles textureNamed:@"samusmeleeright2.png"],[projectiles textureNamed:@"samusmeleeright3.png"],[projectiles textureNamed:@"samusmeleeright4.png"], nil] timePerFrame:0.18 resize:YES restore:YES],[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.41],[SKAction moveBy:CGVectorMake(6,21) duration:0.2],[SKAction moveBy:CGVectorMake(-6,-21) duration:0.01],nil]], nil] ];
+        SKAction *meleeanimatemove=[SKAction group:@[[SKAction animateWithTextures:@[[projectiles textureNamed:@"samusmeleeright1.png"],[projectiles textureNamed:@"samusmeleeright2.png"],[projectiles textureNamed:@"samusmeleeright3.png"],[projectiles textureNamed:@"samusmeleeright4.png"]] timePerFrame:0.18 resize:YES restore:YES],[SKAction sequence:@[[SKAction waitForDuration:0.41],[SKAction moveBy:CGVectorMake(6,21) duration:0.2],[SKAction moveBy:CGVectorMake(-6,-21) duration:0.01]]]] ];
         
-        //NSArray *plrymeleearr=@[[animation textureNamed:@"samusmelee1.png"],[animation textureNamed:@"samusmelee2.png"]];
-        NSArray *plyrmeleearr=@[[samusregsuit textureNamed:@"samus_meleer1.png"],[samusregsuit textureNamed:@"samus_meleer2.png"]];
-        SKAction *playermeleeanimate=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.21],[SKAction animateWithTextures:plyrmeleearr timePerFrame:0.24 resize:YES restore:YES], nil]];
+        SKAction *playermeleeanimate=[SKAction sequence:@[[SKAction waitForDuration:0.21],[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samus_meleer1.png"],[samusregsuit textureNamed:@"samus_meleer2.png"]] timePerFrame:0.24 resize:YES restore:YES]]];
         __weak SKSpriteNode *weakmeleeweapon=self.meleeweapon;
         
         SKAction *meleeblk=[SKAction runBlock:^{[weakmeleeweapon runAction:meleeanimatemove];
             [weakself runAction:playermeleeanimate];}];
-        SKAction *meleedelay=[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeAlphaTo:1 duration:0.03],meleeblk,[SKAction waitForDuration:0.9],[SKAction fadeAlphaTo:0 duration:0.1],[SKAction runBlock:^{[weakself removeAllChildren];weakself.meleeinaction=NO;}], nil]];
+        SKAction *meleedelay=[SKAction sequence:@[[SKAction fadeAlphaTo:1 duration:0.03],meleeblk,[SKAction waitForDuration:0.9],[SKAction fadeAlphaTo:0 duration:0.1],[SKAction runBlock:^{[weakself removeAllChildren];weakself.meleeinaction=NO;}]]];
        
         
-        SKAction *meleeanimatemovemirror=[SKAction group:[NSArray arrayWithObjects:[SKAction animateWithTextures:[NSArray arrayWithObjects:[projectiles textureNamed:@"samusmeleeright1.png"],[projectiles textureNamed:@"samusmeleeright2.png"],[projectiles textureNamed:@"samusmeleeright3.png"],[projectiles textureNamed:@"samusmeleeright4.png"], nil] timePerFrame:0.18 resize:YES restore:YES],[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.41],[SKAction moveBy:CGVectorMake(-6,21) duration:0.2],[SKAction moveBy:CGVectorMake(6,-21) duration:0.01],nil]], nil] ];
+        SKAction *meleeanimatemovemirror=[SKAction group:@[[SKAction animateWithTextures:@[[projectiles textureNamed:@"samusmeleeright1.png"],[projectiles textureNamed:@"samusmeleeright2.png"],[projectiles textureNamed:@"samusmeleeright3.png"],[projectiles textureNamed:@"samusmeleeright4.png"]] timePerFrame:0.18 resize:YES restore:YES],[SKAction sequence:@[[SKAction waitForDuration:0.41],[SKAction moveBy:CGVectorMake(-6,21) duration:0.2],[SKAction moveBy:CGVectorMake(6,-21) duration:0.01]]]] ];
         
-        //NSArray *plrymeleearrmirror=@[[animation textureNamed:@"samusmelee1mirror.png"],[animation textureNamed:@"samusmelee2mirror.png"]];
-        NSArray *plyrmeleearrmirror=@[[samusregsuit textureNamed:@"samus_meleel1.png"],[samusregsuit textureNamed:@"samus_meleel2.png"]];
-        SKAction *playermeleeanimatemirror=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:0.21],[SKAction animateWithTextures:plyrmeleearrmirror timePerFrame:0.24 resize:YES restore:YES], nil]];
-        
+        SKAction *playermeleeanimatemirror=[SKAction sequence:@[[SKAction waitForDuration:0.21],[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samus_meleel1.png"],[samusregsuit textureNamed:@"samus_meleel2.png"]] timePerFrame:0.24 resize:YES restore:YES]]];
         
         SKAction *meleeblkmirror=[SKAction runBlock:^{[weakmeleeweapon runAction:meleeanimatemovemirror];
             [weakself runAction:playermeleeanimatemirror];}];
-        SKAction *meleedelaymirror=[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeAlphaTo:1 duration:0.03],meleeblkmirror,[SKAction waitForDuration:0.9],[SKAction fadeAlphaTo:0 duration:0.1],[SKAction runBlock:^{[weakself removeAllChildren];weakself.meleeinaction=NO;[weakmeleeweapon setXScale:1/*0.88*/];weakmeleeweapon.position=CGPointMake(16,4);}], nil]];
+        SKAction *meleedelaymirror=[SKAction sequence:@[[SKAction fadeAlphaTo:1 duration:0.03],meleeblkmirror,[SKAction waitForDuration:0.9],[SKAction fadeAlphaTo:0 duration:0.1],[SKAction runBlock:^{[weakself removeAllChildren];weakself.meleeinaction=NO;[weakmeleeweapon setXScale:1/*0.88*/];weakmeleeweapon.position=CGPointMake(16,4);}]]];
         
         
         self.meleeactionright=[SKAction runBlock:^{if(!weakself.meleeinaction){
+            weakself.meleeinaction=YES;
             if(weakself.forwardtrack){
             //NSLog(@"meleeactionright");
-            weakself.meleeinaction=YES;
             [weakself addChild:weakmeleeweapon];
             [weakmeleeweapon runAction:meleedelay];
             [weakself runAction:[SKAction moveBy:CGVectorMake(20,0) duration:0.3]];
             }
             else if(weakself.backwardtrack){
             //NSLog(@"meleeactionleft");
-            weakself.meleeinaction=YES;
             weakmeleeweapon.position=CGPointMake(-16,4);
             [weakmeleeweapon setXScale:-1/*0.88*/];
             [weakself addChild:weakmeleeweapon];
@@ -113,23 +107,21 @@
         
         NSArray *runbackwardsarray=@[[samusregsuit textureNamed:@"samus_runb1.png"],[samusregsuit textureNamed:@"samus_runb2.png"],[samusregsuit textureNamed:@"samus_runb3.png"],[samusregsuit textureNamed:@"samus_runb4.png"],[samusregsuit textureNamed:@"samus_runb5.png"],[samusregsuit textureNamed:@"samus_runb6.png"],[samusregsuit textureNamed:@"samus_runb7.png"],[samusregsuit textureNamed:@"samus_runb8.png"],[samusregsuit textureNamed:@"samus_runb9.png"],[samusregsuit textureNamed:@"samus_runb10.png"]];
         
-        NSArray *jumpforwardsstartarray=@[[samusregsuit textureNamed:@"samus_jumpr1.png"],[samusregsuit textureNamed:@"samus_jumpr2.png"]];
+       // NSArray *jumpforwardsstartarray=@[[samusregsuit textureNamed:@"samus_jumpr1.png"],[samusregsuit textureNamed:@"samus_jumpr2.png"]];
         NSArray *jumpforewardsarray=@[[samusregsuit textureNamed:@"samus_jumpr3.png"],[samusregsuit textureNamed:@"samus_jumpr4.png"],[samusregsuit textureNamed:@"samus_jumpr5.png"],[samusregsuit textureNamed:@"samus_jumpr6.png"],[samusregsuit textureNamed:@"samus_jumpr7.png"],[samusregsuit textureNamed:@"samus_jumpr8.png"],[samusregsuit textureNamed:@"samus_jumpr9.png"],[samusregsuit textureNamed:@"samus_jumpr10.png"]];
         
-        NSArray *jumpbackwardsstartarray=@[[samusregsuit textureNamed:@"samus_jumpb1.png"],[samusregsuit textureNamed:@"samus_jumpb2.png"]];
+       // NSArray *jumpbackwardsstartarray=@[[samusregsuit textureNamed:@"samus_jumpb1.png"],[samusregsuit textureNamed:@"samus_jumpb2.png"]];
         NSArray *jumpbackwardsarray=@[[samusregsuit textureNamed:@"samus_jumpb3.png"],[samusregsuit textureNamed:@"samus_jumpb4.png"],[samusregsuit textureNamed:@"samus_jumpb5.png"],[samusregsuit textureNamed:@"samus_jumpb6.png"],[samusregsuit textureNamed:@"samus_jumpb7.png"],[samusregsuit textureNamed:@"samus_jumpb8.png"],[samusregsuit textureNamed:@"samus_jumpb9.png"],[samusregsuit textureNamed:@"samus_jumpb10.png"]];
         
         NSArray *travelthruportalarray=@[[samusregsuit textureNamed:@"samus_travel1.png"],[samusregsuit textureNamed:@"samus_travel2.png"],[samusregsuit textureNamed:@"samus_travel3.png"],[samusregsuit textureNamed:@"samus_travel4.png"],[samusregsuit textureNamed:@"samus_travel5.png"],[samusregsuit textureNamed:@"samus_travel6.png"],[samusregsuit textureNamed:@"samus_travel7.png"],[samusregsuit textureNamed:@"samus_travel8.png"],[samusregsuit textureNamed:@"samus_travel9.png"],[samusregsuit textureNamed:@"samus_travel10.png"]];
         
         
-        //self.standAnimation=[SKAction animateWithTextures:standArray timePerFrame:(NSTimeInterval)0.40 resize:YES restore:NO];
         self.runAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:runarray timePerFrame:0.075 resize:YES restore:NO]];
         self.runBackwardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:runbackwardsarray timePerFrame:0.075 resize:YES restore:NO]];
-        //self.standbackwardsAnimation=[SKAction animateWithTextures:standingbackwardsarray timePerFrame:0.40 resize:YES restore:NO];
         self.jumpForewardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:jumpforewardsarray timePerFrame:0.045 resize:YES restore:NO]];
         self.jumpBackwardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:jumpbackwardsarray timePerFrame:0.045 resize:YES restore:NO]];
-        self.enterfromportalAnimation=[SKAction sequence:[NSArray arrayWithObjects:[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2],[SKAction animateWithTextures:[NSArray arrayWithObjects:[samusregsuit textureNamed:@"samus_turnr1.png"],[samusregsuit textureNamed:@"samus_turnr2.png"],[samusregsuit textureNamed:@"samus_turnr3.png"], nil] timePerFrame:0.1 resize:NO restore:NO],nil]];
-        self.travelthruportalAnimation=[SKAction sequence:[NSArray arrayWithObjects:[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2 resize:YES restore:NO],[SKAction group:[NSArray arrayWithObjects:[SKAction animateWithTextures:[NSArray arrayWithObjects:[samusregsuit textureNamed:@"samusfade.png"], nil] timePerFrame:1.5 resize:YES restore:NO],[SKAction fadeOutWithDuration:1.4], nil]],nil]];
+        self.enterfromportalAnimation=[SKAction sequence:@[[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2],[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samus_turnr1.png"],[samusregsuit textureNamed:@"samus_turnr2.png"],[samusregsuit textureNamed:@"samus_turnr3.png"]] timePerFrame:0.1 resize:NO restore:NO]]];
+        self.travelthruportalAnimation=[SKAction sequence:@[[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2 resize:YES restore:NO],[SKAction group:@[[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samusfade.png"]] timePerFrame:1.5 resize:YES restore:NO],[SKAction fadeOutWithDuration:1.4]]]]];
     
     }
     

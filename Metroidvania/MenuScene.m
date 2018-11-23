@@ -25,8 +25,7 @@
     SKAction *shipflyac;
     SKTransition *menutolvl1tran;
     NSArray *texturesforlvl1;
-    NSArray *texturesforlvl2;//here for testing and convience at the moment
-    //AVAudioPlayer*backgroundmusic;
+    //NSArray *texturesforlvl2;//here for testing and convience at the moment
     gameaudio*audiomanager;
 }
 
@@ -94,7 +93,7 @@
             [weakself addChild:shootingstar];
             [shootingstar runAction:[SKAction followPath:starbez.CGPath asOffset:NO orientToPath:NO duration:1.8] completion:^{[shootingstar setPaused:YES];[shootingstar removeFromParent];}];
         }];
-        SKAction*shootingstarac=[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:2],shootstarblk,[SKAction waitForDuration:8.0], nil]]];
+        SKAction*shootingstarac=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:2],shootstarblk,[SKAction waitForDuration:8.0]]]];
         [self runAction:shootingstarac];
         
         
@@ -125,10 +124,10 @@
         SKSpriteNode *alienship=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"shipv2.png"]];
         alienship.size=CGSizeMake(28,17);
         alienship.position=CGPointMake(45,50);
-        SKAction *thrustrepeat=[SKAction repeatAction:[SKAction animateWithTextures:[NSArray arrayWithObjects:[backgroundtexatl textureNamed:@"shipv2_2.png"],[backgroundtexatl textureNamed:@"shipv2_3.png"], nil] timePerFrame:0.03] count:38];
+        SKAction *thrustrepeat=[SKAction repeatAction:[SKAction animateWithTextures:@[[backgroundtexatl textureNamed:@"shipv2_2.png"],[backgroundtexatl textureNamed:@"shipv2_3.png"]] timePerFrame:0.03] count:38];
         SKAction *waitthrustersact=[SKAction waitForDuration:11.0];
         SKAction *beginningtex=[SKAction setTexture:[backgroundtexatl textureNamed:@"shipv2.png"]];
-        SKAction *thrustact=[SKAction sequence:[NSArray arrayWithObjects:thrustrepeat,beginningtex,waitthrustersact,nil]];
+        SKAction *thrustact=[SKAction sequence:@[thrustrepeat,beginningtex,waitthrustersact]];
         alienship.zPosition=2;
         alienship.zRotation=-0.77;
         [self addChild:referencepoint];
@@ -188,7 +187,7 @@
         
         
         shipreducesize=[SKAction scaleTo:0 duration:1.8];
-        flameflicker=[SKAction repeatActionForever:[SKAction sequence:[NSArray arrayWithObjects:[SKAction fadeAlphaTo:0 duration:0.08],[SKAction fadeAlphaTo:1 duration:0.08], nil]]];
+        flameflicker=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction fadeAlphaTo:0 duration:0.08],[SKAction fadeAlphaTo:1 duration:0.08]]]];
         
         shippath=[UIBezierPath bezierPath];
         [shippath moveToPoint:samusgunship.position];
@@ -209,11 +208,10 @@
         shipflyac=[SKAction group:@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.7]]];
         [shipflyac setTimingMode:SKActionTimingEaseIn];
        
-       //texturesforlvl2=[NSArray arrayWithObjects:@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver", nil];
-        texturesforlvl1=[NSArray arrayWithObjects:@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"Waver", nil];
+    //texturesforlvl2=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver"];
+        texturesforlvl1=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"Waver"];
      
-        
-        self.labelsin=[SKAction sequence:[NSArray arrayWithObjects:[SKAction waitForDuration:1.5],[SKAction fadeInWithDuration:1.5],nil]];
+        self.labelsin=[SKAction sequence:@[[SKAction waitForDuration:1.5],[SKAction fadeInWithDuration:1.5]]];
         [self runAction:[SKAction runBlock:^{[weakself.titlelabel runAction:weakself.labelsin completion:^{weakself.labelsin.speed=3;[weakself._playlabel runAction:weakself.labelsin];[weakself._playbutton runAction:weakself.labelsin];[weakself._cntrllabel runAction:weakself.labelsin completion:^{weakself.userInteractionEnabled=YES;}];}];}]];
       
         audiomanager=[gameaudio alloc];
@@ -244,7 +242,7 @@
                         NSLog(@"preloaded lvl1");
                         [weakshipflamesright2 runAction:weakflameflicker];
                         [weakshipflamesleft2 runAction:weakflameflicker];
-                [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
+                        [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
                 }];
             
         }

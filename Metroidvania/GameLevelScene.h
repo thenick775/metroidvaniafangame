@@ -25,7 +25,9 @@
 @property (nonatomic,assign) BOOL repeating;
 @property (nonatomic,strong) SKSpriteNode *buttonup,*buttonright,*buttonleft,*startbutton;
 @property (nonatomic,strong) gameaudio*audiomanager;
+@property (nonatomic,strong) UISlider*volumeslider;
 
+-(void)slideraction:(id)sender;
 -(void)damageRecievedMsg;
 -(void)enemyhitplayerdmgmsg:(int)hit;
 -(void) gameOver:(BOOL)didwin;

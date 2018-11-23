@@ -10,7 +10,7 @@
 
 @interface TravelPortal : SKSpriteNode
 
--(instancetype)initWithStuff:(NSString*)name;
+-(instancetype)initWithImage:(NSString*)name;
 -(CGRect)collisionBoundingBox;
 
 @end
