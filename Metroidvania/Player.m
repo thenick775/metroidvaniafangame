@@ -154,7 +154,7 @@
     }
     if(self.goForeward){
         self.playervelocity=CGPointAdd(self.playervelocity, forewardStep);
-         self.texture=self.forewards;
+        self.texture=self.forewards;
     }
     if(self.goBackward){
         self.playervelocity=CGPointAdd(self.playervelocity, backwardStep);

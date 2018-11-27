@@ -34,7 +34,7 @@
     //self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
     //self.view.shouldCullNonVisibleNodes=NO; //??? seems to help framerate for now
     
-    self.backgroundColor = /*[SKColor blackColor];*/[SKColor colorWithRed:0.7259 green:0 blue:0.8863 alpha:1.0];
+    self.backgroundColor =[SKColor colorWithRed:0.7259 green:0 blue:0.8863 alpha:1.0];
     self.map = [JSTileMap mapNamed:@"level1.tmx"];
     [self addChild:self.map];
     
@@ -354,9 +354,7 @@
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
   
-  if(self.gameOver)
-    return;
-  if(self.player.meleeinaction)
+  if(self.gameOver || self.player.meleeinaction)
     return;
   
   
@@ -408,9 +406,7 @@
 
 -(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{ //need to modify to fit ^v asap
   
-  if(self.gameOver || self.paused)
-    return;
-  if(self.player.meleeinaction)
+  if(self.gameOver || self.paused || self.player.meleeinaction)
     return;
   
   
@@ -501,13 +497,9 @@
       //[self.player removeActionForKey:@"jmpblk"];
       
       if(self.player.forwardtrack){
-        //self.player.texture=self.player.forewards;
-        //[self.player runAction:[SKAction repeatAction:self.player.standAnimation count:3]];
         [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
       }
       else{
-        //self.player.texture=self.player.backwards;
-        //[self.player runAction:[SKAction repeatAction:self.player.standbackwardsAnimation count:3]];
         [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
       }
     }
@@ -537,47 +529,40 @@
   CGPoint fnctouchlocation=[touch locationInNode:self.camera];
   
     [self.player removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
-    [self.player removeActionForKey:@"runf"];
+    [self.player removeActionForKey:@"runf"];   //also these movements must be NO after every touch finishes
+    self.player.goForeward=NO;                   //initial solution for fixing sticky buttons
     [self.player removeActionForKey:@"runb"];
+    self.player.goBackward=NO;
     [self.player removeActionForKey:@"jmpf"];
     [self.player removeActionForKey:@"jmpb"];
-    
+    self.player.shouldJump=NO;
     
     if(CGRectContainsPoint(_buttonup.frame, fnctouchlocation)){
       //NSLog(@"done touching up");
-      self.player.shouldJump=NO;
+      //self.player.shouldJump=NO;
       if(self.player.backwardtrack)
         [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
-        //self.player.texture=self.player.backwards;
-      //[self.player runAction:[SKAction repeatAction:self.player.standbackwardsAnimation count:3]];
       else
         [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
-        //self.player.texture=self.player.forewards;
-      //[self.player runAction:[SKAction repeatAction:self.player.standAnimation count:3]];
     }
     else if(CGRectContainsPoint(_buttonright.frame, fnctouchlocation)){
       //NSLog(@"done touching right");
-      self.player.goForeward=NO;
+      //self.player.goForeward=NO;
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
-      //[self.player runAction:[SKAction repeatAction:self.player.standAnimation count:3]];
       [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
-      //self.player.texture=self.player.forewards;
     }
     else if(CGRectContainsPoint(_buttonleft.frame, fnctouchlocation)){
       //NSLog(@"done touching left");
-      self.player.goBackward=NO;
+      //self.player.goBackward=NO;
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
-      //[self.player runAction:[SKAction repeatAction:self.player.standbackwardsAnimation count:3]];
       [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
-      //self.player.texture=self.player.backwards;
     }
     else if(CGRectContainsPoint(_startbutton.frame, fnctouchlocation)){
-      //NSLog(@"do nothing hit the pause");
+      //NSLog(@"do nothing hit the pause");//put here so the melee is not hit
     }
     else if(fnctouchlocation.x>self.camera.frame.size.width/2 && fnctouchlocation.y<self.camera.frame.size.height/2){
-      //self.player.fireProjectile=NO;
       //call build projectile/set it going right ->
       if(self.player.forwardtrack)
         [self firePlayerProjectilewithdirection:TRUE];
@@ -589,6 +574,12 @@
       [self.player runAction:self.player.meleeactionright withKey:@"melee"];
       //NSLog(@"start melee");
     }
+    /*else{// to handle any case where the touches are not in sync (gets rid of sticky dpad)
+    NSLog(@"blank touches ended");
+    self.player.goForeward=NO;
+    self.player.goBackward=NO;
+    self.player.shouldJump=NO;
+  }*/
     
     
   }
@@ -601,6 +592,17 @@
   //NSLog(@"adding projectile,count:%d",(int)self.bullets.count);
 }
 
+-(void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+  NSLog(@"recieved CANCELED touch");
+  [self.player removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
+  [self.player removeActionForKey:@"runf"];
+  self.player.goForeward=NO;
+  [self.player removeActionForKey:@"runb"];
+  self.player.goBackward=NO;
+  [self.player removeActionForKey:@"jmpf"];
+  [self.player removeActionForKey:@"jmpb"];
+  self.player.shouldJump=NO;
+}
 
 -(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
   
@@ -615,7 +617,7 @@
           [enemyconcop.enemybullet1 setHidden:YES];
           if(!self.player.plyrrecievingdmg){
             self.player.plyrrecievingdmg=YES;
-            [self enemyhitplayerdmgmsg:10];
+            [self enemyhitplayerdmgmsg:25];
           }
         }
         else if(CGRectContainsPoint(self.player.collisionBoundingBox,CGPointAdd(enemyconcop.enemybullet2.position, enemyconcop.position))){
@@ -623,7 +625,7 @@
           [enemyconcop.enemybullet2 setHidden:YES];
           if(!self.player.plyrrecievingdmg){
             self.player.plyrrecievingdmg=YES;
-            [self enemyhitplayerdmgmsg:10];
+            [self enemyhitplayerdmgmsg:25];
           }
         }
         if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
@@ -647,7 +649,7 @@
       }
       if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0)) && !self.player.plyrrecievingdmg){
         self.player.plyrrecievingdmg=YES;
-        [self enemyhitplayerdmgmsg:8];
+        [self enemyhitplayerdmgmsg:15];
       }
       if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
         //NSLog(@"meleehit");
@@ -736,20 +738,20 @@
 
 -(void)pausegame{
   //NSLog(@"game paused");
+  //[self.startbutton runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05] completion:^{NSLog(@"coloringstart");}];
   [self.camera addChild:_pauselabel];
-  [self.camera addChild: _unpauselabel];
+  [self.camera addChild:_unpauselabel];
   self.volumeslider.hidden=NO;
   self.paused=YES;
   self.player.playervelocity=CGPointMake(0,18);
-  //[gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
 -(void)unpausegame{
+  //[self.startbutton runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05] completion:^{NSLog(@"uncoloringstart");}];
   [_pauselabel removeFromParent];
   [_unpauselabel removeFromParent];
   self.volumeslider.hidden=YES;
   
   self.paused=NO;
-  //[gameaudio playSound:self.audiomanager.bkgrndmusic];
 }
 
 -(void)slideraction:(id)sender{

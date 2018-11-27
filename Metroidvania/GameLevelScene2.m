@@ -166,7 +166,7 @@
                 }]]]];
             }
         }];
-        idlecheck=[SKAction sequence:@[[SKAction waitForDuration:75],[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:1],idleblk]]]]];
+        idlecheck=[SKAction sequence:@[[SKAction waitForDuration:60],[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:1],idleblk]]]]];
         [self runAction:idlecheck withKey:@"idlecheck"]; 
      
     }
@@ -229,7 +229,7 @@
                 [enemyconcop.enemybullet1 setHidden:YES];
                 if(!self.player.plyrrecievingdmg){
                     self.player.plyrrecievingdmg=YES;
-                    [self enemyhitplayerdmgmsg:10];
+                    [self enemyhitplayerdmgmsg:25];
                 }
             }
             else if(CGRectContainsPoint(self.player.collisionBoundingBox,CGPointAdd(enemyconcop.enemybullet2.position, enemyconcop.position))){
@@ -237,7 +237,7 @@
                 [enemyconcop.enemybullet2 setHidden:YES];
                 if(!self.player.plyrrecievingdmg){
                     self.player.plyrrecievingdmg=YES;
-                    [self enemyhitplayerdmgmsg:10];
+                    [self enemyhitplayerdmgmsg:25];
                 }
             }
             if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
@@ -258,12 +258,12 @@
         if(fabs(self.player.position.x-enemyconcop.position.x)<440){
         if(CGRectContainsPoint(CGRectInset(enemyconcop.frame,3,0), self.player.position) && !self.player.plyrrecievingdmg){
                 self.player.plyrrecievingdmg=YES;
-                [self enemyhitplayerdmgmsg:10];
+                [self enemyhitplayerdmgmsg:15];
         }
         for(SKSpriteNode*arachchild in [enemyconcop.projectilesinaction reverseObjectEnumerator]){
             if(CGRectIntersectsRect(self.player.collisionBoundingBox,arachchild.frame) && !self.player.plyrrecievingdmg){
                 self.player.plyrrecievingdmg=YES;
-                [self enemyhitplayerdmgmsg:15];
+                [self enemyhitplayerdmgmsg:20];
             }
         }
     }
@@ -291,7 +291,7 @@
         }
         else if(CGRectIntersectsRect(self.player.frame,enemyconcop.frame) && !self.player.plyrrecievingdmg && !enemyconcop.dead){
             self.player.plyrrecievingdmg=YES;
-            [self enemyhitplayerdmgmsg:10];
+            [self enemyhitplayerdmgmsg:15];
         }
         if(self.player.position.x>enemyconcop.position.x+150 && [enemyconcop actionForKey:@"walk"]){
             NSLog(@"past position of player");
@@ -307,7 +307,7 @@
         }
         if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0)) && !self.player.plyrrecievingdmg){
             self.player.plyrrecievingdmg=YES;
-            [self enemyhitplayerdmgmsg:8];
+            [self enemyhitplayerdmgmsg:15];
         }
         if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
             //NSLog(@"meleehit");
