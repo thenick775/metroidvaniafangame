@@ -805,6 +805,10 @@
     fintext=@"You Died :(";
   //label setup for end of game message
   endgamelabel.text=fintext;
+    if(self.player.forwardtrack)
+      self.player.texture=self.player.forewards;
+    else
+      self.player.texture=self.player.backwards;
   [self.camera addChild:endgamelabel];
   [self.view addSubview:replaybutton];
   }
