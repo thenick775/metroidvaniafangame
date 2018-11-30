@@ -41,5 +41,6 @@
 
 -(void)update:(NSTimeInterval)delta;
 -(CGRect)collisionBoundingBox;
+-(CGRect)meleeBoundingBoxNormalized;
 
 @end

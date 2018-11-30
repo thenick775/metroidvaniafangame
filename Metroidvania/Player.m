@@ -19,7 +19,8 @@
 
 -(id)initWithImageNamed:(NSString *)name{
     __weak NSString *weakname=name;
-    if (self == [super initWithImageNamed:weakname]) {
+    self = [super initWithImageNamed:weakname];
+    if (self != nil) {
         self.playervelocity = CGPointMake(0.0, 0.0);
         self.health=100;
         _gravity=CGPointMake(0.0, -450.0);
@@ -154,7 +155,7 @@
     }
     if(self.goForeward){
         self.playervelocity=CGPointAdd(self.playervelocity, forewardStep);
-         self.texture=self.forewards;
+        self.texture=self.forewards;
     }
     if(self.goBackward){
         self.playervelocity=CGPointAdd(self.playervelocity, backwardStep);
@@ -174,13 +175,15 @@
 
 
 
-- (CGRect)collisionBoundingBox
-{
+-(CGRect)collisionBoundingBox{
     CGRect boundingBox = self.frame;
     CGPoint diff = CGPointSubtract(self.desiredPosition, self.position);
     return CGRectOffset(boundingBox, diff.x, diff.y);
 }
 
+-(CGRect)meleeBoundingBoxNormalized{
+    return CGRectMake(self.meleeweapon.frame.origin.x+self.frame.origin.x, self.meleeweapon.frame.origin.y+self.frame.origin.y, self.meleeweapon.frame.size.width, self.meleeweapon.frame.size.height);
+}
 
 /*-(void)dealloc{
  NSLog(@"player deallocation");
