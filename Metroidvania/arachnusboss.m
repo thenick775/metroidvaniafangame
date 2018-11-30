@@ -9,35 +9,34 @@
 #import "SKTUtils.h"
 
 @implementation arachnusboss{
-    SKAction *_moveforeward;
-    SKAction *_movebackward;
-    SKAction *_fireattackleft;
-    SKAction *_fireattackright;
-    SKAction *_morphballattackright;
-    SKAction *_morphballattackleft;
-    SKAction *_slashattackleft;
-    SKAction *_slashattackright;
-    SKAction *_turnright;
-    SKAction *_turnleft;
-    SKAction *_recievedamageright;
-    SKAction *_recievedamageleft;
-    SKAction *_death;
+    SKAction *moveforeward;
+    SKAction *movebackward;
+    SKAction *fireattackleft;
+    SKAction *fireattackright;
+    SKAction *morphballattackright;
+    SKAction *morphballattackleft;
+    SKAction *slashattackleft;
+    SKAction *slashattackright;
+    SKAction *turnright;
+    SKAction *turnleft;
+    SKAction *recievedamageright;
+    SKAction *recievedamageleft;
+    SKAction *death;
     
-    SKAction *_addfiretoparentmap;
-    SKSpriteNode *_firesprite;
-    SKSpriteNode *_firespritel;
-    //CGPoint _prevcoorddist;
-    GKRuleSystem*_arachnusrs;
-    NSArray *_rightattacks;
-    NSArray *_leftattacks;
-    GKLinearCongruentialRandomSource*_rndsrc;
-    SKAction*_prevac;
+    SKAction *addfiretoparentmap;
+    SKSpriteNode *firesprite;
+    SKSpriteNode *firespritel;
+    CGPoint prevcoorddist;
+    GKRuleSystem*arachnusrs;//
+    NSArray *rightattacks;
+    NSArray *leftattacks;
+    GKLinearCongruentialRandomSource*rndsrc;//
+    SKAction*prevac;
 }
 
 -(instancetype)initWithImageNamed:(NSString *)name{
     __weak NSString *weakname=name;
-    self=[super initWithImageNamed:weakname];
-    if(self!=nil){
+    if(self == [super initWithImageNamed:weakname]){
         self.health=150;//5;//for testing
         self.active=NO;
         
@@ -68,8 +67,8 @@
         SKAction *dustactionright=[SKAction runBlock:^{dustball.position=CGPointMake(-10,-11);[weakself addChild:dustball];[dustball runAction:dustac completion:^{[dustball removeFromParent];}];}];
         SKAction *dustactionleft=[SKAction runBlock:^{dustball.position=CGPointMake(10,-11);[weakself addChild:dustball];[dustball runAction:dustac completion:^{[dustball removeFromParent];}];}];
       
-        _morphballattackright=[SKAction sequence:@[morphtoballrightanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:@[[SKAction repeatAction:ballattackrightanim count:15],dustactionright,[SKAction moveByX:360 y:0 duration:2.4]]],[SKAction moveByX:0 y:8 duration:0],[morphtoballrightanim reversedAction]]];
-        _morphballattackleft=[SKAction sequence:@[morphtoballleftanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:@[[SKAction repeatAction:ballattackleftanim count:15],dustactionleft,[SKAction moveByX:-360 y:0 duration:2.4]]],[SKAction moveByX:0 y:8 duration:0],[morphtoballleftanim reversedAction]]];
+        morphballattackright=[SKAction sequence:@[morphtoballrightanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:@[[SKAction repeatAction:ballattackrightanim count:15],dustactionright,[SKAction moveByX:360 y:0 duration:2.4]]],[SKAction moveByX:0 y:8 duration:0],[morphtoballrightanim reversedAction]]];
+        morphballattackleft=[SKAction sequence:@[morphtoballleftanim,[SKAction moveByX:0 y:-8 duration:0],[SKAction group:@[[SKAction repeatAction:ballattackleftanim count:15],dustactionleft,[SKAction moveByX:-360 y:0 duration:2.4]]],[SKAction moveByX:0 y:8 duration:0],[morphtoballleftanim reversedAction]]];
         
         //move f/b animations
         NSArray *moveforewardtex=@[[arachnustextures textureNamed:@"walk_1.png"],[arachnustextures textureNamed:@"walk_2.png"],[arachnustextures textureNamed:@"walk_3.png"],[arachnustextures textureNamed:@"walk_4.png"],[arachnustextures textureNamed:@"walk_5.png"],[arachnustextures textureNamed:@"walk_6.png"],[arachnustextures textureNamed:@"walk_7.png"],[arachnustextures textureNamed:@"walk_8.png"],[arachnustextures textureNamed:@"walk_9.png"],[arachnustextures textureNamed:@"walk_10.png"],[arachnustextures textureNamed:@"walk_11.png"],[arachnustextures textureNamed:@"walk_12.png"]];
@@ -77,8 +76,8 @@
         NSArray *movebackwardtex=@[[arachnustextures textureNamed:@"lwalk_1.png"],[arachnustextures textureNamed:@"lwalk_2.png"],[arachnustextures textureNamed:@"lwalk_3.png"],[arachnustextures textureNamed:@"lwalk_4.png"],[arachnustextures textureNamed:@"lwalk_5.png"],[arachnustextures textureNamed:@"lwalk_6.png"],[arachnustextures textureNamed:@"lwalk_7.png"],[arachnustextures textureNamed:@"lwalk_8.png"],[arachnustextures textureNamed:@"lwalk_9.png"],[arachnustextures textureNamed:@"lwalk_10.png"],[arachnustextures textureNamed:@"lwalk_11.png"],[arachnustextures textureNamed:@"lwalk_12.png"]];
         SKAction *movebackwardanim=[SKAction animateWithTextures:movebackwardtex timePerFrame:0.08 resize:YES restore:NO];
         
-        _moveforeward=[SKAction sequence:@[[SKAction group:@[[SKAction repeatAction:moveforewardanim count:3],[SKAction moveByX:150 y:0 duration:2.88]]]]];
-        _movebackward=[SKAction sequence:@[[SKAction group:@[[SKAction repeatAction:movebackwardanim count:3],[SKAction moveByX:-150 y:0 duration:2.88]]]]];
+        moveforeward=[SKAction sequence:@[[SKAction group:@[[SKAction repeatAction:moveforewardanim count:3],[SKAction moveByX:150 y:0 duration:2.88]]]]];
+        movebackward=[SKAction sequence:@[[SKAction group:@[[SKAction repeatAction:movebackwardanim count:3],[SKAction moveByX:-150 y:0 duration:2.88]]]]];
         
         //fireattack animations
         NSArray *fireattackrighttex=@[[arachnustextures textureNamed:@"spitfire_1.png"],[arachnustextures textureNamed:@"spitfire_2.png"],[arachnustextures textureNamed:@"spitfire_3.png"],[arachnustextures textureNamed:@"spitfire_4.png"],[arachnustextures textureNamed:@"spitfire_5.png"]];
@@ -90,10 +89,10 @@
         NSArray *fireendtex=@[[arachnustextures textureNamed:@"Fire3.png"],[arachnustextures textureNamed:@"Fire4.png"]];
         
         SKAction *fireburnanim=[SKAction animateWithTextures:fireburntex timePerFrame:0.1 resize:NO restore:YES];
-        _firesprite=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"Fire1.png"]];
-        _firesprite.position=CGPointMake(16,2);
-        _firespritel=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"Fire1.png"]];
-        _firespritel.position=CGPointMake(-16,2);
+        firesprite=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"Fire1.png"]];
+        firesprite.position=CGPointMake(16,2);
+        firespritel=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"Fire1.png"]];
+        firespritel.position=CGPointMake(-16,2);
         SKAction *fireendanim=[SKAction animateWithTextures:fireendtex timePerFrame:0.1 resize:NO restore:NO];
         
         SKAction *addfiretoparentblk=[SKAction runBlock:^{
@@ -113,11 +112,11 @@
         UIBezierPath *firepathright=[UIBezierPath bezierPath];
         [firepathright moveToPoint:CGPointZero];
         [firepathright addQuadCurveToPoint:CGPointMake(37,-26) controlPoint:CGPointMake(40,0)];
-        __weak SKSpriteNode*weakfiresprite=_firesprite;
+        __weak SKSpriteNode*weakfiresprite=firesprite;
         SKAction *fireblk=[SKAction runBlock:^{[weakself addChild:weakfiresprite];[weakfiresprite runAction:[SKAction repeatActionForever:fireburnanim]];[weakfiresprite runAction:[SKAction followPath:firepathright.CGPath duration:0.4] completion:^{[weakself runAction:addfiretoparentblk];[weakfiresprite removeFromParent];weakfiresprite.position=CGPointMake(16,2);[weakfiresprite removeAllActions];}];}];
         SKAction *firespriteac=[SKAction sequence:@[[SKAction waitForDuration:0.52],fireblk]];
        
-        _fireattackright=[SKAction sequence:@[[SKAction group:@[[SKAction moveByX:0 y:3 duration:0],fireattackrightanim,firespriteac]],[SKAction moveByX:0 y:-3 duration:0],[SKAction waitForDuration:0.15]]];
+        fireattackright=[SKAction sequence:@[[SKAction group:@[[SKAction moveByX:0 y:3 duration:0],fireattackrightanim,firespriteac]],[SKAction moveByX:0 y:-3 duration:0],[SKAction waitForDuration:0.15]]];
         
         //below is redifinition of addfiretoparentblk,fireblk,firespriteac so as to flip for left fireattack
         addfiretoparentblk=[SKAction runBlock:^{
@@ -136,12 +135,12 @@
         UIBezierPath *firepathleft=[UIBezierPath bezierPath];
         [firepathleft moveToPoint:CGPointZero];
         [firepathleft addQuadCurveToPoint:CGPointMake(-37,-26) controlPoint:CGPointMake(-40,0)];
-        __weak SKSpriteNode*weakfirespritel=_firespritel;
+        __weak SKSpriteNode*weakfirespritel=firespritel;
         weakfirespritel.position=CGPointMake(-16,2);
         fireblk=[SKAction runBlock:^{[weakself addChild:weakfirespritel];[weakfirespritel runAction:[SKAction repeatActionForever:fireburnanim]];[weakfirespritel runAction:[SKAction followPath:firepathleft.CGPath duration:0.4] completion:^{[weakself runAction:addfiretoparentblk];[weakfirespritel removeFromParent];weakfirespritel.position=CGPointMake(-16,2);[weakfirespritel removeAllActions];}];}];
         firespriteac=[SKAction sequence:@[[SKAction waitForDuration:0.52],fireblk]];
         
-        _fireattackleft=[SKAction sequence:@[[SKAction group:@[[SKAction moveByX:0 y:3 duration:0],fireattackleftanim,firespriteac]],[SKAction moveByX:0 y:-3 duration:0],[SKAction waitForDuration:0.15]]];
+        fireattackleft=[SKAction sequence:@[[SKAction group:@[[SKAction moveByX:0 y:3 duration:0],fireattackleftanim,firespriteac]],[SKAction moveByX:0 y:-3 duration:0],[SKAction waitForDuration:0.15]]];
         
         
         //slash animations
@@ -159,7 +158,7 @@
         [self.slashprojectile addChild:slashprojectiletrail];
         SKAction *slashprojmove=[SKAction moveBy:CGVectorMake(460,0) duration:1.8];
         
-        _slashattackright=[SKAction sequence:@[[SKAction group:@[slashrightanim,[SKAction sequence:@[[SKAction waitForDuration:1.17],[SKAction runBlock:^{CGPoint pointinlevel=[weakself convertPoint:CGPointMake(27,0) toNode:weakself.parent];
+        slashattackright=[SKAction sequence:@[[SKAction group:@[slashrightanim,[SKAction sequence:@[[SKAction waitForDuration:1.17],[SKAction runBlock:^{CGPoint pointinlevel=[weakself convertPoint:CGPointMake(27,0) toNode:weakself.parent];
             SKSpriteNode*slashcpy=weakself.slashprojectile.copy;
             slashcpy.position=pointinlevel;
             [weakself.projectilesinaction addObject:slashcpy];
@@ -170,7 +169,7 @@
         
         slashprojmove=[SKAction moveBy:CGVectorMake(-460,0) duration:1.8];
         
-        _slashattackleft=[SKAction sequence:@[[SKAction group:@[slashleftanim,[SKAction sequence:@[[SKAction waitForDuration:1.17],[SKAction runBlock:^{CGPoint pointinlevel=[weakself convertPoint:CGPointMake(-27,0) toNode:weakself.parent];
+        slashattackleft=[SKAction sequence:@[[SKAction group:@[slashleftanim,[SKAction sequence:@[[SKAction waitForDuration:1.17],[SKAction runBlock:^{CGPoint pointinlevel=[weakself convertPoint:CGPointMake(-27,0) toNode:weakself.parent];
             SKSpriteNode*slashcpy=weakself.slashprojectile.copy;
             [slashcpy setXScale:-1];
             slashcpy.position=pointinlevel;
@@ -182,9 +181,9 @@
         
         //turn animations
         NSArray *turnrighttex=@[[arachnustextures textureNamed:@"turn_4.png"],[arachnustextures textureNamed:@"turn_3.png"],[arachnustextures textureNamed:@"turn_2.png"],[arachnustextures textureNamed:@"turn_1.png"]];
-        _turnleft=[SKAction animateWithTextures:turnrighttex timePerFrame:0.12 resize:YES restore:NO];
+        turnleft=[SKAction animateWithTextures:turnrighttex timePerFrame:0.12 resize:YES restore:NO];
         NSArray *turnlefttex=@[[arachnustextures textureNamed:@"lturn_4.png"],[arachnustextures textureNamed:@"lturn_3.png"],[arachnustextures textureNamed:@"lturn_2.png"],[arachnustextures textureNamed:@"lturn_1.png"]];
-        _turnright=[SKAction animateWithTextures:turnlefttex timePerFrame:0.12 resize:YES restore:NO];
+        turnright=[SKAction animateWithTextures:turnlefttex timePerFrame:0.12 resize:YES restore:NO];
         
         //recieve damage animations
         NSArray *recievedamagertex=@[[arachnustextures textureNamed:@"damage_scream_1.png"],[arachnustextures textureNamed:@"damage_scream_2.png"],[arachnustextures textureNamed:@"damage_scream_3.png"],[arachnustextures textureNamed:@"damage_scream_4.png"],[arachnustextures textureNamed:@"damage_scream_5.png"]];
@@ -205,80 +204,80 @@
             [weakself addChild:firecpy];
         }];
         
-        _recievedamageright=[SKAction sequence:@[[SKAction moveByX:0 y:5 duration:0],[SKAction group:@[recievedamagerightanim,[SKAction repeatAction:adddmgfire count:3]]],[SKAction moveByX:0 y:-5 duration:0]]];
-        _recievedamageleft=[SKAction sequence:@[[SKAction moveByX:0 y:5 duration:0],[SKAction group:@[recievedamageleftanim,[SKAction repeatAction:adddmgfire count:3]]],[SKAction moveByX:0 y:-5 duration:0]]];
+        recievedamageright=[SKAction sequence:@[[SKAction moveByX:0 y:5 duration:0],[SKAction group:@[recievedamagerightanim,[SKAction repeatAction:adddmgfire count:3]]],[SKAction moveByX:0 y:-5 duration:0]]];
+        recievedamageleft=[SKAction sequence:@[[SKAction moveByX:0 y:5 duration:0],[SKAction group:@[recievedamageleftanim,[SKAction repeatAction:adddmgfire count:3]]],[SKAction moveByX:0 y:-5 duration:0]]];
         
         //death animation
-        _death=[SKAction sequence:@[[SKAction repeatAction:[SKAction sequence:@[_recievedamageleft,_recievedamageright]] count:5],[SKAction fadeOutWithDuration:0.4],[SKAction runBlock:^{weakself.active=NO;[weakself removeAllChildren];[weakself removeAllActions];[weakself removeFromParent];}]]];
+        death=[SKAction sequence:@[[SKAction repeatAction:[SKAction sequence:@[recievedamageleft,recievedamageright]] count:5],[SKAction fadeOutWithDuration:0.4],[SKAction runBlock:^{weakself.active=NO;[weakself removeAllChildren];[weakself removeAllActions];[weakself removeFromParent];}]]];
         
-        _rightattacks=@[_moveforeward,_morphballattackright,_fireattackright,_slashattackright];
-        _leftattacks=@[_movebackward,_morphballattackleft,_fireattackleft,_slashattackleft];
+        rightattacks=@[moveforeward,morphballattackright,fireattackright,slashattackright];
+        leftattacks=@[movebackward,morphballattackleft,fireattackleft,slashattackleft];
         
         //GKRulresystem & rule initializations
-        _arachnusrs=[[GKRuleSystem alloc] init];
-        _arachnusrs.state[@"orighealth"]=@(self.health);
+        arachnusrs=[[GKRuleSystem alloc] init];
+        arachnusrs.state[@"orighealth"]=@(self.health);
         
         NSPredicate*turnrightpred=[NSPredicate predicateWithFormat:@"($coorddist>0 && $prevcoorddist<0)"];
         GKRule *turnrightrule=[GKRule ruleWithPredicate:turnrightpred assertingFact:@"turnright" grade:1.0];
-        [_arachnusrs addRule:turnrightrule];
+        [arachnusrs addRule:turnrightrule];
         NSPredicate*turnleftpred=[NSPredicate predicateWithFormat:@"($coorddist<0 && $prevcoorddist>0)"];
         GKRule *turnleftrule=[GKRule ruleWithPredicate:turnleftpred assertingFact:@"turnleft" grade:1.0];
-        [_arachnusrs addRule:turnleftrule];
-        _arachnusrs.state[@"prevcoorddist"]=@(0);//initialized to something
+        [arachnusrs addRule:turnleftrule];
+        arachnusrs.state[@"prevcoorddist"]=@(0);//initialized to something
         
         NSPredicate*morphballattackleftpred=[NSPredicate predicateWithFormat:@"$coorddist < -180"];
         GKRule *morphballattackleftrule=[GKRule ruleWithPredicate:morphballattackleftpred assertingFact:@"ballattackleft" grade:1.0];
-        [_arachnusrs addRule:morphballattackleftrule];
+        [arachnusrs addRule:morphballattackleftrule];
         
         NSPredicate*morphballattackrightpred=[NSPredicate predicateWithFormat:@"$coorddist > 180"];
         GKRule *morphballattackrightrule=[GKRule ruleWithPredicate:morphballattackrightpred assertingFact:@"ballattackright" grade:1.0];
-        [_arachnusrs addRule:morphballattackrightrule];
+        [arachnusrs addRule:morphballattackrightrule];
         
         NSPredicate*slashattackleftpred=[NSPredicate predicateWithFormat:@"$coorddist BETWEEN %@",@[@-150,@-197]];
         GKRule *slashattackleftrule=[GKRule ruleWithPredicate:slashattackleftpred assertingFact:@"slashleft" grade:1.0];
-        [_arachnusrs addRule:slashattackleftrule];
+        [arachnusrs addRule:slashattackleftrule];
         
         NSPredicate*slashattackrightpred=[NSPredicate predicateWithFormat:@"$coorddist BETWEEN %@", @[@150,@179]];
         GKRule *slashattackrightrule=[GKRule ruleWithPredicate:slashattackrightpred assertingFact:@"slashright" grade:1.0];
-        [_arachnusrs addRule:slashattackrightrule];
+        [arachnusrs addRule:slashattackrightrule];
         
         NSPredicate*fireattackleftpred=[NSPredicate predicateWithFormat:@"$coorddist BETWEEN %@",@[@-100,@-149]];
         GKRule *fireattackleftrule=[GKRule ruleWithPredicate:fireattackleftpred assertingFact:@"fireleft" grade:1.0];
-        [_arachnusrs addRule:fireattackleftrule];
+        [arachnusrs addRule:fireattackleftrule];
         
         NSPredicate*fireattackrightpred=[NSPredicate predicateWithFormat:@"$coorddist BETWEEN %@",@[@100,@149]];
         GKRule *fireattackrightrule=[GKRule ruleWithPredicate:fireattackrightpred assertingFact:@"fireright" grade:1.0];
-        [_arachnusrs addRule:fireattackrightrule];
+        [arachnusrs addRule:fireattackrightrule];
         
         NSPredicate*movebackwardspred=[NSPredicate predicateWithFormat:@"$coorddist BETWEEN %@",@[@0,@-99]];
         GKRule *movebackwardsrule=[GKRule ruleWithPredicate:movebackwardspred assertingFact:@"moveback" grade:1.0];
-        [_arachnusrs addRule:movebackwardsrule];
+        [arachnusrs addRule:movebackwardsrule];
         
         NSPredicate*moveforwardspred=[NSPredicate predicateWithFormat:@"$coorddist BETWEEN %@",@[@1,@99]];
         GKRule *moveforwardsrule=[GKRule ruleWithPredicate:moveforwardspred assertingFact:@"moveforward" grade:1.0];
-        [_arachnusrs addRule:moveforwardsrule];
+        [arachnusrs addRule:moveforwardsrule];
         
         NSPredicate*dmgfwdpred=[NSPredicate predicateWithFormat:@"$currenthealth+20<=$prevhealth && $coorddist>0"];
         GKRule *dmgfwdrule=[GKRule ruleWithPredicate:dmgfwdpred assertingFact:@"damageright" grade:1.0];
-        [_arachnusrs addRule:dmgfwdrule];
+        [arachnusrs addRule:dmgfwdrule];
         
         NSPredicate*dmgbkwdpred=[NSPredicate predicateWithFormat:@"$currenthealth+20<=$prevhealth && $coorddist<0"];
         GKRule *dmgbkwdrule=[GKRule ruleWithPredicate:dmgbkwdpred assertingFact:@"damageleft" grade:1.0];
-        [_arachnusrs addRule:dmgbkwdrule];
-        _arachnusrs.state[@"currenthealth"]=@(self.health);
-        _arachnusrs.state[@"prevhealth"]=@(self.health);
+        [arachnusrs addRule:dmgbkwdrule];
+        arachnusrs.state[@"currenthealth"]=@(self.health);
+        arachnusrs.state[@"prevhealth"]=@(self.health);
         
         NSPredicate*deathpred=[NSPredicate predicateWithFormat:@"$currenthealth<=0"];
         GKRule *deathrule=[GKRule ruleWithPredicate:deathpred assertingFact:@"death" grade:1.0];
-        [_arachnusrs addRule:deathrule];
+        [arachnusrs addRule:deathrule];
         
        /* NSPredicate*fleepred=[NSPredicate predicateWithFormat:@"$prevacflee==0 && $currenthealth<($orighealth/3) && $coorddist between %@",@[@-100,@100]];
         GKRule *fleerule=[GKRule ruleWithPredicate:fleepred assertingFact:@"flee" grade:1.0];
-        _arachnusrs.state[@"prevacflee"]=@(NO);
-        [_arachnusrs addRule:fleerule];*/
+        arachnusrs.state[@"prevacflee"]=@(NO);
+        [arachnusrs addRule:fleerule];*/
         
         
-        _rndsrc=[[GKLinearCongruentialRandomSource alloc] init];;
+        rndsrc=[[GKLinearCongruentialRandomSource alloc] init];;
     }
     
     return self;
@@ -290,73 +289,73 @@
     if(![self hasActions]){//potential approach to handling one action at a time
        
         SKAction *actoexecute;
-        _arachnusrs.state[@"coorddist"]=@(focuspos-self.position.x);
-        _arachnusrs.state[@"currenthealth"]=@(self.health);
-        //NSLog(@"coorddist:%f",[_arachnusrs.state[@"coorddist"] floatValue]);
+        arachnusrs.state[@"coorddist"]=@(focuspos-self.position.x);
+        arachnusrs.state[@"currenthealth"]=@(self.health);
+        //NSLog(@"coorddist:%f",[arachnusrs.state[@"coorddist"] floatValue]);
         
-        [_arachnusrs reset];
-        [_arachnusrs evaluate];
+        [arachnusrs reset];
+        [arachnusrs evaluate];
         
-        if([_arachnusrs gradeForFact:@"death"]==1){
-            actoexecute=_death;
+        if([arachnusrs gradeForFact:@"death"]==1){
+            actoexecute=death;
         }
-        else if([_arachnusrs gradeForFact:@"damageright"]==1){
-            _arachnusrs.state[@"prevhealth"]=@(self.health);
-            actoexecute=_recievedamageright;
+        else if([arachnusrs gradeForFact:@"damageright"]==1){
+            arachnusrs.state[@"prevhealth"]=@(self.health);
+            actoexecute=recievedamageright;
         }
-        else if([_arachnusrs gradeForFact:@"damageleft"]==1){
-            _arachnusrs.state[@"prevhealth"]=@(self.health);
-            actoexecute=_recievedamageleft;
+        else if([arachnusrs gradeForFact:@"damageleft"]==1){
+            arachnusrs.state[@"prevhealth"]=@(self.health);
+            actoexecute=recievedamageleft;
         }
-        else if([_arachnusrs gradeForFact:@"turnright"]==1)
-            actoexecute=_turnright;
-        else if([_arachnusrs gradeForFact:@"turnleft"]==1)
-            actoexecute=_turnleft;
-        else if([_arachnusrs gradeForFact:@"ballattackleft"]==1)
-            actoexecute=_morphballattackleft;
-        else if([_arachnusrs gradeForFact:@"slashleft"]==1)
-            actoexecute=_slashattackleft;
-        else if([_arachnusrs gradeForFact:@"fireleft"]==1)
-            actoexecute=_fireattackleft;
-        else if([_arachnusrs gradeForFact:@"moveback"]==1)
-            actoexecute=_movebackward;
-        else if([_arachnusrs gradeForFact:@"ballattackright"]==1)
-            actoexecute=_morphballattackright;
-        else if([_arachnusrs gradeForFact:@"slashright"]==1)
-            actoexecute=_slashattackright;
-        else if([_arachnusrs gradeForFact:@"fireright"]==1)
-            actoexecute=_fireattackright;
-        else if([_arachnusrs gradeForFact:@"moveforward"]==1)
-            actoexecute=_moveforeward;
-        /*if([_arachnusrs gradeForFact:@"flee"]==1){
+        else if([arachnusrs gradeForFact:@"turnright"]==1)
+            actoexecute=turnright;
+        else if([arachnusrs gradeForFact:@"turnleft"]==1)
+            actoexecute=turnleft;
+        else if([arachnusrs gradeForFact:@"ballattackleft"]==1)
+            actoexecute=morphballattackleft;
+        else if([arachnusrs gradeForFact:@"slashleft"]==1)
+            actoexecute=slashattackleft;
+        else if([arachnusrs gradeForFact:@"fireleft"]==1)
+            actoexecute=fireattackleft;
+        else if([arachnusrs gradeForFact:@"moveback"]==1)
+            actoexecute=movebackward;
+        else if([arachnusrs gradeForFact:@"ballattackright"]==1)
+            actoexecute=morphballattackright;
+        else if([arachnusrs gradeForFact:@"slashright"]==1)
+            actoexecute=slashattackright;
+        else if([arachnusrs gradeForFact:@"fireright"]==1)
+            actoexecute=fireattackright;
+        else if([arachnusrs gradeForFact:@"moveforward"]==1)
+            actoexecute=moveforeward;
+        /*if([arachnusrs gradeForFact:@"flee"]==1){
             NSLog(@"fleeing");
-            if(_arachnusrs.state[@"coorddist"]<0)
-                actoexecute=_morphballattackright;
+            if(arachnusrs.state[@"coorddist"]<0)
+                actoexecute=morphballattackright;
             else
-                actoexecute=_morphballattackleft;
-            _arachnusrs.state[@"prevacflee"]=@(YES);
+                actoexecute=morphballattackleft;
+            arachnusrs.state[@"prevacflee"]=@(YES);
         }
         else{
-            _arachnusrs.state[@"prevacflee"]=@(NO);
+            arachnusrs.state[@"prevacflee"]=@(NO);
         }*/
-        if(_prevac==actoexecute){
-            if([_arachnusrs.state[@"coorddist"] floatValue]<0)
-                actoexecute=[_leftattacks objectAtIndex:[_rndsrc nextIntWithUpperBound:_leftattacks.count]];
+        if(prevac==actoexecute){
+            if([arachnusrs.state[@"coorddist"] floatValue]<0)
+                actoexecute=[leftattacks objectAtIndex:[rndsrc nextIntWithUpperBound:leftattacks.count]];
             else
-                actoexecute=[_rightattacks objectAtIndex:[_rndsrc nextIntWithUpperBound:_rightattacks.count]];
+                actoexecute=[rightattacks objectAtIndex:[rndsrc nextIntWithUpperBound:rightattacks.count]];
         }
-        if(actoexecute!=_death){
-            [actoexecute setSpeed:(CGFloat)1.0+(CGFloat)([_arachnusrs.state[@"orighealth"] floatValue]-self.health)/(3*[_arachnusrs.state[@"orighealth"] floatValue])];
+        if(actoexecute!=death){
+            [actoexecute setSpeed:(CGFloat)1.0+(CGFloat)([arachnusrs.state[@"orighealth"] floatValue]-self.health)/(3*[arachnusrs.state[@"orighealth"] floatValue])];
         }
         else
             [actoexecute setSpeed:(CGFloat)1.0];
         
-        NSLog(@"%f",(CGFloat)1.0+(CGFloat)([_arachnusrs.state[@"orighealth"] floatValue]-self.health)/(2.5*[_arachnusrs.state[@"orighealth"] floatValue]));
+        NSLog(@"%f",(CGFloat)1.0+(CGFloat)([arachnusrs.state[@"orighealth"] floatValue]-self.health)/(2.5*[arachnusrs.state[@"orighealth"] floatValue]));
         
-        _arachnusrs.state[@"prevcoorddist"]=_arachnusrs.state[@"coorddist"];
+        arachnusrs.state[@"prevcoorddist"]=arachnusrs.state[@"coorddist"];
         
         [self runAction:actoexecute];
-        _prevac=actoexecute;
+        prevac=actoexecute;
     }
 
 }

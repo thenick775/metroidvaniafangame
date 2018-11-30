@@ -7,12 +7,11 @@
 #import "GameLevelScene3.h"
 
 @implementation GameLevelScene3{
-    SKTextureAtlas*_lvl3assets;
+    SKTextureAtlas*lvl3assets;
 }
 
 -(instancetype)initWithSize:(CGSize)size{
-    self = [super initWithSize:size];
-    if (self!=nil) {
+    if (self = [super initWithSize:size]) {
         [self.map removeFromParent];
         self.map=nil;
         
@@ -27,7 +26,7 @@
         self.foreground=[self.map layerNamed:@"foreground"];
         self.foreground.zPosition=17;
         
-        _lvl3assets=[SKTextureAtlas atlasNamed:@"lvl3assets"];
+        lvl3assets=[SKTextureAtlas atlasNamed:@"lvl3assets"];
         
         __weak GameLevelScene3*weakself=self;
         self.userInteractionEnabled=NO; //for use with player enter scene
@@ -63,7 +62,7 @@
         self.enemies=[[NSMutableArray alloc]init];
         
         //scene items here
-        SKSpriteNode*powerupstatue=[SKSpriteNode spriteNodeWithTexture:[_lvl3assets textureNamed:@"powerupstatuelvl3.png"]];
+        SKSpriteNode*powerupstatue=[SKSpriteNode spriteNodeWithTexture:[lvl3assets textureNamed:@"powerupstatuelvl3.png"]];
         powerupstatue.position=CGPointMake(17*self.map.tileSize.width, 5*self.map.tileSize.height);
         [powerupstatue setScale:0.7];
         powerupstatue.zPosition=0;
