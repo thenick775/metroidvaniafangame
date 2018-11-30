@@ -16,7 +16,8 @@
 
 -(instancetype)initWithImage:(NSString *)name{
     __weak NSString *weakname=name;
-    if(self==[super initWithImageNamed:weakname]){
+    self=[super initWithImageNamed:weakname];
+    if(self!=nil){
         SKTextureAtlas *portalatlas=[SKTextureAtlas atlasNamed:@"travelmirror"];
         
         NSArray *appeararray=@[[portalatlas textureNamed:@"mirror1.png"],[portalatlas textureNamed:@"mirror2.png"],[portalatlas textureNamed:@"mirror3.png"],[portalatlas textureNamed:@"mirror4.png"],[portalatlas textureNamed:@"mirror5.png"],[portalatlas textureNamed:@"mirror6.png"],[portalatlas textureNamed:@"mirror7.png"],[portalatlas textureNamed:@"mirror8.png"],[portalatlas textureNamed:@"mirror9.png"],[portalatlas textureNamed:@"mirror10.png"],[portalatlas textureNamed:@"mirror11.png"],[portalatlas textureNamed:@"mirror12.png"],[portalatlas textureNamed:@"mirror13.png"],[portalatlas textureNamed:@"mirror14.png"],[portalatlas textureNamed:@"mirror15.png"],[portalatlas textureNamed:@"mirror16.png"],[portalatlas textureNamed:@"mirror17.png"],[portalatlas textureNamed:@"mirror18.png"],[portalatlas textureNamed:@"mirror19.png"],[portalatlas textureNamed:@"mirror20.png"]];
