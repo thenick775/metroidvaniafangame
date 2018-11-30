@@ -20,7 +20,8 @@
     SKTexture *stand=[sciseranimation textureNamed:@"scisser1.png"];
     
     self=[super initWithTexture:stand];
-    if(self!=nil){
+    
+    if(self!=NULL){
         self.health=10;
         //setup enemy pos/animations/etc here
         NSArray *moveanim=@[[sciseranimation textureNamed:@"scisser1.png"],[sciseranimation textureNamed:@"scisser2.png"],[sciseranimation textureNamed:@"scisser3.png"],[sciseranimation textureNamed:@"scisser4.png"]];
