@@ -21,6 +21,7 @@
   skView.showsNodeCount = YES;
   skView.showsDrawCount =YES;
   skView.ignoresSiblingOrder=YES;
+  skView.multipleTouchEnabled=NO;
   // Create and configure the scene.
   // Present the scene.
   NSArray *texturesformenuscene=@[@"menusceneitems"];

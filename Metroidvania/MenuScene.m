@@ -222,8 +222,22 @@
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     for(UITouch*touch in touches){
-        if((CGRectContainsPoint(self._playlabel.frame,[touch locationInNode:self])) || (CGRectContainsPoint(self._playbutton.frame,[touch locationInNode:self]))){
+        
+        
+        if(CGRectContainsPoint(self._cntrllabel.frame,[touch locationInNode:self]) && !viewingcntrls){
+            [_cntrlbkrnd runAction:[SKAction fadeInWithDuration:0.2]];
+            [self._cntrllabel runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
+            viewingcntrls=YES;
+        }
+        else if(viewingcntrls){
+            [_cntrlbkrnd runAction:[SKAction fadeOutWithDuration:0.2]];
+            [self._cntrllabel runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
+            viewingcntrls=NO;
+        }
+        else if(CGRectContainsPoint(self._playlabel.frame,[touch locationInNode:self]) || CGRectContainsPoint(self._playbutton.frame,[touch locationInNode:self])){
             self.userInteractionEnabled=NO;
+            [self._playlabel runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
+            [self._playbutton runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
             
             __weak MenuScene *weakself = self;
             __weak SKTransition*weakmenutolvl1tran=menutolvl1tran;
@@ -245,14 +259,6 @@
                         [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
                 }];
             
-        }
-        else if(CGRectContainsPoint(self._cntrllabel.frame,[touch locationInNode:self]) && !viewingcntrls){
-            [_cntrlbkrnd runAction:[SKAction fadeInWithDuration:0.2]];
-            viewingcntrls=YES;
-        }
-        else if(viewingcntrls){
-            [_cntrlbkrnd runAction:[SKAction fadeOutWithDuration:0.2]];
-            viewingcntrls=NO;
         }
     }
 }
