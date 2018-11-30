@@ -23,7 +23,7 @@
 @property (nonatomic,assign) BOOL dead;
 @property (nonatomic,strong) GKComponentSystem *agentSystem;
 @property (nonatomic,strong) GKAgent2D *target;
--(instancetype)init;
+-(instancetype)initcomplete;
 -(void)updateWithDeltaTime:(NSTimeInterval)seconds;
 @end
 

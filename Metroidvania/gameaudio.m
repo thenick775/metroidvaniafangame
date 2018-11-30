@@ -21,10 +21,7 @@
 }
 
 -(void)switchBackgroundMusicTo:(NSString*)newsong{
-    __weak NSString*weaknewsong=newsong;
-    [gameaudio pauseSound:self.bkgrndmusic];
-    self.bkgrndmusic=[gameaudio setupRepeatingSound:weaknewsong volume:0.7];
-    [gameaudio playSound:self.bkgrndmusic];
+    
 }
 
 

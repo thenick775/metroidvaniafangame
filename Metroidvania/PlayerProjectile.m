@@ -17,7 +17,8 @@
 
 -(instancetype)initWithPos:(CGPoint)pos andDirection:(BOOL) direction{ //true==forewards false==backwards
     self=[super initWithImageNamed:@"samus_projectile1.png"];
-    if(self != nil){
+    
+    if(self != NULL){
         self.size=CGSizeMake(9,9);
         SKTextureAtlas *bullet=[SKTextureAtlas atlasNamed:@"projectiles"];
         CGVector projvector=CGVectorMake(180,0);
