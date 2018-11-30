@@ -234,7 +234,7 @@
             [self._cntrllabel runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
             viewingcntrls=NO;
         }
-        else if((CGRectContainsPoint(self._playlabel.frame,[touch locationInNode:self])) || (CGRectContainsPoint(self._playbutton.frame,[touch locationInNode:self]))){
+        else if(CGRectContainsPoint(self._playlabel.frame,[touch locationInNode:self]) || CGRectContainsPoint(self._playbutton.frame,[touch locationInNode:self])){
             self.userInteractionEnabled=NO;
             [self._playlabel runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
             [self._playbutton runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];

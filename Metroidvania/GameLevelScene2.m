@@ -85,17 +85,17 @@
         [self.enemies addObject:enemy1];
         [self.map addChild:enemy1];
         
-        honeypot *enemy2=[[honeypot alloc] initcomplete];
+        honeypot *enemy2=[[honeypot alloc] init];
         enemy2.position=CGPointMake(179*self.map.tileSize.width,3*self.map.tileSize.height-3);
         [self.enemies addObject:enemy2];
         [self.map addChild:enemy2];
         
-        honeypot *enemy3=[[honeypot alloc] initcomplete];
+        honeypot *enemy3=[[honeypot alloc] init];
         enemy3.position=CGPointMake(110*self.map.tileSize.width,20*self.map.tileSize.height-3);
         [self.enemies addObject:enemy3];
         [self.map addChild:enemy3];
         
-        honeypot *enemy4=[[honeypot alloc] initcomplete];
+        honeypot *enemy4=[[honeypot alloc] init];
         enemy4.position=CGPointMake(367*self.map.tileSize.width,18*self.map.tileSize.height-3);
         [self.enemies addObject:enemy4];
         [self.map addChild:enemy4];
@@ -240,7 +240,7 @@
                     [self enemyhitplayerdmgmsg:25];
                 }
             }
-            if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
+            if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
                 //NSLog(@"meleehit");
                 enemyconcop.health=enemyconcop.health-10;
                 [self.player runAction:self.player.meleedelayac];
@@ -258,12 +258,12 @@
         if(fabs(self.player.position.x-enemyconcop.position.x)<440){
         if(CGRectContainsPoint(CGRectInset(enemyconcop.frame,3,0), self.player.position) && !self.player.plyrrecievingdmg){
                 self.player.plyrrecievingdmg=YES;
-                [self enemyhitplayerdmgmsg:15];
+                [self enemyhitplayerdmgmsg:10];
         }
         for(SKSpriteNode*arachchild in [enemyconcop.projectilesinaction reverseObjectEnumerator]){
             if(CGRectIntersectsRect(self.player.collisionBoundingBox,arachchild.frame) && !self.player.plyrrecievingdmg){
                 self.player.plyrrecievingdmg=YES;
-                [self enemyhitplayerdmgmsg:20];
+                [self enemyhitplayerdmgmsg:15];
             }
         }
     }
@@ -309,7 +309,7 @@
             self.player.plyrrecievingdmg=YES;
             [self enemyhitplayerdmgmsg:15];
         }
-        if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect(CGRectMake(self.player.meleeweapon.frame.origin.x+self.player.frame.origin.x, self.player.meleeweapon.frame.origin.y+self.player.frame.origin.y, self.player.meleeweapon.frame.size.width, self.player.meleeweapon.frame.size.height),enemyconcop.frame)){
+        if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
             //NSLog(@"meleehit");
             enemyconcop.health=enemyconcop.health-10;
             [self.player runAction:self.player.meleedelayac];
