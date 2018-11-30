@@ -803,6 +803,10 @@
   }
   else{
     fintext=@"You Died :(";
+    if(self.player.forwardtrack)
+      self.player.texture=self.player.forewards;
+    else
+      self.player.texture=self.player.backwards;
   //label setup for end of game message
   endgamelabel.text=fintext;
   [self.camera addChild:endgamelabel];
