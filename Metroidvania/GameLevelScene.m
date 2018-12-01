@@ -114,7 +114,6 @@
     _pauselabel.position=CGPointMake(0,35);
     _unpauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"unpauselabel.png"];
     _unpauselabel.position=CGPointMake(0,10);
-    self.volumeslider=[[UISlider alloc] initWithFrame:CGRectMake(weakself.size.width/2+200,weakself.size.height/2+15, weakself.size.height-40, 15.0)];
     
     //portal stuff
     _travelportal=[[TravelPortal alloc] initWithImage:@"travelmirror.png"];
@@ -168,6 +167,7 @@
   
   __weak GameLevelScene*weakself=self;
   dispatch_async(dispatch_get_main_queue(), ^{ //deal with certain ui (that could be used immediately) on main thread only
+  self.volumeslider=[[UISlider alloc] initWithFrame:CGRectMake(weakself.size.width/2+200,weakself.size.height/2+15, weakself.size.height-40, 15.0)];
   weakself.volumeslider.minimumValue=0;
   weakself.volumeslider.maximumValue=100.0;
   weakself.volumeslider.continuous=YES;
@@ -369,6 +369,7 @@
     else if(self.paused)
       return;
     else if(CGRectContainsPoint(_startbutton.frame, touchlocation)){
+      //[self.startbutton runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05] completion:^{NSLog(@"coloringstart");
       [self pausegame];
     }
     else if(CGRectContainsPoint(_buttonright.frame, touchlocation)){
@@ -745,7 +746,7 @@
   
   --self.player.health;
   self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
-  self.healthbar.size=CGSizeMake((self.healthbar.size.width-(_healthbarsize/100)), self.healthbar.size.height);
+  self.healthbar.size=CGSizeMake((((float)self.player.health/100)*_healthbarsize), self.healthbar.size.height);
   
 }
 -(void)enemyhitplayerdmgmsg:(int)hit{
@@ -780,7 +781,6 @@
 
 -(void)slideraction:(id)sender{
   UISlider*tmpslider=(UISlider*)sender;
-  
   self.audiomanager.bkgrndmusic.volume=tmpslider.value/100;
 }
 
@@ -788,25 +788,20 @@
   
   self.gameOver=YES;
   [self.player removeAllActions];
+  if(self.player.forwardtrack)
+    [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
+  else
+    [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
   
   if(didwin){
     fintext=@"You Won!";
     endgamelabel.text=fintext;
-    if(self.player.forwardtrack)
-      self.player.texture=self.player.forewards;
-    else
-      self.player.texture=self.player.backwards;
-    
     __weak SKLabelNode *weakendgamelabel=endgamelabel;
     __weak UIButton *weakcontinuebutton=continuebutton;
     [self.player runAction:self.player.travelthruportalAnimation completion:^{[self.camera addChild:weakendgamelabel];[self.view addSubview:weakcontinuebutton];}];
   }
   else{
     fintext=@"You Died :(";
-    if(self.player.forwardtrack)
-      self.player.texture=self.player.forewards;
-    else
-      self.player.texture=self.player.backwards;
   //label setup for end of game message
   endgamelabel.text=fintext;
   [self.camera addChild:endgamelabel];

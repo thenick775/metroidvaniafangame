@@ -351,7 +351,7 @@
         else
             [actoexecute setSpeed:(CGFloat)1.0];
         
-        NSLog(@"%f",(CGFloat)1.0+(CGFloat)([_arachnusrs.state[@"orighealth"] floatValue]-self.health)/(2.5*[_arachnusrs.state[@"orighealth"] floatValue]));
+        //NSLog(@"%f",(CGFloat)1.0+(CGFloat)([_arachnusrs.state[@"orighealth"] floatValue]-self.health)/(2.5*[_arachnusrs.state[@"orighealth"] floatValue]));
         
         _arachnusrs.state[@"prevcoorddist"]=_arachnusrs.state[@"coorddist"];
         
