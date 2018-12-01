@@ -14,9 +14,9 @@ Technical details:
 
 -This app makes use of the third party library JSTileMap to make use of Tiled TMX tile maps.
 
--Multithreading (background tasks provided by Spritekit was used over GCD in this case) is used to smoothly transition between scenes, and to preload assets without blocking the UI while transitioning.
+-Multithreading (background tasks provided by Spritekit was used over GCD in this case) is used to smoothly transition between scenes, to preload assets without blocking the UI while transitioning, and to handle UI elements that use autolayout.
 
--This app uses a fuzzy logic rule system (GKRuleSystem) to quickly evaluate standard game logic for more complex enemies and provide the framework for fuzzy logic if more complex enemy action is needed.
+-This app uses a fuzzy logic rule system (GKRuleSystem) to quickly evaluate standard game logic for more complex enemies and provide the framework for fuzzy logic to be applied if more complex enemy action is needed.
 
 -This app utilizes the NSPredicate query language to access state information about enemies using the fuzzy logic system decribed above. 
 
