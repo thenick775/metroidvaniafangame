@@ -141,29 +141,42 @@
         
         handlebridge=[SKAction sequence:@[[SKAction waitForDuration:8.5],removebosswall,[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:0.1],bridgeblk]]]]];
         
-        SKEmitterNode*bossintro=[SKEmitterNode nodeWithFileNamed:@"arachnusintroduction.sks"];
-        bossintro.zPosition=16;
-        bossintro.position=CGPointMake(249*self.map.tileSize.width,2*self.map.tileSize.height);
+        SKEmitterNode*bossFire=[SKEmitterNode nodeWithFileNamed:@"arachnusintroduction.sks"];
+        bossFire.zPosition=16;
+        bossFire.position=CGPointMake(249*self.map.tileSize.width,2*self.map.tileSize.height);
+        
         __weak arachnusboss*weakboss1=boss1;
         __block BOOL bossdidenter=NO;
+        __block BOOL timerrepeat=NO;
+        SKAction *bossEntrance=[SKAction sequence:@[[SKAction waitForDuration:3.0],[SKAction runBlock:^{
+            weakboss1.zPosition=0.0;
+            for(int i=247;i<=250;i++){
+                for(int k=25;k<=27;k++){
+                    [weakself.walls removeTileAtCoord:CGPointMake(i,k)];
+                }
+            }
+            [bossFire removeFromParent];
+            weakboss1.zPosition=0.0;
+            [weakself.enemies addObject:weakboss1];
+            weakboss1.active=YES;
+            [weakself removeActionForKey:@"idlecheck"];
+        }]]];
+        
         SKAction*idleblk=[SKAction runBlock:^{
             NSLog(@"checking boss idle");
-            if(weakself.player.meleeinaction && CGRectIntersectsRect(CGRectMake(weakself.player.meleeweapon.frame.origin.x+weakself.player.frame.origin.x, weakself.player.meleeweapon.frame.origin.y+weakself.player.frame.origin.y, weakself.player.meleeweapon.frame.size.width, weakself.player.meleeweapon.frame.size.height),weakboss1.frame) && !bossdidenter){
+            if(weakself.player.meleeinaction && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],weakboss1.frame) && !bossdidenter){
+                [weakself removeActionForKey:@"backuptimer"];
                 bossdidenter=YES;
-                [weakself addChild:bossintro];
-                [weakself runAction:[SKAction sequence:@[[SKAction waitForDuration:3.0],[SKAction runBlock:^{
-                    weakboss1.zPosition=0.0;
-                    for(int i=247;i<=250;i++){
-                        for(int k=25;k<=27;k++){
-                            [weakself.walls removeTileAtCoord:CGPointMake(i,k)];
-                        }
-                    }
-                    [bossintro removeFromParent];
-                    weakboss1.zPosition=0.0;
-                    [weakself.enemies addObject:weakboss1];
-                    weakboss1.active=YES;
-                    [weakself removeActionForKey:@"idlecheck"];
-                }]]]];
+                [weakself addChild:bossFire];
+                [weakself runAction:bossEntrance];
+            }
+            else if(weakself.player.position.x>weakboss1.position.x-100 && !bossdidenter && !timerrepeat){
+                timerrepeat=YES;
+                [weakself runAction:[SKAction sequence:@[[SKAction waitForDuration:10.0],[SKAction runBlock:^{
+                bossdidenter=YES;
+                [weakself addChild:bossFire];
+                [weakself runAction:bossEntrance];
+                }]]] withKey:@"backuptimer"];
             }
         }];
         idlecheck=[SKAction sequence:@[[SKAction waitForDuration:60],[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:1],idleblk]]]]];
@@ -180,6 +193,7 @@
     
     __weak GameLevelScene2*weakself=self;
     dispatch_async(dispatch_get_main_queue(), ^{//deal with certain ui on main thread only
+    self.volumeslider=[[UISlider alloc] initWithFrame:CGRectMake(weakself.size.width/2+200,weakself.size.height/2+15, weakself.size.height-40, 15.0)];
     weakself.volumeslider.minimumValue=0;
     weakself.volumeslider.maximumValue=100.0;
     weakself.volumeslider.continuous=YES;
