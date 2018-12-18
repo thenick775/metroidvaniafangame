@@ -28,6 +28,8 @@ Technical details:
 
 -Audio management of this game has been encapsulated in a class specifically designed to manage the audio of each scene. This class makes use of AVFoundation, specifically AVAudioPlayer and its related functions, along with GCD to play sounds asychronously. This allows relevent audio to be preloaded with each scene, and the load on the main thread and memory is as small as possible.
 
+-NSNotificationCenter is used to handle the scene as the app transitions between background and active states.
+
 The gifs may take some time to load due to the filesize, any FPS tags are slower than on actual device (gifs captured on simulator)
 
 
