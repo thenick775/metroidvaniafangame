@@ -117,15 +117,15 @@
         return;
     }
     
-    TMXTilesetInfo* tilesetInfo = [self.map tilesetInfoForGid:gID];
+    TMXTilesetInfo* tilesetInfo = [self.map tilesetInfoForGid:(int)gID];
     [self.tileInfo addObject:tilesetInfo];
     
     SKSpriteNode *tile = [self tileAtCoord:coord];
     if (tilesetInfo && tile){
-        SKTexture* texture = [tilesetInfo textureForGid:gID];
+        SKTexture* texture = [tilesetInfo textureForGid:(int)gID];
         if (texture){
             [tile setTexture:texture];
-            _layerInfo.tiles[ idx ] = gID;
+            _layerInfo.tiles[ idx ] = (int)gID;
         }
     }
 }

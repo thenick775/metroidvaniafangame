@@ -12,7 +12,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-  NSLog(@"in view");
+  //NSLog(@"in view");
   [super viewDidAppear:animated];
   
   // Configure the view.

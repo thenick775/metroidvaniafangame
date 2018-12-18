@@ -120,6 +120,9 @@
     _travelportal.position=CGPointMake((self.map.mapSize.width * self.map.tileSize.width)-120, 95.0);
     
     //button initialization
+    self.buttonhighlight=[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05];
+    self.buttonunhighlight=[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05];
+    
     _buttonup=[SKSpriteNode spriteNodeWithImageNamed:@"buttonupv4real.png"];
     _buttonup.position=CGPointMake((-2*(self.size.width/6)), -36);//CGPointMake(self.size.width/6, self.size.height/2-36);
     [self.camera addChild:_buttonup];
@@ -155,6 +158,8 @@
     
     //door stuff here
     _repeating=NO;
+    self.stayPaused=NO;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setStayPaused) name:@"stayPausedNotification" object:nil];//notification listening for stayPausedNotification
     
   }
   return self;
@@ -183,9 +188,14 @@
   });
 }
 
+-(void)willMoveFromView:(SKView *)view{
+  //NSLog(@"moving from view");
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)update:(NSTimeInterval)currentTime{
   
-  if(self.gameOver)
+  if(self.gameOver || self.stayPaused)
     return;
   
   NSTimeInterval delta=currentTime-self.storetime;
@@ -379,7 +389,7 @@
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
       
-      [_buttonright runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
+      [_buttonright runAction:self.buttonhighlight];
       [self.player runAction:self.player.runAnimation withKey:@"runf"];
     }
     else if(CGRectContainsPoint(_buttonleft.frame, touchlocation)){
@@ -389,13 +399,13 @@
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
       
-      [_buttonleft runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
+      [_buttonleft runAction:self.buttonhighlight];
       [self.player runAction:self.player.runBackwardsAnimation withKey:@"runb"];
     }
     else if(CGRectContainsPoint(_buttonup.frame,touchlocation)){
       //NSLog(@"touching up control");
       self.player.shouldJump=YES;
-      [_buttonup runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
+      [_buttonup runAction:self.buttonhighlight];
       if(self.player.forwardtrack)
         [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       else
@@ -423,18 +433,18 @@
     if(currtouchlocation.x>self.size.width/2 && (previoustouchlocation.x<=self.size.width/2)){
       //NSLog(@"moving to firing weapon");
       self.player.shouldJump=NO;
-      [_buttonup runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
+      [_buttonup runAction:self.buttonunhighlight];
       self.player.goForeward=NO;
-      [_buttonright runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
+      [_buttonright runAction:self.buttonunhighlight];
       self.player.goBackward=NO;
-      [_buttonleft runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
+      [_buttonleft runAction:self.buttonunhighlight];
     }
     else if(CGRectContainsPoint(_buttonup.frame, currtouchlocation) && CGRectContainsPoint(_buttonright.frame, previoustouchlocation)){
     //NSLog(@"moving from move right to jumping");
       self.player.shouldJump=YES;
-      [_buttonup runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
+      [_buttonup runAction:self.buttonhighlight];
       self.player.goForeward=NO;
-      [_buttonright runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
+      [_buttonright runAction:self.buttonunhighlight];
       
       [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       [self.player removeActionForKey:@"runf"];
@@ -442,9 +452,9 @@
     else if(CGRectContainsPoint(_buttonup.frame, currtouchlocation) && CGRectContainsPoint(_buttonleft.frame, previoustouchlocation)){
       //NSLog(@"moving from move backward to jumping");
       self.player.shouldJump=YES;
-      [_buttonup runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
+      [_buttonup runAction:self.buttonhighlight];
       self.player.goBackward=NO;
-      [_buttonleft runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
+      [_buttonleft runAction:self.buttonunhighlight];
       
       [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
       [self.player removeActionForKey:@"runb"];
@@ -452,9 +462,9 @@
     else if(CGRectContainsPoint(_buttonright.frame, currtouchlocation) && CGRectContainsPoint(_buttonleft.frame, previoustouchlocation)){
       //NSLog(@"moving from move backward to moveforeward");
       self.player.goForeward=YES;
-      [_buttonright runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
+      [_buttonright runAction:self.buttonhighlight];
       self.player.goBackward=NO;
-      [_buttonleft runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
+      [_buttonleft runAction:self.buttonunhighlight];
       
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
@@ -465,9 +475,9 @@
     else if(CGRectContainsPoint(_buttonright.frame, currtouchlocation) && CGRectContainsPoint(_buttonup.frame, previoustouchlocation)){
       //NSLog(@"move up to move foreward");
       self.player.goForeward=YES;
-      [_buttonright runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
+      [_buttonright runAction:self.buttonhighlight];
       self.player.shouldJump=NO;
-      [_buttonup runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
+      [_buttonup runAction:self.buttonunhighlight];
       
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
@@ -478,9 +488,9 @@
     else if(CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && CGRectContainsPoint(_buttonright.frame, previoustouchlocation)){
       //NSLog(@"move forewards to movebackwards");
       self.player.goBackward=YES;
-      [_buttonleft runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
+      [_buttonleft runAction:self.buttonhighlight];
       self.player.goForeward=NO;
-      [_buttonright runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
+      [_buttonright runAction:self.buttonunhighlight];
       
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
@@ -491,9 +501,9 @@
     else if(CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && CGRectContainsPoint(_buttonup.frame, previoustouchlocation)){
       //NSLog(@"move up to movebackwards");
       self.player.goBackward=YES;
-      [_buttonleft runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
+      [_buttonleft runAction:self.buttonhighlight];
       self.player.shouldJump=NO;
-      [_buttonup runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
+      [_buttonup runAction:self.buttonunhighlight];
       
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
@@ -506,9 +516,9 @@
       self.player.shouldJump=NO;
       self.player.goForeward=NO;
       self.player.goBackward=NO;
-      [_buttonup runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
-      [_buttonright runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
-      [_buttonleft runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
+      [_buttonup runAction:self.buttonunhighlight];
+      [_buttonright runAction:self.buttonunhighlight];
+      [_buttonleft runAction:self.buttonunhighlight];
 
       
       [self.player removeActionForKey:@"runf"];
@@ -558,9 +568,9 @@
     [self.player removeActionForKey:@"jmpb"];
     self.player.shouldJump=NO;
     
-    [_buttonup runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
-    [_buttonright runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
-    [_buttonleft runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
+    [_buttonup runAction:self.buttonunhighlight];
+    [_buttonright runAction:self.buttonunhighlight];
+    [_buttonleft runAction:self.buttonunhighlight];
     
     if(CGRectContainsPoint(_buttonup.frame, fnctouchlocation)){
       //NSLog(@"done touching up");
@@ -627,6 +637,9 @@
   [self.player removeActionForKey:@"jmpf"];
   [self.player removeActionForKey:@"jmpb"];
   self.player.shouldJump=NO;
+  [_buttonup runAction:self.buttonunhighlight];
+  [_buttonright runAction:self.buttonunhighlight];
+  [_buttonleft runAction:self.buttonunhighlight];
 }
 
 -(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
@@ -777,6 +790,14 @@
   self.volumeslider.hidden=YES;
   
   self.paused=NO;
+}
+
+-(void)setStayPaused{//for use to keep the scene paused while returning from background
+  //NSLog(@"staying paused");
+  self.stayPaused=YES;
+  [self unpausegame];
+  GameLevelScene*weakself=self;
+  [self runAction:[SKAction sequence:@[[SKAction waitForDuration:0.05],[SKAction runBlock:^{[weakself pausegame];}]]] completion:^{weakself.stayPaused=NO;}];
 }
 
 -(void)slideraction:(id)sender{

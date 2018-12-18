@@ -164,7 +164,7 @@
         
         SKAction*idleblk=[SKAction runBlock:^{
             NSLog(@"checking boss idle");
-            if(weakself.player.meleeinaction && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],weakboss1.frame) && !bossdidenter){
+            if(weakself.player.meleeinaction && CGRectIntersectsRect([weakself.player meleeBoundingBoxNormalized],weakboss1.frame) && !bossdidenter){
                 [weakself removeActionForKey:@"backuptimer"];
                 bossdidenter=YES;
                 [weakself addChild:bossFire];

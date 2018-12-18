@@ -25,7 +25,9 @@
     SKAction *shipflyac;
     SKTransition *menutolvl1tran;
     NSArray *texturesforlvl1;
-    //NSArray *texturesforlvl2;//here for testing and convience at the moment
+    NSArray *texturesforlvl2;//here for testing and convience at the moment
+    SKAction *_buttonhighlight;
+    SKAction *_buttonunhighlight;
     gameaudio*audiomanager;
 }
 
@@ -164,7 +166,7 @@
         SKLabelNode *cntrll3=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
         cntrll1.zPosition=6;
         cntrll1.fontSize=16;
-        cntrll1.text=@"Use the Dpad to move around,";
+        cntrll1.text=@"Use the Dpad to move around by sliding your finger,";
         cntrll1.position=CGPointMake(0,20);
         cntrll2.zPosition=6;
         cntrll2.fontSize=16;
@@ -208,12 +210,16 @@
         shipflyac=[SKAction group:@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.7]]];
         [shipflyac setTimingMode:SKActionTimingEaseIn];
        
-    //texturesforlvl2=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver"];
+        texturesforlvl2=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver"];
         texturesforlvl1=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"Waver"];
      
         self.labelsin=[SKAction sequence:@[[SKAction waitForDuration:1.5],[SKAction fadeInWithDuration:1.5]]];
         [self runAction:[SKAction runBlock:^{[weakself.titlelabel runAction:weakself.labelsin completion:^{weakself.labelsin.speed=3;[weakself._playlabel runAction:weakself.labelsin];[weakself._playbutton runAction:weakself.labelsin];[weakself._cntrllabel runAction:weakself.labelsin completion:^{weakself.userInteractionEnabled=YES;}];}];}]];
       
+        _buttonhighlight=[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05];
+        _buttonunhighlight=[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05];
+        
+        
         audiomanager=[gameaudio alloc];
         [audiomanager runBkgrndMusicForlvl:0];
     }
@@ -226,18 +232,18 @@
         
         if(CGRectContainsPoint(self._cntrllabel.frame,[touch locationInNode:self]) && !viewingcntrls){
             [_cntrlbkrnd runAction:[SKAction fadeInWithDuration:0.2]];
-            [self._cntrllabel runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
+            [self._cntrllabel runAction:_buttonhighlight];
             viewingcntrls=YES;
         }
         else if(viewingcntrls){
             [_cntrlbkrnd runAction:[SKAction fadeOutWithDuration:0.2]];
-            [self._cntrllabel runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05]];
+            [self._cntrllabel runAction:_buttonunhighlight];
             viewingcntrls=NO;
         }
         else if(CGRectContainsPoint(self._playlabel.frame,[touch locationInNode:self]) || CGRectContainsPoint(self._playbutton.frame,[touch locationInNode:self])){
             self.userInteractionEnabled=NO;
-            [self._playlabel runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
-            [self._playbutton runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05]];
+            [self._playlabel runAction:_buttonhighlight];
+            [self._playbutton runAction:_buttonhighlight];
             
             __weak MenuScene *weakself = self;
             __weak SKTransition*weakmenutolvl1tran=menutolvl1tran;
