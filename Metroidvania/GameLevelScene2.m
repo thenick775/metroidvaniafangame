@@ -164,7 +164,7 @@
         
         SKAction*idleblk=[SKAction runBlock:^{
             NSLog(@"checking boss idle");
-            if(weakself.player.meleeinaction && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],weakboss1.frame) && !bossdidenter){
+            if(weakself.player.meleeinaction && CGRectIntersectsRect([weakself.player meleeBoundingBoxNormalized],weakboss1.frame) && !bossdidenter){
                 [weakself removeActionForKey:@"backuptimer"];
                 bossdidenter=YES;
                 [weakself addChild:bossFire];
@@ -172,7 +172,7 @@
             }
             else if(weakself.player.position.x>weakboss1.position.x-100 && !bossdidenter && !timerrepeat){
                 timerrepeat=YES;
-                [weakself runAction:[SKAction sequence:@[[SKAction waitForDuration:10.0],[SKAction runBlock:^{
+                [weakself runAction:[SKAction sequence:@[[SKAction waitForDuration:13.0],[SKAction runBlock:^{
                 bossdidenter=YES;
                 [weakself addChild:bossFire];
                 [weakself runAction:bossEntrance];
@@ -292,7 +292,12 @@
             for(honeypotproj *child in [enemyconcop.children reverseObjectEnumerator]){
                 if(CGRectContainsPoint(self.player.frame,[self convertPoint:child.position fromNode:enemyconcop]) && !self.player.plyrrecievingdmg){
                     self.player.plyrrecievingdmg=YES;
-                    [self enemyhitplayerdmgmsg:10];
+                    [self enemyhitplayerdmgmsg:12];
+                }
+                if(!child.anger && self.player.meleeinaction && !self.player.meleedelay && CGRectContainsPoint([self.player meleeBoundingBoxNormalized],[self convertPoint:child.position fromNode:enemyconcop])){
+                    NSLog(@"hit honeypot child");
+                    [enemyconcop dealChildDamage:3 withChild:child];
+                    [self.player runAction:self.player.shortdurationmeleedelayac];
                 }
             }
             if(enemyconcop.agentSystem.components.count==0){
@@ -303,7 +308,7 @@
             }
         
         }
-        else if(CGRectIntersectsRect(self.player.frame,enemyconcop.frame) && !self.player.plyrrecievingdmg && !enemyconcop.dead){
+        else if(CGRectIntersectsRect(self.player.frame,enemyconcop.frame) && !self.player.plyrrecievingdmg && [enemyconcop actionForKey:@"walk"]/*!enemyconcop.dead*/){
             self.player.plyrrecievingdmg=YES;
             [self enemyhitplayerdmgmsg:15];
         }

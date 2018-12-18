@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		592B389D20DB008400C62977 /* MenuScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 592B389C20DB008400C62977 /* MenuScene.m */; };
+		59450D6E21B360BC0019BAEB /* door.m in Sources */ = {isa = PBXBuildFile; fileRef = 59450D6D21B360BC0019BAEB /* door.m */; };
 		594F557B20CDE911000E476E /* GameLevelScene2.m in Sources */ = {isa = PBXBuildFile; fileRef = 594F557A20CDE911000E476E /* GameLevelScene2.m */; };
 		594F558520CE16A9000E476E /* spacefloortile.png in Resources */ = {isa = PBXBuildFile; fileRef = 594F558420CE16A9000E476E /* spacefloortile.png */; };
 		594F559320CE1CA0000E476E /* level2.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 594F559220CE1CA0000E476E /* level2.tmx */; };
@@ -69,6 +70,8 @@
 /* Begin PBXFileReference section */
 		592B389B20DB008400C62977 /* MenuScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MenuScene.h; sourceTree = "<group>"; };
 		592B389C20DB008400C62977 /* MenuScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MenuScene.m; sourceTree = "<group>"; };
+		59450D6C21B360850019BAEB /* door.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = door.h; sourceTree = "<group>"; };
+		59450D6D21B360BC0019BAEB /* door.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = door.m; sourceTree = "<group>"; };
 		594F557920CDE911000E476E /* GameLevelScene2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameLevelScene2.h; sourceTree = "<group>"; };
 		594F557A20CDE911000E476E /* GameLevelScene2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameLevelScene2.m; sourceTree = "<group>"; };
 		594F558420CE16A9000E476E /* spacefloortile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spacefloortile.png; sourceTree = "<group>"; };
@@ -182,6 +185,8 @@
 				59C0DE1320B91F25008999C3 /* PlayerProjectile.m */,
 				596F2DB020C1C44700B32C47 /* TravelPortal.h */,
 				596F2DB120C1C44700B32C47 /* TravelPortal.m */,
+				59450D6C21B360850019BAEB /* door.h */,
+				59450D6D21B360BC0019BAEB /* door.m */,
 				59DAC082218278220077E10C /* gameaudio.h */,
 				59DAC083218278330077E10C /* gameaudio.m */,
 			);
@@ -474,6 +479,7 @@
 				F275B6E5186E25C1009F6E6B /* SKTTimingFunctions.m in Sources */,
 				59DAC084218278330077E10C /* gameaudio.m in Sources */,
 				F275B6AE186E0B8D009F6E6B /* Player.m in Sources */,
+				59450D6E21B360BC0019BAEB /* door.m in Sources */,
 				5971B78F215F831C00A65C6E /* honeypot.m in Sources */,
 				596F2DB220C1C44700B32C47 /* TravelPortal.m in Sources */,
 				F275B6E3186E25C1009F6E6B /* SKTAudio.m in Sources */,

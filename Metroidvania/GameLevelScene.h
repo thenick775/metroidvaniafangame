@@ -26,6 +26,9 @@
 @property (nonatomic,strong) SKSpriteNode *buttonup,*buttonright,*buttonleft,*startbutton;
 @property (nonatomic,strong) gameaudio*audiomanager;
 @property (nonatomic,strong) UISlider*volumeslider;
+@property (nonatomic,strong) SKAction *buttonhighlight;
+@property (nonatomic,strong) SKAction *buttonunhighlight;
+@property (nonatomic,assign) BOOL stayPaused;
 
 -(void)slideraction:(id)sender;
 -(void)damageRecievedMsg;
@@ -33,6 +36,7 @@
 -(void) gameOver:(BOOL)didwin;
 -(void)replaybuttonpush:(id)sender;
 -(void)continuebuttonpush:(id)sender;
-
+-(void)pausegame;
+-(void)unpausegame;
 
 @end

@@ -18,12 +18,15 @@
         self.agent.radius=self.size.height;
         self.agent.position=(vector_float2){(float)position.x,(float)position.y};
         self.agent.delegate=self;
+        self.health=15;
         if(!angry){
+            self.anger=NO;
             self.agent.maxSpeed=18;
             self.agent.maxAcceleration=12;
             self.agent.mass=2;
         }
         else{
+            self.anger=YES;
             [self runAction:[SKAction colorizeWithColor:[UIColor redColor] colorBlendFactor:0.6 duration:0]];
             self.agent.maxSpeed=45;
             self.agent.maxAcceleration=30;
@@ -132,7 +135,15 @@
     
 }
 
-
+-(void)dealChildDamage:(int)damage withChild:(honeypotproj *)child{
+    __weak GKComponentSystem *weakagentSystem=self.agentSystem;
+    __weak honeypotproj*weakchild=child;
+    child.health=child.health-5;
+    if(child.health<=0){
+        [child runAction:[SKAction sequence:@[_projectileexplode,[SKAction runBlock:^{[weakagentSystem removeComponent:weakchild.agent];[weakchild removeFromParent];}]]]];
+    }
+    
+}
 
 
 /*-(void)dealloc{

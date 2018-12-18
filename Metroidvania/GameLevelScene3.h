@@ -15,5 +15,6 @@
 -(instancetype)initWithSize:(CGSize)size;
 @property (nonatomic,strong) TMXLayer*background;
 @property (nonatomic,strong) TMXLayer*foreground;
+@property (nonatomic,strong) NSMutableArray*doors;
 
 @end
