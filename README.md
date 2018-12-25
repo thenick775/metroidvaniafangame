@@ -63,3 +63,7 @@ BurghRecords-Dystopian Future Fx Sounds (used in menuscene, background music) li
 Micah Young-Lost Moon's Grateful Eights (used in lvl1, background music) liscensed under Creative Commons Attribution Liscense
 
 deleted_user_38815-newbit2 (used in lvl2, background music) liscensed under Creative Commons Attribution Liscense
+
+Bob Bobium-Human Station Menuscene (space colony ceres), Door sprites
+
+Greiga Master-Chozo Statue
