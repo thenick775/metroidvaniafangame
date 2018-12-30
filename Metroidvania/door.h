@@ -6,12 +6,14 @@
 //
 
 #include <SpriteKit/SpriteKit.h>
+#import "Player.h"
 
 @interface door : SKSpriteNode
 
 @property (nonatomic,assign) BOOL passable;
 
--(instancetype)initWithTextureAtlas:(SKTextureAtlas*)texatlas andNames:(NSArray*)names;
+-(instancetype)initWithTextureAtlas:(SKTextureAtlas*)texatlas hasMarker:(BOOL)hasMarker andNames:(NSArray*)names;
 -(void)opendoor;
+-(void)handleCollisionsWithPlayer:(Player*)player;
 
 @end

@@ -278,7 +278,7 @@
         [_arachnusrs addRule:fleerule];*/
         
         
-        _rndsrc=[[GKLinearCongruentialRandomSource alloc] init];;
+        _rndsrc=[[GKLinearCongruentialRandomSource alloc] init];
     }
     
     return self;

@@ -5,12 +5,12 @@
 //
 //  Created by nick vancise on 10/10/18.
 //
-#import <Spritekit/Spritekit.h>
 #import <GameplayKit/GameplayKit.h>
+#import "enemyBase.h"
 
-@interface waver : SKSpriteNode <GKAgentDelegate>
+@interface waver : enemyBase <GKAgentDelegate>
 
-@property (nonatomic,assign) int health;
+//@property (nonatomic,assign) int health;
 @property (nonatomic,assign) BOOL attacking;
 
 -(instancetype)initWithPosition:(CGPoint)position;

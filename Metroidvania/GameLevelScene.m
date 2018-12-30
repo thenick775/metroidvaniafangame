@@ -124,15 +124,18 @@
     self.buttonunhighlight=[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05];
     
     _buttonup=[SKSpriteNode spriteNodeWithImageNamed:@"buttonupv4real.png"];
-    _buttonup.position=CGPointMake((-2*(self.size.width/6)), -36);//CGPointMake(self.size.width/6, self.size.height/2-36);
+    _buttonup.position=CGPointMake((-2*(self.size.width/6)), -36);
+    _buttonup.zPosition=14;
     [self.camera addChild:_buttonup];
     
     _buttonleft=[SKSpriteNode spriteNodeWithImageNamed:@"buttonleftv2real.png"];
-    _buttonleft.position=CGPointMake((-2*(self.size.width/6))-28, -75);//CGPointMake(self.size.width/6-28, self.size.height/2-75);
+    _buttonleft.position=CGPointMake((-2*(self.size.width/6))-28, -75);
+    _buttonleft.zPosition=14;
     [self.camera addChild:_buttonleft];
    
     _buttonright=[SKSpriteNode spriteNodeWithImageNamed:@"buttonrightv2real.png"];
-    _buttonright.position=CGPointMake((-2*(self.size.width/6))+28, -75);//CGPointMake(self.size.width/6+28, self.size.height/2-75);
+    _buttonright.position=CGPointMake((-2*(self.size.width/6))+28, -75);
+    _buttonright.zPosition=14;
     [self.camera addChild:_buttonright];
     
     _startbutton=[SKSpriteNode spriteNodeWithImageNamed:@"startbutton.png"];
@@ -170,22 +173,25 @@
   self.audiomanager=[gameaudio alloc];
   [self.audiomanager runBkgrndMusicForlvl:1];
   
-  __weak GameLevelScene*weakself=self;
   dispatch_async(dispatch_get_main_queue(), ^{ //deal with certain ui (that could be used immediately) on main thread only
-  self.volumeslider=[[UISlider alloc] initWithFrame:CGRectMake(weakself.size.width/2+200,weakself.size.height/2+15, weakself.size.height-40, 15.0)];
-  weakself.volumeslider.minimumValue=0;
-  weakself.volumeslider.maximumValue=100.0;
-  weakself.volumeslider.continuous=YES;
-  weakself.volumeslider.value=70;
-  weakself.volumeslider.hidden=YES;
-  weakself.volumeslider.minimumTrackTintColor=[UIColor redColor];
-  weakself.volumeslider.maximumTrackTintColor=[UIColor darkGrayColor];
-  [weakself.volumeslider setThumbImage:[UIImage imageNamed:@"supermetroid_sliderbar.png"] forState:UIControlStateNormal];
-  [weakself.volumeslider setTransform:CGAffineTransformRotate(weakself.volumeslider.transform, M_PI_2)];
-  [weakself.volumeslider setBackgroundColor:[UIColor clearColor]];
-  [weakself.volumeslider addTarget:weakself action:@selector(slideraction:) forControlEvents:UIControlEventValueChanged];
-  [weakself.view addSubview:weakself.volumeslider];
+  [self setupVolumeSlider];
   });
+}
+
+-(void)setupVolumeSlider{//**setup on main thread only**might set call to main thread in this function..
+  self.volumeslider=[[UISlider alloc] initWithFrame:CGRectMake(self.size.width/2+200,self.size.height/2+15, self.size.height-40, 15.0)];
+  self.volumeslider.minimumValue=0;
+  self.volumeslider.maximumValue=100.0;
+  self.volumeslider.continuous=YES;
+  self.volumeslider.value=70;
+  self.volumeslider.hidden=YES;
+  self.volumeslider.minimumTrackTintColor=[UIColor redColor];
+  self.volumeslider.maximumTrackTintColor=[UIColor darkGrayColor];
+  [self.volumeslider setThumbImage:[UIImage imageNamed:@"supermetroid_sliderbar.png"] forState:UIControlStateNormal];
+  [self.volumeslider setTransform:CGAffineTransformRotate(self.volumeslider.transform, M_PI_2)];
+  [self.volumeslider setBackgroundColor:[UIColor clearColor]];
+  [self.volumeslider addTarget:self action:@selector(slideraction:) forControlEvents:UIControlEventValueChanged];
+  [self.view addSubview:self.volumeslider];
 }
 
 -(void)willMoveFromView:(SKView *)view{
@@ -204,19 +210,20 @@
     delta=0.2;
   
   self.storetime=currentTime;
+  self.delta=delta;
   
   [self.player update:delta];
   
   //do collision detection calls here
   
-  [self checkAndResolveCollisionsForPlayer:self.player];
+  [self checkAndResolveCollisionsForPlayer];
   
   [self handleBulletEnemyCollisions];
 }
 
 
 
--(NSInteger)tileGIDAtTileCoord:(CGPoint)tilecoordinate forLayer:(TMXLayer *)fnclayer {
+-(NSInteger)tileGIDAtTileCoord:(CGPoint)tilecoordinate forLayer:(TMXLayer *)fnclayer{
   @autoreleasepool{
   TMXLayerInfo *currinfo=fnclayer.layerInfo;
   return [currinfo tileGidAtCoord:tilecoordinate];
@@ -226,7 +233,6 @@
 
 
 -(CGRect)tileRectFromTileCoords:(CGPoint)fnccoordinate{
-  
   float levelheightinpixels=self.map.mapSize.height * self.map.tileSize.height;
   
   CGPoint origin=CGPointMake(fnccoordinate.x * self.map.tileSize.width, levelheightinpixels - ((fnccoordinate.y+1)* self.map.tileSize.height));
@@ -236,37 +242,36 @@
 
 
 
--(void)checkAndResolveCollisionsForPlayer:(Player *)fncplayer{
+-(void)checkAndResolveCollisionsForPlayer{
   
   NSInteger tileindecies[8]={7,1,3,5,0,2,6,8};
-  fncplayer.onGround=NO;
-  
+  self.player.onGround=NO;
   
   
   for(NSInteger i=0;i<8;i++){
     NSInteger tileindex=tileindecies[i];
     
-    CGRect playerrect=[fncplayer collisionBoundingBox];
-    CGPoint playercoordinate=[self.walls coordForPoint:fncplayer.desiredPosition];
+    CGRect playerrect=[self.player collisionBoundingBox];
+    CGPoint playercoordinate=[self.walls coordForPoint:self.player.desiredPosition];
     
   
     if(playercoordinate.y >= self.map.mapSize.height-1 ){ //sets gameover if you go below the bottom of the maps y max-1
       [self gameOver:0];
       return;
     }
-    if(fncplayer.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-220 && !_repeating){
+    if(self.player.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-220 && !_repeating){
       [self.map addChild:_travelportal];
       _repeating=YES;
     }
     if(_travelportal!=NULL && CGRectIntersectsRect(CGRectInset(playerrect,4,6),[_travelportal collisionBoundingBox])){      
-      [fncplayer runAction:[SKAction moveTo:_travelportal.position duration:1.5] completion:^{[self gameOver:1];}];
+      [self.player runAction:[SKAction moveTo:_travelportal.position duration:1.5] completion:^{[self gameOver:1];}];
       return;
     }
     
     
     
     NSInteger tilecolumn=tileindex%3; //this is how array of coordinates around player is navigated
-    NSInteger tilerows=tileindex/3;
+    NSInteger tilerows=tileindex/3;   //using a 3X3 grid
     
     CGPoint tilecoordinate=CGPointMake(playercoordinate.x+(tilecolumn-1), playercoordinate.y+(tilerows-1));
     
@@ -285,10 +290,10 @@
         
         if(tileindex==7){
           //tile below the sprite
-          fncplayer.desiredPosition=CGPointMake(fncplayer.desiredPosition.x, fncplayer.desiredPosition.y+pl_tl_intersection.size.height);
+          self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x, self.player.desiredPosition.y+pl_tl_intersection.size.height);
           
-          fncplayer.playervelocity=CGPointMake(fncplayer.playervelocity.x, 0.0);
-          fncplayer.onGround=YES;
+          self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
+          self.player.onGround=YES;
         }
         else if(tileindex==1){
           //tile above the sprite
@@ -298,35 +303,34 @@
             [self hitHealthBox]; //adjusts player healthlabel/healthbar
           }
           else{
-          fncplayer.desiredPosition=CGPointMake(fncplayer.desiredPosition.x, fncplayer.desiredPosition.y-pl_tl_intersection.size.height);
-          fncplayer.playervelocity=CGPointMake(fncplayer.playervelocity.x, 0.0);
+          self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x, self.player.desiredPosition.y-pl_tl_intersection.size.height);
+          self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
           }
         }
         else if(tileindex==3){
           //tile back left of sprite
-          fncplayer.desiredPosition=CGPointMake(fncplayer.desiredPosition.x+pl_tl_intersection.size.width, fncplayer.desiredPosition.y);
+          self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x+pl_tl_intersection.size.width, self.player.desiredPosition.y);
         }
         else if(tileindex==5){
           //tile front right of sprite
-          fncplayer.desiredPosition=CGPointMake(fncplayer.desiredPosition.x-pl_tl_intersection.size.width, fncplayer.desiredPosition.y);
+          self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x-pl_tl_intersection.size.width, self.player.desiredPosition.y);
         }
         else{
           if(pl_tl_intersection.size.width>pl_tl_intersection.size.height){
             //this is for resolving collision up or down due to ^
             float intersectionheight;
             if(thetileGID!=0){
-            fncplayer.playervelocity=CGPointMake(fncplayer.playervelocity.x, 0.0);
+            self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
             }
             
             if(tileindex>4){
               intersectionheight=pl_tl_intersection.size.height;
-              fncplayer.onGround=YES;
+              self.player.onGround=YES;
             }
             else
               intersectionheight=-pl_tl_intersection.size.height;
             
-            fncplayer.desiredPosition=CGPointMake(fncplayer.desiredPosition.x, fncplayer.desiredPosition.y+intersectionheight);
-         
+            self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x, self.player.desiredPosition.y+intersectionheight);
           }
           else{
             //this is for resolving collisions left or right due to ^
@@ -337,7 +341,7 @@
             else
               intersectionheight=-pl_tl_intersection.size.width;
             
-            fncplayer.desiredPosition=CGPointMake(fncplayer.desiredPosition.x+intersectionheight, fncplayer.desiredPosition.y);
+            self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x+intersectionheight, self.player.desiredPosition.y);
           }
           
         }
@@ -348,7 +352,7 @@
       CGRect hazardtilerect=[self tileRectFromTileCoords:tilecoordinate];
       if(CGRectIntersectsRect(CGRectInset(playerrect, 1, 0), hazardtilerect)){
         [self damageRecievedMsg];
-        if(fncplayer.health<=0){
+        if(self.player.health<=0){
           [self gameOver:0];
         }
       }//if rects intersect
@@ -357,7 +361,7 @@
     
     
   }//for loop bracket
-  fncplayer.position=fncplayer.desiredPosition;
+  self.player.position=self.player.desiredPosition;
 }//fnc bracket
 
 
@@ -627,7 +631,7 @@
   //NSLog(@"adding projectile,count:%d",(int)self.bullets.count);
 }
 
--(void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+-(void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{//maybe need to add for touch in touches
   NSLog(@"recieved CANCELED touch");
   [self.player removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
   [self.player removeActionForKey:@"runf"];
@@ -681,7 +685,7 @@
     }
     else if([enemycon isKindOfClass:[waver class]]){
       waver*enemyconcop=(waver*)enemycon;
-      [enemyconcop updateWithDeltaTime:0.16 andPlayerpos:self.player.position];
+      [enemyconcop updateWithDeltaTime:self.delta andPlayerpos:self.player.position];
       if(fabs(self.player.position.x-enemyconcop.position.x)<40 && fabs(self.player.position.y-enemyconcop.position.y)<60 && !enemyconcop.attacking){
         [enemyconcop attack];
       }
@@ -705,7 +709,6 @@
   
   
   for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){
-    
     if(currbullet.cleanup){//here to avoid another run through of arr
       //NSLog(@"removing from array");
       [self.bullets removeObject:currbullet];
@@ -715,44 +718,20 @@
     
     for(id enemyl in self.enemies){
       //NSLog(@"bullet frame:%@",NSStringFromCGRect(currbullet.frame));
-      if([enemyl isKindOfClass:[sciserenemy class]]){
-        sciserenemy*enemylcop=(sciserenemy*)enemyl;
-        if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
+        enemyBase*enemylcop=(enemyBase*)enemyl;
+        if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame) && !enemylcop.dead){
           //NSLog(@"hit an enemy");
-          enemylcop.health--;
-          if(enemylcop.health<=0){
-            [enemyl removeAllActions];
-            [enemyl removeAllChildren];
-            [enemyl runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}]]]];
-            [self.enemies removeObject:enemyl];
-          }
+          [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies];
           [currbullet removeAllActions];
           [currbullet removeFromParent];
           [self.bullets removeObject:currbullet];
           break; //if bullet hits enemy stop checking for same bullet
-        }
-      }
-      else if([enemyl isKindOfClass:[waver class]]){
-        waver*enemylcop=(waver*)enemyl;
-        if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
-          enemylcop.health--;
-          if(enemylcop.health<=0){
-            [enemyl removeAllActions];
-            [enemyl removeAllChildren];
-            [enemyl runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}]]]];
-            [self.enemies removeObject:enemyl];
-          }
-          [currbullet removeAllActions];
-          [currbullet removeFromParent];
-          [self.bullets removeObject:currbullet];
-          break; //if bullet hits enemy stop checking for same bullet
-        }
+        
       }
     }
   }//for currbullet
   
-  
-  
+ 
 }
 
 -(void)damageRecievedMsg{

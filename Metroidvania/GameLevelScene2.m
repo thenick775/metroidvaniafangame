@@ -13,6 +13,7 @@
 #import "PlayerProjectile.h"
 #import "waver.h"
 #import "gameaudio.h"
+#import "enemyBase.h"
 
 @implementation GameLevelScene2{
     arachnusboss*boss1;
@@ -41,7 +42,7 @@
         self.audiomanager=nil;
         
         //player initializiation stuff
-        self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];//_fusion_walking3_v1.png"];
+        self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];
         self.player.position = CGPointMake(100, 150);
         self.player.zPosition = 15;
         
@@ -68,7 +69,7 @@
         [self.map addChild: starbackground];
         
         //portal adjust position to suit this level
-    self.travelportal.position=CGPointMake(self.map.tileSize.width*391,self.map.tileSize.height*8);
+        self.travelportal.position=CGPointMake(self.map.tileSize.width*391,self.map.tileSize.height*8);
         
         //mutable arrays here
         [self.bullets removeAllObjects];
@@ -191,21 +192,9 @@
     self.audiomanager=[gameaudio alloc];
     [self.audiomanager runBkgrndMusicForlvl:2];
     
-    __weak GameLevelScene2*weakself=self;
+    //__weak GameLevelScene2*weakself=self;
     dispatch_async(dispatch_get_main_queue(), ^{//deal with certain ui on main thread only
-    self.volumeslider=[[UISlider alloc] initWithFrame:CGRectMake(weakself.size.width/2+200,weakself.size.height/2+15, weakself.size.height-40, 15.0)];
-    weakself.volumeslider.minimumValue=0;
-    weakself.volumeslider.maximumValue=100.0;
-    weakself.volumeslider.continuous=YES;
-    weakself.volumeslider.value=70;
-    weakself.volumeslider.hidden=YES;
-    weakself.volumeslider.minimumTrackTintColor=[UIColor redColor];
-    weakself.volumeslider.maximumTrackTintColor=[UIColor darkGrayColor];
-    [weakself.volumeslider setThumbImage:[UIImage imageNamed:@"supermetroid_sliderbar.png"] forState:UIControlStateNormal];
-    [weakself.volumeslider setTransform:CGAffineTransformRotate(weakself.volumeslider.transform, M_PI_2)];
-    [weakself.volumeslider setBackgroundColor:[UIColor clearColor]];
-    [weakself.volumeslider addTarget:weakself action:@selector(slideraction:) forControlEvents:UIControlEventValueChanged];
-    [weakself.view addSubview:weakself.volumeslider];
+    [self setupVolumeSlider];
     });
 }
 
@@ -247,7 +236,7 @@
                 }
             }
             else if(CGRectContainsPoint(self.player.collisionBoundingBox,CGPointAdd(enemyconcop.enemybullet2.position, enemyconcop.position))){
-                //NSLog(@"enemy hit player buller#2");
+                //NSLog(@"enemy hit player bullet#2");
                 [enemyconcop.enemybullet2 setHidden:YES];
                 if(!self.player.plyrrecievingdmg){
                     self.player.plyrrecievingdmg=YES;
@@ -272,12 +261,12 @@
         if(fabs(self.player.position.x-enemyconcop.position.x)<440){
         if(CGRectContainsPoint(CGRectInset(enemyconcop.frame,3,0), self.player.position) && !self.player.plyrrecievingdmg){
                 self.player.plyrrecievingdmg=YES;
-                [self enemyhitplayerdmgmsg:10];
+                [self enemyhitplayerdmgmsg:15];
         }
         for(SKSpriteNode*arachchild in [enemyconcop.projectilesinaction reverseObjectEnumerator]){
             if(CGRectIntersectsRect(self.player.collisionBoundingBox,arachchild.frame) && !self.player.plyrrecievingdmg){
                 self.player.plyrrecievingdmg=YES;
-                [self enemyhitplayerdmgmsg:15];
+                [self enemyhitplayerdmgmsg:22];
             }
         }
     }
@@ -285,7 +274,7 @@
     else if([enemycon isKindOfClass:[honeypot class]]){
         honeypot*enemyconcop=(honeypot*)enemycon;
         if(enemyconcop.dead){
-            [enemyconcop updateWithDeltaTime:0.16];
+            [enemyconcop updateWithDeltaTime:self.delta];
             CGPoint realpos=[self convertPoint:self.player.position toNode:enemyconcop];
             enemyconcop.target.position=vector2((float)realpos.x,(float)realpos.y);
         
@@ -297,7 +286,7 @@
                 if(!child.anger && self.player.meleeinaction && !self.player.meleedelay && CGRectContainsPoint([self.player meleeBoundingBoxNormalized],[self convertPoint:child.position fromNode:enemyconcop])){
                     NSLog(@"hit honeypot child");
                     [enemyconcop dealChildDamage:3 withChild:child];
-                    [self.player runAction:self.player.shortdurationmeleedelayac];
+                    //[self.player runAction:self.player.shortdurationmeleedelayac];
                 }
             }
             if(enemyconcop.agentSystem.components.count==0){
@@ -320,7 +309,7 @@
     }
     else if([enemycon isKindOfClass:[waver class]]){
         waver*enemyconcop=(waver*)enemycon;
-        [enemyconcop updateWithDeltaTime:0.16 andPlayerpos:self.player.position];
+        [enemyconcop updateWithDeltaTime:self.delta andPlayerpos:self.player.position];
         if(fabs(self.player.position.x-enemyconcop.position.x)<40 && fabs(self.player.position.y-enemyconcop.position.y)<60 && !enemyconcop.attacking){
             [enemyconcop attack];
         }
@@ -345,7 +334,6 @@
     
     
     for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){//bullet to enemy
-        
         if(currbullet.cleanup){//here to avoid another run through of arr
             //NSLog(@"removing from array");
             [self.bullets removeObject:currbullet];
@@ -354,25 +342,7 @@
         }
         
         for(id enemyl in self.enemies){
-            //NSLog(@"bullet frame:%@",NSStringFromCGRect(currbullet.frame));
-            if([enemyl isKindOfClass:[sciserenemy class]]){
-                sciserenemy*enemylcop=(sciserenemy*)enemyl;
-            if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
-                //NSLog(@"hit an enemy");
-                enemylcop.health--;
-                if(enemylcop.health<=0){
-                    [enemyl removeAllActions];
-                    [enemyl removeAllChildren];
-                    [enemyl runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}]]]];
-                    [self.enemies removeObject:enemyl];
-                }
-                [currbullet removeAllActions];
-                [currbullet removeFromParent];
-                [self.bullets removeObject:currbullet];
-                break; //if bullet hits enemy stop checking for same bullet
-            }
-        }
-            else if([enemyl isKindOfClass:[arachnusboss class]]){
+        if([enemyl isKindOfClass:[arachnusboss class]]){
                 arachnusboss*enemylcop=(arachnusboss*)enemyl;
                 if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
                     //NSLog(@"hit an enemy");
@@ -387,33 +357,15 @@
                     break; //if bullet hits enemy stop checking for same bullet
                 }
             }
-            else if([enemyl isKindOfClass:[honeypot class]]){
-                honeypot*enemylcop=(honeypot*)enemyl;
-                if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0),currbullet.frame) && [enemylcop actionForKey:@"walk"]/*!enemylcop.dead*/){
-                    enemylcop.health--;
-                    if(enemylcop.health<=0 && /*!enemylcop.dead*/[enemylcop actionForKey:@"walk"]){
-                        [enemylcop runAction:enemylcop.explode];
-                    }
+           else{
+                enemyBase*enemylcop=(enemyBase*)enemyl;
+                if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame) && !enemylcop.dead){
+                    //NSLog(@"hit an enemy");
+                    [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies];
                     [currbullet removeAllActions];
                     [currbullet removeFromParent];
                     [self.bullets removeObject:currbullet];
                     break; //if bullet hits enemy stop checking for same bullet
-                }
-            }
-            else if([enemyl isKindOfClass:[waver class]]){
-                waver*enemylcop=(waver*)enemyl;
-                if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
-                    enemylcop.health--;
-                    if(enemylcop.health<=0){
-                        [enemyl removeAllActions];
-                        [enemyl removeAllChildren];
-                        [enemyl runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[enemyl removeFromParent];}]]]];
-                        [self.enemies removeObject:enemyl];
-                    }
-                [currbullet removeAllActions];
-                [currbullet removeFromParent];
-                [self.bullets removeObject:currbullet];
-                break; //if bullet hits enemy stop checking for same bullet
                 }
             }
       }

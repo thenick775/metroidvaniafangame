@@ -4,8 +4,8 @@
 //
 //  Created by nick vancise on 9/29/18.
 //
-#import <Spritekit/Spritekit.h>
 #import <GameplayKit/GameplayKit.h>
+#import "enemyBase.h"
 
 
 @interface honeypotproj:SKSpriteNode<GKAgentDelegate>
@@ -17,11 +17,11 @@
 
 
 
-@interface honeypot : SKSpriteNode
-@property (nonatomic,assign) int health;
+@interface honeypot : enemyBase
+//@property (nonatomic,assign) int health;
 @property (nonatomic,strong) SKAction *explode;
 @property (nonatomic,strong) SKAction *explodeangry;
-@property (nonatomic,assign) BOOL dead;
+//@property (nonatomic,assign) BOOL dead;
 @property (nonatomic,strong) GKComponentSystem *agentSystem;
 @property (nonatomic,strong) GKAgent2D *target;
 -(instancetype)init;
