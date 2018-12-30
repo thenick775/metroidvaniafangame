@@ -264,7 +264,7 @@
             CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10);
             
             [SKTextureAtlas preloadTextureAtlasesNamed:weaktexturesforlvl1 withCompletionHandler:^(NSError*error,NSArray*foundatlases){
-                    GameLevelScene2*preload=[[GameLevelScene2 alloc]initWithSize:nextSceneSize];
+                    GameLevelScene*preload=[[GameLevelScene alloc]initWithSize:nextSceneSize];
                     preload.scaleMode = SKSceneScaleModeAspectFill;
                         NSLog(@"preloaded lvl1");
                         [weakshipflamesright2 runAction:weakflameflicker];
