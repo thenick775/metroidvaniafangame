@@ -15,7 +15,7 @@
 @property (nonatomic,strong) Player *player;
 @property (nonatomic,strong) JSTileMap *map;
 @property (nonatomic,strong) TMXLayer *walls,*hazards,*mysteryboxes;
-@property (nonatomic,assign) NSTimeInterval storetime;
+@property (nonatomic,assign) NSTimeInterval storetime,delta;
 @property (nonatomic,assign) BOOL gameOver;
 @property (nonatomic,strong) SKLabelNode *healthlabel;
 @property (nonatomic,strong) SKSpriteNode *healthbar,*healthbarborder;
@@ -36,7 +36,9 @@
 -(void) gameOver:(BOOL)didwin;
 -(void)replaybuttonpush:(id)sender;
 -(void)continuebuttonpush:(id)sender;
--(void)pausegame;
--(void)unpausegame;
+-(void)setupVolumeSlider;
+-(CGRect)tileRectFromTileCoords:(CGPoint)fnccoordinate;
+-(NSInteger)tileGIDAtTileCoord:(CGPoint)tilecoordinate forLayer:(TMXLayer *)fnclayer;
+-(void)hitHealthBox;
 
 @end

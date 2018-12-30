@@ -108,11 +108,14 @@
     if(!angrily)
         deathtime=12.0;
     else
-        deathtime=8.0;
+        deathtime=10.0;
     
     float xposconst=-2;
+    int projnum=31;
+    if(angrily)
+        projnum=61;
     
-    for(int i=0;i<30;i++){
+    for(int i=0;i<projnum;i++){
         __weak GKComponentSystem *weakagentSystem=self.agentSystem;
         honeypotproj *tmproj=[[honeypotproj alloc] initWithPosition:CGPointZero andTex:[_honeypotatlas textureNamed:@"honeypotprojectiler.png"] andAnger:angrily];
         __weak honeypotproj*weaktmproj=tmproj;
@@ -145,6 +148,11 @@
     
 }
 
+-(void)hitByBulletWithArrayToRemoveFrom:(NSMutableArray *)arr{
+    self.health--;
+    if(self.health<=0 && [self actionForKey:@"walk"])
+            [self runAction:self.explode];
+}
 
 /*-(void)dealloc{
     NSLog(@"honeypot deallocated");

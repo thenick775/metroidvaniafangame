@@ -47,7 +47,6 @@
         
         [self runAction:bulletseq completion:^{self.cleanup=YES;}];
     }
-    
     return self;
 }
 

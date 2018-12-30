@@ -32,6 +32,7 @@
 		5979C75A213C79A100965A50 /* crateriaTileSet.png in Resources */ = {isa = PBXBuildFile; fileRef = 5979C759213C79A100965A50 /* crateriaTileSet.png */; };
 		5979C75D21447BF700965A50 /* arachnusintroduction.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5979C75B21447BF700965A50 /* arachnusintroduction.sks */; };
 		59C0DE1420B91F25008999C3 /* PlayerProjectile.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C0DE1320B91F25008999C3 /* PlayerProjectile.m */; };
+		59CE01C121CDCD1D00BF13B1 /* enemyBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 59CE01C021CDCD1D00BF13B1 /* enemyBase.m */; };
 		59DAC084218278330077E10C /* gameaudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 59DAC083218278330077E10C /* gameaudio.m */; };
 		59DAC086218278800077E10C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59DAC085218278800077E10C /* AVFoundation.framework */; };
 		59DAC0972187D4430077E10C /* titlescreen_dystopian-future.wav in Resources */ = {isa = PBXBuildFile; fileRef = 59DAC0942187D4430077E10C /* titlescreen_dystopian-future.wav */; };
@@ -104,6 +105,8 @@
 		5979C75B21447BF700965A50 /* arachnusintroduction.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = arachnusintroduction.sks; sourceTree = "<group>"; };
 		59C0DE1220B91F25008999C3 /* PlayerProjectile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerProjectile.h; sourceTree = "<group>"; };
 		59C0DE1320B91F25008999C3 /* PlayerProjectile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerProjectile.m; sourceTree = "<group>"; };
+		59CE01C021CDCD1D00BF13B1 /* enemyBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = enemyBase.m; sourceTree = "<group>"; };
+		59CE01C221CDCD2F00BF13B1 /* enemyBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = enemyBase.h; sourceTree = "<group>"; };
 		59DAC082218278220077E10C /* gameaudio.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gameaudio.h; sourceTree = "<group>"; };
 		59DAC083218278330077E10C /* gameaudio.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = gameaudio.m; sourceTree = "<group>"; };
 		59DAC085218278800077E10C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -196,6 +199,8 @@
 		590F803F2146318F00C09169 /* enemies */ = {
 			isa = PBXGroup;
 			children = (
+				59CE01C221CDCD2F00BF13B1 /* enemyBase.h */,
+				59CE01C021CDCD1D00BF13B1 /* enemyBase.m */,
 				596F2DA720BFAFAE00B32C47 /* sciserenemy.h */,
 				596F2DA820BFAFAE00B32C47 /* sciserenemy.m */,
 				5971B78D215F831000A65C6E /* honeypot.h */,
@@ -492,6 +497,7 @@
 				F275B6E0186E25C1009F6E6B /* SKEmitterNode+SKTExtras.m in Sources */,
 				F275B6DF186E25C1009F6E6B /* SKAction+SKTSpecialEffects.m in Sources */,
 				F275B6E1186E25C1009F6E6B /* SKNode+SKTDebugDraw.m in Sources */,
+				59CE01C121CDCD1D00BF13B1 /* enemyBase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

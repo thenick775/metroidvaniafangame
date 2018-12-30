@@ -25,7 +25,7 @@
     SKAction *shipflyac;
     SKTransition *menutolvl1tran;
     NSArray *texturesforlvl1;
-    NSArray *texturesforlvl2;//here for testing and convience at the moment
+    //NSArray *texturesforlvl2;//here for testing and convience at the moment
     SKAction *_buttonhighlight;
     SKAction *_buttonunhighlight;
     gameaudio*audiomanager;
@@ -106,7 +106,7 @@
         
         SKSpriteNode *ringplanet=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"parallax-space-ring-planet.png"] size:CGSizeMake(51,115)];
         ringplanet.position=CGPointMake(self.size.width/4,self.size.height/2-48);
-        ringplanet.zPosition=2;
+        ringplanet.zPosition=3;
         [self addChild:ringplanet];
         
         SKSpriteNode *farplanets=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"parallax-space-far-planets.png"] size:CGSizeMake(272,160)];
@@ -121,8 +121,8 @@
         [self addChild:self.titlelabel];
         
         
-        SKSpriteNode *referencepoint=[[SKSpriteNode alloc] init];
-        referencepoint.position=bigplanet.position;
+        SKSpriteNode *referencepoint1=[[SKSpriteNode alloc] init];
+        referencepoint1.position=bigplanet.position;
         SKSpriteNode *alienship=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"shipv2.png"]];
         alienship.size=CGSizeMake(28,17);
         alienship.position=CGPointMake(45,50);
@@ -132,11 +132,17 @@
         SKAction *thrustact=[SKAction sequence:@[thrustrepeat,beginningtex,waitthrustersact]];
         alienship.zPosition=2;
         alienship.zRotation=-0.77;
-        [self addChild:referencepoint];
-        [referencepoint addChild:alienship];
-        [referencepoint runAction:[SKAction repeatActionForever:[SKAction rotateByAngle:2*M_PI duration:260]]];
+        [self addChild:referencepoint1];
+        [referencepoint1 addChild:alienship];
+        [referencepoint1 runAction:[SKAction repeatActionForever:[SKAction rotateByAngle:2*M_PI duration:210]]];
         [alienship runAction:[SKAction repeatActionForever:thrustact]];
         
+        SKSpriteNode *humanship=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"humanship.png"]];
+        [humanship setScale:0.2];
+        humanship.zPosition=2;
+        UIBezierPath *ovalpath=[UIBezierPath bezierPathWithOvalInRect:CGRectMake(ringplanet.frame.origin.x+15, ringplanet.frame.origin.y-5, ringplanet.frame.size.width-9, ringplanet.frame.size.height)];
+        [humanship runAction:[SKAction repeatActionForever:[SKAction followPath:ovalpath.CGPath asOffset:NO orientToPath:NO speed:1.0]]];
+        [self addChild:humanship];
         
         self._playlabel=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"playlabel.png"] size:CGSizeMake(120,30)];
         self._playlabel.position=CGPointMake(self.size.width/2+110,self.size.height/2-110);
@@ -152,6 +158,7 @@
         
         self._cntrllabel=[SKSpriteNode spriteNodeWithImageNamed:@"controllabel.png"];
         self._cntrllabel.position=CGPointMake(self.size.width/2-130,self.size.height/2-110);
+        self._cntrllabel.zPosition=4;
         self._cntrllabel.alpha=0;
         [self addChild:self._cntrllabel];
         
@@ -210,7 +217,7 @@
         shipflyac=[SKAction group:@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.7]]];
         [shipflyac setTimingMode:SKActionTimingEaseIn];
        
-        texturesforlvl2=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver"];
+        //texturesforlvl2=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver"];
         texturesforlvl1=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"Waver"];
      
         self.labelsin=[SKAction sequence:@[[SKAction waitForDuration:1.5],[SKAction fadeInWithDuration:1.5]]];
@@ -257,7 +264,7 @@
             CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10);
             
             [SKTextureAtlas preloadTextureAtlasesNamed:weaktexturesforlvl1 withCompletionHandler:^(NSError*error,NSArray*foundatlases){
-                    GameLevelScene*preload=[[GameLevelScene alloc]initWithSize:nextSceneSize];
+                    GameLevelScene2*preload=[[GameLevelScene2 alloc]initWithSize:nextSceneSize];
                     preload.scaleMode = SKSceneScaleModeAspectFill;
                         NSLog(@"preloaded lvl1");
                         [weakshipflamesright2 runAction:weakflameflicker];
