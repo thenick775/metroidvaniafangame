@@ -42,9 +42,11 @@ The gifs may take some time to load due to the filesize, any FPS tags are slower
 
 Credits for art assets ripped by:
 
-Garact Jownson-some background objects from metroid fusion
+Garact Jownson-Some background objects from metroid fusion
 
-Midiwaffle-crateria tileset
+Midiwaffle-Crateria tileset
+
+FlamingCobra-TRO Tileset
 
 B Hopkins & Captain Invictus-samus normal suit
 
@@ -52,9 +54,13 @@ Ray Wenderlich.com-Base super mario assets (1st lvl)
 
 Tommy Lee-"honeypot" walking cactus enemy, metroid sprite (used as volume slider)
 
-N-finity-Arachnus boss, Waver enemy , Sciser enemy
+N-finity-Arachnus boss, Waver enemy , Sciser enemy, Nettori boss
 
-ansimuz-space parallax backround (menu scene background)
+ansimuz-Space parallax backround (menu scene background)
+
+Bob Bobium-Human Station Menuscene (space colony ceres), Door sprites
+
+Greiga Master-Chozo Statue, Nettori boss
 
 Credit for music:
 
@@ -64,6 +70,3 @@ Micah Young-Lost Moon's Grateful Eights (used in lvl1, background music) liscens
 
 deleted_user_38815-newbit2 (used in lvl2, background music) liscensed under Creative Commons Attribution Liscense
 
-Bob Bobium-Human Station Menuscene (space colony ceres), Door sprites
-
-Greiga Master-Chozo Statue
