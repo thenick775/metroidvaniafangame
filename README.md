@@ -68,6 +68,6 @@ BurghRecords-Dystopian Future Fx Sounds (used in menuscene, background music) li
 
 Micah Young-Lost Moon's Grateful Eights (used in lvl1, background music) liscensed under Creative Commons Attribution Liscense
 
-deleted_user_38815-newbit2 (used in lvl2, background music) liscensed under Creative Commons Attribution Liscense
+Yung Kartz-Lonely, Aye licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License.
 
-Makaih Beats-Waves (makaihbeats.net) liscensed under Attribution-NonCommercial-ShareAlike 3.0 United States (CC BY-NC-SA 3.0 US)
+254beats-Trap-2017, Trap Beat 2017 Dope Rap_Trap Instrumental sourced from Mdundo
