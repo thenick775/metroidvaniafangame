@@ -230,42 +230,28 @@
             if(CGRectContainsPoint(self.player.collisionBoundingBox, CGPointAdd(enemyconcop.enemybullet1.position, enemyconcop.position))){
                 //NSLog(@"enemy hit player bullet#1");
                 [enemyconcop.enemybullet1 setHidden:YES];
-                if(!self.player.plyrrecievingdmg){
-                    self.player.plyrrecievingdmg=YES;
-                    [self enemyhitplayerdmgmsg:25];
-                }
+                [self enemyhitplayerdmgmsg:25];
             }
             else if(CGRectContainsPoint(self.player.collisionBoundingBox,CGPointAdd(enemyconcop.enemybullet2.position, enemyconcop.position))){
                 //NSLog(@"enemy hit player bullet#2");
                 [enemyconcop.enemybullet2 setHidden:YES];
-                if(!self.player.plyrrecievingdmg){
-                    self.player.plyrrecievingdmg=YES;
-                    [self enemyhitplayerdmgmsg:25];
-                }
+                [self enemyhitplayerdmgmsg:25];
             }
             if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
                 //NSLog(@"meleehit");
-                enemyconcop.health=enemyconcop.health-10;
                 [self.player runAction:self.player.meleedelayac];
-                if(enemyconcop.health<=0){
-                    [enemyconcop removeAllActions];
-                    [enemyconcop removeAllChildren];
-                    [enemyconcop removeFromParent];
-                    [self.enemies removeObject:enemyconcop];
-                }
+                [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
             }
         }
     }
     else if([enemycon isKindOfClass:[arachnusboss class]]){
         arachnusboss*enemyconcop=(arachnusboss*)enemycon;
         if(fabs(self.player.position.x-enemyconcop.position.x)<440){
-        if(CGRectContainsPoint(CGRectInset(enemyconcop.frame,3,0), self.player.position) && !self.player.plyrrecievingdmg){
-                self.player.plyrrecievingdmg=YES;
+        if(CGRectContainsPoint(CGRectInset(enemyconcop.frame,3,0), self.player.position)){
                 [self enemyhitplayerdmgmsg:15];
         }
         for(SKSpriteNode*arachchild in [enemyconcop.projectilesinaction reverseObjectEnumerator]){
-            if(CGRectIntersectsRect(self.player.collisionBoundingBox,arachchild.frame) && !self.player.plyrrecievingdmg){
-                self.player.plyrrecievingdmg=YES;
+            if(CGRectIntersectsRect(self.player.collisionBoundingBox,arachchild.frame)){
                 [self enemyhitplayerdmgmsg:22];
             }
         }
@@ -279,12 +265,11 @@
             enemyconcop.target.position=vector2((float)realpos.x,(float)realpos.y);
         
             for(honeypotproj *child in [enemyconcop.children reverseObjectEnumerator]){
-                if(CGRectContainsPoint(self.player.frame,[self convertPoint:child.position fromNode:enemyconcop]) && !self.player.plyrrecievingdmg){
-                    self.player.plyrrecievingdmg=YES;
+                if(CGRectContainsPoint(self.player.frame,[self convertPoint:child.position fromNode:enemyconcop])){
                     [self enemyhitplayerdmgmsg:12];
                 }
                 if(!child.anger && self.player.meleeinaction && !self.player.meleedelay && CGRectContainsPoint([self.player meleeBoundingBoxNormalized],[self convertPoint:child.position fromNode:enemyconcop])){
-                    NSLog(@"hit honeypot child");
+                    //NSLog(@"hit honeypot child");
                     [enemyconcop dealChildDamage:3 withChild:child];
                     //[self.player runAction:self.player.shortdurationmeleedelayac];
                 }
@@ -297,8 +282,7 @@
             }
         
         }
-        else if(CGRectIntersectsRect(self.player.frame,enemyconcop.frame) && !self.player.plyrrecievingdmg && [enemyconcop actionForKey:@"walk"]/*!enemyconcop.dead*/){
-            self.player.plyrrecievingdmg=YES;
+        else if(CGRectIntersectsRect(self.player.frame,enemyconcop.frame) && [enemyconcop actionForKey:@"walk"]/*!enemyconcop.dead*/){
             [self enemyhitplayerdmgmsg:15];
         }
         if(self.player.position.x>enemyconcop.position.x+150 && [enemyconcop actionForKey:@"walk"]){
@@ -313,20 +297,13 @@
         if(fabs(self.player.position.x-enemyconcop.position.x)<40 && fabs(self.player.position.y-enemyconcop.position.y)<60 && !enemyconcop.attacking){
             [enemyconcop attack];
         }
-        if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0)) && !self.player.plyrrecievingdmg){
-            self.player.plyrrecievingdmg=YES;
+        if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0))){
             [self enemyhitplayerdmgmsg:15];
         }
         if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
             //NSLog(@"meleehit");
-            enemyconcop.health=enemyconcop.health-10;
             [self.player runAction:self.player.meleedelayac];
-            if(enemyconcop.health<=0){
-                [enemyconcop removeAllActions];
-                [enemyconcop removeAllChildren];
-                [enemyconcop removeFromParent];
-                [self.enemies removeObject:enemyconcop];
-            }
+            [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
         }
     }
         

@@ -52,7 +52,7 @@
 
 
 /*-(void)dealloc{
-    NSLog(@"deallocatin bullet");
+    NSLog(@"deallocating bullet");
 }*/
 
 

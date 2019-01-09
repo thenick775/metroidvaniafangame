@@ -8,12 +8,12 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
-@interface gameaudio : NSObject
+@interface gameaudio : NSObject <AVAudioPlayerDelegate>
 
 
 -(void)runBkgrndMusicForlvl:(int)lvlnum;
 @property(nonatomic,strong) AVAudioPlayer*bkgrndmusic;
-
+@property(nonatomic,assign) float currentVolume;    // % out of 100;
 
 +(AVAudioPlayer*)setupRepeatingSound:(NSString*)file volume:(float)volume;
 +(AVAudioPlayer*)setupSound:(NSString*)file volume:(float)volume;

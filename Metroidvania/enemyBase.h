@@ -14,5 +14,6 @@
 @property (nonatomic,assign) BOOL recievesMelee;
 
 -(void)hitByBulletWithArrayToRemoveFrom:(NSMutableArray*)arr;
+-(void)hitByMeleeWithArrayToRemoveFrom:(NSMutableArray*)arr;
 
 @end

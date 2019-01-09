@@ -7,16 +7,36 @@
 
 #import "gameaudio.h"
 
-@implementation gameaudio
+@implementation gameaudio{
+    NSMutableArray*_musicQueue;  //for background music containing 1 or more tracks to be played
+    int _currentQueueIterator;
+}
 
 -(void)runBkgrndMusicForlvl:(int)lvlnum{
-    if(lvlnum==0)
-        self.bkgrndmusic=[gameaudio setupRepeatingSound:@"titlescreen_dystopian-future.wav" volume:0.7];
-    else if(lvlnum==1)
-        self.bkgrndmusic=[gameaudio setupRepeatingSound:@"lvl1-lost-moon.wav" volume:0.6];
-    else if(lvlnum==2)
-        self.bkgrndmusic=[gameaudio setupRepeatingSound:@"lvl2_newbit2.wav" volume:0.8];
+    _musicQueue=[[NSMutableArray alloc] init];
+    _currentQueueIterator=0;
     
+    if(lvlnum==0){
+        self.currentVolume=0.7;
+        [_musicQueue addObject:[gameaudio setupSound:@"titlescreen_dystopian-future.wav" volume:self.currentVolume]];
+    }
+    else if(lvlnum==1){
+        self.currentVolume=0.6;
+        //self.bkgrndmusic=[gameaudio setupRepeatingSound:@"lvl1-lost-moon.wav" volume:self.currentVolume];
+        [_musicQueue addObject:[gameaudio setupSound:@"lvl1-lost-moon.wav" volume:self.currentVolume]];
+    }
+    else if(lvlnum==2){
+        self.currentVolume=0.65;
+        [_musicQueue addObjectsFromArray:@[[gameaudio setupSound:@"11 Lonely.mp3" volume:self.currentVolume],[gameaudio setupSound:@"Trap Beat 2017, Dope Rap_Trap Instrumentalc.mp3" volume:self.currentVolume]]];
+    }
+    else if(lvlnum==3){
+        self.currentVolume=0.7;
+        [_musicQueue addObjectsFromArray:@[[gameaudio setupSound:@"254Beats-Trap-2017.mp3" volume:self.currentVolume],[gameaudio setupSound:@"Yung_Kartz_-_08_-_Aye.mp3" volume:self.currentVolume]]];
+    }
+    
+    self.bkgrndmusic=_musicQueue[_currentQueueIterator];
+    self.bkgrndmusic.delegate=self;
+    self.currentVolume=self.currentVolume*100;
     [gameaudio playSound:self.bkgrndmusic];
 }
 
@@ -27,7 +47,15 @@
     [gameaudio playSound:self.bkgrndmusic];
 }
 
-
+-(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{//for background music playing continuous tracks
+    _currentQueueIterator++;
+    if(_currentQueueIterator>=_musicQueue.count)
+        _currentQueueIterator=0;
+    
+    self.bkgrndmusic=_musicQueue[_currentQueueIterator];
+    self.bkgrndmusic.volume=player.volume;
+    [gameaudio playSound:self.bkgrndmusic];
+}
 
 
 //class functions

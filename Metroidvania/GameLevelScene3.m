@@ -10,6 +10,7 @@
 #import "waver.h"
 #import "SKTUtils.h"
 #import "PlayerProjectile.h"
+#import "nettoriboss.h"
 
 @implementation GameLevelScene3{
     SKTextureAtlas*_lvl3assets;
@@ -85,28 +86,39 @@
         //doors here
         door *door1=[[door alloc] initWithTextureAtlas:_lvl3assets hasMarker:NO andNames:@[@"door.png",@"door1.png",@"door2.png"]];
         door1.position=CGPointMake(39*self.map.tileSize.width, 7*self.map.tileSize.height);
-        NSLog(@"coord for door1:%@",NSStringFromCGPoint([self.walls coordForPoint:door1.position]));
         [self.map addChild:door1];
         [self.doors addObject:door1];
         
         door *door2=[[door alloc] initWithTextureAtlas:_lvl3assets hasMarker:YES andNames:@[@"bluedoor1.png",@"bluedoor2.png",@"bluedoor3.png",@"bluedoor4.png",@"bluedoor5.png",@"marker",@"bluedoormeniscus1.png",@"bluedoormeniscus2.png",@"bluedoormeniscus3.png",@"bluedoormeniscus4.png",@"doormeniscus5.png"]];
         door2.position=CGPointMake(81*self.map.tileSize.width, 6*self.map.tileSize.height);
-        NSLog(@"coord for door2:%@",NSStringFromCGPoint([self.walls coordForPoint:door2.position]));
         [self.map addChild:door2];
         [self.doors addObject:door2];
         
         door *door3=[[door alloc] initWithTextureAtlas:_lvl3assets hasMarker:NO andNames:@[@"door.png",@"door1.png",@"door2.png"]];
         door3.position=CGPointMake(128.5*self.map.tileSize.width, 6*self.map.tileSize.height);
-        NSLog(@"coord for door1:%@",NSStringFromCGPoint([self.walls coordForPoint:door3.position]));
         [self.map addChild:door3];
         [self.doors addObject:door3];
         
         door *door4=[[door alloc] initWithTextureAtlas:_lvl3assets hasMarker:NO andNames:@[@"door.png",@"door1.png",@"door2.png"]];
         door4.position=CGPointMake(144.5*self.map.tileSize.width, 19*self.map.tileSize.height);
-        NSLog(@"coord for door1:%@",NSStringFromCGPoint([self.walls coordForPoint:door4.position]));
         [self.map addChild:door4];
         [self.doors addObject:door4];
         
+        door *door5=[[door alloc] initWithTextureAtlas:_lvl3assets hasMarker:YES andNames:@[@"bluedoor1.png",@"bluedoor2.png",@"bluedoor3.png",@"bluedoor4.png",@"bluedoor5.png",@"marker",@"bluedoormeniscus1.png",@"bluedoormeniscus2.png",@"bluedoormeniscus3.png",@"bluedoormeniscus4.png",@"doormeniscus5.png"]];
+        door5.position=CGPointMake(178.5*self.map.tileSize.width, 5*self.map.tileSize.height);
+        [self.map addChild:door5];
+        [self.doors addObject:door5];
+        
+        //enemies here
+        nettoriboss *nettori=[[nettoriboss alloc] initWithPosition:CGPointMake(176*self.map.tileSize.width-10, 5*self.map.tileSize.height-2)];
+        [self.map addChild:nettori];
+        [self.enemies addObject:nettori];
+        
+        //SKEmitterNode*nettoriproj=[SKEmitterNode nodeWithFileNamed:@"nettori_projectile.sks"];
+        //nettoriproj.position=CGPointMake(nettori.position.x-100, nettori.position.y+50);
+        //nettoriproj.particleRenderOrder=SKParticleRenderOrderDontCare;
+        //[self.map addChild:nettoriproj];
+    
     }
     return self;
 }
@@ -114,7 +126,7 @@
 -(void)didMoveToView:(SKView *)view{
     //setup sound
     self.audiomanager=[gameaudio alloc];
-    //[self.audiomanager runBkgrndMusicForlvl:2];
+    [self.audiomanager runBkgrndMusicForlvl:3];
     
     //__weak GameLevelScene3*weakself=self;
     dispatch_async(dispatch_get_main_queue(), ^{//deal with certain ui on main thread only
@@ -139,29 +151,17 @@
                 if(CGRectContainsPoint(self.player.collisionBoundingBox, CGPointAdd(enemyconcop.enemybullet1.position, enemyconcop.position))){
                     //NSLog(@"enemy hit player bullet#1");
                     [enemyconcop.enemybullet1 setHidden:YES];
-                    if(!self.player.plyrrecievingdmg){
-                        self.player.plyrrecievingdmg=YES;
-                        [self enemyhitplayerdmgmsg:25];
-                    }
+                    [self enemyhitplayerdmgmsg:25];
                 }
                 else if(CGRectContainsPoint(self.player.collisionBoundingBox,CGPointAdd(enemyconcop.enemybullet2.position, enemyconcop.position))){
                     //NSLog(@"enemy hit player buller#2");
                     [enemyconcop.enemybullet2 setHidden:YES];
-                    if(!self.player.plyrrecievingdmg){
-                        self.player.plyrrecievingdmg=YES;
-                        [self enemyhitplayerdmgmsg:25];
-                    }
+                    [self enemyhitplayerdmgmsg:25];
                 }
                 if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
                     //NSLog(@"meleehit");
-                    enemyconcop.health=enemyconcop.health-10;
                     [self.player runAction:self.player.meleedelayac];
-                    if(enemyconcop.health<=0){
-                        [enemycon removeAllActions];
-                        [enemycon removeAllChildren];
-                        [enemycon removeFromParent];
-                        [self.enemies removeObject:enemycon];
-                    }
+                    [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
                 }
             }
         }
@@ -171,21 +171,17 @@
             if(fabs(self.player.position.x-enemyconcop.position.x)<40 && fabs(self.player.position.y-enemyconcop.position.y)<60 && !enemyconcop.attacking){
                 [enemyconcop attack];
             }
-            if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0)) && !self.player.plyrrecievingdmg){
-                self.player.plyrrecievingdmg=YES;
+            if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0))){
                 [self enemyhitplayerdmgmsg:15];
             }
             if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
                 //NSLog(@"meleehit");
-                enemyconcop.health=enemyconcop.health-10;
                 [self.player runAction:self.player.meleedelayac];
-                if(enemyconcop.health<=0){
-                    [enemyconcop removeAllActions];
-                    [enemyconcop removeAllChildren];
-                    [enemyconcop removeFromParent];
-                    [self.enemies removeObject:enemyconcop];
-                }
+                [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
             }
+        }
+        else if([enemycon isKindOfClass:[nettoriboss class]]){
+            [enemycon updateWithDeltaTime:self.delta];
         }
     }
     
@@ -212,7 +208,7 @@
         }
         
         for(door* door in _doors){//maybe handle doors along with enemies to disperse run through of this array
-            if(fabs((self.player.position.x-door.position.x)<180) && CGRectIntersectsRect(door.frame, currbullet.frame) && !door.passable){
+            if(fabs((self.player.position.x-door.position.x)<180) && CGRectIntersectsRect(door.frame, currbullet.frame) && !door.openAlready){
             [door opendoor];
             [currbullet removeAllActions];
             [currbullet removeFromParent];
@@ -341,6 +337,7 @@
                 }
             }//if rects intersect
         }//if hazard tile
+        
         if(tileindex==3 || tileindex==5 || tileindex==1 || tileindex==7){
         for(door*tmpdoor in self.doors){
             [tmpdoor handleCollisionsWithPlayer:self.player];

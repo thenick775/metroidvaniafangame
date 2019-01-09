@@ -271,7 +271,6 @@
                         [weakshipflamesleft2 runAction:weakflameflicker];
                         [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
                 }];
-            
         }
     }
 }

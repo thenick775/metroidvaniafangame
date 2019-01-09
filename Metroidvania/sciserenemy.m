@@ -32,8 +32,12 @@
         self.enemybullet2=[SKSpriteNode spriteNodeWithImageNamed:@"scisserprojectile2.png"];
         self.enemybullet1.position=CGPointMake(12,4);    //dependent on "self's" position
         self.enemybullet2.position=CGPointMake(-12,4);
-        __weak SKSpriteNode* enemybullet1=self.enemybullet1;
-        __weak SKSpriteNode* enemybullet2=self.enemybullet2;
+        [self addChild:self.enemybullet1];
+        [self addChild:self.enemybullet2];
+        __weak SKSpriteNode* weakenemybullet1=self.enemybullet1;
+        __weak SKSpriteNode* weakenemybullet2=self.enemybullet2;
+        weakenemybullet1.hidden=YES;
+        weakenemybullet2.hidden=YES;
         
         self.position=sciserpos;
         _moveaction=[SKAction animateWithTextures:moveanim timePerFrame:0.25];
@@ -49,8 +53,14 @@
         [projpath2 moveToPoint:CGPointMake(0,0)];
         [projpath2 addQuadCurveToPoint:CGPointMake(-42, -15) controlPoint:CGPointMake(-40, 35)];
         
-        __weak sciserenemy*weakself=self;
-        SKAction *letknowaction=[SKAction runBlock:^{[weakself addChild:enemybullet1];[weakself addChild:enemybullet2];[enemybullet1 runAction:[SKAction followPath:projpath1.CGPath duration:0.75] completion:^{[enemybullet1 removeFromParent];enemybullet1.position=CGPointMake(12,4);}];[enemybullet2 runAction:[SKAction followPath:projpath2.CGPath duration:0.75] completion:^{[enemybullet2 removeFromParent];enemybullet2.position=CGPointMake(-12,4);}];[enemybullet1 setHidden:NO];[enemybullet2 setHidden:NO];}];
+        //__weak sciserenemy*weakself=self;
+        /*SKAction *letknowaction=[SKAction runBlock:^{[weakself addChild:weakenemybullet1];[weakself addChild:weakenemybullet2];[weakenemybullet1 runAction:[SKAction followPath:projpath1.CGPath duration:0.75] completion:^{[weakenemybullet1 removeFromParent];weakenemybullet1.position=CGPointMake(12,4);}];[weakenemybullet2 runAction:[SKAction followPath:projpath2.CGPath duration:0.75] completion:^{[weakenemybullet2 removeFromParent];weakenemybullet2.position=CGPointMake(-12,4);}];[weakenemybullet1 setHidden:NO];[weakenemybullet2 setHidden:NO];}];*/
+        SKAction *letknowaction=[SKAction runBlock:^{
+            weakenemybullet1.hidden=NO;
+            weakenemybullet2.hidden=NO;
+            [weakenemybullet1 runAction:[SKAction followPath:projpath1.CGPath duration:0.75] completion:^{weakenemybullet1.hidden=YES;weakenemybullet1.position=CGPointMake(12,4);}];
+            [weakenemybullet2 runAction:[SKAction followPath:projpath2.CGPath duration:0.75] completion:^{weakenemybullet2.hidden=YES;weakenemybullet2.position=CGPointMake(-12,4);}];
+        }];
         SKAction *waitac=[SKAction waitForDuration:1.0];
         NSArray  *waitletknow=@[waitac,letknowaction,waitac];
         SKAction *group=[SKAction group:[NSArray arrayWithObjects:_fireaction,waitletknow, nil]];//need to use arraywithobjects here

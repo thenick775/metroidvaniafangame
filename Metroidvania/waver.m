@@ -61,16 +61,16 @@
 }
 
 -(void)updateWithDeltaTime:(NSTimeInterval)seconds andPlayerpos:(CGPoint)playerpos{
-    NSTimeInterval delta=seconds-_storetime;
+    //NSTimeInterval delta=seconds-_storetime;//might not be needed, need to test
     
     if([_agent.behavior weightForGoal:_seektarget]!=0){
         _target.position=vector2((float)playerpos.x,(float)playerpos.y);
     }
     
-    if(delta<0.16)
-        delta=0.16;
+    if(seconds<0.16)
+        seconds=0.16;
     
-    [_agent updateWithDeltaTime:delta];
+    [_agent updateWithDeltaTime:seconds];
 }
 
 -(void)agentWillUpdate:(GKAgent2D *)agent{
@@ -88,7 +88,7 @@
     [_agent.behavior setWeight:20.0 forGoal:_seektarget];
     [_agent.behavior setWeight:0.0 forGoal:_stayonpath];
     [_agent.behavior setWeight:0.0 forGoal:_wander];
-    _agent.maxSpeed=15;
+    _agent.maxSpeed=17;
     _agent.mass=2;
     __weak GKAgent2D*weakagent=_agent;
     __weak GKGoal*weakseektarget=_seektarget;
