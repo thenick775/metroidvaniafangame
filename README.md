@@ -33,11 +33,13 @@ Technical details:
 The gifs may take some time to load due to the filesize, any FPS tags are slower than on actual device (gifs captured on simulator), I am also in the process of making a new set of gifs as some of the UI has been updated.
 
 
-![](menuscenedemo.gif)
+![](menuscenedemo_v2.gif)
 
-![](honeypottrackdemo.gif)
+![](honeypottrackdemo_v2.gif)
 
-![](bossdemo.gif)
+![](bossdemo_v1.gif)
+
+![](lvl3demo_v1.gif)
 
 
 Credits for art assets ripped by:
