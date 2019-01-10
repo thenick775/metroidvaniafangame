@@ -92,14 +92,13 @@
 }
 
 -(void)updateWithDeltaTime:(NSTimeInterval)seconds{
-    NSTimeInterval delta=seconds-_storetime;
     
-    if(delta<0.16)
-        delta=0.16;
+    if(seconds<0.16)
+        seconds=0.16;
     
     _storetime=seconds;
     
-    [self.agentSystem updateWithDeltaTime:delta];
+    [self.agentSystem updateWithDeltaTime:seconds];
 }
 
 -(void)projectileAttack:(BOOL)angrily{

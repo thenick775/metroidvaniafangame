@@ -23,4 +23,16 @@
     
 }
 
+-(void)hitByMeleeWithArrayToRemoveFrom:(NSMutableArray*)arr{
+    self.health=self.health-10;
+    if(self.health<=0){
+        [self removeAllActions];
+        [self removeAllChildren];
+        //[self removeFromParent];
+        __weak enemyBase*weakself=self;
+        [self runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.1],[SKAction runBlock:^{[weakself removeFromParent];}]]]];
+        [arr removeObject:self];
+    }
+}
+
 @end

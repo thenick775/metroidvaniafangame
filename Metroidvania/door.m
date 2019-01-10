@@ -20,6 +20,7 @@
         self.passable=NO;
         self.anchorPoint=CGPointMake(1,0);
         self.zPosition=17;
+        self.openAlready=NO;
         
         NSMutableArray*animationNames=[[NSMutableArray alloc] init];
         NSMutableArray*meniscusAnimationNames=[[NSMutableArray alloc] init];
@@ -44,8 +45,8 @@
             _meniscus=[SKSpriteNode spriteNodeWithTexture:meniscusAnimationNames[0]];
             _meniscus.position=CGPointMake(-(self.size.width+3),32);
             [self addChild:_meniscus];
-            SKAction*openac=[SKAction animateWithTextures:[animationNames copy] timePerFrame:0.1];
-            SKAction*meniscusac=[SKAction animateWithTextures:meniscusAnimationNames timePerFrame:0.1];
+            SKAction*openac=[SKAction animateWithTextures:[animationNames copy] timePerFrame:0.08];
+            SKAction*meniscusac=[SKAction animateWithTextures:meniscusAnimationNames timePerFrame:0.08];
             __weak SKSpriteNode*weakmeniscus=_meniscus;
             _open=[SKAction group:@[openac,[SKAction runBlock:^{[weakmeniscus runAction:meniscusac];}]]];
             _close=[SKAction group:@[[openac reversedAction],[SKAction runBlock:^{[weakmeniscus runAction:[meniscusac reversedAction]];}]]];
@@ -62,19 +63,18 @@
 -(void)opendoor{
     __weak door*weakdoor=self;
     __weak SKAction*weakdoorclose=_close;
-    [self runAction:_open completion:^{weakdoor.passable=YES;[weakdoor runAction:[SKAction sequence:@[[SKAction waitForDuration:2.3],weakdoorclose]] completion:^{weakdoor.passable=NO;}];}];
+    self.openAlready=YES;
+    [self runAction:_open completion:^{weakdoor.passable=YES;[weakdoor runAction:[SKAction sequence:@[[SKAction waitForDuration:2.3],weakdoorclose]] completion:^{weakdoor.passable=NO;weakdoor.openAlready=NO;}];}];
 }
 
 -(void)handleCollisionsWithPlayer:(Player*)player{
     if(fabs((player.position.x-self.position.x)<180) && CGRectIntersectsRect(self.frame, player.frame) && !self.passable){
         //CGRect intersection=CGRectIntersection(self.frame, player.frame);
         
-        if(player.position.x-self.position.x<0){
+        if(player.position.x-self.position.x<0)
             player.desiredPosition=CGPointMake(player.desiredPosition.x-0.85/*intersection.size.width*/, player.desiredPosition.y);
-        }
-        else{
+        else
             player.desiredPosition=CGPointMake(player.desiredPosition.x+0.85/*intersection.size.width*/, player.desiredPosition.y);
-        }
         
     }
 }

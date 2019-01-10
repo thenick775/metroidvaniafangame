@@ -40,7 +40,7 @@
         self.plyrdmgwaitlock=[SKAction sequence:@[[SKAction waitForDuration:3.0],[SKAction runBlock:^{weakself.plyrrecievingdmg=NO;}]]];
         self.damageaction=[SKAction sequence:@[[SKAction colorizeWithColor:[UIColor redColor] colorBlendFactor:0.7 duration:0.1],[SKAction colorizeWithColorBlendFactor:0.0 duration:0.1]]];
         self.meleedelayac=[SKAction sequence:@[[SKAction runBlock:^{weakself.meleedelay=YES;}],[SKAction waitForDuration:1.2],[SKAction runBlock:^{weakself.meleedelay=NO;}]]];
-        //self.shortdurationmeleedelayac=[SKAction sequence:@[[SKAction runBlock:^{weakself.meleedelay=YES;}],/*[SKAction waitForDuration:0.15],*/[SKAction runBlock:^{weakself.meleedelay=NO;}]]];
+        //self.shortdurationmeleedelayac=[SKAction sequence:@[[SKAction runBlock:^{weakself.meleedelay=YES;}],[SKAction waitForDuration:0.15],[SKAction runBlock:^{weakself.meleedelay=NO;}]]];
         
         //case for jumping to stay jumping until on ground
         SKAction *jmpblk=[SKAction runBlock:^{/*NSLog(@"checkingjmpblk");*/if(weakself.onGround){

@@ -183,7 +183,7 @@
   self.volumeslider.minimumValue=0;
   self.volumeslider.maximumValue=100.0;
   self.volumeslider.continuous=YES;
-  self.volumeslider.value=70;
+  self.volumeslider.value=self.audiomanager.currentVolume;
   self.volumeslider.hidden=YES;
   self.volumeslider.minimumTrackTintColor=[UIColor redColor];
   self.volumeslider.maximumTrackTintColor=[UIColor darkGrayColor];
@@ -657,29 +657,17 @@
         if(CGRectContainsPoint(self.player.collisionBoundingBox, CGPointAdd(enemyconcop.enemybullet1.position, enemyconcop.position))){
           //NSLog(@"enemy hit player bullet#1");
           [enemyconcop.enemybullet1 setHidden:YES];
-          if(!self.player.plyrrecievingdmg){
-            self.player.plyrrecievingdmg=YES;
-            [self enemyhitplayerdmgmsg:25];
-          }
+          [self enemyhitplayerdmgmsg:25];
         }
         else if(CGRectContainsPoint(self.player.collisionBoundingBox,CGPointAdd(enemyconcop.enemybullet2.position, enemyconcop.position))){
           //NSLog(@"enemy hit player buller#2");
           [enemyconcop.enemybullet2 setHidden:YES];
-          if(!self.player.plyrrecievingdmg){
-            self.player.plyrrecievingdmg=YES;
-            [self enemyhitplayerdmgmsg:25];
-          }
+          [self enemyhitplayerdmgmsg:25];
         }
         if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
           //NSLog(@"meleehit");
-          enemyconcop.health=enemyconcop.health-10;
           [self.player runAction:self.player.meleedelayac];
-          if(enemyconcop.health<=0){
-            [enemycon removeAllActions];
-            [enemycon removeAllChildren];
-            [enemycon removeFromParent];
-            [self.enemies removeObject:enemycon];
-          }
+          [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
         }
       }
     }
@@ -689,20 +677,13 @@
       if(fabs(self.player.position.x-enemyconcop.position.x)<40 && fabs(self.player.position.y-enemyconcop.position.y)<60 && !enemyconcop.attacking){
         [enemyconcop attack];
       }
-      if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0)) && !self.player.plyrrecievingdmg){
-        self.player.plyrrecievingdmg=YES;
+      if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0))){
         [self enemyhitplayerdmgmsg:15];
       }
       if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
         //NSLog(@"meleehit");
-        enemyconcop.health=enemyconcop.health-10;
         [self.player runAction:self.player.meleedelayac];
-        if(enemyconcop.health<=0){
-          [enemyconcop removeAllActions];
-          [enemyconcop removeAllChildren];
-          [enemyconcop removeFromParent];
-          [self.enemies removeObject:enemyconcop];
-        }
+        [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
       }
     }
   }
@@ -742,6 +723,8 @@
   
 }
 -(void)enemyhitplayerdmgmsg:(int)hit{
+  if(!self.player.plyrrecievingdmg){
+  self.player.plyrrecievingdmg=YES;
   self.player.health=self.player.health-hit;
   if(self.player.health<=0 && !self.gameOver){
     self.player.health=0;
@@ -751,6 +734,7 @@
   self.healthbar.size=CGSizeMake((((float)self.player.health/100)*_healthbarsize), self.healthbar.size.height);
   
   [self.player runAction:[SKAction group:@[self.player.plyrdmgwaitlock,[SKAction repeatAction:self.player.damageaction count:15]]]];
+  }
 }
 
 -(void)pausegame{
@@ -782,6 +766,7 @@
 -(void)slideraction:(id)sender{
   UISlider*tmpslider=(UISlider*)sender;
   self.audiomanager.bkgrndmusic.volume=tmpslider.value/100;
+  self.audiomanager.currentVolume=tmpslider.value;
 }
 
 -(void) gameOver:(BOOL)didwin{
