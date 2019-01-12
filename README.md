@@ -40,6 +40,7 @@ The gifs may take some time to load due to the filesize, any FPS tags are slower
 
 
 Credits for art assets ripped by:
+
 Garact Jownson-Some background objects from metroid fusion
 Midiwaffle-Crateria tileset
 FlamingCobra-TRO Tileset
@@ -52,6 +53,7 @@ Bob Bobium-Human Station Menuscene (space colony ceres), Door sprites
 Greiga Master-Chozo Statue, Nettori boss
 
 Credit for music:
+
 BurghRecords-Dystopian Future Fx Sounds (used in menuscene, background music) liscensed under Creative Commons 0 Liscense
 Micah Young-Lost Moon's Grateful Eights (used in lvl1, background music) liscensed under Creative Commons Attribution Liscense
 Yung Kartz-Lonely, Aye licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License.
