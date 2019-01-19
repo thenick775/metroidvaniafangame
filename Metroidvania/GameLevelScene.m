@@ -17,7 +17,22 @@
 #import "PlayerProjectile.h"
 #import "sciserenemy.h"
 #import "waver.h"
+#import "joystick.h"
 
+
+@implementation MySlider //created to make a more responsive UISlider
+-(BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event{//adjust here to adjust the size of the entire slider hit area
+  CGRect mybound=CGRectMake(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width+5, self.bounds.size.height+45);
+  return CGRectContainsPoint(mybound, point);
+}
+- (BOOL) beginTrackingWithTouch:(UITouch*)touch withEvent:(UIEvent*)event {
+  CGRect bounds = self.bounds;
+  float thumbPercent = (self.value - self.minimumValue) / (self.maximumValue - self.minimumValue);
+  float thumbPos = [self currentThumbImage].size.height + (thumbPercent * (bounds.size.width+5 - (2 * [self currentThumbImage].size.height)));
+  CGPoint touchPoint = [touch locationInView:self];
+  return (touchPoint.x >= (thumbPos - 45) && touchPoint.x <= (thumbPos + 25));//adjust where the x pos of your touch falls relative to the slider thumb
+}
+@end
 
 @implementation GameLevelScene{
   NSString *fintext;
@@ -25,7 +40,7 @@
   UIButton *replaybutton;
   UIButton *continuebutton;
   SKSpriteNode*_pauselabel,*_unpauselabel;
-  UISlider*_volumeslider;
+  joystick*myjoystick;
 }
 
 -(instancetype)initWithSize:(CGSize)size {
@@ -113,33 +128,20 @@
     _pauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"pauselabel.png"];
     _pauselabel.position=CGPointMake(0,35);
     _unpauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"unpauselabel.png"];
-    _unpauselabel.position=CGPointMake(0,10);
+    _unpauselabel.position=CGPointMake(0,0);
+    [_unpauselabel setScale:1.35];
     
     //portal stuff
     _travelportal=[[TravelPortal alloc] initWithImage:@"travelmirror.png"];
     _travelportal.position=CGPointMake((self.map.mapSize.width * self.map.tileSize.width)-120, 95.0);
     
-    //button initialization
-    self.buttonhighlight=[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05];
-    self.buttonunhighlight=[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05];
-    
-    _buttonup=[SKSpriteNode spriteNodeWithImageNamed:@"buttonupv4real.png"];
-    _buttonup.position=CGPointMake((-2*(self.size.width/6)), -36);
-    _buttonup.zPosition=14;
-    [self.camera addChild:_buttonup];
-    
-    _buttonleft=[SKSpriteNode spriteNodeWithImageNamed:@"buttonleftv2real.png"];
-    _buttonleft.position=CGPointMake((-2*(self.size.width/6))-28, -75);
-    _buttonleft.zPosition=14;
-    [self.camera addChild:_buttonleft];
-   
-    _buttonright=[SKSpriteNode spriteNodeWithImageNamed:@"buttonrightv2real.png"];
-    _buttonright.position=CGPointMake((-2*(self.size.width/6))+28, -75);
-    _buttonright.zPosition=14;
-    [self.camera addChild:_buttonright];
+    //joystick initialization
+    myjoystick=[[joystick alloc] initWithPos:CGPointMake(-158.27777099609375, -75)];
+    [self.camera addChild:myjoystick];
     
     _startbutton=[SKSpriteNode spriteNodeWithImageNamed:@"startbutton.png"];
-    _startbutton.position=CGPointMake(self.size.width/4+90,self.size.height/2-12);
+    [_startbutton setScale:1.1];
+    _startbutton.position=CGPointMake(self.size.width/4+88,self.size.height/2-12);
     [self.camera addChild:_startbutton];
     
     //scene mutable arrays here
@@ -147,7 +149,7 @@
     self.enemies=[[NSMutableArray alloc]init];
     
     //enemies here
-    sciserenemy *enemy=[[sciserenemy alloc] initWithPos:CGPointMake(self.player.position.x+100, self.player.position.y-108)];
+    sciserenemy *enemy=[[sciserenemy alloc] initWithPos:CGPointMake(12.5*self.map.tileSize.width,2.625*self.map.tileSize.height)];
     [self.enemies addObject:enemy];
     [self.map addChild:enemy];
     
@@ -179,7 +181,7 @@
 }
 
 -(void)setupVolumeSlider{//**setup on main thread only**might set call to main thread in this function..
-  self.volumeslider=[[UISlider alloc] initWithFrame:CGRectMake(self.size.width/2+200,self.size.height/2+15, self.size.height-40, 15.0)];
+  self.volumeslider=[[MySlider alloc] initWithFrame:CGRectMake(self.size.width/2+200,self.size.height/2+15, self.size.height-40, 15.0)];
   self.volumeslider.minimumValue=0;
   self.volumeslider.maximumValue=100.0;
   self.volumeslider.continuous=YES;
@@ -375,7 +377,7 @@
   for(UITouch *touch in touches){
     //NSLog(@"touchbegan");
     CGPoint touchlocation=[touch locationInNode:self.camera];  //location of the touch
-    
+    [myjoystick moveFingertrackerto:touchlocation];
     //start delegating parts of the screen to specific movements
     
     if(self.paused && CGRectContainsPoint(_unpauselabel.frame, touchlocation)) //check for unpause
@@ -386,30 +388,27 @@
       //[self.startbutton runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05] completion:^{NSLog(@"coloringstart");
       [self pausegame];
     }
-    else if(CGRectContainsPoint(_buttonright.frame, touchlocation)){
+    else if([myjoystick shouldGoForeward:touchlocation]){
       //NSLog(@"touching right control");
       self.player.goForeward=YES;
       
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
       
-      [_buttonright runAction:self.buttonhighlight];
       [self.player runAction:self.player.runAnimation withKey:@"runf"];
     }
-    else if(CGRectContainsPoint(_buttonleft.frame, touchlocation)){
+    else if([myjoystick shouldGoBackward:touchlocation]){
       //NSLog(@"touching left control");
       self.player.goBackward=YES;
       
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
       
-      [_buttonleft runAction:self.buttonhighlight];
       [self.player runAction:self.player.runBackwardsAnimation withKey:@"runb"];
     }
-    else if(CGRectContainsPoint(_buttonup.frame,touchlocation)){
+    else if([myjoystick shouldJump:touchlocation]){
       //NSLog(@"touching up control");
       self.player.shouldJump=YES;
-      [_buttonup runAction:self.buttonhighlight];
       if(self.player.forwardtrack)
         [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       else
@@ -430,45 +429,36 @@
   
   //NSLog(@"Touch is moving");
   for(UITouch *touch in touches){
-  
+    
     CGPoint currtouchlocation=[touch locationInNode:self.camera];
     CGPoint previoustouchlocation=[touch previousLocationInNode:self.camera];
-    
+    [myjoystick moveFingertrackerto:currtouchlocation];
     if(currtouchlocation.x>self.size.width/2 && (previoustouchlocation.x<=self.size.width/2)){
       //NSLog(@"moving to firing weapon");
       self.player.shouldJump=NO;
-      [_buttonup runAction:self.buttonunhighlight];
       self.player.goForeward=NO;
-      [_buttonright runAction:self.buttonunhighlight];
       self.player.goBackward=NO;
-      [_buttonleft runAction:self.buttonunhighlight];
     }
-    else if(CGRectContainsPoint(_buttonup.frame, currtouchlocation) && CGRectContainsPoint(_buttonright.frame, previoustouchlocation)){
+    else if([myjoystick shouldJump:currtouchlocation] && [myjoystick shouldGoForeward:previoustouchlocation]){
     //NSLog(@"moving from move right to jumping");
       self.player.shouldJump=YES;
-      [_buttonup runAction:self.buttonhighlight];
       self.player.goForeward=NO;
-      [_buttonright runAction:self.buttonunhighlight];
       
       [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       [self.player removeActionForKey:@"runf"];
     }
-    else if(CGRectContainsPoint(_buttonup.frame, currtouchlocation) && CGRectContainsPoint(_buttonleft.frame, previoustouchlocation)){
+    else if([myjoystick shouldJump:currtouchlocation] && [myjoystick shouldGoBackward:previoustouchlocation]){
       //NSLog(@"moving from move backward to jumping");
       self.player.shouldJump=YES;
-      [_buttonup runAction:self.buttonhighlight];
       self.player.goBackward=NO;
-      [_buttonleft runAction:self.buttonunhighlight];
       
       [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
       [self.player removeActionForKey:@"runb"];
     }
-    else if(CGRectContainsPoint(_buttonright.frame, currtouchlocation) && CGRectContainsPoint(_buttonleft.frame, previoustouchlocation)){
+    else if([myjoystick shouldGoForeward:currtouchlocation] && [myjoystick shouldGoBackward:previoustouchlocation]){
       //NSLog(@"moving from move backward to moveforeward");
       self.player.goForeward=YES;
-      [_buttonright runAction:self.buttonhighlight];
       self.player.goBackward=NO;
-      [_buttonleft runAction:self.buttonunhighlight];
       
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
@@ -476,12 +466,10 @@
       [self.player runAction:self.player.runAnimation withKey:@"runf"];
       [self.player removeActionForKey:@"runb"];
     }
-    else if(CGRectContainsPoint(_buttonright.frame, currtouchlocation) && CGRectContainsPoint(_buttonup.frame, previoustouchlocation)){
+    else if([myjoystick shouldGoForeward:currtouchlocation] && [myjoystick shouldJump:previoustouchlocation]){
       //NSLog(@"move up to move foreward");
       self.player.goForeward=YES;
-      [_buttonright runAction:self.buttonhighlight];
       self.player.shouldJump=NO;
-      [_buttonup runAction:self.buttonunhighlight];
       
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
@@ -489,12 +477,10 @@
       [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
     }
-    else if(CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && CGRectContainsPoint(_buttonright.frame, previoustouchlocation)){
+    else if([myjoystick shouldGoBackward:currtouchlocation] && [myjoystick shouldGoForeward:previoustouchlocation]){
       //NSLog(@"move forewards to movebackwards");
       self.player.goBackward=YES;
-      [_buttonleft runAction:self.buttonhighlight];
       self.player.goForeward=NO;
-      [_buttonright runAction:self.buttonunhighlight];
       
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
@@ -502,12 +488,10 @@
       [self.player runAction:self.player.runBackwardsAnimation withKey:@"runb"];
       [self.player removeActionForKey:@"runf"];
     }
-    else if(CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && CGRectContainsPoint(_buttonup.frame, previoustouchlocation)){
+    else if([myjoystick shouldGoBackward:currtouchlocation] && [myjoystick shouldJump:previoustouchlocation]){
       //NSLog(@"move up to movebackwards");
       self.player.goBackward=YES;
-      [_buttonleft runAction:self.buttonhighlight];
       self.player.shouldJump=NO;
-      [_buttonup runAction:self.buttonunhighlight];
       
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
@@ -515,15 +499,11 @@
       [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
     }
-    else if(!CGRectContainsPoint(_buttonup.frame, currtouchlocation) && !CGRectContainsPoint(_buttonright.frame, currtouchlocation) && !CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && currtouchlocation.x<self.camera.frame.size.width/2){
+    /*else if(!CGRectContainsPoint(_buttonup.frame, currtouchlocation) && !CGRectContainsPoint(_buttonright.frame, currtouchlocation) && !CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && currtouchlocation.x<self.camera.frame.size.width/2){
       //NSLog(@"not in dpad");
       self.player.shouldJump=NO;
       self.player.goForeward=NO;
       self.player.goBackward=NO;
-      [_buttonup runAction:self.buttonunhighlight];
-      [_buttonright runAction:self.buttonunhighlight];
-      [_buttonleft runAction:self.buttonunhighlight];
-
       
       [self.player removeActionForKey:@"runf"];
       [self.player removeActionForKey:@"runb"];
@@ -537,7 +517,7 @@
       else{
         [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
       }
-    }
+    }*/
     
     
   }//for uitouch bracket
@@ -562,7 +542,7 @@
   
   for(UITouch *touch in touches){
   CGPoint fnctouchlocation=[touch locationInNode:self.camera];
-  
+    [myjoystick resetFingertracker];
     [self.player removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
     [self.player removeActionForKey:@"runf"];   //also these movements must be NO after every touch finishes
     self.player.goForeward=NO;                   //initial solution for fixing sticky buttons
@@ -572,28 +552,21 @@
     [self.player removeActionForKey:@"jmpb"];
     self.player.shouldJump=NO;
     
-    [_buttonup runAction:self.buttonunhighlight];
-    [_buttonright runAction:self.buttonunhighlight];
-    [_buttonleft runAction:self.buttonunhighlight];
-    
-    if(CGRectContainsPoint(_buttonup.frame, fnctouchlocation)){
+    if([myjoystick shouldJump:fnctouchlocation]){
       //NSLog(@"done touching up");
-      //self.player.shouldJump=NO;
       if(self.player.backwardtrack)
         [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
       else
         [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
     }
-    else if(CGRectContainsPoint(_buttonright.frame, fnctouchlocation)){
+    else if([myjoystick shouldGoForeward:fnctouchlocation]){
       //NSLog(@"done touching right");
-      //self.player.goForeward=NO;
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
       [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
     }
-    else if(CGRectContainsPoint(_buttonleft.frame, fnctouchlocation)){
+    else if([myjoystick shouldGoBackward:fnctouchlocation]){
       //NSLog(@"done touching left");
-      //self.player.goBackward=NO;
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
       [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
@@ -692,8 +665,9 @@
   for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){
     if(currbullet.cleanup){//here to avoid another run through of arr
       //NSLog(@"removing from array");
-      [self.bullets removeObject:currbullet];
+      [currbullet removeAllActions];
       [currbullet removeFromParent];
+      [self.bullets removeObject:currbullet];
       continue;//avoid comparing with removed bullet
     }
     

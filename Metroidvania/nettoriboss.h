@@ -7,11 +7,11 @@
 
 #import <SpriteKit/SpriteKit.h>
 #import <GameplayKit/GameplayKit.h>
+#import "enemyBase.h"
 
-@interface nettoriboss : SKSpriteNode
+@interface nettoriboss : enemyBase
 
-@property (nonatomic,assign) int health;
-
+@property(nonatomic,strong) NSMutableArray*projectilesInAction;
 -(instancetype)initWithPosition:(CGPoint)pos;
 -(void)updateWithDeltaTime:(NSTimeInterval)seconds;
 
@@ -20,7 +20,7 @@
 
 @interface petal : SKSpriteNode
 
--(instancetype)initWithAtlas:(SKTextureAtlas*)atlas andComponentSystem:(GKComponentSystem*)system andPosition:(CGPoint)pos;
+-(instancetype)initWithAtlas:(SKTextureAtlas*)atlas andCS:(GKComponentSystem*)system andPos:(CGPoint)pos andArr:(NSMutableArray*)arr;
 
 @end
 
@@ -28,7 +28,7 @@
 
 @property (nonatomic,strong) GKAgent2D*agent;
 
--(instancetype)initWithTextureAtlas:(SKTextureAtlas*)atlas andComponentSystem:(GKComponentSystem*)system andPosition:(CGPoint)pos;
+-(instancetype)initWithTextureAtlas:(SKTextureAtlas*)atlas andCS:(GKComponentSystem*)system andPos:(CGPoint)pos andArr:(NSMutableArray*)arr;
 
 @end
 

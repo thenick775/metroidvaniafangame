@@ -216,6 +216,7 @@
         
         //GKRulresystem & rule initializations
         _arachnusrs=[[GKRuleSystem alloc] init];
+        __weak GKRuleSystem*weakarachnusrs=_arachnusrs;
         _arachnusrs.state[@"orighealth"]=@(self.health);
         
         NSPredicate*turnrightpred=[NSPredicate predicateWithFormat:@"($coorddist>0 && $prevcoorddist<0)"];
@@ -229,7 +230,7 @@
         NSPredicate*morphballattackleftpred=[NSPredicate predicateWithFormat:@"$coorddist < -180"];
         GKRule *morphballattackleftrule=[GKRule ruleWithPredicate:morphballattackleftpred assertingFact:@"ballattackleft" grade:1.0];
         [_arachnusrs addRule:morphballattackleftrule];
-        
+
         NSPredicate*morphballattackrightpred=[NSPredicate predicateWithFormat:@"$coorddist > 180"];
         GKRule *morphballattackrightrule=[GKRule ruleWithPredicate:morphballattackrightpred assertingFact:@"ballattackright" grade:1.0];
         [_arachnusrs addRule:morphballattackrightrule];

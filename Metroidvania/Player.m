@@ -27,8 +27,8 @@
         _forewardMove=CGPointMake(800.0, 0.0);
         _backwardMove=CGPointMake(-800.0, 0.0);
         _jumpMove=CGPointMake(0.0, 253.0);
-        _minmovement=CGPointMake(-120.0, -255.0);
-        _maxmovement=CGPointMake(120.0, 250.0);
+        _minmovement=CGPointMake(-150.0, -255.0);
+        _maxmovement=CGPointMake(150.0, 250.0);
         
         __weak Player*weakself=self;
         SKTextureAtlas *samusregsuit=[SKTextureAtlas atlasNamed:@"Samusregsuit"];

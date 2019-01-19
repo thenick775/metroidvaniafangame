@@ -69,6 +69,8 @@
     
     if(seconds<0.16)
         seconds=0.16;
+    else if(seconds>0.18)
+        seconds=0.18;
     
     [_agent updateWithDeltaTime:seconds];
 }

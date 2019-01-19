@@ -12,8 +12,6 @@
     SKTextureAtlas*_nettoriAtlas;
     SKAction *dmgbaseac,*dmgbasemedac,*dmgbasehighac;
     SKAction *baseattack,*basemedattack,*basehighattack;
-    NSMutableArray *ceilingpetals;
-    NSMutableArray *groundplants;
     GKComponentSystem*_agentSystem;
     SKAction*_petalidleanim,*_petalattackanim;
 }
@@ -23,9 +21,13 @@
     self=[super initWithTexture:[_nettoriAtlas textureNamed:@"nettori_nodmg1.png"]];
     if(self!=nil){
         self.position=pos;
+        self.health=300;
         [self setScale:1.2];
         self.anchorPoint=CGPointMake(1,0);
         self.health=200;
+        self.dead=NO;
+        self.projectilesInAction=[[NSMutableArray alloc] init];
+        
         _agentSystem=[[GKComponentSystem alloc] initWithComponentClass:[GKAgent2D class]];
         
         dmgbaseac=[SKAction animateWithTextures:@[[_nettoriAtlas textureNamed:@"nettori_dmgbase1.png"],[_nettoriAtlas textureNamed:@"nettori_dmgbase2.png"],[_nettoriAtlas textureNamed:@"nettori_dmgbase3.png"],[_nettoriAtlas textureNamed:@"nettori_dmgbase4.png"],[_nettoriAtlas textureNamed:@"nettori_dmgbase5.png"]] timePerFrame:0.2 resize:YES restore:NO];
@@ -34,44 +36,42 @@
         
         dmgbasehighac=[SKAction animateWithTextures:@[[_nettoriAtlas textureNamed:@"nettori_dmgbasehigh1.png"],[_nettoriAtlas textureNamed:@"nettori_dmgbasehigh2.png"],[_nettoriAtlas textureNamed:@"nettori_dmgbasehigh3.png"],[_nettoriAtlas textureNamed:@"nettori_dmgbasehigh4.png"],[_nettoriAtlas textureNamed:@"nettori_dmgbasehigh5.png"]] timePerFrame:0.2 resize:YES restore:NO];
         
-        
-       /* _petalidleanim=[SKAction repeatAction:[SKAction animateWithTextures:@[[_nettoriAtlas textureNamed:@"petalidle1.png"],[_nettoriAtlas textureNamed:@"petalidle2.png"],[_nettoriAtlas textureNamed:@"petalidle3.png"],[_nettoriAtlas textureNamed:@"petalidle4.png"],] timePerFrame:0.2] count:5];
-        _petalattackanim=[SKAction animateWithTextures:@[[_nettoriAtlas textureNamed:@"petalattack1.png"],[_nettoriAtlas textureNamed:@"petalattack2.png"],[_nettoriAtlas textureNamed:@"petalattack3.png"],[_nettoriAtlas textureNamed:@"petalattack4.png"],[_nettoriAtlas textureNamed:@"petalattack5.png"],[_nettoriAtlas textureNamed:@"petalattack6.png"],[_nettoriAtlas textureNamed:@"petalattack7.png"],[_nettoriAtlas textureNamed:@"petalattack8.png"],] timePerFrame:0.2];
-        
-        SKSpriteNode*testpetal=[SKSpriteNode spriteNodeWithTexture:[_nettoriAtlas textureNamed:@"petalidle1.png"]];
-        __weak GKComponentSystem*weakagentSystem=_agentSystem;
-        __weak SKTextureAtlas*weaktex=_nettoriAtlas;
-        __weak nettoriboss*weakself=self;
-        SKAction*petalattack=[SKAction repeatActionForever:[SKAction sequence:@[_petalidleanim,[SKAction group:@[_petalattackanim,[SKAction sequence:@[[SKAction waitForDuration:0.6],[SKAction runBlock:^{
-            petalprojectile*tmp=[[petalprojectile alloc] initWithTextureAtlas:weaktex andComponentSystem:weakagentSystem andPosition:testpetal.position];
-            [weakself addChild:tmp];
-        }]]]]]]]];
-        testpetal.position=CGPointMake(-16*9,16*6);
-        [testpetal runAction: petalattack];
-        [self addChild:testpetal];
-        
-        SKSpriteNode*testpetal1=testpetal.copy;
-        testpetal1.position=CGPointMake(-16*14,16*6);
-        [testpetal1 removeAllActions];
-        [testpetal1 runAction:[SKAction sequence:@[[SKAction waitForDuration:0.67],petalattack]]];
-        [self addChild:testpetal1];
-        
-        SKSpriteNode*testpetal2=testpetal.copy;
-        [testpetal2 setXScale:-1];
-        testpetal2.position=CGPointMake(-16*17,16*6);
-        [testpetal2 removeAllActions];
-        [testpetal2 runAction:[SKAction sequence:@[[SKAction waitForDuration:1.11],petalattack]]];
-        [self addChild:testpetal2];
-        */
-        petal*petal1=[[petal alloc] initWithAtlas:_nettoriAtlas andComponentSystem:_agentSystem andPosition:CGPointMake(-16*9,16*6)];
+        petal*petal1=[[petal alloc] initWithAtlas:_nettoriAtlas andCS:_agentSystem andPos:CGPointMake(-16*9,16*6) andArr:self.projectilesInAction];
         [self addChild:petal1];
         
-        petal*petal2=[[petal alloc] initWithAtlas:_nettoriAtlas andComponentSystem:_agentSystem andPosition:CGPointMake(-16*14,16*6)];
+        petal*petal4=[[petal alloc] initWithAtlas:_nettoriAtlas andCS:_agentSystem andPos:CGPointMake(-16*7,16*6) andArr:self.projectilesInAction];
+        [petal4 setXScale:-1];
+        [self addChild:petal4];
+        
+        petal*petal2=[[petal alloc] initWithAtlas:_nettoriAtlas andCS:_agentSystem andPos:CGPointMake(-16*14,16*6) andArr:self.projectilesInAction];
+        //[petal2 setXScale:-1];
         [self addChild:petal2];
         
-        petal*petal3=[[petal alloc] initWithAtlas:_nettoriAtlas andComponentSystem:_agentSystem andPosition:CGPointMake(-16*17,16*6)];
+        petal*petal3=[[petal alloc] initWithAtlas:_nettoriAtlas andCS:_agentSystem andPos:CGPointMake(-16*17,16*6) andArr:self.projectilesInAction];
         [petal3 setXScale:-1];
         [self addChild:petal3];
+        
+        SKAction*plantidle=[SKAction repeatActionForever:[SKAction animateWithTextures:@[[_nettoriAtlas textureNamed:@"plantidle1.png"],[_nettoriAtlas textureNamed:@"plantidle2.png"],[_nettoriAtlas textureNamed:@"plantidle3.png"],[_nettoriAtlas textureNamed:@"plantidle4.png"],[_nettoriAtlas textureNamed:@"plantidle5.png"],[_nettoriAtlas textureNamed:@"plantidle6.png"],[_nettoriAtlas textureNamed:@"plantidle7.png"],[_nettoriAtlas textureNamed:@"plantidle8.png"],[_nettoriAtlas textureNamed:@"plantidle9.png"],[_nettoriAtlas textureNamed:@"plantidle10.png"],[_nettoriAtlas textureNamed:@"plantidle11.png"],[_nettoriAtlas textureNamed:@"plantidle12.png"],[_nettoriAtlas textureNamed:@"plantidle13.png"],] timePerFrame:0.25 resize:YES restore:NO]];
+        SKAction*plantattack=[SKAction animateWithTextures:@[[_nettoriAtlas textureNamed:@"plantattack1.png"],[_nettoriAtlas textureNamed:@"plantattack2.png"],[_nettoriAtlas textureNamed:@"plantattack3.png"],[_nettoriAtlas textureNamed:@"plantattack4.png"],] timePerFrame:0.12 resize:YES restore:NO];
+        
+        SKSpriteNode*plant1=[SKSpriteNode spriteNodeWithTexture:[_nettoriAtlas textureNamed:@"plantidle1.png"]];
+        plant1.anchorPoint=CGPointMake(0.5,0);
+        [plant1 setScale:0.85];
+        plant1.position=CGPointMake(-16*9, -16*3);
+        [self addChild:plant1];
+        [plant1 runAction:plantidle];
+        
+        SKSpriteNode*plant2=plant1.copy;
+        plant2.position=CGPointMake(plant1.position.x-5*16, plant1.position.y);
+        [self addChild:plant2];
+        
+        SKSpriteNode*plant3=plant1.copy;
+        plant3.position=CGPointMake(plant2.position.x-5*16, plant1.position.y);
+        [self addChild:plant3];
+        
+        SKSpriteNode*plant4=plant1.copy;
+        plant4.position=CGPointMake(plant3.position.x-5*16, plant1.position.y);
+        [self addChild:plant4];
         
     }
     return self;
@@ -86,6 +86,9 @@
     [_agentSystem updateWithDeltaTime:seconds];
 }
 
+/*-(void)dealloc{
+    NSLog(@"nettori deallocated");
+}*/
 
 @end
 
@@ -96,7 +99,7 @@
     SKAction*_petalattack;
 }
 
--(instancetype)initWithAtlas:(SKTextureAtlas*)atlas andComponentSystem:(GKComponentSystem*)system andPosition:(CGPoint)pos{
+-(instancetype)initWithAtlas:(SKTextureAtlas*)atlas andCS:(GKComponentSystem*)system andPos:(CGPoint)pos andArr:(NSMutableArray*)arr{
     self=[super initWithTexture:[atlas textureNamed:@"petalidle1.png"]];
     if(self!=nil){
         self.position=pos;
@@ -105,8 +108,12 @@
         
         __weak GKComponentSystem*weakagentSystem=system;
         __weak petal*weakself=self;
-        _petalattack=[SKAction sequence:@[[SKAction waitForDuration:(float)arc4random_uniform(200.0)/100],[SKAction repeatActionForever:[SKAction sequence:@[_petalidleanim,[SKAction group:@[_petalattackanim,[SKAction sequence:@[[SKAction waitForDuration:0.6],[SKAction runBlock:^{
-            petalprojectile*tmp=[[petalprojectile alloc] initWithTextureAtlas:atlas andComponentSystem:weakagentSystem andPosition:CGPointZero];
+        __weak NSMutableArray*weakarr=arr;
+        _petalattack=[SKAction sequence:@[[SKAction waitForDuration:(float)arc4random_uniform(300.0)/100],[SKAction repeatActionForever:[SKAction sequence:@[_petalidleanim,[SKAction group:@[_petalattackanim,[SKAction sequence:@[[SKAction waitForDuration:0.6],[SKAction runBlock:^{
+            petalprojectile*tmp=[[petalprojectile alloc] initWithTextureAtlas:atlas andCS:weakagentSystem andPos:CGPointZero andArr:weakarr];
+            NSLog(@"adding petal proj");
+            [weakarr addObject:tmp];
+            NSLog(@"weakarr count:%lu",(unsigned long)weakarr.count);
             [weakself addChild:tmp];
         }]]]]]]]]]];
         //NSLog(@"testing time:%f",(float)arc4random_uniform(100.0)/100);
@@ -114,6 +121,10 @@
     }
     return self;
 }
+
+/*-(void)dealloc{
+    NSLog(@"petal deallocated");
+}*/
 
 @end
 
@@ -123,7 +134,7 @@
     SKAction*_petalprojexplode;
 }
 
--(instancetype)initWithTextureAtlas:(SKTextureAtlas*)atlas andComponentSystem:(GKComponentSystem*)system andPosition:(CGPoint)pos{
+-(instancetype)initWithTextureAtlas:(SKTextureAtlas*)atlas andCS:(GKComponentSystem*)system andPos:(CGPoint)pos andArr:(NSMutableArray *)arr{
     self=[super initWithTexture:[atlas textureNamed:@"petalprojidle1.png"]];
     if(self!=nil){
         self.position=pos;
@@ -135,15 +146,22 @@
         self.agent.mass=5;
         __weak petalprojectile*weakself=self;
         __weak GKComponentSystem*weaksystem=system;
-        GKBehavior*wanderAround=[GKBehavior behaviorWithGoal:[GKGoal goalToWander:1] weight:10];
-        self.agent.behavior=wanderAround;
+        
+        vector_float2 myVectors[8] = {
+            {(float)self.position.x,(float)self.position.y-30},
+            {(float)self.position.x+20/*+(350/2)*/,(float)self.position.y-100}
+        };
+        
+        GKBehavior*wanderWithinBoundary=[GKBehavior behaviorWithGoals:@[[GKGoal goalToWander:1],[GKGoal goalToStayOnPath:[GKPath pathWithPoints:myVectors count:2 radius:25 cyclical:YES] maxPredictionTime:0.5]] andWeights:@[@10,@50]];
+        self.agent.behavior=wanderWithinBoundary;
         
         _petalprojidle=[SKAction repeatAction:[SKAction animateWithTextures:@[[atlas textureNamed:@"petalprojidle1.png"],[atlas textureNamed:@"petalprojidle2.png"],[atlas textureNamed:@"petalprojidle3.png"],[atlas textureNamed:@"petalprojidle4.png"],] timePerFrame:0.3] count:8];
         _petalprojexplode=[SKAction animateWithTextures:@[[atlas textureNamed:@"petalprojexplode1.png"],[atlas textureNamed:@"petalprojexplode2.png"],[atlas textureNamed:@"petalprojexplode3.png"],] timePerFrame:0.1];
         
         SKAction*composedac=[SKAction sequence:@[_petalprojidle,_petalprojexplode]];
         [system addComponent:self.agent];
-        [self runAction:composedac completion:^{[weaksystem removeComponent:weakself.agent];[weakself removeAllActions];[weakself removeFromParent];}];
+        //[arr addObject:self];
+        [self runAction:composedac completion:^{[weaksystem removeComponent:weakself.agent];[arr removeObject:weakself];[weakself removeAllActions];[weakself removeFromParent];}];
         
     }
     return self;
@@ -157,5 +175,9 @@
     self.position = CGPointMake((CGFloat)agent.position.x, (CGFloat)agent.position.y);
     self.zRotation = (CGFloat)agent.rotation;
 }
+
+/*-(void)dealloc{
+    NSLog(@"petal projectile deallocated");
+}*/
 
 @end

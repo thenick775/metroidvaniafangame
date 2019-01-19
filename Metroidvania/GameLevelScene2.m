@@ -44,6 +44,7 @@
         //player initializiation stuff
         self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];
         self.player.position = CGPointMake(100, 150);
+        //self.player.position=CGPointMake(3980-60,100);
         self.player.zPosition = 15;
         
         SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33] Y:[SKRange rangeWithUpperLimit:(self.map.tileSize.height*self.map.mapSize.height)-22]];
@@ -78,7 +79,7 @@
         self.enemies=[[NSMutableArray alloc]init];
         
         //enemies here
-        sciserenemy *enemy=[[sciserenemy alloc] initWithPos:CGPointMake(self.player.position.x+100, self.player.position.y-108)];
+        sciserenemy *enemy=[[sciserenemy alloc] initWithPos:CGPointMake(12.5*self.map.tileSize.width,2.625*self.map.tileSize.height)];
         [self.enemies addObject:enemy];
         [self.map addChild:enemy];
         
@@ -126,12 +127,10 @@
                 if(plyrtilecoordx-1>263)
                     [weakself.walls setTileGid:1 at:CGPointMake(plyrtilecoordx-1,28)];
                 if(plyrtilecoordx-2>263)
-                    [weakself.walls setTileGid:3063 at:CGPointMake(plyrtilecoordx-2,28)];
+                    [weakself.walls setTileGid:3007 at:CGPointMake(plyrtilecoordx-2,28)];
                 if(plyrtilecoordx+2<297)
-                    [weakself.walls setTileGid:3063 at:CGPointMake(plyrtilecoordx+2,28)];
+                    [weakself.walls setTileGid:3007 at:CGPointMake(plyrtilecoordx+2,28)];
             }
-            
-            
         }];
         
         SKAction* removebosswall=[SKAction runBlock:^{
@@ -164,7 +163,7 @@
         }]]];
         
         SKAction*idleblk=[SKAction runBlock:^{
-            NSLog(@"checking boss idle");
+            //NSLog(@"checking boss idle");
             if(weakself.player.meleeinaction && CGRectIntersectsRect([weakself.player meleeBoundingBoxNormalized],weakboss1.frame) && !bossdidenter){
                 [weakself removeActionForKey:@"backuptimer"];
                 bossdidenter=YES;
@@ -180,8 +179,8 @@
                 }]]] withKey:@"backuptimer"];
             }
         }];
-        idlecheck=[SKAction sequence:@[[SKAction waitForDuration:60],[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:1],idleblk]]]]];
-        [self runAction:idlecheck withKey:@"idlecheck"]; 
+        idlecheck=[SKAction sequence:@[[SKAction waitForDuration:38],[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:1],idleblk]]]]];
+        [self runAction:idlecheck withKey:@"idlecheck"];
      
     }
     return self;
@@ -206,7 +205,7 @@
 -(void)continuebuttonpush:(id)sender{
     [[self.view viewWithTag:888] removeFromSuperview];
     __weak GameLevelScene2*weakself=self;
-    [SKTextureAtlas preloadTextureAtlasesNamed:@[@"lvl3assets"] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
+    [SKTextureAtlas preloadTextureAtlasesNamed:@[@"lvl3assets",@"Nettori"] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
         GameLevelScene3*preload=[[GameLevelScene3 alloc]initWithSize:weakself.size];
         preload.scaleMode = SKSceneScaleModeAspectFill;
         NSLog(@"preloaded lvl3");
@@ -286,7 +285,7 @@
             [self enemyhitplayerdmgmsg:15];
         }
         if(self.player.position.x>enemyconcop.position.x+150 && [enemyconcop actionForKey:@"walk"]){
-            NSLog(@"past position of player");
+            //NSLog(@"past position of player");
             [enemyconcop runAction:enemyconcop.explodeangry];
         }
         
@@ -313,8 +312,9 @@
     for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){//bullet to enemy
         if(currbullet.cleanup){//here to avoid another run through of arr
             //NSLog(@"removing from array");
-            [self.bullets removeObject:currbullet];
+            [currbullet removeAllActions];
             [currbullet removeFromParent];
+            [self.bullets removeObject:currbullet];
             continue;//avoid comparing with removed bullet
         }
         

@@ -12,6 +12,7 @@
 		593F109F21D9D894008208E6 /* nyzlew.png in Resources */ = {isa = PBXBuildFile; fileRef = 593F109E21D9D893008208E6 /* nyzlew.png */; };
 		593F10A221DAA914008208E6 /* nettoriboss.m in Sources */ = {isa = PBXBuildFile; fileRef = 593F10A121DAA914008208E6 /* nettoriboss.m */; };
 		59450D6E21B360BC0019BAEB /* door.m in Sources */ = {isa = PBXBuildFile; fileRef = 59450D6D21B360BC0019BAEB /* door.m */; };
+		5948813221F1B337008F742A /* joystick.m in Sources */ = {isa = PBXBuildFile; fileRef = 5948813121F1B337008F742A /* joystick.m */; };
 		594F557B20CDE911000E476E /* GameLevelScene2.m in Sources */ = {isa = PBXBuildFile; fileRef = 594F557A20CDE911000E476E /* GameLevelScene2.m */; };
 		594F558520CE16A9000E476E /* spacefloortile.png in Resources */ = {isa = PBXBuildFile; fileRef = 594F558420CE16A9000E476E /* spacefloortile.png */; };
 		594F559320CE1CA0000E476E /* level2.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 594F559220CE1CA0000E476E /* level2.tmx */; };
@@ -84,6 +85,8 @@
 		593F10A121DAA914008208E6 /* nettoriboss.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = nettoriboss.m; sourceTree = "<group>"; };
 		59450D6C21B360850019BAEB /* door.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = door.h; sourceTree = "<group>"; };
 		59450D6D21B360BC0019BAEB /* door.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = door.m; sourceTree = "<group>"; };
+		5948813121F1B337008F742A /* joystick.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = joystick.m; sourceTree = "<group>"; };
+		5948813321F1B342008F742A /* joystick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = joystick.h; sourceTree = "<group>"; };
 		594F557920CDE911000E476E /* GameLevelScene2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameLevelScene2.h; sourceTree = "<group>"; };
 		594F557A20CDE911000E476E /* GameLevelScene2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameLevelScene2.m; sourceTree = "<group>"; };
 		594F558420CE16A9000E476E /* spacefloortile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spacefloortile.png; sourceTree = "<group>"; };
@@ -204,6 +207,8 @@
 				596F2DB020C1C44700B32C47 /* TravelPortal.h */,
 				596F2DB120C1C44700B32C47 /* TravelPortal.m */,
 				59450D6C21B360850019BAEB /* door.h */,
+				5948813321F1B342008F742A /* joystick.h */,
+				5948813121F1B337008F742A /* joystick.m */,
 				59450D6D21B360BC0019BAEB /* door.m */,
 				59DAC082218278220077E10C /* gameaudio.h */,
 				59DAC083218278330077E10C /* gameaudio.m */,
@@ -507,6 +512,7 @@
 				5979C753213B36BA00965A50 /* LFCGzipUtility.m in Sources */,
 				F275B689186E0B06009F6E6B /* ViewController.m in Sources */,
 				59DAC09B2187DAD90077E10C /* GameLevelScene3.m in Sources */,
+				5948813221F1B337008F742A /* joystick.m in Sources */,
 				F275B683186E0B06009F6E6B /* AppDelegate.m in Sources */,
 				5952F8752106AAB600F3BC5B /* arachnusboss.m in Sources */,
 				F275B67F186E0B06009F6E6B /* main.m in Sources */,
