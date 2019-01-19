@@ -27,7 +27,7 @@ Technical details:
 
 -NSNotificationCenter is used to handle the scene as the app transitions between background and active states.
 
-The gifs may take some time to load due to the filesize, any FPS tags are slower than on actual device (gifs captured using third party software).
+The gifs may take some time to load due to the filesize, any FPS tags are slower than on actual device (gifs captured using third party software). New gifs coming soon, no third party software used/no more dpad!
 
 
 ![](menuscenedemo_v2.gif)
