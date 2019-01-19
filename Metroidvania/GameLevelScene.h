@@ -10,6 +10,9 @@
 #import "JSTileMap.h"
 #import "gameaudio.h"
 
+@interface MySlider : UISlider
+@end
+
 @interface GameLevelScene : SKScene
 
 @property (nonatomic,strong) Player *player;
@@ -25,7 +28,7 @@
 @property (nonatomic,assign) BOOL repeating;
 @property (nonatomic,strong) SKSpriteNode *buttonup,*buttonright,*buttonleft,*startbutton;
 @property (nonatomic,strong) gameaudio*audiomanager;
-@property (nonatomic,strong) UISlider*volumeslider;
+@property (nonatomic,strong) MySlider*volumeslider;
 @property (nonatomic,strong) SKAction *buttonhighlight;
 @property (nonatomic,strong) SKAction *buttonunhighlight;
 @property (nonatomic,assign) BOOL stayPaused;

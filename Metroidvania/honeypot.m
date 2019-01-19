@@ -21,9 +21,9 @@
         self.health=15;
         if(!angry){
             self.anger=NO;
-            self.agent.maxSpeed=18;
-            self.agent.maxAcceleration=12;
-            self.agent.mass=2;
+            self.agent.maxSpeed=22;
+            self.agent.maxAcceleration=15;
+            self.agent.mass=2.5;
         }
         else{
             self.anger=YES;
@@ -95,6 +95,8 @@
     
     if(seconds<0.16)
         seconds=0.16;
+    else if(seconds>0.18)
+        seconds=0.18;
     
     _storetime=seconds;
     

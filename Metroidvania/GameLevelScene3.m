@@ -114,7 +114,7 @@
         [self.map addChild:nettori];
         [self.enemies addObject:nettori];
         
-        //SKEmitterNode*nettoriproj=[SKEmitterNode nodeWithFileNamed:@"nettori_projectile.sks"];
+        //SKEmitterNode*nettoriproj=[SKEmitterNode nodeWithFileNamed:@"nettori_projectile.sks"];//maybe have this draw all the petal particles
         //nettoriproj.position=CGPointMake(nettori.position.x-100, nettori.position.y+50);
         //nettoriproj.particleRenderOrder=SKParticleRenderOrderDontCare;
         //[self.map addChild:nettoriproj];
@@ -141,7 +141,7 @@
 }
 
 -(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
-    
+    BOOL bulletlock=NO;
     for(id enemycon in [self.enemies reverseObjectEnumerator]){
         
         if([enemycon isKindOfClass:[sciserenemy class]]){
@@ -182,15 +182,23 @@
         }
         else if([enemycon isKindOfClass:[nettoriboss class]]){
             [enemycon updateWithDeltaTime:self.delta];
+            nettoriboss*boss=(nettoriboss*)enemycon;
+            //NSLog(@"enemyprojinaction:%lu",(unsigned long)boss.projectilesInAction.count);
+            for(SKSpriteNode*tmp in [boss.projectilesInAction reverseObjectEnumerator]){
+                if(CGRectContainsPoint(self.player.collisionBoundingBox, [self convertPoint:tmp.position fromNode:tmp.parent])){
+                    NSLog(@"hit nettoriproj");
+                }
+            }
         }
     }
     
     
     for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){
-        if(currbullet.cleanup){//here to avoid another run through of arr
+        if(currbullet.cleanup || [self tileGIDAtTileCoord:[self.walls coordForPoint:currbullet.position] forLayer:self.walls]){//here to avoid another run through of arr
             //NSLog(@"removing from array");
-            [self.bullets removeObject:currbullet];
+            [currbullet removeAllActions];
             [currbullet removeFromParent];
+            [self.bullets removeObject:currbullet];
             continue;//avoid comparing with removed bullet
         }
         
@@ -198,15 +206,17 @@
             //NSLog(@"bullet frame:%@",NSStringFromCGRect(currbullet.frame));
                 enemyBase*enemylcop=(enemyBase*)enemyl;
                 if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame) && !enemylcop.dead){
-                    //NSLog(@"hit an enemy");
+                    NSLog(@"hit an enemy");
                     [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies];
                     [currbullet removeAllActions];
                     [currbullet removeFromParent];
                     [self.bullets removeObject:currbullet];
+                    bulletlock=YES;
                     break; //if bullet hits enemy stop checking for same bullet
                 }
         }
         
+        if(!bulletlock){
         for(door* door in _doors){//maybe handle doors along with enemies to disperse run through of this array
             if(fabs((self.player.position.x-door.position.x)<180) && CGRectIntersectsRect(door.frame, currbullet.frame) && !door.openAlready){
             [door opendoor];
@@ -215,6 +225,7 @@
             [self.bullets removeObject:currbullet];
             break; //if bullet hits enemy stop checking for same bullet
             }
+        }
         }
     }//for currbullet
     
