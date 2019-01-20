@@ -4,7 +4,7 @@ Written by Nicholas VanCise, credit for art and base assets provided below.
 
 This is a simple 2d platformer fan game, all nintendo art assets do not belong to me, editing of assets was done by me. 
 I have written the event driven animation scheme, collission detection, character physics, scene architecture, and game logic. 
-This game is targeted for iphone 5 through 8+, and uses a MVC pattern.
+This game is targeted for iphone 8 through XS, and uses a MVC pattern.
 
 
 Technical details:
