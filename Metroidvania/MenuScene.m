@@ -25,7 +25,6 @@
     SKAction *shipflyac;
     SKTransition *menutolvl1tran;
     NSArray *texturesforlvl1;
-    //NSArray *texturesforlvl2;//here for testing and convience at the moment
     SKAction *_buttonhighlight;
     SKAction *_buttonunhighlight;
     gameaudio*audiomanager;
@@ -173,7 +172,7 @@
         SKLabelNode *cntrll3=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
         cntrll1.zPosition=6;
         cntrll1.fontSize=16;
-        cntrll1.text=@"Use the Dpad to move around by sliding your finger,";
+        cntrll1.text=@"Use the joystick to move around by sliding your finger,";
         cntrll1.position=CGPointMake(0,20);
         cntrll2.zPosition=6;
         cntrll2.fontSize=16;
@@ -217,7 +216,7 @@
         shipflyac=[SKAction group:@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.7]]];
         [shipflyac setTimingMode:SKActionTimingEaseIn];
        
-        //texturesforlvl2=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver"];
+        //texturesforlvl2=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver"]; now a note so I dont forget
         texturesforlvl1=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"Waver"];
      
         self.labelsin=[SKAction sequence:@[[SKAction waitForDuration:1.5],[SKAction fadeInWithDuration:1.5]]];
@@ -259,9 +258,8 @@
             __weak SKAction *weakflameflicker=flameflicker;
             __weak SKSpriteNode *weaksamusgunship=samusgunship;
             __weak SKAction *weakshipflyac=shipflyac;
-            //__weak NSArray *weaktexturesforlvl2=texturesforlvl2;
             __weak NSArray *weaktexturesforlvl1=texturesforlvl1;
-            CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.2,self.view.bounds.size.height/1.2-10);
+            CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.5,self.view.bounds.size.height/1.5-10);
             
             [SKTextureAtlas preloadTextureAtlasesNamed:weaktexturesforlvl1 withCompletionHandler:^(NSError*error,NSArray*foundatlases){
                     GameLevelScene*preload=[[GameLevelScene alloc]initWithSize:nextSceneSize];

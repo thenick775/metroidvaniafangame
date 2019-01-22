@@ -14,7 +14,7 @@
 -(instancetype)initWithPos:(CGPoint)pos{
     self=[joystick shapeNodeWithCircleOfRadius:35];
     if(self!=nil){
-        NSLog(@"creating joystick");
+        //NSLog(@"creating joystick");
         self.position=pos;
         self.zPosition=15;
         self.strokeColor=[UIColor whiteColor];

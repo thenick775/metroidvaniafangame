@@ -111,9 +111,9 @@
         __weak NSMutableArray*weakarr=arr;
         _petalattack=[SKAction sequence:@[[SKAction waitForDuration:(float)arc4random_uniform(300.0)/100],[SKAction repeatActionForever:[SKAction sequence:@[_petalidleanim,[SKAction group:@[_petalattackanim,[SKAction sequence:@[[SKAction waitForDuration:0.6],[SKAction runBlock:^{
             petalprojectile*tmp=[[petalprojectile alloc] initWithTextureAtlas:atlas andCS:weakagentSystem andPos:CGPointZero andArr:weakarr];
-            NSLog(@"adding petal proj");
+            //NSLog(@"adding petal proj");
             [weakarr addObject:tmp];
-            NSLog(@"weakarr count:%lu",(unsigned long)weakarr.count);
+            //NSLog(@"weakarr count:%lu",(unsigned long)weakarr.count);
             [weakself addChild:tmp];
         }]]]]]]]]]];
         //NSLog(@"testing time:%f",(float)arc4random_uniform(100.0)/100);

@@ -130,7 +130,7 @@
     
     //__weak GameLevelScene3*weakself=self;
     dispatch_async(dispatch_get_main_queue(), ^{//deal with certain ui on main thread only
-        [self setupVolumeSlider];
+        [self setupVolumeSliderAndReplayAndContinue];
     });
 }
 
@@ -186,7 +186,7 @@
             //NSLog(@"enemyprojinaction:%lu",(unsigned long)boss.projectilesInAction.count);
             for(SKSpriteNode*tmp in [boss.projectilesInAction reverseObjectEnumerator]){
                 if(CGRectContainsPoint(self.player.collisionBoundingBox, [self convertPoint:tmp.position fromNode:tmp.parent])){
-                    NSLog(@"hit nettoriproj");
+                    NSLog(@"hit by nettoriproj");
                 }
             }
         }

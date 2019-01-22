@@ -37,9 +37,8 @@
 @implementation GameLevelScene{
   NSString *fintext;
   SKLabelNode *endgamelabel;
-  UIButton *replaybutton;
-  UIButton *continuebutton;
-  SKSpriteNode*_pauselabel,*_unpauselabel;
+  UIButton *_continuebutton,*_replaybutton;
+  SKSpriteNode*_pauselabel,*_unpauselabel,*_startbutton;
   joystick*myjoystick;
 }
 
@@ -109,20 +108,6 @@
     endgamelabel=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
     endgamelabel.fontSize=40;
     endgamelabel.position=CGPointMake(0,35);
-
-    replaybutton=[UIButton buttonWithType:UIButtonTypeCustom];
-    replaybutton.tag=666;
-    UIImage *replayimage=[UIImage imageNamed:@"replay"];
-    [replaybutton setImage:replayimage forState:UIControlStateNormal];
-    [replaybutton addTarget:self action:@selector(replaybuttonpush:) forControlEvents:UIControlEventTouchUpInside];
-    replaybutton.frame=CGRectMake(self.size.width/2.0-replayimage.size.width/4.0+5, self.size.height/2.0-replayimage.size.height/4.0+5, replayimage.size.width, replayimage.size.height);
-    
-    continuebutton=[UIButton buttonWithType:UIButtonTypeCustom];
-    continuebutton.tag=888;
-    UIImage *continueimage=[UIImage imageNamed:@"continuebutton.png"];
-    [continuebutton setImage:continueimage forState:UIControlStateNormal];
-    [continuebutton addTarget:self action:@selector(continuebuttonpush:) forControlEvents:UIControlEventTouchUpInside];
-    continuebutton.frame=CGRectMake(self.size.width/2.0-continueimage.size.width/4.0-15, self.size.height/2.0-continueimage.size.height/4.0+7, continueimage.size.width, continueimage.size.height);
     
     //pause-unpause buttons/labels & pause screen items
     _pauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"pauselabel.png"];
@@ -141,7 +126,7 @@
     
     _startbutton=[SKSpriteNode spriteNodeWithImageNamed:@"startbutton.png"];
     [_startbutton setScale:1.1];
-    _startbutton.position=CGPointMake(self.size.width/4+88,self.size.height/2-12);
+    _startbutton.position=CGPointMake(self.size.width/4+83,self.size.height/2-12);
     [self.camera addChild:_startbutton];
     
     //scene mutable arrays here
@@ -176,12 +161,13 @@
   [self.audiomanager runBkgrndMusicForlvl:1];
   
   dispatch_async(dispatch_get_main_queue(), ^{ //deal with certain ui (that could be used immediately) on main thread only
-  [self setupVolumeSlider];
+  [self setupVolumeSliderAndReplayAndContinue];
   });
 }
 
--(void)setupVolumeSlider{//**setup on main thread only**might set call to main thread in this function..
-  self.volumeslider=[[MySlider alloc] initWithFrame:CGRectMake(self.size.width/2+200,self.size.height/2+15, self.size.height-40, 15.0)];
+-(void)setupVolumeSliderAndReplayAndContinue{//**setup on main thread only**might set call to main thread in this function..
+  self.volumeslider=[[MySlider alloc] initWithFrame:CGRectMake(self.view.bounds.size.width*0.746305,self.view.bounds.size.height/2, self.view.bounds.size.width*0.348610, 15.0)];
+  
   self.volumeslider.minimumValue=0;
   self.volumeslider.maximumValue=100.0;
   self.volumeslider.continuous=YES;
@@ -194,6 +180,20 @@
   [self.volumeslider setBackgroundColor:[UIColor clearColor]];
   [self.volumeslider addTarget:self action:@selector(slideraction:) forControlEvents:UIControlEventValueChanged];
   [self.view addSubview:self.volumeslider];
+  
+  _replaybutton=[UIButton buttonWithType:UIButtonTypeCustom]; //replay button
+  _replaybutton.tag=666;
+  UIImage *replayimage=[UIImage imageNamed:@"replay"];
+  [_replaybutton setImage:replayimage forState:UIControlStateNormal];
+  [_replaybutton addTarget:self action:@selector(replaybuttonpush:) forControlEvents:UIControlEventTouchUpInside];
+  _replaybutton.frame=CGRectMake(self.view.bounds.size.width/2.0-replayimage.size.width/2, self.view.bounds.size.height/2.0-replayimage.size.height/1.5, replayimage.size.width, replayimage.size.height);
+  
+  _continuebutton=[UIButton buttonWithType:UIButtonTypeCustom]; //continue button
+  _continuebutton.tag=888;
+  UIImage *continueimage=[UIImage imageNamed:@"continuebutton.png"];
+  [_continuebutton setImage:continueimage forState:UIControlStateNormal];
+  [_continuebutton addTarget:self action:@selector(continuebuttonpush:) forControlEvents:UIControlEventTouchUpInside];
+  _continuebutton.frame=CGRectMake(self.view.bounds.size.width/2.0-continueimage.size.width/2/*/4.0-15*/, self.view.bounds.size.height/2.0-continueimage.size.height/1.5/*4.0+7*/, continueimage.size.width, continueimage.size.height);
 }
 
 -(void)willMoveFromView:(SKView *)view{
@@ -429,7 +429,6 @@
   
   //NSLog(@"Touch is moving");
   for(UITouch *touch in touches){
-    
     CGPoint currtouchlocation=[touch locationInNode:self.camera];
     CGPoint previoustouchlocation=[touch previousLocationInNode:self.camera];
     [myjoystick moveFingertrackerto:currtouchlocation];
@@ -584,7 +583,6 @@
     }
     else if(fnctouchlocation.x>self.camera.frame.size.width/2 && fnctouchlocation.y>self.camera.frame.size.height/2){
       [self.player runAction:self.player.meleeactionright withKey:@"melee"];
-      //NSLog(@"start melee");
     }
     /*else{// to handle any case where the touches are not in sync (gets rid of sticky dpad)
     NSLog(@"blank touches ended");
@@ -614,9 +612,6 @@
   [self.player removeActionForKey:@"jmpf"];
   [self.player removeActionForKey:@"jmpb"];
   self.player.shouldJump=NO;
-  [_buttonup runAction:self.buttonunhighlight];
-  [_buttonright runAction:self.buttonunhighlight];
-  [_buttonleft runAction:self.buttonunhighlight];
 }
 
 -(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
@@ -756,7 +751,7 @@
     fintext=@"You Won!";
     endgamelabel.text=fintext;
     __weak SKLabelNode *weakendgamelabel=endgamelabel;
-    __weak UIButton *weakcontinuebutton=continuebutton;
+    __weak UIButton *weakcontinuebutton=_continuebutton;
     [self.player runAction:self.player.travelthruportalAnimation completion:^{[self.camera addChild:weakendgamelabel];[self.view addSubview:weakcontinuebutton];}];
   }
   else{
@@ -764,7 +759,7 @@
   //label setup for end of game message
   endgamelabel.text=fintext;
   [self.camera addChild:endgamelabel];
-  [self.view addSubview:replaybutton];
+  [self.view addSubview:_replaybutton];
   }
 }
 -(void)replaybuttonpush:(id)sender{
