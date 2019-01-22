@@ -51,6 +51,7 @@
 		59DAC0B42187ED8C0077E10C /* rm_a4a03.png in Resources */ = {isa = PBXBuildFile; fileRef = 59DAC0B22187ED8C0077E10C /* rm_a4a03.png */; };
 		59DAC0B52187ED8C0077E10C /* rm_a5b04.png in Resources */ = {isa = PBXBuildFile; fileRef = 59DAC0B32187ED8C0077E10C /* rm_a5b04.png */; };
 		59DAC0B72187F70E0077E10C /* lvl3tilesets.png in Resources */ = {isa = PBXBuildFile; fileRef = 59DAC0B62187F70E0077E10C /* lvl3tilesets.png */; };
+		59EE2C1021F5BC6000F8234E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 59EE2C0F21F5BC6000F8234E /* Launch Screen.storyboard */; };
 		F275B671186E0B06009F6E6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B670186E0B06009F6E6B /* Foundation.framework */; };
 		F275B673186E0B06009F6E6B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B672186E0B06009F6E6B /* CoreGraphics.framework */; };
 		F275B675186E0B06009F6E6B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B674186E0B06009F6E6B /* UIKit.framework */; };
@@ -66,7 +67,6 @@
 		F275B6CB186E2497009F6E6B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B6CA186E2497009F6E6B /* libz.dylib */; };
 		F275B6DE186E25C1009F6E6B /* SKAction+SKTExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = F275B6CE186E25C1009F6E6B /* SKAction+SKTExtras.m */; };
 		F275B6DF186E25C1009F6E6B /* SKAction+SKTSpecialEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = F275B6D0186E25C1009F6E6B /* SKAction+SKTSpecialEffects.m */; };
-		F275B6E0186E25C1009F6E6B /* SKEmitterNode+SKTExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = F275B6D2186E25C1009F6E6B /* SKEmitterNode+SKTExtras.m */; };
 		F275B6E1186E25C1009F6E6B /* SKNode+SKTDebugDraw.m in Sources */ = {isa = PBXBuildFile; fileRef = F275B6D4186E25C1009F6E6B /* SKNode+SKTDebugDraw.m */; };
 		F275B6E2186E25C1009F6E6B /* SKNode+SKTExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = F275B6D6186E25C1009F6E6B /* SKNode+SKTExtras.m */; };
 		F275B6E3186E25C1009F6E6B /* SKTAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = F275B6D8186E25C1009F6E6B /* SKTAudio.m */; };
@@ -137,6 +137,7 @@
 		59DAC0B22187ED8C0077E10C /* rm_a4a03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rm_a4a03.png; sourceTree = "<group>"; };
 		59DAC0B32187ED8C0077E10C /* rm_a5b04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rm_a5b04.png; sourceTree = "<group>"; };
 		59DAC0B62187F70E0077E10C /* lvl3tilesets.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lvl3tilesets.png; sourceTree = "<group>"; };
+		59EE2C0F21F5BC6000F8234E /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		F275B66D186E0B06009F6E6B /* Metroidvania.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metroidvania.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F275B670186E0B06009F6E6B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F275B672186E0B06009F6E6B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -162,8 +163,6 @@
 		F275B6CE186E25C1009F6E6B /* SKAction+SKTExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKAction+SKTExtras.m"; sourceTree = "<group>"; };
 		F275B6CF186E25C1009F6E6B /* SKAction+SKTSpecialEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKAction+SKTSpecialEffects.h"; sourceTree = "<group>"; };
 		F275B6D0186E25C1009F6E6B /* SKAction+SKTSpecialEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKAction+SKTSpecialEffects.m"; sourceTree = "<group>"; };
-		F275B6D1186E25C1009F6E6B /* SKEmitterNode+SKTExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKEmitterNode+SKTExtras.h"; sourceTree = "<group>"; };
-		F275B6D2186E25C1009F6E6B /* SKEmitterNode+SKTExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKEmitterNode+SKTExtras.m"; sourceTree = "<group>"; };
 		F275B6D3186E25C1009F6E6B /* SKNode+SKTDebugDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKNode+SKTDebugDraw.h"; sourceTree = "<group>"; };
 		F275B6D4186E25C1009F6E6B /* SKNode+SKTDebugDraw.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKNode+SKTDebugDraw.m"; sourceTree = "<group>"; };
 		F275B6D5186E25C1009F6E6B /* SKNode+SKTExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKNode+SKTExtras.h"; sourceTree = "<group>"; };
@@ -340,6 +339,7 @@
 				F275B681186E0B06009F6E6B /* AppDelegate.h */,
 				F275B682186E0B06009F6E6B /* AppDelegate.m */,
 				5952F876210AFDEF00F3BC5B /* Main.storyboard */,
+				59EE2C0F21F5BC6000F8234E /* Launch Screen.storyboard */,
 				F275B67A186E0B06009F6E6B /* Metroidvania-Info.plist */,
 				F275B67B186E0B06009F6E6B /* InfoPlist.strings */,
 				F275B67E186E0B06009F6E6B /* main.m */,
@@ -390,8 +390,6 @@
 				F275B6CE186E25C1009F6E6B /* SKAction+SKTExtras.m */,
 				F275B6CF186E25C1009F6E6B /* SKAction+SKTSpecialEffects.h */,
 				F275B6D0186E25C1009F6E6B /* SKAction+SKTSpecialEffects.m */,
-				F275B6D1186E25C1009F6E6B /* SKEmitterNode+SKTExtras.h */,
-				F275B6D2186E25C1009F6E6B /* SKEmitterNode+SKTExtras.m */,
 				F275B6D3186E25C1009F6E6B /* SKNode+SKTDebugDraw.h */,
 				F275B6D4186E25C1009F6E6B /* SKNode+SKTDebugDraw.m */,
 				F275B6D5186E25C1009F6E6B /* SKNode+SKTExtras.h */,
@@ -474,6 +472,7 @@
 				596F2DAF20C1496400B32C47 /* backgroundobjects.png in Resources */,
 				596F2DAB20C07CF100B32C47 /* floortilesimple.png in Resources */,
 				5979C75A213C79A100965A50 /* crateriaTileSet.png in Resources */,
+				59EE2C1021F5BC6000F8234E /* Launch Screen.storyboard in Resources */,
 				598856EB21DC61D400F9ACD8 /* nettori_projectile.sks in Resources */,
 				5952F877210AFDEF00F3BC5B /* Main.storyboard in Resources */,
 				5976965721E164C3001D825B /* Trap Beat 2017, Dope Rap_Trap Instrumentalc.mp3 in Resources */,
@@ -530,7 +529,6 @@
 				596F2DA920BFAFAE00B32C47 /* sciserenemy.m in Sources */,
 				F275B6DE186E25C1009F6E6B /* SKAction+SKTExtras.m in Sources */,
 				595D4058216F16C2004A7D24 /* waver.m in Sources */,
-				F275B6E0186E25C1009F6E6B /* SKEmitterNode+SKTExtras.m in Sources */,
 				F275B6DF186E25C1009F6E6B /* SKAction+SKTSpecialEffects.m in Sources */,
 				F275B6E1186E25C1009F6E6B /* SKNode+SKTDebugDraw.m in Sources */,
 				59CE01C121CDCD1D00BF13B1 /* enemyBase.m in Sources */,
@@ -598,7 +596,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -644,7 +642,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -659,6 +657,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metroidvania/Metroidvania-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Metroidvania/Metroidvania-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
@@ -675,6 +674,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metroidvania/Metroidvania-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Metroidvania/Metroidvania-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;

@@ -38,7 +38,7 @@
     __weak NSString *weakname=name;
     self=[super initWithImageNamed:weakname];
     if(self!=nil){
-        self.health=150;//5;//for testing
+        self.health=140;//5;//for testing
         self.active=NO;
         
         SKTextureAtlas *arachnustextures=[SKTextureAtlas atlasNamed:@"Arachnus"];
@@ -157,7 +157,7 @@
         slashprojectiletrail.position=CGPointMake(-25,0);
         slashprojectiletrail.alpha=0.6;
         [self.slashprojectile addChild:slashprojectiletrail];
-        SKAction *slashprojmove=[SKAction moveBy:CGVectorMake(460,0) duration:1.8];
+        SKAction *slashprojmove=[SKAction moveBy:CGVectorMake(470,0) duration:1.8];
         
         _slashattackright=[SKAction sequence:@[[SKAction group:@[slashrightanim,[SKAction sequence:@[[SKAction waitForDuration:1.17],[SKAction runBlock:^{CGPoint pointinlevel=[weakself convertPoint:CGPointMake(27,0) toNode:weakself.parent];
             SKSpriteNode*slashcpy=weakself.slashprojectile.copy;
@@ -168,7 +168,7 @@
                 [weakself.projectilesinaction removeObject:slashcpy];
                 slashcpy.position=CGPointMake(27,0);}];}]]]]]]];
         
-        slashprojmove=[SKAction moveBy:CGVectorMake(-460,0) duration:1.8];
+        slashprojmove=[SKAction moveBy:CGVectorMake(-470,0) duration:1.8];
         
         _slashattackleft=[SKAction sequence:@[[SKAction group:@[slashleftanim,[SKAction sequence:@[[SKAction waitForDuration:1.17],[SKAction runBlock:^{CGPoint pointinlevel=[weakself convertPoint:CGPointMake(-27,0) toNode:weakself.parent];
             SKSpriteNode*slashcpy=weakself.slashprojectile.copy;
@@ -227,19 +227,19 @@
         [_arachnusrs addRule:turnleftrule];
         _arachnusrs.state[@"prevcoorddist"]=@(0);//initialized to something
         
-        NSPredicate*morphballattackleftpred=[NSPredicate predicateWithFormat:@"$coorddist < -180"];
+        NSPredicate*morphballattackleftpred=[NSPredicate predicateWithFormat:@"$coorddist < -250"];
         GKRule *morphballattackleftrule=[GKRule ruleWithPredicate:morphballattackleftpred assertingFact:@"ballattackleft" grade:1.0];
         [_arachnusrs addRule:morphballattackleftrule];
 
-        NSPredicate*morphballattackrightpred=[NSPredicate predicateWithFormat:@"$coorddist > 180"];
+        NSPredicate*morphballattackrightpred=[NSPredicate predicateWithFormat:@"$coorddist > 250"];
         GKRule *morphballattackrightrule=[GKRule ruleWithPredicate:morphballattackrightpred assertingFact:@"ballattackright" grade:1.0];
         [_arachnusrs addRule:morphballattackrightrule];
         
-        NSPredicate*slashattackleftpred=[NSPredicate predicateWithFormat:@"$coorddist BETWEEN %@",@[@-150,@-197]];
+        NSPredicate*slashattackleftpred=[NSPredicate predicateWithFormat:@"$coorddist BETWEEN %@",@[@-150,@-249]];
         GKRule *slashattackleftrule=[GKRule ruleWithPredicate:slashattackleftpred assertingFact:@"slashleft" grade:1.0];
         [_arachnusrs addRule:slashattackleftrule];
         
-        NSPredicate*slashattackrightpred=[NSPredicate predicateWithFormat:@"$coorddist BETWEEN %@", @[@150,@179]];
+        NSPredicate*slashattackrightpred=[NSPredicate predicateWithFormat:@"$coorddist BETWEEN %@", @[@150,@249]];
         GKRule *slashattackrightrule=[GKRule ruleWithPredicate:slashattackrightpred assertingFact:@"slashright" grade:1.0];
         [_arachnusrs addRule:slashattackrightrule];
         
@@ -280,6 +280,11 @@
         
         
         _rndsrc=[[GKLinearCongruentialRandomSource alloc] init];
+        self.healthlbl=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
+        self.healthlbl.text=[NSString stringWithFormat:@"Boss Health:%d",self.health];
+        self.healthlbl.fontSize=15;
+        self.healthlbl.zPosition=15;
+        //self.healthlbl.position=CGPointMake(-176.3, 90);
     }
     
     return self;

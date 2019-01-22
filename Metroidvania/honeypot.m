@@ -13,7 +13,8 @@
 
 -(instancetype)initWithPosition:(CGPoint)position andTex:(SKTexture*)tex andAnger:(BOOL)angry{
     __weak SKTexture *weaktex=tex;
-    if(self == [super initWithTexture:weaktex]){
+    self=[super initWithTexture:weaktex];
+    if(self!=nil){
         self.agent=[[GKAgent2D alloc] init];
         self.agent.radius=self.size.height;
         self.agent.position=(vector_float2){(float)position.x,(float)position.y};

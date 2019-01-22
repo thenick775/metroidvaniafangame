@@ -133,7 +133,10 @@
             }
         }];
         
+        __weak arachnusboss*weakboss1=boss1;
+        
         SKAction* removebosswall=[SKAction runBlock:^{
+            [weakboss1.healthlbl removeFromParent];
             for(int i=23;i<28;i++){
                 [weakself.walls removeTileAtCoord:CGPointMake(263,i)];
                 [weakself.background removeTileAtCoord:CGPointMake(262,i)];
@@ -145,11 +148,12 @@
         bossFire.zPosition=16;
         bossFire.position=CGPointMake(249*self.map.tileSize.width,2*self.map.tileSize.height);
         
-        __weak arachnusboss*weakboss1=boss1;
         __block BOOL bossdidenter=NO;
         __block BOOL timerrepeat=NO;
         SKAction *bossEntrance=[SKAction sequence:@[[SKAction waitForDuration:3.0],[SKAction runBlock:^{
             weakboss1.zPosition=0.0;
+            weakboss1.healthlbl.position=CGPointMake((-3.65*(weakself.size.width/10)), weakself.size.height/2-40);
+            [weakself.camera addChild:weakboss1.healthlbl];
             for(int i=247;i<=250;i++){
                 for(int k=25;k<=27;k++){
                     [weakself.walls removeTileAtCoord:CGPointMake(i,k)];
@@ -193,7 +197,7 @@
     
     //__weak GameLevelScene2*weakself=self;
     dispatch_async(dispatch_get_main_queue(), ^{//deal with certain ui on main thread only
-    [self setupVolumeSlider];
+    [self setupVolumeSliderAndReplayAndContinue];
     });
 }
 
@@ -324,6 +328,7 @@
                 if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
                     //NSLog(@"hit an enemy");
                     enemylcop.health--;
+                    enemylcop.healthlbl.text=[NSString stringWithFormat:@"Boss Health:%d",enemylcop.health];
                     if(enemylcop.health<=0){
                         [self.enemies removeObject:enemylcop];
                         [self runAction:handlebridge withKey:@"handlebridge"];

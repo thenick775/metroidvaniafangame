@@ -17,20 +17,20 @@
     _currentQueueIterator=0;
     
     if(lvlnum==0){
-        self.currentVolume=0.7;
+        self.currentVolume=0.6;
         [_musicQueue addObject:[gameaudio setupSound:@"titlescreen_dystopian-future.wav" volume:self.currentVolume]];
     }
     else if(lvlnum==1){
-        self.currentVolume=0.6;
+        self.currentVolume=0.4;
         //self.bkgrndmusic=[gameaudio setupRepeatingSound:@"lvl1-lost-moon.wav" volume:self.currentVolume];
         [_musicQueue addObject:[gameaudio setupSound:@"lvl1-lost-moon.wav" volume:self.currentVolume]];
     }
     else if(lvlnum==2){
-        self.currentVolume=0.65;
+        self.currentVolume=0.3;
         [_musicQueue addObjectsFromArray:@[[gameaudio setupSound:@"11 Lonely.mp3" volume:self.currentVolume],[gameaudio setupSound:@"Trap Beat 2017, Dope Rap_Trap Instrumentalc.mp3" volume:self.currentVolume]]];
     }
     else if(lvlnum==3){
-        self.currentVolume=0.7;
+        self.currentVolume=0.5;
         [_musicQueue addObjectsFromArray:@[[gameaudio setupSound:@"254Beats-Trap-2017.mp3" volume:self.currentVolume],[gameaudio setupSound:@"Yung_Kartz_-_08_-_Aye.mp3" volume:self.currentVolume]]];
     }
     
