@@ -86,13 +86,13 @@
     self.healthlabel=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
     self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
     self.healthlabel.fontSize=15;
-    self.healthlabel.zPosition=15;
+    self.healthlabel.zPosition=19;
     self.healthlabel.position=CGPointMake((-4*(self.size.width/10))+3, self.size.height/2-20);
     [self.camera addChild:self.healthlabel];
     
     //health bar initialization
     self.healthbar=[SKSpriteNode spriteNodeWithColor:[UIColor redColor] size:CGSizeMake(200, 20)];
-    self.healthbar.zPosition=14;
+    self.healthbar.zPosition=18;
     self.healthbar.anchorPoint=CGPointMake(0.0, 0.0);
     self.healthbar.position=CGPointMake((-9*(self.size.width/20))-9.5/*self.size.width/20-10*/, self.size.height/2-24);
     [self.camera addChild:self.healthbar];
@@ -100,7 +100,7 @@
     
     self.healthbarborder=[SKSpriteNode spriteNodeWithImageNamed:@"healthbarborder.png"];
     self.healthbarborder.anchorPoint=CGPointMake(0.0, 0.0);
-    self.healthbarborder.zPosition=15;
+    self.healthbarborder.zPosition=19;
     self.healthbarborder.position=CGPointMake((-9*(self.size.width/20))-9.5/*self.size.width/20-10*/, self.size.height/2-24);
     [self.camera addChild:self.healthbarborder];
     
@@ -112,8 +112,10 @@
     //pause-unpause buttons/labels & pause screen items
     _pauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"pauselabel.png"];
     _pauselabel.position=CGPointMake(0,35);
+    _pauselabel.zPosition=18;
     _unpauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"unpauselabel.png"];
     _unpauselabel.position=CGPointMake(0,0);
+    _unpauselabel.zPosition=18;
     [_unpauselabel setScale:1.35];
     
     //portal stuff
@@ -122,11 +124,13 @@
     
     //joystick initialization
     myjoystick=[[joystick alloc] initWithPos:CGPointMake(-158.27777099609375, -75)];
+    myjoystick.zPosition=18;
     [self.camera addChild:myjoystick];
     
     _startbutton=[SKSpriteNode spriteNodeWithImageNamed:@"startbutton.png"];
     [_startbutton setScale:1.1];
     _startbutton.position=CGPointMake(self.size.width/4+83,self.size.height/2-12);
+    _startbutton.zPosition=18;
     [self.camera addChild:_startbutton];
     
     //scene mutable arrays here

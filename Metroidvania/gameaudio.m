@@ -21,7 +21,7 @@
         [_musicQueue addObject:[gameaudio setupSound:@"titlescreen_dystopian-future.wav" volume:self.currentVolume]];
     }
     else if(lvlnum==1){
-        self.currentVolume=0.4;
+        self.currentVolume=0.35;
         //self.bkgrndmusic=[gameaudio setupRepeatingSound:@"lvl1-lost-moon.wav" volume:self.currentVolume];
         [_musicQueue addObject:[gameaudio setupSound:@"lvl1-lost-moon.wav" volume:self.currentVolume]];
     }

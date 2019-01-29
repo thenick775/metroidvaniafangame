@@ -274,7 +274,6 @@
                 if(!child.anger && self.player.meleeinaction && !self.player.meleedelay && CGRectContainsPoint([self.player meleeBoundingBoxNormalized],[self convertPoint:child.position fromNode:enemyconcop])){
                     //NSLog(@"hit honeypot child");
                     [enemyconcop dealChildDamage:3 withChild:child];
-                    //[self.player runAction:self.player.shortdurationmeleedelayac];
                 }
             }
             if(enemyconcop.agentSystem.components.count==0){

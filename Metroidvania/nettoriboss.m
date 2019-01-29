@@ -51,27 +51,18 @@
         [petal3 setXScale:-1];
         [self addChild:petal3];
         
-        SKAction*plantidle=[SKAction repeatActionForever:[SKAction animateWithTextures:@[[_nettoriAtlas textureNamed:@"plantidle1.png"],[_nettoriAtlas textureNamed:@"plantidle2.png"],[_nettoriAtlas textureNamed:@"plantidle3.png"],[_nettoriAtlas textureNamed:@"plantidle4.png"],[_nettoriAtlas textureNamed:@"plantidle5.png"],[_nettoriAtlas textureNamed:@"plantidle6.png"],[_nettoriAtlas textureNamed:@"plantidle7.png"],[_nettoriAtlas textureNamed:@"plantidle8.png"],[_nettoriAtlas textureNamed:@"plantidle9.png"],[_nettoriAtlas textureNamed:@"plantidle10.png"],[_nettoriAtlas textureNamed:@"plantidle11.png"],[_nettoriAtlas textureNamed:@"plantidle12.png"],[_nettoriAtlas textureNamed:@"plantidle13.png"],] timePerFrame:0.25 resize:YES restore:NO]];
-        SKAction*plantattack=[SKAction animateWithTextures:@[[_nettoriAtlas textureNamed:@"plantattack1.png"],[_nettoriAtlas textureNamed:@"plantattack2.png"],[_nettoriAtlas textureNamed:@"plantattack3.png"],[_nettoriAtlas textureNamed:@"plantattack4.png"],] timePerFrame:0.12 resize:YES restore:NO];
-        
-        SKSpriteNode*plant1=[SKSpriteNode spriteNodeWithTexture:[_nettoriAtlas textureNamed:@"plantidle1.png"]];
-        plant1.anchorPoint=CGPointMake(0.5,0);
-        [plant1 setScale:0.85];
-        plant1.position=CGPointMake(-16*9, -16*3);
-        [self addChild:plant1];
-        [plant1 runAction:plantidle];
-        
-        SKSpriteNode*plant2=plant1.copy;
-        plant2.position=CGPointMake(plant1.position.x-5*16, plant1.position.y);
-        [self addChild:plant2];
-        
-        SKSpriteNode*plant3=plant1.copy;
-        plant3.position=CGPointMake(plant2.position.x-5*16, plant1.position.y);
-        [self addChild:plant3];
-        
-        SKSpriteNode*plant4=plant1.copy;
-        plant4.position=CGPointMake(plant3.position.x-5*16, plant1.position.y);
-        [self addChild:plant4];
+        plant *plnt1=[[plant alloc] initWithPos:CGPointMake(-16*9, -16*3) andTextureAtlas:_nettoriAtlas];
+        [self addChild:plnt1];
+        [self.projectilesInAction addObject:plnt1];
+        plant *plnt2=[[plant alloc] initWithPos:CGPointMake(plnt1.position.x-5*16, -16*3) andTextureAtlas:_nettoriAtlas];
+        [self addChild:plnt2];
+        [self.projectilesInAction addObject:plnt2];
+        plant *plnt3=[[plant alloc] initWithPos:CGPointMake(plnt2.position.x-5*16, -16*3) andTextureAtlas:_nettoriAtlas];
+        [self addChild:plnt3];
+        [self.projectilesInAction addObject:plnt3];
+        plant *plnt4=[[plant alloc] initWithPos:CGPointMake(plnt3.position.x-5*16, -16*3) andTextureAtlas:_nettoriAtlas];
+        [self addChild:plnt4];
+        [self.projectilesInAction addObject:plnt4];
         
     }
     return self;
@@ -92,6 +83,42 @@
 
 @end
 
+@implementation netprojbase
+-(void)runDmgac{
+    
+}
+@end
+
+@implementation plant
+
+-(instancetype)initWithPos:(CGPoint)pos andTextureAtlas:(SKTextureAtlas*)atlas{
+    self=[super initWithTexture:[atlas textureNamed:@"plantidle1.png"]];
+    if(self!=nil){
+        self.anchorPoint=CGPointMake(0.5,0);
+        [self setScale:0.85];
+        self.position=pos;
+        self.canGiveDmg=YES;
+        self.dmgamt=15;
+        
+        self.plantidle=[SKAction repeatActionForever:[SKAction animateWithTextures:@[[atlas textureNamed:@"plantidle1.png"],[atlas textureNamed:@"plantidle2.png"],[atlas textureNamed:@"plantidle3.png"],[atlas textureNamed:@"plantidle4.png"],[atlas textureNamed:@"plantidle5.png"],[atlas textureNamed:@"plantidle6.png"],[atlas textureNamed:@"plantidle7.png"],[atlas textureNamed:@"plantidle8.png"],[atlas textureNamed:@"plantidle9.png"],[atlas textureNamed:@"plantidle10.png"],[atlas textureNamed:@"plantidle11.png"],[atlas textureNamed:@"plantidle12.png"],[atlas textureNamed:@"plantidle13.png"],] timePerFrame:0.25 resize:YES restore:NO]];
+        self.plantattack=[SKAction animateWithTextures:@[[atlas textureNamed:@"plantattack1.png"],[atlas textureNamed:@"plantattack2.png"],[atlas textureNamed:@"plantattack3.png"],[atlas textureNamed:@"plantattack4.png"],] timePerFrame:0.12 resize:YES restore:NO];
+    
+        self.dmgaction=[SKAction sequence:@[[SKAction repeatAction:self.plantattack count:5]]];
+        [self runAction:self.plantidle withKey:@"idle"];
+    }
+    return self;
+}
+
+-(void)runDmgac{
+    if(self.dmgaction!=nil && [self actionForKey:@"idle"]){
+        NSLog(@"petal eat ac running");
+        __weak plant*weakself=self;
+        [self removeActionForKey:@"idle"];
+        [self runAction:self.dmgaction completion:^{[weakself runAction:self.plantidle withKey:@"idle"];}];
+    }
+}
+
+@end
 
 @implementation petal{
     SKAction*_petalidleanim;
@@ -129,10 +156,7 @@
 @end
 
 
-@implementation petalprojectile{
-    SKAction*_petalprojidle;
-    SKAction*_petalprojexplode;
-}
+@implementation petalprojectile
 
 -(instancetype)initWithTextureAtlas:(SKTextureAtlas*)atlas andCS:(GKComponentSystem*)system andPos:(CGPoint)pos andArr:(NSMutableArray *)arr{
     self=[super initWithTexture:[atlas textureNamed:@"petalprojidle1.png"]];
@@ -144,21 +168,26 @@
         self.agent.maxSpeed=5;
         self.agent.maxAcceleration=7;
         self.agent.mass=5;
+        self.canGiveDmg=NO;
+        self.dmgaction=nil;
+        self.dmgamt=10;
         __weak petalprojectile*weakself=self;
         __weak GKComponentSystem*weaksystem=system;
         
         vector_float2 myVectors[8] = {
-            {(float)self.position.x,(float)self.position.y-30},
-            {(float)self.position.x+20/*+(350/2)*/,(float)self.position.y-100}
+            {(float)self.position.x,(float)self.position.y-50},
+            {(float)self.position.x+20,(float)self.position.y-90}
         };
         
         GKBehavior*wanderWithinBoundary=[GKBehavior behaviorWithGoals:@[[GKGoal goalToWander:1],[GKGoal goalToStayOnPath:[GKPath pathWithPoints:myVectors count:2 radius:25 cyclical:YES] maxPredictionTime:0.5]] andWeights:@[@10,@50]];
         self.agent.behavior=wanderWithinBoundary;
         
-        _petalprojidle=[SKAction repeatAction:[SKAction animateWithTextures:@[[atlas textureNamed:@"petalprojidle1.png"],[atlas textureNamed:@"petalprojidle2.png"],[atlas textureNamed:@"petalprojidle3.png"],[atlas textureNamed:@"petalprojidle4.png"],] timePerFrame:0.3] count:8];
-        _petalprojexplode=[SKAction animateWithTextures:@[[atlas textureNamed:@"petalprojexplode1.png"],[atlas textureNamed:@"petalprojexplode2.png"],[atlas textureNamed:@"petalprojexplode3.png"],] timePerFrame:0.1];
+        SKAction*petalprojidle=[SKAction repeatAction:[SKAction animateWithTextures:@[[atlas textureNamed:@"petalprojidle1.png"],[atlas textureNamed:@"petalprojidle2.png"],[atlas textureNamed:@"petalprojidle3.png"],[atlas textureNamed:@"petalprojidle4.png"],] timePerFrame:0.3] count:8];
+        SKAction*petalprojexplode=[SKAction animateWithTextures:@[[atlas textureNamed:@"petalprojexplode1.png"],[atlas textureNamed:@"petalprojexplode2.png"],[atlas textureNamed:@"petalprojexplode3.png"],] timePerFrame:0.1];
+        SKAction*setDmgAvailability=[SKAction runBlock:^{weakself.canGiveDmg=YES;}];
         
-        SKAction*composedac=[SKAction sequence:@[_petalprojidle,_petalprojexplode]];
+        
+        SKAction*composedac=[SKAction sequence:@[petalprojidle,setDmgAvailability,petalprojexplode]];
         [system addComponent:self.agent];
         //[arr addObject:self];
         [self runAction:composedac completion:^{[weaksystem removeComponent:weakself.agent];[arr removeObject:weakself];[weakself removeAllActions];[weakself removeFromParent];}];

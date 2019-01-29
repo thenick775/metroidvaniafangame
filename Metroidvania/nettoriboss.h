@@ -17,18 +17,28 @@
 
 @end
 
-
 @interface petal : SKSpriteNode
-
 -(instancetype)initWithAtlas:(SKTextureAtlas*)atlas andCS:(GKComponentSystem*)system andPos:(CGPoint)pos andArr:(NSMutableArray*)arr;
-
 @end
 
-@interface petalprojectile : SKSpriteNode <GKAgentDelegate>
 
+@interface netprojbase : SKSpriteNode
+@property (nonatomic,assign) BOOL canGiveDmg;
+@property (nonatomic,assign) int dmgamt;
+@property (nonatomic,strong) SKAction*dmgaction;
+-(void)runDmgac;
+@end
+
+@interface petalprojectile : netprojbase <GKAgentDelegate>
 @property (nonatomic,strong) GKAgent2D*agent;
-
+//@property (nonatomic,assign) BOOL canGiveDmg;
 -(instancetype)initWithTextureAtlas:(SKTextureAtlas*)atlas andCS:(GKComponentSystem*)system andPos:(CGPoint)pos andArr:(NSMutableArray*)arr;
-
 @end
 
+@interface plant : netprojbase
+
+//@property (nonatomic,assign) BOOL isattacking;
+@property (nonatomic,strong) SKAction *plantidle,*plantattack;
+-(instancetype)initWithPos:(CGPoint)pos andTextureAtlas:(SKTextureAtlas*)atlas;
+
+@end
