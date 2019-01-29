@@ -183,10 +183,11 @@
         else if([enemycon isKindOfClass:[nettoriboss class]]){
             [enemycon updateWithDeltaTime:self.delta];
             nettoriboss*boss=(nettoriboss*)enemycon;
-            //NSLog(@"enemyprojinaction:%lu",(unsigned long)boss.projectilesInAction.count);
-            for(SKSpriteNode*tmp in [boss.projectilesInAction reverseObjectEnumerator]){
-                if(CGRectContainsPoint(self.player.collisionBoundingBox, [self convertPoint:tmp.position fromNode:tmp.parent])){
-                    NSLog(@"hit by nettoriproj");
+            for(netprojbase*tmp in [boss.projectilesInAction reverseObjectEnumerator]){
+                if(tmp.canGiveDmg && CGRectContainsPoint(tmp.frame,[self convertPoint:self.player.position toNode:tmp.parent])){
+                    //NSLog(@"hit by nettoriproj");
+                    [self enemyhitplayerdmgmsg:tmp.dmgamt];
+                    [tmp runDmgac];
                 }
             }
         }
