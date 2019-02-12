@@ -63,7 +63,7 @@
     self.player.position = CGPointMake(100, 150);
     self.player.zPosition = 15;
     
-    SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33]];
+    SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33] Y:[SKRange rangeWithUpperLimit:(self.map.tileSize.height*self.map.mapSize.height)-22]];
     plyrconst.referenceNode=self.parent;
     self.player.constraints=@[plyrconst];
     
@@ -411,12 +411,25 @@
       [self.player runAction:self.player.runBackwardsAnimation withKey:@"runb"];
     }
     else if([myjoystick shouldJump:touchlocation]){
-      //NSLog(@"touching up control");
       self.player.shouldJump=YES;
       if(self.player.forwardtrack)
         [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       else
         [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
+    }
+    else if([myjoystick shouldJumpForeward:touchlocation]){
+      self.player.shouldJump=YES;
+      self.player.goForeward=YES;
+      self.player.forwardtrack=YES;
+      self.player.backwardtrack=NO;
+      [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
+    }
+    else if([myjoystick shouldJumpBackward:touchlocation]){
+      self.player.shouldJump=YES;
+      self.player.goBackward=YES;
+      self.player.backwardtrack=YES;
+      self.player.forwardtrack=NO;
+      [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
     }
     
   
@@ -430,36 +443,61 @@
   if(self.gameOver || self.paused || self.player.meleeinaction)
     return;
   
-  
   //NSLog(@"Touch is moving");
   for(UITouch *touch in touches){
     CGPoint currtouchlocation=[touch locationInNode:self.camera];
     CGPoint previoustouchlocation=[touch previousLocationInNode:self.camera];
     [myjoystick moveFingertrackerto:currtouchlocation];
     if(currtouchlocation.x>self.size.width/2 && (previoustouchlocation.x<=self.size.width/2)){
-      //NSLog(@"moving to firing weapon");
+      NSLog(@"moving to firing weapon");
       self.player.shouldJump=NO;
       self.player.goForeward=NO;
       self.player.goBackward=NO;
     }
     else if([myjoystick shouldJump:currtouchlocation] && [myjoystick shouldGoForeward:previoustouchlocation]){
-    //NSLog(@"moving from move right to jumping");
+    NSLog(@"moving from move right to jumping");
       self.player.shouldJump=YES;
       self.player.goForeward=NO;
       
+      //if(![self.player actionForKey:@"jmpf"]){
       [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
+      [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
       [self.player removeActionForKey:@"runf"];
+      //}
+    }
+    else if([myjoystick shouldJumpForeward:currtouchlocation] && [myjoystick shouldGoForeward:previoustouchlocation]){
+      NSLog(@"moving from move right to jmpfwd");
+      self.player.shouldJump=YES;
+      
+      //if(![self.player actionForKey:@"jmpf"]){
+      [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
+      [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
+      [self.player removeActionForKey:@"runf"];
+      //}
     }
     else if([myjoystick shouldJump:currtouchlocation] && [myjoystick shouldGoBackward:previoustouchlocation]){
-      //NSLog(@"moving from move backward to jumping");
+      NSLog(@"moving from move backward to jumping");
       self.player.shouldJump=YES;
       self.player.goBackward=NO;
       
+      //if(![self.player actionForKey:@"jmpb"]){
       [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
+      [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
       [self.player removeActionForKey:@"runb"];
+      //}
+    }
+    else if([myjoystick shouldJumpBackward:currtouchlocation] && [myjoystick shouldGoBackward:previoustouchlocation]){
+      NSLog(@"moving from move backward to jmpbkwd");
+      self.player.shouldJump=YES;
+      
+      //if(![self.player actionForKey:@"jmpb"]){
+      [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
+      [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
+      [self.player removeActionForKey:@"runb"];
+      //}
     }
     else if([myjoystick shouldGoForeward:currtouchlocation] && [myjoystick shouldGoBackward:previoustouchlocation]){
-      //NSLog(@"moving from move backward to moveforeward");
+      NSLog(@"moving from move backward to move right");
       self.player.goForeward=YES;
       self.player.goBackward=NO;
       
@@ -470,18 +508,44 @@
       [self.player removeActionForKey:@"runb"];
     }
     else if([myjoystick shouldGoForeward:currtouchlocation] && [myjoystick shouldJump:previoustouchlocation]){
-      //NSLog(@"move up to move foreward");
+      NSLog(@"move up to move right");
       self.player.goForeward=YES;
+      self.player.goBackward=NO;
       self.player.shouldJump=NO;
       
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
       
-      [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
+      if([self.player actionForKey:@"jmpb"]){
+        [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
+        [self.player removeActionForKey:@"jmpb"];
+        [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
+      }
+
+    }
+    else if([myjoystick shouldGoForeward:currtouchlocation] && [myjoystick shouldJumpForeward:previoustouchlocation]){
+      NSLog(@"moving from jmpfwd to move right");
+      self.player.shouldJump=NO;
+      
+      self.player.forwardtrack=YES;
+      self.player.backwardtrack=NO;
+      
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
     }
+    else if([myjoystick shouldGoForeward:currtouchlocation] && [myjoystick shouldJumpBackward:previoustouchlocation]){
+      NSLog(@"moving from jmpbkwd to move right");
+      self.player.shouldJump=NO;
+      self.player.goForeward=YES;
+      self.player.goBackward=NO;
+      
+      self.player.forwardtrack=YES;
+      self.player.backwardtrack=NO;
+      
+      [self.player runAction:self.player.runAnimation withKey:@"runf"];
+      [self.player removeActionForKey:@"jmpb"];
+    }
     else if([myjoystick shouldGoBackward:currtouchlocation] && [myjoystick shouldGoForeward:previoustouchlocation]){
-      //NSLog(@"move forewards to movebackwards");
+      NSLog(@"move right to movebackwards");
       self.player.goBackward=YES;
       self.player.goForeward=NO;
       
@@ -492,37 +556,74 @@
       [self.player removeActionForKey:@"runf"];
     }
     else if([myjoystick shouldGoBackward:currtouchlocation] && [myjoystick shouldJump:previoustouchlocation]){
-      //NSLog(@"move up to movebackwards");
+      NSLog(@"move up to movebackwards");
+      self.player.goBackward=YES;
+      self.player.goForeward=NO;
+      self.player.shouldJump=NO;
+      
+      self.player.backwardtrack=YES;
+      self.player.forwardtrack=NO;
+      
+      if([self.player actionForKey:@"jmpf"]){
+        [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
+        [self.player removeActionForKey:@"jmpf"];
+        [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
+      }
+      
+    }
+    else if([myjoystick shouldGoBackward:currtouchlocation] && [myjoystick shouldJumpBackward:previoustouchlocation]){
+      NSLog(@"moving from jmpbkwd to move backwards");
       self.player.goBackward=YES;
       self.player.shouldJump=NO;
       
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
       
-      [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
     }
-    /*else if(!CGRectContainsPoint(_buttonup.frame, currtouchlocation) && !CGRectContainsPoint(_buttonright.frame, currtouchlocation) && !CGRectContainsPoint(_buttonleft.frame, currtouchlocation) && currtouchlocation.x<self.camera.frame.size.width/2){
-      //NSLog(@"not in dpad");
+    else if([myjoystick shouldGoBackward:currtouchlocation] && [myjoystick shouldJumpForeward:previoustouchlocation]){
+      NSLog(@"moving from jmpfwd to move backwards");
       self.player.shouldJump=NO;
+      self.player.goBackward=YES;
       self.player.goForeward=NO;
+      
+      self.player.backwardtrack=YES;
+      self.player.forwardtrack=NO;
+      
+      [self.player runAction:self.player.runBackwardsAnimation withKey:@"runb"];
+      [self.player removeActionForKey:@"jmpf"];
+    }
+    else if([myjoystick shouldJumpForeward:currtouchlocation] && [myjoystick shouldJump:previoustouchlocation]){
+      NSLog(@"moving from jump to jmpfwd");
+      self.player.goForeward=YES;
       self.player.goBackward=NO;
       
-      [self.player removeActionForKey:@"runf"];
-      [self.player removeActionForKey:@"runb"];
-      [self.player removeActionForKey:@"jmpf"];
-      [self.player removeActionForKey:@"jmpb"];
-      //[self.player removeActionForKey:@"jmpblk"];
+      self.player.forwardtrack=YES;
+      self.player.backwardtrack=NO;
       
-      if(self.player.forwardtrack){
-        [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
+      if([self.player actionForKey:@"jmpb"]){
+      NSLog(@"change jump");
+      [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
+      [self.player removeActionForKey:@"jmpb"];
+      [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
       }
-      else{
-        [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
+    }
+    else if([myjoystick shouldJumpBackward:currtouchlocation] && [myjoystick shouldJump:previoustouchlocation]){
+      NSLog(@"moving from jump to jumpbkwd");
+      self.player.goBackward=YES;
+      self.player.goForeward=NO;
+      
+      self.player.backwardtrack=YES;
+      self.player.forwardtrack=NO;
+      
+      if([self.player actionForKey:@"jmpf"]){
+      NSLog(@"change jump");
+      [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
+      [self.player removeActionForKey:@"jmpf"];
+      [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
       }
-    }*/
-    
-    
+    }
+  
   }//for uitouch bracket
 }//fnc bracket
 
@@ -555,7 +656,7 @@
     [self.player removeActionForKey:@"jmpb"];
     self.player.shouldJump=NO;
     
-    if([myjoystick shouldJump:fnctouchlocation]){
+    if([myjoystick shouldJump:fnctouchlocation] || [myjoystick shouldJumpBackward:fnctouchlocation] || [myjoystick shouldJumpForeward:fnctouchlocation]){
       //NSLog(@"done touching up");
       if(self.player.backwardtrack)
         [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
@@ -588,13 +689,7 @@
     else if(fnctouchlocation.x>self.camera.frame.size.width/2 && fnctouchlocation.y>self.camera.frame.size.height/2){
       [self.player runAction:self.player.meleeactionright withKey:@"melee"];
     }
-    /*else{// to handle any case where the touches are not in sync (gets rid of sticky dpad)
-    NSLog(@"blank touches ended");
-    self.player.goForeward=NO;
-    self.player.goBackward=NO;
-    self.player.shouldJump=NO;
-  }*/
-    
+  
     
   }
 }
