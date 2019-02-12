@@ -32,28 +32,38 @@
 }
 
 -(BOOL)shouldGoForeward:(CGPoint)pos{
-    if([self convertPoint:pos fromNode:self.parent].x>0 && [self convertPoint:pos fromNode:self.parent].y<10 && pos.x<self.parent.frame.size.width/2)
+    CGPoint temp=[self convertPoint:pos fromNode:self.parent];
+    if(temp.x>0 && temp.y<10 && pos.x<self.parent.frame.size.width/2){
         return YES;
+    }
     else return NO;
 }
 -(BOOL)shouldGoBackward:(CGPoint)pos{
-    if([self convertPoint:pos fromNode:self.parent].x<0 && [self convertPoint:pos fromNode:self.parent].y<10 && pos.x<self.parent.frame.size.width/2)
+    CGPoint temp=[self convertPoint:pos fromNode:self.parent];
+    if(temp.x<0 && temp.y<10 && pos.x<self.parent.frame.size.width/2){
         return YES;
+    }
     else return NO;
 }
 -(BOOL)shouldJumpForeward:(CGPoint)pos{
-    if([self convertPoint:pos fromNode:self.parent].x>0 && [self convertPoint:pos fromNode:self.parent].y>10 && pos.x<self.parent.frame.size.width/2)
+    CGPoint temp=[self convertPoint:pos fromNode:self.parent];
+    if(temp.x>14 && temp.y>10 && pos.x<self.parent.frame.size.width/2){
         return YES;
+    }
     else return NO;
 }
 -(BOOL)shouldJumpBackward:(CGPoint)pos{
-    if([self convertPoint:pos fromNode:self.parent].x<0 && [self convertPoint:pos fromNode:self.parent].y>10 && pos.x<self.parent.frame.size.width/2)
+    CGPoint temp=[self convertPoint:pos fromNode:self.parent];
+    if(temp.x<-14 && temp.y>10 && pos.x<self.parent.frame.size.width/2){
         return YES;
+    }
     else return NO;
 }
 -(BOOL)shouldJump:(CGPoint)pos{
-    if([self convertPoint:pos fromNode:self.parent].y>10 && pos.x<self.parent.frame.size.width/2)
+    CGPoint temp=[self convertPoint:pos fromNode:self.parent];
+    if(temp.y>10 && temp.x>-14 && temp.x<14 && pos.x<self.parent.frame.size.width/2){
         return YES;
+    }
     else return NO;
 }
 -(void)moveFingertrackerto:(CGPoint)pos{

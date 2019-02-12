@@ -216,7 +216,7 @@
         
         //GKRulresystem & rule initializations
         _arachnusrs=[[GKRuleSystem alloc] init];
-        __weak GKRuleSystem*weakarachnusrs=_arachnusrs;
+        //__weak GKRuleSystem*weakarachnusrs=_arachnusrs;
         _arachnusrs.state[@"orighealth"]=@(self.health);
         
         NSPredicate*turnrightpred=[NSPredicate predicateWithFormat:@"($coorddist>0 && $prevcoorddist<0)"];
