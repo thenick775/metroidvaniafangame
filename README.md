@@ -23,7 +23,7 @@ Technical details:
 
 -This app uses GKAgents (GameplayKit) in conjunction with SpriteKit to create event driven autonomous flocking behavior that simulates real-world physical movement and targeting using GKAgents, and dynamic wandering (ex. honeypot, waver). This behavoir is lightweight and requires no physicsbodies/external nodes attatched to the target, and is integrated with the collision detection system for applicable enemies.
 
--Audio management of this game has been encapsulated in a class designed as a component of each scene. This class makes use of AVFoundation, specifically AVAudioPlayer and its related functions, along with GCD and a simple queue to play sounds asychronously. This allows relevent audio to be preloaded with each scene, and the load on the main thread and memory is as small as possible.
+-Audio management of this game has been encapsulated in a class designed as a component of each scene (gameaudio.m). This class makes use of AVFoundation, specifically AVAudioPlayer and its related functions, along with GCD and a simple queue to play sounds asychronously. This allows relevent audio to be preloaded with each scene, and the load on the main thread and memory is as small as possible.
 
 -NSNotificationCenter is used to handle the scene as the app transitions between background and active states.
 
