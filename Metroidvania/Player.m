@@ -42,7 +42,8 @@
         self.meleedelayac=[SKAction sequence:@[[SKAction runBlock:^{weakself.meleedelay=YES;}],[SKAction waitForDuration:1.2],[SKAction runBlock:^{weakself.meleedelay=NO;}]]];
         
         //case for jumping to stay jumping until on ground
-        SKAction *jmpblk=[SKAction runBlock:^{/*NSLog(@"checkingjmpblk");*/if(weakself.onGround){
+        SKAction *jmpblk=[SKAction runBlock:^{/*NSLog(@"checkingjmpblk");*/
+            if(weakself.onGround && !weakself.shouldJump){
             if(weakself.goForeward)
             [weakself runAction:[SKAction repeatActionForever:weakself.runAnimation] withKey:@"runf"];
             else if(weakself.goBackward)
