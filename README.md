@@ -30,13 +30,13 @@ Technical details:
 The gifs may take some time to load due to the filesize, any FPS tags are slower than on actual device (gifs captured using third party software). New gifs coming soon, no third party software used/no more dpad!
 
 
-![](menuscenedemo_v2.gif)
+![](menuscenedemo_v3.gif)
 
-![](honeypottrackdemo_v2.gif)
+![](honeypottrackdemo_v4.gif)
 
-![](bossdemo_v1.gif)
+![](bossdemo_v3.gif)
 
-![](lvl3demo_v1.gif)
+![](lvl3demo_v3.gif)
 
 
 Credits for art assets ripped by:
