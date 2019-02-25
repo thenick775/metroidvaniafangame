@@ -27,7 +27,9 @@ Technical details:
 
 -NSNotificationCenter is used to handle the scene as the app transitions between background and active states.
 
-The gifs may take some time to load due to the filesize, any FPS tags are slower than on actual device (gifs captured using third party software). New gifs coming soon, no third party software used/no more dpad!
+-The joystick was implemented from scratch in joystick.m and allows 5-directional movement. This scheme is disconnected from the player animation, while providing inputs for the player physics (player x and +y vectors).
+
+The gifs may take some time to load due to the filesize, any FPS tags are slower than on actual device (gifs captured using third party software).
 
 
 ![](menuscenedemo_v3.gif)
