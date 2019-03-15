@@ -63,6 +63,8 @@ Bob Bobium-Human Station Menuscene (space colony ceres), Door sprites
 
 Greiga Master-Chozo Statue, Nettori boss
 
+Some labels were made using https://fontmeme.com/pixel-fonts/
+
 Credit for music:
 
 BurghRecords-Dystopian Future Fx Sounds (used in menuscene, background music) liscensed under Creative Commons 0 Liscense
