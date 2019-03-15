@@ -22,7 +22,8 @@
 }
 
 -(instancetype)initWithSize:(CGSize)size {
-    if (self = [super initWithSize:size]) {
+    self=[super initWithSize:size];
+    if (self!=nil) {
         //self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
         [self.map removeFromParent]; //gets rid of super's implementation of my map
         self.map=nil;
@@ -46,6 +47,7 @@
         self.player.position = CGPointMake(100, 150);
         //self.player.position=CGPointMake(3980-60,100);
         self.player.zPosition = 15;
+        self.hasHadBossInterac=NO;
         
         SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33] Y:[SKRange rangeWithUpperLimit:(self.map.tileSize.height*self.map.mapSize.height)-22]];
         plyrconst.referenceNode=self.parent;
@@ -170,11 +172,13 @@
             //NSLog(@"checking boss idle");
             if(weakself.player.meleeinaction && CGRectIntersectsRect([weakself.player meleeBoundingBoxNormalized],weakboss1.frame) && !bossdidenter){
                 [weakself removeActionForKey:@"backuptimer"];
+                weakself.hasHadBossInterac=YES;
                 bossdidenter=YES;
                 [weakself addChild:bossFire];
                 [weakself runAction:bossEntrance];
             }
             else if(weakself.player.position.x>weakboss1.position.x-100 && !bossdidenter && !timerrepeat){
+                weakself.hasHadBossInterac=YES;
                 timerrepeat=YES;
                 [weakself runAction:[SKAction sequence:@[[SKAction waitForDuration:13.0],[SKAction runBlock:^{
                 bossdidenter=YES;
@@ -203,7 +207,10 @@
 
 -(void)replaybuttonpush:(id)sender{
     [[self.view viewWithTag:666] removeFromSuperview];
-    [self.view presentScene:[[GameLevelScene2 alloc] initWithSize:self.size]];
+    if(self.hasHadBossInterac)
+        [self.view presentScene:[[GameLevelScene2 alloc] initNearBossWithSize:self.size]];
+    else
+        [self.view presentScene:[[GameLevelScene2 alloc] initWithSize:self.size]];
     [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
 -(void)continuebuttonpush:(id)sender{
@@ -287,6 +294,11 @@
         else if(CGRectIntersectsRect(self.player.frame,enemyconcop.frame) && [enemyconcop actionForKey:@"walk"]/*!enemyconcop.dead*/){
             [self enemyhitplayerdmgmsg:15];
         }
+        if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame) && [enemyconcop actionForKey:@"walk"]){
+            //NSLog(@"meleehit");
+            [self.player runAction:self.player.meleedelayac];
+            [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
+        }
         if(self.player.position.x>enemyconcop.position.x+150 && [enemyconcop actionForKey:@"walk"]){
             //NSLog(@"past position of player");
             [enemyconcop runAction:enemyconcop.explodeangry];
@@ -313,7 +325,7 @@
     
     
     for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){//bullet to enemy
-        if(currbullet.cleanup){//here to avoid another run through of arr
+        if(currbullet.cleanup || [self tileGIDAtTileCoord:[self.walls coordForPoint:currbullet.position] forLayer:self.walls]){//here to avoid another run through of arr
             //NSLog(@"removing from array");
             [currbullet removeAllActions];
             [currbullet removeFromParent];
@@ -356,6 +368,155 @@
     
 }
 
+-(instancetype)initNearBossWithSize:(CGSize)size{//initial workaround for now but it is functional until i can devise a good inheritance scheme or other minimized solution..
+    if (self = [super initWithSize:size]) {
+        NSLog(@"in near boss with size\n");
+        //self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
+        [self.map removeFromParent]; //gets rid of super's implementation of my map
+        self.map=nil;
+        self.backgroundColor = [SKColor blackColor];
+        self.map = [JSTileMap mapNamed:@"level2.tmx"];
+        [self addChild:self.map];
+        
+        self.walls=[self.map layerNamed:@"walls"];
+        self.hazards=[self.map layerNamed:@"hazards"];
+        self.mysteryboxes=[self.map layerNamed:@"mysteryboxes"];
+        self.background=[self.map layerNamed:@"background"];
+        
+        __weak GameLevelScene2*weakself=self;
+        self.userInteractionEnabled=NO; //for use with player enter scene
+        
+        //audio setup (get rid of reference to previous audio manager)
+        self.audiomanager=nil;
+        
+        //player initializiation stuff
+        self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];
+        self.player.position = CGPointMake(3700,150);
+        //self.player.position=CGPointMake(3980-60,100);
+        self.player.zPosition = 15;
+        self.hasHadBossInterac=YES;
+        
+        SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33] Y:[SKRange rangeWithUpperLimit:(self.map.tileSize.height*self.map.mapSize.height)-22]];
+        plyrconst.referenceNode=self.parent;
+        self.player.constraints=@[plyrconst];
+        
+        [self.map addChild:self.player];
+        [self.player runAction:self.player.enterfromportalAnimation completion:^{[weakself.player runAction:[SKAction setTexture:weakself.player.forewards resize:YES]];weakself.userInteractionEnabled=YES;}];//need to modify to turn player when entering map, rename entermap/have seperate for travelthruportal
+        
+        self.player.forwardtrack=YES;
+        self.player.backwardtrack=NO;
+        
+        //camera initialization
+        SKRange *xrange=[SKRange rangeWithLowerLimit:self.size.width/2 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-self.size.width/2];
+        SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
+        SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
+        self.camera.constraints=@[[SKConstraint distance:[SKRange rangeWithLowerLimit:0 upperLimit:4] toNode:self.player],edgeconstraint];
+        
+        //star background initialization here
+        SKEmitterNode *starbackground=[SKEmitterNode nodeWithFileNamed:@"starsbackground.sks"];
+        starbackground.position=CGPointMake(2400,(self.map.mapSize.height*self.map.tileSize.height));
+        [starbackground advanceSimulationTime:180.0];
+        [self.map addChild: starbackground];
+        
+        //portal adjust position to suit this level
+        self.travelportal.position=CGPointMake(self.map.tileSize.width*391,self.map.tileSize.height*8);
+        
+        //mutable arrays here
+        [self.bullets removeAllObjects];
+        [self.enemies removeAllObjects];
+        self.bullets=[[NSMutableArray alloc]init];
+        self.enemies=[[NSMutableArray alloc]init];
+        
+        //enemies here
+        honeypot *enemy4=[[honeypot alloc] init];
+        enemy4.position=CGPointMake(367*self.map.tileSize.width,18*self.map.tileSize.height-3);
+        [self.enemies addObject:enemy4];
+        [self.map addChild:enemy4];
+       
+        boss1=[[arachnusboss alloc] initWithImageNamed:@"wait_1.png"];
+        boss1.position=CGPointMake(3980,56);
+        boss1.zPosition=-81.0;
+        [self.map addChild:boss1];
+        
+        SKAction* bridgeblk=[SKAction runBlock:^{
+            int plyrtilecoordx=[weakself.walls coordForPoint:weakself.player.position].x;
+            if(plyrtilecoordx>296){
+                //remove all the tiles for the bridge
+                for(int i=264;i<=296;i++){
+                    [weakself.walls removeTileAtCoord:CGPointMake(i,28)];
+                }
+                [weakself removeActionForKey:@"handlebridge"];
+            }
+            else if(plyrtilecoordx>263){
+                [weakself.walls setTileGid:1 at:CGPointMake(plyrtilecoordx,28)];
+                if(plyrtilecoordx+1<297)
+                    [weakself.walls setTileGid:1 at:CGPointMake(plyrtilecoordx+1,28)];
+                if(plyrtilecoordx-1>263)
+                    [weakself.walls setTileGid:1 at:CGPointMake(plyrtilecoordx-1,28)];
+                if(plyrtilecoordx-2>263)
+                    [weakself.walls setTileGid:3007 at:CGPointMake(plyrtilecoordx-2,28)];
+                if(plyrtilecoordx+2<297)
+                    [weakself.walls setTileGid:3007 at:CGPointMake(plyrtilecoordx+2,28)];
+            }
+        }];
+        
+        __weak arachnusboss*weakboss1=boss1;
+        
+        SKAction* removebosswall=[SKAction runBlock:^{
+            [weakboss1.healthlbl removeFromParent];
+            for(int i=23;i<28;i++){
+                [weakself.walls removeTileAtCoord:CGPointMake(263,i)];
+                [weakself.background removeTileAtCoord:CGPointMake(262,i)];
+            }}];
+        
+        handlebridge=[SKAction sequence:@[[SKAction waitForDuration:8.5],removebosswall,[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:0.1],bridgeblk]]]]];
+        
+        SKEmitterNode*bossFire=[SKEmitterNode nodeWithFileNamed:@"arachnusintroduction.sks"];
+        bossFire.zPosition=16;
+        bossFire.position=CGPointMake(249*self.map.tileSize.width,2*self.map.tileSize.height);
+        
+        __block BOOL bossdidenter=NO;
+        __block BOOL timerrepeat=NO;
+        SKAction *bossEntrance=[SKAction sequence:@[[SKAction waitForDuration:3.0],[SKAction runBlock:^{
+            weakboss1.zPosition=0.0;
+            weakboss1.healthlbl.position=CGPointMake((-3.65*(weakself.size.width/10)), weakself.size.height/2-40);
+            [weakself.camera addChild:weakboss1.healthlbl];
+            for(int i=247;i<=250;i++){
+                for(int k=25;k<=27;k++){
+                    [weakself.walls removeTileAtCoord:CGPointMake(i,k)];
+                }
+            }
+            [bossFire removeFromParent];
+            weakboss1.zPosition=0.0;
+            [weakself.enemies addObject:weakboss1];
+            weakboss1.active=YES;
+            [weakself removeActionForKey:@"idlecheck"];
+        }]]];
+        
+        SKAction*idleblk=[SKAction runBlock:^{
+            //NSLog(@"checking boss idle");
+            if(weakself.player.meleeinaction && CGRectIntersectsRect([weakself.player meleeBoundingBoxNormalized],weakboss1.frame) && !bossdidenter){
+                [weakself removeActionForKey:@"backuptimer"];
+                weakself.hasHadBossInterac=YES;
+                bossdidenter=YES;
+                [weakself addChild:bossFire];
+                [weakself runAction:bossEntrance];
+            }
+            else if(weakself.player.position.x>weakboss1.position.x-100 && !bossdidenter && !timerrepeat){
+                weakself.hasHadBossInterac=YES;
+                timerrepeat=YES;
+                [weakself runAction:[SKAction sequence:@[[SKAction waitForDuration:13.0],[SKAction runBlock:^{
+                    bossdidenter=YES;
+                    [weakself addChild:bossFire];
+                    [weakself runAction:bossEntrance];
+                }]]] withKey:@"backuptimer"];
+            }
+        }];
+        idlecheck=[SKAction sequence:@[[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:1],idleblk]]]]];
+        [self runAction:idlecheck withKey:@"idlecheck"];
+    }
+    return self;
+}
 
 /*- (void)dealloc {
     NSLog(@"LVL2 SCENE DEALLOCATED");

@@ -12,5 +12,6 @@
 
 -(instancetype)initWithSize:(CGSize)size;
 @property (nonatomic,strong) TMXLayer*background;
+@property (nonatomic,assign) bool hasHadBossInterac;
 
 @end

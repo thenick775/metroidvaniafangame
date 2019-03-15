@@ -38,7 +38,8 @@
 @property (nonatomic,assign) BOOL meleeinaction;
 @property (nonatomic,assign) BOOL forwardtrack;  //to tell which direction player is facing
 @property (nonatomic,assign) BOOL backwardtrack;
-
+@property (nonatomic,assign) NSString *currentBulletType;
+@property (nonatomic,assign) int currentBulletRange;
 
 -(void)update:(NSTimeInterval)delta;
 -(CGRect)collisionBoundingBox;

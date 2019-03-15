@@ -29,6 +29,8 @@
         _jumpMove=CGPointMake(0.0, 253.0);
         _minmovement=CGPointMake(-150.0, -255.0);
         _maxmovement=CGPointMake(150.0, 250.0);
+        self.currentBulletRange=180/*220*/;
+        self.currentBulletType=@"default";
         
         __weak Player*weakself=self;
         SKTextureAtlas *samusregsuit=[SKTextureAtlas atlasNamed:@"Samusregsuit"];
@@ -42,7 +44,8 @@
         self.meleedelayac=[SKAction sequence:@[[SKAction runBlock:^{weakself.meleedelay=YES;}],[SKAction waitForDuration:1.2],[SKAction runBlock:^{weakself.meleedelay=NO;}]]];
         
         //case for jumping to stay jumping until on ground
-        SKAction *jmpblk=[SKAction runBlock:^{/*NSLog(@"checkingjmpblk");*/if(weakself.onGround){
+        SKAction *jmpblk=[SKAction runBlock:^{/*NSLog(@"checkingjmpblk");*/
+            if(weakself.onGround && !weakself.shouldJump){
             if(weakself.goForeward)
             [weakself runAction:[SKAction repeatActionForever:weakself.runAnimation] withKey:@"runf"];
             else if(weakself.goBackward)

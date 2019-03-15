@@ -156,6 +156,12 @@
             [self runAction:self.explode];
 }
 
+-(void)hitByMeleeWithArrayToRemoveFrom:(NSMutableArray*)arr{
+    self.health=self.health-10;
+    if(self.health<=0 && [self actionForKey:@"walk"])
+            [self runAction:self.explode];
+}
+
 /*-(void)dealloc{
     NSLog(@"honeypot deallocated");
 }*/
