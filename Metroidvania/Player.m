@@ -29,6 +29,8 @@
         _jumpMove=CGPointMake(0.0, 253.0);
         _minmovement=CGPointMake(-150.0, -255.0);
         _maxmovement=CGPointMake(150.0, 250.0);
+        self.currentBulletRange=180/*220*/;
+        self.currentBulletType=@"default";
         
         __weak Player*weakself=self;
         SKTextureAtlas *samusregsuit=[SKTextureAtlas atlasNamed:@"Samusregsuit"];

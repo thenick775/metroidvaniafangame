@@ -11,6 +11,6 @@
 @interface PlayerProjectile : SKSpriteNode
 
 @property (nonatomic,assign) BOOL cleanup;
--(instancetype)initWithPos:(CGPoint)pos andDirection:(BOOL) direction;
+-(instancetype)initWithPos:(CGPoint)pos andMag_Range:(int)mag_range andType:(NSString*)type andDirection:(BOOL) direction;
 
 @end

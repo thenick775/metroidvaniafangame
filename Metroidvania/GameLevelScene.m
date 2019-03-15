@@ -38,12 +38,14 @@
   NSString *fintext;
   SKLabelNode *endgamelabel;
   UIButton *_continuebutton,*_replaybutton;
-  SKSpriteNode*_pauselabel,*_unpauselabel,*_startbutton;
+  SKSpriteNode*_pauselabel,*_unpauselabel,*_controlslabel,*_startbutton;
   joystick*myjoystick;
+  UITextView *_controlstext;
 }
 
 -(instancetype)initWithSize:(CGSize)size {
-  if (self = [super initWithSize:size]) {
+  self=[super initWithSize:size];
+  if (self!=nil) {
     /* Setup scene here */
     //self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
     //self.view.shouldCullNonVisibleNodes=NO; //??? seems to help framerate for now
@@ -117,6 +119,9 @@
     _unpauselabel.position=CGPointMake(0,0);
     _unpauselabel.zPosition=18;
     [_unpauselabel setScale:1.35];
+    _controlslabel=[SKSpriteNode spriteNodeWithImageNamed:@"controlslabel.png"];
+    _controlslabel.position=CGPointMake(0,-30);
+    _controlslabel.zPosition=18;
     
     //portal stuff
     _travelportal=[[TravelPortal alloc] initWithImage:@"travelmirror.png"];
@@ -198,6 +203,14 @@
   [_continuebutton setImage:continueimage forState:UIControlStateNormal];
   [_continuebutton addTarget:self action:@selector(continuebuttonpush:) forControlEvents:UIControlEventTouchUpInside];
   _continuebutton.frame=CGRectMake(self.view.bounds.size.width/2.0-continueimage.size.width/2/*/4.0-15*/, self.view.bounds.size.height/2.0-continueimage.size.height/1.5/*4.0+7*/, continueimage.size.width, continueimage.size.height);
+  
+  _controlstext=[[UITextView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2-(self.view.bounds.size.width*0.7)/2/*/4.0-15*/, self.view.bounds.size.height/4/*4.0+7*/, self.view.bounds.size.width*0.7,self.view.bounds.size.height/2)/*CGRectMake(0, 0, self.size.width/4, self.size.height/4)*/];
+  _controlstext.scrollEnabled=YES;
+  _controlstext.editable=NO;
+  [_controlstext setFont:[UIFont systemFontOfSize:16]];
+  _controlstext.backgroundColor=[UIColor darkGrayColor];
+  _controlstext.textColor=[UIColor whiteColor];
+  _controlstext.text=@"Use the joystick to move around by sliding your finger,\nit is 5 directional allowing you to jump and move foreward or backwards at the same time,\n\nTap the upper right half of the screen to melee\n\nTap the lower right half of the screen to fire your weapon\n\nRemember, one touch at a time, but two fingers to fire are fair game!\n\nHealth Boxes are in all levels, look for the unusual ones\n\nEnemies Guide:\nScisser: melee or fire to kill,\n\nHoneypot (walking cactus): melee or fire to kill, green means killable, red means invincible,\n\nWavers: melee or fire to kill, or simple keep your distance.";
 }
 
 -(void)willMoveFromView:(SKView *)view{
@@ -386,6 +399,10 @@
     
     if(self.paused && CGRectContainsPoint(_unpauselabel.frame, touchlocation)) //check for unpause
       [self unpausegame];
+    else if(self.paused && CGRectContainsPoint(_controlslabel.frame, touchlocation))
+      [self displaycontrolstext];
+    else if(self.paused && _controlstext.superview!=nil)
+        [_controlstext removeFromSuperview];
     else if(self.paused)
       return;
     else if(CGRectContainsPoint(_startbutton.frame, touchlocation)){
@@ -449,55 +466,47 @@
     CGPoint previoustouchlocation=[touch previousLocationInNode:self.camera];
     [myjoystick moveFingertrackerto:currtouchlocation];
     if(currtouchlocation.x>self.size.width/2 && (previoustouchlocation.x<=self.size.width/2)){
-      NSLog(@"moving to firing weapon");
+      //NSLog(@"moving to firing weapon");
       self.player.shouldJump=NO;
       self.player.goForeward=NO;
       self.player.goBackward=NO;
     }
     else if([myjoystick shouldJump:currtouchlocation] && [myjoystick shouldGoForeward:previoustouchlocation]){
-    NSLog(@"moving from move right to jumping");
+      //NSLog(@"moving from move right to jumping");
       self.player.shouldJump=YES;
       self.player.goForeward=NO;
       
-      //if(![self.player actionForKey:@"jmpf"]){
       [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
       [self.player removeActionForKey:@"runf"];
-      //}
     }
     else if([myjoystick shouldJumpForeward:currtouchlocation] && [myjoystick shouldGoForeward:previoustouchlocation]){
-      NSLog(@"moving from move right to jmpfwd");
+      //NSLog(@"moving from move right to jmpfwd");
       self.player.shouldJump=YES;
       
-      //if(![self.player actionForKey:@"jmpf"]){
       [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
       [self.player removeActionForKey:@"runf"];
-      //}
     }
     else if([myjoystick shouldJump:currtouchlocation] && [myjoystick shouldGoBackward:previoustouchlocation]){
-      NSLog(@"moving from move backward to jumping");
+      //NSLog(@"moving from move backward to jumping");
       self.player.shouldJump=YES;
       self.player.goBackward=NO;
       
-      //if(![self.player actionForKey:@"jmpb"]){
       [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
       [self.player removeActionForKey:@"runb"];
-      //}
     }
     else if([myjoystick shouldJumpBackward:currtouchlocation] && [myjoystick shouldGoBackward:previoustouchlocation]){
-      NSLog(@"moving from move backward to jmpbkwd");
+      //NSLog(@"moving from move backward to jmpbkwd");
       self.player.shouldJump=YES;
       
-      //if(![self.player actionForKey:@"jmpb"]){
       [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
       [self.player removeActionForKey:@"runb"];
-      //}
     }
     else if([myjoystick shouldGoForeward:currtouchlocation] && [myjoystick shouldGoBackward:previoustouchlocation]){
-      NSLog(@"moving from move backward to move right");
+      //NSLog(@"moving from move backward to move right");
       self.player.goForeward=YES;
       self.player.goBackward=NO;
       
@@ -508,7 +517,7 @@
       [self.player removeActionForKey:@"runb"];
     }
     else if([myjoystick shouldGoForeward:currtouchlocation] && [myjoystick shouldJump:previoustouchlocation]){
-      NSLog(@"move up to move right");
+      //NSLog(@"move up to move right");
       self.player.goForeward=YES;
       self.player.goBackward=NO;
       self.player.shouldJump=NO;
@@ -524,7 +533,7 @@
 
     }
     else if([myjoystick shouldGoForeward:currtouchlocation] && [myjoystick shouldJumpForeward:previoustouchlocation]){
-      NSLog(@"moving from jmpfwd to move right");
+      //NSLog(@"moving from jmpfwd to move right");
       self.player.shouldJump=NO;
       
       self.player.forwardtrack=YES;
@@ -533,7 +542,7 @@
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
     }
     else if([myjoystick shouldGoForeward:currtouchlocation] && [myjoystick shouldJumpBackward:previoustouchlocation]){
-      NSLog(@"moving from jmpbkwd to move right");
+      //NSLog(@"moving from jmpbkwd to move right");
       self.player.shouldJump=NO;
       self.player.goForeward=YES;
       self.player.goBackward=NO;
@@ -545,7 +554,7 @@
       [self.player removeActionForKey:@"jmpb"];
     }
     else if([myjoystick shouldGoBackward:currtouchlocation] && [myjoystick shouldGoForeward:previoustouchlocation]){
-      NSLog(@"move right to movebackwards");
+      //NSLog(@"move right to movebackwards");
       self.player.goBackward=YES;
       self.player.goForeward=NO;
       
@@ -556,7 +565,7 @@
       [self.player removeActionForKey:@"runf"];
     }
     else if([myjoystick shouldGoBackward:currtouchlocation] && [myjoystick shouldJump:previoustouchlocation]){
-      NSLog(@"move up to movebackwards");
+      //NSLog(@"move up to movebackwards");
       self.player.goBackward=YES;
       self.player.goForeward=NO;
       self.player.shouldJump=NO;
@@ -572,7 +581,7 @@
       
     }
     else if([myjoystick shouldGoBackward:currtouchlocation] && [myjoystick shouldJumpBackward:previoustouchlocation]){
-      NSLog(@"moving from jmpbkwd to move backwards");
+      //NSLog(@"moving from jmpbkwd to move backwards");
       self.player.goBackward=YES;
       self.player.shouldJump=NO;
       
@@ -582,7 +591,7 @@
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
     }
     else if([myjoystick shouldGoBackward:currtouchlocation] && [myjoystick shouldJumpForeward:previoustouchlocation]){
-      NSLog(@"moving from jmpfwd to move backwards");
+      //NSLog(@"moving from jmpfwd to move backwards");
       self.player.shouldJump=NO;
       self.player.goBackward=YES;
       self.player.goForeward=NO;
@@ -594,7 +603,7 @@
       [self.player removeActionForKey:@"jmpf"];
     }
     else if([myjoystick shouldJumpForeward:currtouchlocation] && [myjoystick shouldJump:previoustouchlocation]){
-      NSLog(@"moving from jump to jmpfwd");
+      //NSLog(@"moving from jump to jmpfwd");
       self.player.goForeward=YES;
       self.player.goBackward=NO;
       
@@ -602,14 +611,14 @@
       self.player.backwardtrack=NO;
       
       if([self.player actionForKey:@"jmpb"]){
-      NSLog(@"change jump");
+      //NSLog(@"change jump");
       [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       [self.player removeActionForKey:@"jmpb"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
       }
     }
     else if([myjoystick shouldJumpBackward:currtouchlocation] && [myjoystick shouldJump:previoustouchlocation]){
-      NSLog(@"moving from jump to jumpbkwd");
+      //NSLog(@"moving from jump to jumpbkwd");
       self.player.goBackward=YES;
       self.player.goForeward=NO;
       
@@ -617,7 +626,7 @@
       self.player.forwardtrack=NO;
       
       if([self.player actionForKey:@"jmpf"]){
-      NSLog(@"change jump");
+      //NSLog(@"change jump");
       [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
       [self.player removeActionForKey:@"jmpf"];
       [self.player runAction:[SKAction repeatActionForever:self.player.jmptomfmbcheck] withKey:@"jmpblk"];
@@ -694,7 +703,7 @@
   }
 }
 -(void)firePlayerProjectilewithdirection:(BOOL)direction{
-  PlayerProjectile *newProjectile=[[PlayerProjectile alloc] initWithPos:self.player.position andDirection:direction];
+  PlayerProjectile *newProjectile=[[PlayerProjectile alloc] initWithPos:self.player.position andMag_Range:self.player.currentBulletRange andType:self.player.currentBulletType andDirection:direction];
   newProjectile.zPosition=16;
   [self.map addChild:newProjectile];
   [self.bullets addObject:newProjectile];
@@ -757,7 +766,7 @@
   
   
   for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){
-    if(currbullet.cleanup){//here to avoid another run through of arr
+    if(currbullet.cleanup || [self tileGIDAtTileCoord:[self.walls coordForPoint:currbullet.position] forLayer:self.walls]){//here to avoid another run through of arr
       //NSLog(@"removing from array");
       [currbullet removeAllActions];
       [currbullet removeFromParent];
@@ -808,8 +817,11 @@
 -(void)pausegame{
   //NSLog(@"game paused");
   //[self.startbutton runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05] completion:^{NSLog(@"coloringstart");}];
+  //[self.view addSubview:_controlstext];
+  //[self.view bringSubviewToFront:_controlstext];
   [self.camera addChild:_pauselabel];
   [self.camera addChild:_unpauselabel];
+  [self.camera addChild:_controlslabel];
   self.volumeslider.hidden=NO;
   self.paused=YES;
   self.player.playervelocity=CGPointMake(0,18);
@@ -818,9 +830,14 @@
   //[self.startbutton runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05] completion:^{NSLog(@"uncoloringstart");}];
   [_pauselabel removeFromParent];
   [_unpauselabel removeFromParent];
+  [_controlslabel removeFromParent];
   self.volumeslider.hidden=YES;
   
   self.paused=NO;
+}
+-(void)displaycontrolstext{
+  [self.view addSubview:_controlstext];
+  [self.view bringSubviewToFront:_controlstext];
 }
 
 -(void)setStayPaused{//for use to keep the scene paused while returning from background
