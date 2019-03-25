@@ -63,6 +63,8 @@ Bob Bobium-Human Station Menuscene (space colony ceres), Door sprites
 
 Greiga Master-Chozo Statue, Nettori boss
 
+Cha0sMiles07 & Ngamer-Samus Projectile sprites
+
 Some labels were made using fontmeme.com
 
 Credit for music:
