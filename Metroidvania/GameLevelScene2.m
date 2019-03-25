@@ -190,6 +190,9 @@
         idlecheck=[SKAction sequence:@[[SKAction waitForDuration:38],[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:1],idleblk]]]]];
         [self runAction:idlecheck withKey:@"idlecheck"];
      
+        //
+        self.player.chargebeamenabled=YES;
+        //
     }
     return self;
 }

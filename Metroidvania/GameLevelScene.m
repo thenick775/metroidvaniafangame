@@ -210,7 +210,7 @@
   [_controlstext setFont:[UIFont systemFontOfSize:16]];
   _controlstext.backgroundColor=[UIColor darkGrayColor];
   _controlstext.textColor=[UIColor whiteColor];
-  _controlstext.text=@"Use the joystick to move around by sliding your finger,\nit is 5 directional allowing you to jump and move foreward or backwards at the same time,\n\nTap the upper right half of the screen to melee\n\nTap the lower right half of the screen to fire your weapon\n\nRemember, one touch at a time, but two fingers to fire are fair game!\n\nHealth Boxes are in all levels, look for the unusual ones\n\nEnemies Guide:\nScisser: melee or fire to kill,\n\nHoneypot (walking cactus): melee or fire to kill, green means killable, red means invincible,\n\nWavers: melee or fire to kill, or simple keep your distance.";
+  _controlstext.text=@"Use the joystick to move around by sliding your finger,\nit is 5 directional allowing you to jump and move foreward or backwards at the same time,\n\nTap the upper right half of the screen to melee\n\nTap the lower right half of the screen to fire your weapon\n\nRemember, one touch at a time, but two fingers to fire are fair game!\n\nHealth Boxes are in all levels, look for the unusual ones\n\nEnemies Guide:\nScisser: melee or fire to kill,\n\nHoneypot (walking cactus): melee or fire to kill, green projectiles means you can damage them with melee, red means they are invincible,\n\nWavers: melee or fire to kill, or simply keep your distance.";
 }
 
 -(void)willMoveFromView:(SKView *)view{
@@ -397,13 +397,13 @@
     [myjoystick moveFingertrackerto:touchlocation];
     //start delegating parts of the screen to specific movements
     
-    if(self.paused && CGRectContainsPoint(_unpauselabel.frame, touchlocation)) //check for unpause
+    if(self.paused && CGRectContainsPoint(_unpauselabel.frame, touchlocation)) //check for unpause/related pause items
       [self unpausegame];
     else if(self.paused && CGRectContainsPoint(_controlslabel.frame, touchlocation))
       [self displaycontrolstext];
     else if(self.paused && _controlstext.superview!=nil)
         [_controlstext removeFromSuperview];
-    else if(self.paused)
+    else if(self.paused)//loop if paused above here
       return;
     else if(CGRectContainsPoint(_startbutton.frame, touchlocation)){
       //[self.startbutton runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05] completion:^{NSLog(@"coloringstart");
@@ -448,6 +448,16 @@
       self.player.forwardtrack=NO;
       [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
     }
+    else if(touchlocation.x>self.camera.frame.size.width/2 && touchlocation.y<self.camera.frame.size.height/2){
+      //call build projectile/set it going right ->
+       //NSLog(@"start charge timer");
+      if(![self.player actionForKey:@"chargeT"])
+        [self.player runAction:self.player.chargebeamtimer withKey:@"chargeT"];
+      /*if(self.player.forwardtrack)
+        [self firePlayerProjectilewithdirection:TRUE];
+      else
+        [self firePlayerProjectilewithdirection:FALSE];*/
+    }
     
   
   }//uitouch iteration end
@@ -465,11 +475,20 @@
     CGPoint currtouchlocation=[touch locationInNode:self.camera];
     CGPoint previoustouchlocation=[touch previousLocationInNode:self.camera];
     [myjoystick moveFingertrackerto:currtouchlocation];
-    if(currtouchlocation.x>self.size.width/2 && (previoustouchlocation.x<=self.size.width/2)){
-      //NSLog(@"moving to firing weapon");
-      self.player.shouldJump=NO;
-      self.player.goForeward=NO;
+    if((currtouchlocation.x<self.camera.frame.size.width/2 || currtouchlocation.y>self.camera.frame.size.height/2) && [self.player actionForKey:@"chargeT"]){//remove charge beam & related timer
+      //NSLog(@"removign  chargeT");
+      [self.player removeActionForKey:@"chargeT"];
+    }
+    if(currtouchlocation.x>self.camera.frame.size.width/2 && (previoustouchlocation.x<=self.camera.frame.size.width/2)){//this code to disable
+      //NSLog(@"moving to firing weapon");                                                                                  //movement and animations
+      self.player.shouldJump=NO;                                                                                           //when fire/melee area is
+      self.player.goForeward=NO;                                                                                           //accessed
       self.player.goBackward=NO;
+      [self.player removeMovementAnims];
+      if(self.player.forwardtrack)
+        [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
+      else if(self.player.backwardtrack)
+        [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
     }
     else if([myjoystick shouldJump:currtouchlocation] && [myjoystick shouldGoForeward:previoustouchlocation]){
       //NSLog(@"moving from move right to jumping");
@@ -642,28 +661,20 @@
   if(self.gameOver || self.paused)
     return;
   if(self.player.meleeinaction){
-    [self.player removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
-    self.player.shouldJump=NO;
-    [self.player removeActionForKey:@"runf"];
+    self.player.shouldJump=NO;//disable player movement
     self.player.goForeward=NO;
-    [self.player removeActionForKey:@"runb"];
     self.player.goBackward=NO;
-    [self.player removeActionForKey:@"jmpf"];
-    [self.player removeActionForKey:@"jmpb"];
+    [self.player removeMovementAnims];//remove player animations/other side effects ex jmpblk/charge beam timer
     return;
   }
   
   for(UITouch *touch in touches){
   CGPoint fnctouchlocation=[touch locationInNode:self.camera];
-    [myjoystick resetFingertracker];
-    [self.player removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
-    [self.player removeActionForKey:@"runf"];   //also these movements must be NO after every touch finishes
-    self.player.goForeward=NO;                   //initial solution for fixing sticky buttons
-    [self.player removeActionForKey:@"runb"];
+    [myjoystick resetFingertracker];   //these movements must be NO after every touch finishes
+    self.player.goForeward=NO;         //initial solution for fixing sticky buttons
     self.player.goBackward=NO;
-    [self.player removeActionForKey:@"jmpf"];
-    [self.player removeActionForKey:@"jmpb"];
     self.player.shouldJump=NO;
+    [self.player removeMovementAnims];
     
     if([myjoystick shouldJump:fnctouchlocation] || [myjoystick shouldJumpBackward:fnctouchlocation] || [myjoystick shouldJumpForeward:fnctouchlocation]){
       //NSLog(@"done touching up");
@@ -712,13 +723,9 @@
 
 -(void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{//maybe need to add for touch in touches
   NSLog(@"recieved CANCELED touch");
-  [self.player removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
-  [self.player removeActionForKey:@"runf"];
+  [self.player removeMovementAnims];
   self.player.goForeward=NO;
-  [self.player removeActionForKey:@"runb"];
   self.player.goBackward=NO;
-  [self.player removeActionForKey:@"jmpf"];
-  [self.player removeActionForKey:@"jmpb"];
   self.player.shouldJump=NO;
 }
 

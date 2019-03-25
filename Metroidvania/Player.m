@@ -31,6 +31,7 @@
         _maxmovement=CGPointMake(150.0, 250.0);
         self.currentBulletRange=180/*220*/;
         self.currentBulletType=@"default";
+        self.chargebeamenabled=NO;
         
         __weak Player*weakself=self;
         SKTextureAtlas *samusregsuit=[SKTextureAtlas atlasNamed:@"Samusregsuit"];
@@ -64,24 +65,27 @@
         self.meleeweapon=[SKSpriteNode spriteNodeWithTexture:[projectiles textureNamed:@"samusmeleeright1.png"]];
         self.meleeweapon.position=CGPointMake(16,4);
         self.meleeweapon.alpha=0;
-        SKAction *meleeanimatemove=[SKAction group:@[[SKAction animateWithTextures:@[[projectiles textureNamed:@"samusmeleeright1.png"],[projectiles textureNamed:@"samusmeleeright2.png"],[projectiles textureNamed:@"samusmeleeright3.png"],[projectiles textureNamed:@"samusmeleeright4.png"]] timePerFrame:0.18 resize:YES restore:YES],[SKAction sequence:@[[SKAction waitForDuration:0.41],[SKAction moveBy:CGVectorMake(6,21) duration:0.2],[SKAction moveBy:CGVectorMake(-6,-21) duration:0.01]]]] ];
+        self.meleeweapon.zPosition=self.zPosition+1;
+        SKAction *meleeanimatemove=[SKAction group:@[[SKAction animateWithTextures:@[[projectiles textureNamed:@"samusmeleeright1.png"],[projectiles textureNamed:@"samusmeleeright2.png"],[projectiles textureNamed:@"samusmeleeright3.png"],[projectiles textureNamed:@"samusmeleeright4.png"]] timePerFrame:0.14 resize:YES restore:NO],[SKAction sequence:@[[SKAction waitForDuration:0.31],[SKAction moveBy:CGVectorMake(5.5,16) duration:0.18],[SKAction waitForDuration:0.1],[SKAction setTexture:[projectiles textureNamed:@"samusmeleeright1.png"] resize:YES],[SKAction moveBy:CGVectorMake(-5.5,-16) duration:0.04]]]]];
         
-        SKAction *playermeleeanimate=[SKAction sequence:@[[SKAction waitForDuration:0.21],[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samus_meleer1.png"],[samusregsuit textureNamed:@"samus_meleer2.png"]] timePerFrame:0.24 resize:YES restore:YES]]];
+        SKAction *playermeleeanimate=[SKAction sequence:@[[SKAction waitForDuration:0.21],[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samus_meleer1.png"]/*,[samusregsuit textureNamed:@"samus_meleer2.png"]*/] timePerFrame:0.23 resize:YES restore:YES],[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samus_meleer2.png"]] timePerFrame:0.16 resize:YES restore:YES]]];
         __weak SKSpriteNode *weakmeleeweapon=self.meleeweapon;
         
         SKAction *meleeblk=[SKAction runBlock:^{[weakmeleeweapon runAction:meleeanimatemove];
             [weakself runAction:playermeleeanimate];}];
-        SKAction *meleedelay=[SKAction sequence:@[[SKAction fadeAlphaTo:1 duration:0.03],meleeblk,[SKAction waitForDuration:0.9],[SKAction fadeAlphaTo:0 duration:0.1],[SKAction runBlock:^{[weakself removeAllChildren];weakself.meleeinaction=NO;}]]];
-       
+        SKAction *meleedelay=[SKAction sequence:@[[SKAction fadeAlphaTo:1 duration:0.03],meleeblk,[SKAction waitForDuration:0.78],[SKAction fadeAlphaTo:0 duration:0.1],[SKAction runBlock:^{[weakself removeAllChildren];weakself.meleeinaction=NO;}]]];
+        meleedelay.timingMode=SKActionTimingEaseOut;
         
-        SKAction *meleeanimatemovemirror=[SKAction group:@[[SKAction animateWithTextures:@[[projectiles textureNamed:@"samusmeleeright1.png"],[projectiles textureNamed:@"samusmeleeright2.png"],[projectiles textureNamed:@"samusmeleeright3.png"],[projectiles textureNamed:@"samusmeleeright4.png"]] timePerFrame:0.18 resize:YES restore:YES],[SKAction sequence:@[[SKAction waitForDuration:0.41],[SKAction moveBy:CGVectorMake(-6,21) duration:0.2],[SKAction moveBy:CGVectorMake(6,-21) duration:0.01]]]] ];
+        SKAction *meleeanimatemovemirror=[SKAction group:@[[SKAction animateWithTextures:@[[projectiles textureNamed:@"samusmeleeright1.png"],[projectiles textureNamed:@"samusmeleeright2.png"],[projectiles textureNamed:@"samusmeleeright3.png"],[projectiles textureNamed:@"samusmeleeright4.png"]] timePerFrame:0.14 resize:YES restore:NO],[SKAction sequence:@[[SKAction waitForDuration:0.31],[SKAction moveBy:CGVectorMake(-5.5,16) duration:0.18],[SKAction waitForDuration:0.1],[SKAction setTexture:[projectiles textureNamed:@"samusmeleeright1.png"] resize:YES],[SKAction moveBy:CGVectorMake(5.5,-16) duration:0.04]]]] ];
         
-        SKAction *playermeleeanimatemirror=[SKAction sequence:@[[SKAction waitForDuration:0.21],[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samus_meleel1.png"],[samusregsuit textureNamed:@"samus_meleel2.png"]] timePerFrame:0.24 resize:YES restore:YES]]];
+        SKAction *playermeleeanimatemirror=[SKAction sequence:@[[SKAction waitForDuration:0.21],[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samus_meleel1.png"]/*,[samusregsuit textureNamed:@"samus_meleel2.png"]*/] timePerFrame:0.23 resize:YES restore:YES],[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samus_meleel2.png"]] timePerFrame:0.16 resize:YES restore:YES]]];
         
         SKAction *meleeblkmirror=[SKAction runBlock:^{[weakmeleeweapon runAction:meleeanimatemovemirror];
             [weakself runAction:playermeleeanimatemirror];}];
-        SKAction *meleedelaymirror=[SKAction sequence:@[[SKAction fadeAlphaTo:1 duration:0.03],meleeblkmirror,[SKAction waitForDuration:0.9],[SKAction fadeAlphaTo:0 duration:0.1],[SKAction runBlock:^{[weakself removeAllChildren];weakself.meleeinaction=NO;[weakmeleeweapon setXScale:1];weakmeleeweapon.position=CGPointMake(16,4);}]]];
+        SKAction *meleedelaymirror=[SKAction sequence:@[[SKAction fadeAlphaTo:1 duration:0.03],meleeblkmirror,[SKAction waitForDuration:0.78],[SKAction fadeAlphaTo:0 duration:0.1],[SKAction runBlock:^{[weakself removeAllChildren];weakself.meleeinaction=NO;[weakmeleeweapon setXScale:1];weakmeleeweapon.position=CGPointMake(16,4);}]]];
+        meleeblkmirror.timingMode=SKActionTimingEaseOut;
         
+        self.chargebeamtimer=[SKAction sequence:@[[SKAction waitForDuration:4.0],[SKAction runBlock:^{NSLog(@"chargebeam timer reached 4 sec");}]]];
         
         self.meleeactionright=[SKAction runBlock:^{if(!weakself.meleeinaction){
             weakself.meleeinaction=YES;
@@ -185,6 +189,15 @@
 
 -(CGRect)meleeBoundingBoxNormalized{
     return CGRectMake(self.meleeweapon.frame.origin.x+self.frame.origin.x, self.meleeweapon.frame.origin.y+self.frame.origin.y, self.meleeweapon.frame.size.width, self.meleeweapon.frame.size.height);
+}
+
+-(void)removeMovementAnims{
+    [self removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
+    [self removeActionForKey:@"runf"];
+    [self removeActionForKey:@"runb"];
+    [self removeActionForKey:@"jmpf"];
+    [self removeActionForKey:@"jmpb"];
+    [self removeActionForKey:@"chargeT"];
 }
 
 /*-(void)dealloc{

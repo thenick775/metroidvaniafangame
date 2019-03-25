@@ -40,8 +40,11 @@
 @property (nonatomic,assign) BOOL backwardtrack;
 @property (nonatomic,assign) NSString *currentBulletType;
 @property (nonatomic,assign) int currentBulletRange;
+@property (nonatomic,assign) BOOL chargebeamenabled;
+@property (nonatomic,strong) SKAction *chargebeamtimer;
 
 -(void)update:(NSTimeInterval)delta;
+-(void)removeMovementAnims;
 -(CGRect)collisionBoundingBox;
 -(CGRect)meleeBoundingBoxNormalized;
 
