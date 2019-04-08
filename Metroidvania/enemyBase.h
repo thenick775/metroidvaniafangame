@@ -13,7 +13,7 @@
 @property (nonatomic,assign) BOOL needsUpdate;
 @property (nonatomic,assign) BOOL recievesMelee;
 
--(void)hitByBulletWithArrayToRemoveFrom:(NSMutableArray*)arr;
+-(void)hitByBulletWithArrayToRemoveFrom:(NSMutableArray*)arr withHit:(int)hit;
 -(void)hitByMeleeWithArrayToRemoveFrom:(NSMutableArray*)arr;
 
 @end

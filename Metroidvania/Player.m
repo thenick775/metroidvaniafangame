@@ -30,8 +30,10 @@
         _minmovement=CGPointMake(-150.0, -255.0);
         _maxmovement=CGPointMake(150.0, 250.0);
         self.currentBulletRange=180/*220*/;
-        self.currentBulletType=@"default";
+        self.currentBulletDamage=1;
+        self.currentBulletType=@"default";//types available, default, plasma, chargereg, charge
         self.chargebeamenabled=NO;
+        self.lockmovement=NO;
         
         __weak Player*weakself=self;
         SKTextureAtlas *samusregsuit=[SKTextureAtlas atlasNamed:@"Samusregsuit"];
@@ -41,14 +43,14 @@
         //damage related items
         self.plyrrecievingdmg=NO;
         self.plyrdmgwaitlock=[SKAction sequence:@[[SKAction waitForDuration:3.0],[SKAction runBlock:^{weakself.plyrrecievingdmg=NO;}]]];
-        self.damageaction=[SKAction sequence:@[[SKAction colorizeWithColor:[UIColor redColor] colorBlendFactor:0.7 duration:0.1],[SKAction colorizeWithColorBlendFactor:0.0 duration:0.1]]];
+        self.damageaction=[SKAction sequence:@[[SKAction colorizeWithColor:[SKColor redColor] colorBlendFactor:0.7 duration:0.1],[SKAction colorizeWithColorBlendFactor:0.0 duration:0.1]]];
         self.meleedelayac=[SKAction sequence:@[[SKAction runBlock:^{weakself.meleedelay=YES;}],[SKAction waitForDuration:1.2],[SKAction runBlock:^{weakself.meleedelay=NO;}]]];
         
         //case for jumping to stay jumping until on ground
         SKAction *jmpblk=[SKAction runBlock:^{/*NSLog(@"checkingjmpblk");*/
             if(weakself.onGround && !weakself.shouldJump){
             if(weakself.goForeward)
-            [weakself runAction:[SKAction repeatActionForever:weakself.runAnimation] withKey:@"runf"];
+                [weakself runAction:[SKAction repeatActionForever:weakself.runAnimation] withKey:@"runf"];
             else if(weakself.goBackward)
                 [weakself runAction:[SKAction repeatActionForever:weakself.runBackwardsAnimation] withKey:@"runb"];
             [weakself removeActionForKey:@"jmpblk"];}}];
@@ -125,8 +127,8 @@
         
         self.runAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:runarray timePerFrame:0.075 resize:YES restore:NO]];
         self.runBackwardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:runbackwardsarray timePerFrame:0.075 resize:YES restore:NO]];
-        self.jumpForewardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:jumpforewardsarray timePerFrame:0.045 resize:YES restore:NO]];
-        self.jumpBackwardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:jumpbackwardsarray timePerFrame:0.045 resize:YES restore:NO]];
+        self.jumpForewardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:jumpforewardsarray timePerFrame:0.04 resize:YES restore:NO]];
+        self.jumpBackwardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:jumpbackwardsarray timePerFrame:0.04 resize:YES restore:NO]];
         self.enterfromportalAnimation=[SKAction sequence:@[[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2],[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samus_turnr1.png"],[samusregsuit textureNamed:@"samus_turnr2.png"],[samusregsuit textureNamed:@"samus_turnr3.png"]] timePerFrame:0.1 resize:NO restore:NO]]];
         self.travelthruportalAnimation=[SKAction sequence:@[[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2 resize:YES restore:NO],[SKAction group:@[[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samusfade.png"]] timePerFrame:1.5 resize:YES restore:NO],[SKAction fadeOutWithDuration:1.4]]]]];
     
@@ -176,7 +178,8 @@
     
     CGPoint velocitymove=CGPointMultiplyScalar(self.playervelocity, delta);
     
-    self.desiredPosition=CGPointAdd(self.position, velocitymove);
+    if(!self.lockmovement)
+        self.desiredPosition=CGPointAdd(self.position, velocitymove);
 }
 
 
@@ -198,6 +201,13 @@
     [self removeActionForKey:@"jmpf"];
     [self removeActionForKey:@"jmpb"];
     [self removeActionForKey:@"chargeT"];
+}
+
+-(void)resetTex{
+    if(self.forwardtrack)
+        [self runAction:[SKAction setTexture:self.forewards resize:YES]];
+    else if(self.backwardtrack)
+        [self runAction:[SKAction setTexture:self.backwards resize:YES]];
 }
 
 /*-(void)dealloc{

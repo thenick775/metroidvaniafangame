@@ -9,8 +9,8 @@
 @implementation enemyBase
 
 
--(void)hitByBulletWithArrayToRemoveFrom:(NSMutableArray*)arr{//default implementation
-    self.health--;
+-(void)hitByBulletWithArrayToRemoveFrom:(NSMutableArray*)arr withHit:(int)hit{//default implementation
+    self.health=self.health-hit;
     if(self.health<=0){
         //NSLog(@"healthisbelowzero");
         [self removeAllActions];

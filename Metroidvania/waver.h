@@ -13,7 +13,7 @@
 //@property (nonatomic,assign) int health;
 @property (nonatomic,assign) BOOL attacking;
 
--(instancetype)initWithPosition:(CGPoint)position;
+-(instancetype)initWithPosition:(CGPoint)position xRange:(int)xrange yRange:(int)yrange;
 -(void)updateWithDeltaTime:(NSTimeInterval)seconds andPlayerpos:(CGPoint)playerpos;
 -(void)attack;
 

@@ -37,6 +37,7 @@
     self.bkgrndmusic=_musicQueue[_currentQueueIterator];
     self.bkgrndmusic.delegate=self;
     self.currentVolume=self.currentVolume*100;
+    //__weak gameaudio*weakself=self;
     [gameaudio playSound:self.bkgrndmusic];
 }
 
@@ -61,8 +62,8 @@
 //class functions
 // get a repeating sound
 +(AVAudioPlayer*)setupRepeatingSound:(NSString*)file volume:(float)volume {
-    __weak NSString*weakfile=file;
-    AVAudioPlayer *s = [self setupSound:weakfile volume:volume];
+    //NSString*weakfile=file;
+    AVAudioPlayer *s = [self setupSound:file volume:volume];
     s.numberOfLoops = -1;
     return s;
 }
@@ -70,8 +71,8 @@
 // setup a sound
 +(AVAudioPlayer*)setupSound:(NSString*)file volume:(float)volume{
     NSError *error;
-    __weak NSString*weakfile=file;
-    __weak NSURL *url = [[NSBundle mainBundle] URLForResource:weakfile withExtension:nil];
+    //__weak NSString*weakfile=file;
+    NSURL *url = [[NSBundle mainBundle] URLForResource:file withExtension:nil];
     AVAudioPlayer *s = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
     s.numberOfLoops = 0;
     s.volume = volume;
@@ -79,12 +80,12 @@
     return s;
 }
 
-// play a sound now through GCD
+// play a sound now
 +(void)playSound:(AVAudioPlayer*)player {
-    __weak AVAudioPlayer*weakplayer=player;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [weakplayer play];
-    });
+    //__weak AVAudioPlayer*weakplayer=player;
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [/*weak*/player play];
+    //});
 }
 
 // play a sound later through GCD

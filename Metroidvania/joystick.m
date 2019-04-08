@@ -9,6 +9,8 @@
 
 @implementation joystick{
     SKShapeNode*_fingertracker;
+    SKAction*_tmp;
+    SKAction*_reset;
 }
 
 -(instancetype)initWithPos:(CGPoint)pos{
@@ -17,11 +19,12 @@
         //NSLog(@"creating joystick");
         self.position=pos;
         self.zPosition=15;
-        self.strokeColor=[UIColor whiteColor];
-        self.fillColor=[UIColor clearColor];
+        self.strokeColor=[SKColor whiteColor];
+        self.fillColor=[SKColor clearColor];
+        _reset=[SKAction moveTo:CGPointZero duration:0.15];
         _fingertracker=[SKShapeNode shapeNodeWithCircleOfRadius:5.0];
         _fingertracker.zPosition=16;
-        _fingertracker.fillColor=[UIColor redColor];
+        _fingertracker.fillColor=[SKColor redColor];
         _fingertracker.constraints=@[[SKConstraint positionX:[SKRange rangeWithValue:0 variance:28] Y:[SKRange rangeWithValue:0 variance:25]]];
         _fingertracker.position=CGPointZero;
         [self addChild:_fingertracker];
@@ -67,14 +70,15 @@
     else return NO;
 }
 -(void)moveFingertrackerto:(CGPoint)pos{
+    //__weak joystick*weakself=self;
     if(pos.x<self.parent.frame.size.width/2){
-    SKAction*tmp=[SKAction moveTo:[self convertPoint:pos fromNode:self.parent] duration:0.2];
-    [_fingertracker runAction:tmp];
+    _tmp=[SKAction moveTo:[self convertPoint:pos fromNode:self.parent] duration:0.2];
+        [_fingertracker runAction:_tmp];
     }
 }
 -(void)resetFingertracker{
     [_fingertracker removeAllActions];
-    [_fingertracker runAction:[SKAction moveTo:CGPointZero duration:0.15]];
+    [_fingertracker runAction:_reset];
 }
 
 

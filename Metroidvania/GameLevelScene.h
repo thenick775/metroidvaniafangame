@@ -34,9 +34,9 @@
 -(void) gameOver:(BOOL)didwin;
 -(void)replaybuttonpush:(id)sender;
 -(void)continuebuttonpush:(id)sender;
--(void)setupVolumeSliderAndReplayAndContinue;
+-(void)setupVolumeSliderAndReplayAndContinue:(GameLevelScene*)weakself;
 -(CGRect)tileRectFromTileCoords:(CGPoint)fnccoordinate;
 -(NSInteger)tileGIDAtTileCoord:(CGPoint)tilecoordinate forLayer:(TMXLayer *)fnclayer;
 -(void)hitHealthBox;
-
+-(instancetype)initWithSize:(CGSize)size;
 @end

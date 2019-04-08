@@ -104,7 +104,7 @@
         [self.enemies addObject:enemy4];
         [self.map addChild:enemy4];
         
-        waver*enemy5=[[waver alloc] initWithPosition:CGPointMake(31*self.map.tileSize.width, 8*self.map.tileSize.height)];
+        waver*enemy5=[[waver alloc] initWithPosition:CGPointMake(31*self.map.tileSize.width, 8*self.map.tileSize.height) xRange:350 yRange:20];
         [self.enemies addObject:enemy5];
         [self.map addChild:enemy5];
         
@@ -202,14 +202,15 @@
     self.audiomanager=[gameaudio alloc];
     [self.audiomanager runBkgrndMusicForlvl:2];
     
-    //__weak GameLevelScene2*weakself=self;
+    __weak GameLevelScene2*weakself=self;
     dispatch_async(dispatch_get_main_queue(), ^{//deal with certain ui on main thread only
-    [self setupVolumeSliderAndReplayAndContinue];
+        [weakself setupVolumeSliderAndReplayAndContinue:weakself];
     });
 }
 
 -(void)replaybuttonpush:(id)sender{
     [[self.view viewWithTag:666] removeFromSuperview];
+    [[self.view viewWithTag:4545] removeFromSuperview];
     if(self.hasHadBossInterac)
         [self.view presentScene:[[GameLevelScene2 alloc] initNearBossWithSize:self.size]];
     else
@@ -218,6 +219,7 @@
 }
 -(void)continuebuttonpush:(id)sender{
     [[self.view viewWithTag:888] removeFromSuperview];
+    [[self.view viewWithTag:4545] removeFromSuperview];
     __weak GameLevelScene2*weakself=self;
     [SKTextureAtlas preloadTextureAtlasesNamed:@[@"lvl3assets",@"Nettori"] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
         GameLevelScene3*preload=[[GameLevelScene3 alloc]initWithSize:weakself.size];
@@ -357,7 +359,7 @@
                 enemyBase*enemylcop=(enemyBase*)enemyl;
                 if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame) && !enemylcop.dead){
                     //NSLog(@"hit an enemy");
-                    [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies];
+                    [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies withHit:self.player.currentBulletDamage];
                     [currbullet removeAllActions];
                     [currbullet removeFromParent];
                     [self.bullets removeObject:currbullet];

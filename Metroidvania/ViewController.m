@@ -22,14 +22,16 @@
   skView.showsDrawCount =YES;
   skView.ignoresSiblingOrder=YES;
   skView.multipleTouchEnabled=NO;
+  __block SKScene *menuscenep;
   // Create and configure the scene.
   // Present the scene.
+  __weak SKView*weakview=skView;
   NSArray *texturesformenuscene=@[@"menusceneitems"];
   [SKTextureAtlas preloadTextureAtlasesNamed:texturesformenuscene withCompletionHandler:^(NSError*error,NSArray*foundatlases){
     dispatch_async(dispatch_get_main_queue(), ^{
     NSLog(@"preloaded menuscene");
-    SKScene *menuscenep=[[MenuScene alloc] initWithSize:skView.bounds.size];
-    [skView presentScene:menuscenep];
+    menuscenep=[[MenuScene alloc] initWithSize:/*skView*/weakview.bounds.size];
+    [weakview presentScene:menuscenep];
     });
   }];
   
