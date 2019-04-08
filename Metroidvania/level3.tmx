@@ -27,7 +27,7 @@
  </layer>
  <layer name="hazards" width="500" height="25">
   <data encoding="base64" compression="zlib">
-   eJztzjENAAAIA7AdCMC/WmSQJa2CJgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB12vgcAAAAAAAAAAAAdDrA5ABU=
+   eJztwQENAAAAwqD3T20PBxQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABPBsNQAAE=
   </data>
  </layer>
  <layer name="mysteryboxes" width="500" height="25">

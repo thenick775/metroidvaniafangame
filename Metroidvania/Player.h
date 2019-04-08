@@ -38,11 +38,17 @@
 @property (nonatomic,assign) BOOL meleeinaction;
 @property (nonatomic,assign) BOOL forwardtrack;  //to tell which direction player is facing
 @property (nonatomic,assign) BOOL backwardtrack;
+@property (nonatomic,assign) BOOL lockmovement;
 @property (nonatomic,assign) NSString *currentBulletType;
 @property (nonatomic,assign) int currentBulletRange;
+@property (nonatomic,assign) int currentBulletDamage;
+@property (nonatomic,assign) BOOL chargebeamenabled;
+@property (nonatomic,strong) SKAction *chargebeamtimer;
 
 -(void)update:(NSTimeInterval)delta;
+-(void)removeMovementAnims;
 -(CGRect)collisionBoundingBox;
 -(CGRect)meleeBoundingBoxNormalized;
+-(void)resetTex;
 
 @end

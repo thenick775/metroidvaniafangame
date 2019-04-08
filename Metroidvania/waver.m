@@ -17,7 +17,7 @@
     GKGoal *_seektarget;
 }
 
--(instancetype)initWithPosition:(CGPoint)position{
+-(instancetype)initWithPosition:(CGPoint)position xRange:(int)xrange yRange:(int)yrange{
     //__weak NSString *weakname=name;
     self = [super initWithImageNamed:@"waver_r3.png"];
     if(self!=nil){
@@ -42,10 +42,11 @@
         _target.radius=2;
         _target.delegate=nil;
         
-        vector_float2 myVectors[8] = {
-            {(float)self.position.x,(float)self.position.y},
-            {(float)self.position.x+(350/2),(float)self.position.y+20},
-            {(float)self.position.x+350,(float)self.position.y}
+        __weak waver*weakself=self;
+        vector_float2 myVectors[8] = {//accepts range that will generate a triangle with left vertex at
+            {(float)weakself.position.x,(float)weakself.position.y},//its set position
+            {(float)weakself.position.x+(xrange/2),(float)weakself.position.y+yrange},
+            {(float)weakself.position.x+xrange,(float)weakself.position.y}
         };
         
         _wander=[GKGoal goalToWander:1];

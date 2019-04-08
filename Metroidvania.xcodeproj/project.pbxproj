@@ -52,6 +52,7 @@
 		59DAC0B52187ED8C0077E10C /* rm_a5b04.png in Resources */ = {isa = PBXBuildFile; fileRef = 59DAC0B32187ED8C0077E10C /* rm_a5b04.png */; };
 		59DAC0B72187F70E0077E10C /* lvl3tilesets.png in Resources */ = {isa = PBXBuildFile; fileRef = 59DAC0B62187F70E0077E10C /* lvl3tilesets.png */; };
 		59EE2C1021F5BC6000F8234E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 59EE2C0F21F5BC6000F8234E /* Launch Screen.storyboard */; };
+		59FFC330224DAD2C00236F2E /* powerupBubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 59FFC32F224DAD2C00236F2E /* powerupBubble.m */; };
 		F275B671186E0B06009F6E6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B670186E0B06009F6E6B /* Foundation.framework */; };
 		F275B673186E0B06009F6E6B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B672186E0B06009F6E6B /* CoreGraphics.framework */; };
 		F275B675186E0B06009F6E6B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F275B674186E0B06009F6E6B /* UIKit.framework */; };
@@ -138,6 +139,8 @@
 		59DAC0B32187ED8C0077E10C /* rm_a5b04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rm_a5b04.png; sourceTree = "<group>"; };
 		59DAC0B62187F70E0077E10C /* lvl3tilesets.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lvl3tilesets.png; sourceTree = "<group>"; };
 		59EE2C0F21F5BC6000F8234E /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		59FFC32F224DAD2C00236F2E /* powerupBubble.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = powerupBubble.m; sourceTree = "<group>"; };
+		59FFC331224DAD3A00236F2E /* powerupBubble.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = powerupBubble.h; sourceTree = "<group>"; };
 		F275B66D186E0B06009F6E6B /* Metroidvania.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metroidvania.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F275B670186E0B06009F6E6B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F275B672186E0B06009F6E6B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -205,9 +208,11 @@
 				59C0DE1320B91F25008999C3 /* PlayerProjectile.m */,
 				596F2DB020C1C44700B32C47 /* TravelPortal.h */,
 				596F2DB120C1C44700B32C47 /* TravelPortal.m */,
-				59450D6C21B360850019BAEB /* door.h */,
 				5948813321F1B342008F742A /* joystick.h */,
 				5948813121F1B337008F742A /* joystick.m */,
+				59FFC331224DAD3A00236F2E /* powerupBubble.h */,
+				59FFC32F224DAD2C00236F2E /* powerupBubble.m */,
+				59450D6C21B360850019BAEB /* door.h */,
 				59450D6D21B360BC0019BAEB /* door.m */,
 				59DAC082218278220077E10C /* gameaudio.h */,
 				59DAC083218278330077E10C /* gameaudio.m */,
@@ -442,7 +447,7 @@
 			};
 			buildConfigurationList = F275B668186E0B06009F6E6B /* Build configuration list for PBXProject "Metroidvania" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -508,6 +513,7 @@
 				F275B68C186E0B06009F6E6B /* GameLevelScene.m in Sources */,
 				592B389D20DB008400C62977 /* MenuScene.m in Sources */,
 				F275B6E2186E25C1009F6E6B /* SKNode+SKTExtras.m in Sources */,
+				59FFC330224DAD2C00236F2E /* powerupBubble.m in Sources */,
 				5979C750213B368A00965A50 /* JSTileMap.m in Sources */,
 				5979C753213B36BA00965A50 /* LFCGzipUtility.m in Sources */,
 				F275B689186E0B06009F6E6B /* ViewController.m in Sources */,
@@ -597,7 +603,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -631,9 +637,10 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -643,7 +650,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -660,7 +667,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metroidvania/Metroidvania-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Metroidvania/Metroidvania-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -680,7 +687,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metroidvania/Metroidvania-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Metroidvania/Metroidvania-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -699,7 +706,7 @@
 				F275B6A5186E0B06009F6E6B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		F275B6A6186E0B06009F6E6B /* Build configuration list for PBXNativeTarget "Metroidvania" */ = {
 			isa = XCConfigurationList;
@@ -708,7 +715,7 @@
 				F275B6A8186E0B06009F6E6B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

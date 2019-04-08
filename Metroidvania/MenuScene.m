@@ -161,7 +161,7 @@
         self._cntrllabel.alpha=0;
         [self addChild:self._cntrllabel];
         
-        _cntrlbkrnd=[SKSpriteNode spriteNodeWithColor:[UIColor darkGrayColor] size:CGSizeMake(self.size.width-185,95)];
+        _cntrlbkrnd=[SKSpriteNode spriteNodeWithColor:[SKColor darkGrayColor] size:CGSizeMake(self.size.width-185,95)];
         _cntrlbkrnd.alpha=0;
         _cntrlbkrnd.position=CGPointMake(self.size.width/2,self.size.height/2);
         _cntrlbkrnd.zPosition=5;
@@ -222,7 +222,7 @@
         self.labelsin=[SKAction sequence:@[[SKAction waitForDuration:1.5],[SKAction fadeInWithDuration:1.5]]];
         [self runAction:[SKAction runBlock:^{[weakself.titlelabel runAction:weakself.labelsin completion:^{weakself.labelsin.speed=3;[weakself._playlabel runAction:weakself.labelsin];[weakself._playbutton runAction:weakself.labelsin];[weakself._cntrllabel runAction:weakself.labelsin completion:^{weakself.userInteractionEnabled=YES;}];}];}]];
       
-        _buttonhighlight=[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05];
+        _buttonhighlight=[SKAction colorizeWithColor:[SKColor darkGrayColor] colorBlendFactor:0.8 duration:0.05];
         _buttonunhighlight=[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05];
         
         
@@ -235,10 +235,10 @@
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     for(UITouch*touch in touches){
         
-        
+        __weak MenuScene*weakself=self;
         if(CGRectContainsPoint(self._cntrllabel.frame,[touch locationInNode:self]) && !viewingcntrls){
             [_cntrlbkrnd runAction:[SKAction fadeInWithDuration:0.2]];
-            [self._cntrllabel runAction:_buttonhighlight];
+            [weakself._cntrllabel runAction:_buttonhighlight];
             viewingcntrls=YES;
         }
         else if(viewingcntrls){
@@ -259,10 +259,11 @@
             __weak SKSpriteNode *weaksamusgunship=samusgunship;
             __weak SKAction *weakshipflyac=shipflyac;
             __weak NSArray *weaktexturesforlvl1=texturesforlvl1;
+            __block GameLevelScene*preload;
             CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.5,self.view.bounds.size.height/1.5-10);
             
             [SKTextureAtlas preloadTextureAtlasesNamed:weaktexturesforlvl1 withCompletionHandler:^(NSError*error,NSArray*foundatlases){
-                    GameLevelScene*preload=[[GameLevelScene alloc]initWithSize:nextSceneSize];
+                    preload=[[GameLevelScene alloc]initWithSize:nextSceneSize];
                     preload.scaleMode = SKSceneScaleModeAspectFill;
                         NSLog(@"preloaded lvl1");
                         [weakshipflamesright2 runAction:weakflameflicker];

@@ -11,6 +11,7 @@
 #import "SKTUtils.h"
 #import "PlayerProjectile.h"
 #import "nettoriboss.h"
+#import "powerupBubble.h"
 
 @implementation GameLevelScene3{
     SKTextureAtlas*_lvl3assets;
@@ -76,12 +77,9 @@
         powerupstatue.zPosition=0;
         [self.map addChild:powerupstatue];
         
-        SKSpriteNode*powerupbubble=[SKSpriteNode spriteNodeWithTexture:[_lvl3assets textureNamed:@"powerup_bubble1.png"]];
-        powerupbubble.position=CGPointMake(powerupstatue.position.x-11, powerupstatue.position.y+11);
-        [powerupbubble setScale:0.8];
-        powerupbubble.zPosition=0;
-        [self.map addChild:powerupbubble];
-        [powerupbubble runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction animateWithTextures:@[[_lvl3assets textureNamed:@"powerup_bubble1.png"],[_lvl3assets textureNamed:@"powerup_bubble2.png"],[_lvl3assets textureNamed:@"powerup_bubble3.png"],[_lvl3assets textureNamed:@"powerup_bubble4.png"],[_lvl3assets textureNamed:@"powerup_bubble5.png"],[_lvl3assets textureNamed:@"powerup_bubble6.png"]] timePerFrame:0.2 resize:NO restore:YES],[SKAction waitForDuration:1.7]]]]];
+        powerupBubble*bubble1=[[powerupBubble alloc] initWithPosition:CGPointMake(powerupstatue.position.x-11, powerupstatue.position.y+11) andCenter:CGPointMake(self.camera.frame.size.width/2,self.frame.size.height/2) andTexAtlas:_lvl3assets];
+        [self.map addChild:bubble1];
+        [self.enemies addObject:bubble1];
         
         //doors here
         door *door1=[[door alloc] initWithTextureAtlas:_lvl3assets hasMarker:NO andNames:@[@"door.png",@"door1.png",@"door2.png"]];
@@ -110,6 +108,18 @@
         [self.doors addObject:door5];
         
         //enemies here
+        waver*enemy1=[[waver alloc] initWithPosition:CGPointMake(107*self.map.tileSize.width, 8*self.map.tileSize.height) xRange:350 yRange:15];
+        [self.enemies addObject:enemy1];
+        [self.map addChild:enemy1];
+        
+        waver*enemy2=[[waver alloc] initWithPosition:CGPointMake(87*self.map.tileSize.width, 8*self.map.tileSize.height) xRange:300 yRange:15];
+        [self.enemies addObject:enemy2];
+        [self.map addChild:enemy2];
+        
+        waver*enemy3=[[waver alloc] initWithPosition:CGPointMake(117*self.map.tileSize.width, 8*self.map.tileSize.height) xRange:128 yRange:15];
+        [self.enemies addObject:enemy3];
+        [self.map addChild:enemy3];
+        
         nettoriboss *nettori=[[nettoriboss alloc] initWithPosition:CGPointMake(176*self.map.tileSize.width-10, 5*self.map.tileSize.height-2)];
         [self.map addChild:nettori];
         [self.enemies addObject:nettori];
@@ -128,14 +138,15 @@
     self.audiomanager=[gameaudio alloc];
     [self.audiomanager runBkgrndMusicForlvl:3];
     
-    //__weak GameLevelScene3*weakself=self;
+    __weak GameLevelScene3*weakself=self;
     dispatch_async(dispatch_get_main_queue(), ^{//deal with certain ui on main thread only
-        [self setupVolumeSliderAndReplayAndContinue];
+        [weakself setupVolumeSliderAndReplayAndContinue:weakself];
     });
 }
 
 -(void)replaybuttonpush:(id)sender{
     [[self.view viewWithTag:666] removeFromSuperview];
+    [[self.view viewWithTag:4545] removeFromSuperview];
     [self.view presentScene:[[GameLevelScene3 alloc] initWithSize:self.size]];
     [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
@@ -191,7 +202,21 @@
                 }
             }
         }
+        else if([enemycon isKindOfClass:[powerupBubble class]]){
+            powerupBubble*enemyconcop=(powerupBubble*)enemycon;
+            if(CGRectIntersectsRect(enemyconcop.frame,self.player.frame) && enemyconcop.served!=YES){
+                //NSLog(@"player intersecting powerupbub");
+                [self.player removeMovementAnims];
+                [self.player resetTex];
+                self.player.lockmovement=YES;
+                __weak GameLevelScene3*weakself=self;
+                __weak powerupBubble*weakenemyconcop=enemyconcop;
+                [enemyconcop setgainac:self.player.position];
+                [enemyconcop runAction:enemyconcop.gainPowerup completion:^{weakself.player.paused=NO;weakself.player.lockmovement=NO;[weakself enemyhitplayerdmgmsg:0];weakself.player.currentBulletType=@"chargereg";weakself.player.currentBulletRange=220;weakself.player.currentBulletDamage=2;[weakenemyconcop hitByMeleeWithArrayToRemoveFrom:weakself.enemies];}];
+            }
+        }
     }
+    
     
     
     for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){
@@ -207,8 +232,8 @@
             //NSLog(@"bullet frame:%@",NSStringFromCGRect(currbullet.frame));
                 enemyBase*enemylcop=(enemyBase*)enemyl;
                 if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame) && !enemylcop.dead){
-                    NSLog(@"hit an enemy");
-                    [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies];
+                    //NSLog(@"hit an enemy");
+                    [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies withHit:self.player.currentBulletDamage];
                     [currbullet removeAllActions];
                     [currbullet removeFromParent];
                     [self.bullets removeObject:currbullet];

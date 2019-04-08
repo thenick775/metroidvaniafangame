@@ -105,7 +105,7 @@
 }
 
 -(void)projectileAttack:(BOOL)angrily{
-    NSLog(@"initiating projectile attack");
+    //NSLog(@"initiating projectile attack");
     NSTimeInterval deathtime;
     if(!angrily)
         deathtime=12.0;
@@ -150,8 +150,8 @@
     
 }
 
--(void)hitByBulletWithArrayToRemoveFrom:(NSMutableArray *)arr{
-    self.health--;
+-(void)hitByBulletWithArrayToRemoveFrom:(NSMutableArray *)arr withHit:(int)hit{
+    self.health=self.health-hit;
     if(self.health<=0 && [self actionForKey:@"walk"])
             [self runAction:self.explode];
 }

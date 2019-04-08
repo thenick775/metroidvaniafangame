@@ -32,6 +32,9 @@
   CGPoint touchPoint = [touch locationInView:self];
   return (touchPoint.x >= (thumbPos - 45) && touchPoint.x <= (thumbPos + 25));//adjust where the x pos of your touch falls relative to the slider thumb
 }
+/*-(void)dealloc{
+  NSLog(@"in slider dealloc");
+}*/
 @end
 
 @implementation GameLevelScene{
@@ -49,8 +52,10 @@
     /* Setup scene here */
     //self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
     //self.view.shouldCullNonVisibleNodes=NO; //??? seems to help framerate for now
+    [self.map removeFromParent];
+    self.map=nil;
     
-    self.backgroundColor =[SKColor colorWithRed:0.7259 green:0 blue:0.8863 alpha:1.0];
+    self.backgroundColor=[SKColor colorWithRed:0.7259 green:0 blue:0.8863 alpha:1.0];
     self.map = [JSTileMap mapNamed:@"level1.tmx"];
     [self addChild:self.map];
     
@@ -93,7 +98,7 @@
     [self.camera addChild:self.healthlabel];
     
     //health bar initialization
-    self.healthbar=[SKSpriteNode spriteNodeWithColor:[UIColor redColor] size:CGSizeMake(200, 20)];
+    self.healthbar=[SKSpriteNode spriteNodeWithColor:[SKColor redColor] size:CGSizeMake(200, 20)];
     self.healthbar.zPosition=18;
     self.healthbar.anchorPoint=CGPointMake(0.0, 0.0);
     self.healthbar.position=CGPointMake((-9*(self.size.width/20))-9.5/*self.size.width/20-10*/, self.size.height/2-24);
@@ -151,7 +156,7 @@
     [self.enemies addObject:enemy2];
     [self.map addChild:enemy2];
     
-    waver*enemy3=[[waver alloc] initWithPosition:CGPointMake(160*self.map.tileSize.width, 8*self.map.tileSize.height)];
+    waver*enemy3=[[waver alloc] initWithPosition:CGPointMake(160*self.map.tileSize.width, 8*self.map.tileSize.height) xRange:350 yRange:20];
     [self.enemies addObject:enemy3];
     [self.map addChild:enemy3];
     
@@ -168,49 +173,50 @@
   //setup sound
   self.audiomanager=[gameaudio alloc];
   [self.audiomanager runBkgrndMusicForlvl:1];
-  
+  __weak GameLevelScene*weakself=self;
   dispatch_async(dispatch_get_main_queue(), ^{ //deal with certain ui (that could be used immediately) on main thread only
-  [self setupVolumeSliderAndReplayAndContinue];
+    [weakself setupVolumeSliderAndReplayAndContinue:weakself];
   });
 }
 
--(void)setupVolumeSliderAndReplayAndContinue{//**setup on main thread only**might set call to main thread in this function..
-  self.volumeslider=[[MySlider alloc] initWithFrame:CGRectMake(self.view.bounds.size.width*0.746305,self.view.bounds.size.height/2, self.view.bounds.size.width*0.348610, 15.0)];
+-(void)setupVolumeSliderAndReplayAndContinue:(GameLevelScene*)weakself{//**setup on main thread only**might set call to main thread in this function..
+  weakself.volumeslider=[[MySlider alloc] initWithFrame:CGRectMake(weakself.view.bounds.size.width*0.746305,weakself.view.bounds.size.height/2, weakself.view.bounds.size.width*0.348610, 15.0)];
   
-  self.volumeslider.minimumValue=0;
-  self.volumeslider.maximumValue=100.0;
-  self.volumeslider.continuous=YES;
-  self.volumeslider.value=self.audiomanager.currentVolume;
-  self.volumeslider.hidden=YES;
-  self.volumeslider.minimumTrackTintColor=[UIColor redColor];
-  self.volumeslider.maximumTrackTintColor=[UIColor darkGrayColor];
-  [self.volumeslider setThumbImage:[UIImage imageNamed:@"supermetroid_sliderbar.png"] forState:UIControlStateNormal];
-  [self.volumeslider setTransform:CGAffineTransformRotate(self.volumeslider.transform, M_PI_2)];
-  [self.volumeslider setBackgroundColor:[UIColor clearColor]];
-  [self.volumeslider addTarget:self action:@selector(slideraction:) forControlEvents:UIControlEventValueChanged];
-  [self.view addSubview:self.volumeslider];
+  weakself.volumeslider.minimumValue=0;
+  weakself.volumeslider.maximumValue=100.0;
+  weakself.volumeslider.tag=4545;
+  weakself.volumeslider.continuous=YES;
+  weakself.volumeslider.value=weakself.audiomanager.currentVolume;
+  weakself.volumeslider.hidden=YES;
+  weakself.volumeslider.minimumTrackTintColor=[SKColor redColor];
+  weakself.volumeslider.maximumTrackTintColor=[SKColor darkGrayColor];
+  [weakself.volumeslider setThumbImage:[UIImage imageNamed:@"supermetroid_sliderbar.png"] forState:UIControlStateNormal];
+  [weakself.volumeslider setTransform:CGAffineTransformRotate(weakself.volumeslider.transform, M_PI_2)];
+  [weakself.volumeslider setBackgroundColor:[SKColor clearColor]];
+  [weakself.volumeslider addTarget:weakself action:@selector(slideraction:) forControlEvents:UIControlEventValueChanged];
+  [weakself.view addSubview:weakself.volumeslider];
   
   _replaybutton=[UIButton buttonWithType:UIButtonTypeCustom]; //replay button
   _replaybutton.tag=666;
   UIImage *replayimage=[UIImage imageNamed:@"replay"];
   [_replaybutton setImage:replayimage forState:UIControlStateNormal];
-  [_replaybutton addTarget:self action:@selector(replaybuttonpush:) forControlEvents:UIControlEventTouchUpInside];
-  _replaybutton.frame=CGRectMake(self.view.bounds.size.width/2.0-replayimage.size.width/2, self.view.bounds.size.height/2.0-replayimage.size.height/1.5, replayimage.size.width, replayimage.size.height);
+  [_replaybutton addTarget:weakself action:@selector(replaybuttonpush:) forControlEvents:UIControlEventTouchUpInside];
+  _replaybutton.frame=CGRectMake(weakself.view.bounds.size.width/2.0-replayimage.size.width/2, weakself.view.bounds.size.height/2.0-replayimage.size.height/1.5, replayimage.size.width, replayimage.size.height);
   
   _continuebutton=[UIButton buttonWithType:UIButtonTypeCustom]; //continue button
   _continuebutton.tag=888;
   UIImage *continueimage=[UIImage imageNamed:@"continuebutton.png"];
   [_continuebutton setImage:continueimage forState:UIControlStateNormal];
-  [_continuebutton addTarget:self action:@selector(continuebuttonpush:) forControlEvents:UIControlEventTouchUpInside];
-  _continuebutton.frame=CGRectMake(self.view.bounds.size.width/2.0-continueimage.size.width/2/*/4.0-15*/, self.view.bounds.size.height/2.0-continueimage.size.height/1.5/*4.0+7*/, continueimage.size.width, continueimage.size.height);
+  [_continuebutton addTarget:weakself action:@selector(continuebuttonpush:) forControlEvents:UIControlEventTouchUpInside];
+  _continuebutton.frame=CGRectMake(weakself.view.bounds.size.width/2.0-continueimage.size.width/2/*/4.0-15*/, weakself.view.bounds.size.height/2.0-continueimage.size.height/1.5/*4.0+7*/, continueimage.size.width, continueimage.size.height);
   
-  _controlstext=[[UITextView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2-(self.view.bounds.size.width*0.7)/2/*/4.0-15*/, self.view.bounds.size.height/4/*4.0+7*/, self.view.bounds.size.width*0.7,self.view.bounds.size.height/2)/*CGRectMake(0, 0, self.size.width/4, self.size.height/4)*/];
+  _controlstext=[[UITextView alloc] initWithFrame:CGRectMake(weakself.view.bounds.size.width/2-(weakself.view.bounds.size.width*0.7)/2/*/4.0-15*/, weakself.view.bounds.size.height/4/*4.0+7*/, weakself.view.bounds.size.width*0.7,weakself.view.bounds.size.height/2)/*CGRectMake(0, 0, weakself.size.width/4, weakself.size.height/4)*/];
   _controlstext.scrollEnabled=YES;
   _controlstext.editable=NO;
   [_controlstext setFont:[UIFont systemFontOfSize:16]];
-  _controlstext.backgroundColor=[UIColor darkGrayColor];
-  _controlstext.textColor=[UIColor whiteColor];
-  _controlstext.text=@"Use the joystick to move around by sliding your finger,\nit is 5 directional allowing you to jump and move foreward or backwards at the same time,\n\nTap the upper right half of the screen to melee\n\nTap the lower right half of the screen to fire your weapon\n\nRemember, one touch at a time, but two fingers to fire are fair game!\n\nHealth Boxes are in all levels, look for the unusual ones\n\nEnemies Guide:\nScisser: melee or fire to kill,\n\nHoneypot (walking cactus): melee or fire to kill, green means killable, red means invincible,\n\nWavers: melee or fire to kill, or simple keep your distance.";
+  _controlstext.backgroundColor=[SKColor darkGrayColor];
+  _controlstext.textColor=[SKColor whiteColor];
+  _controlstext.text=@"Use the joystick to move around by sliding your finger,\nit is 5 directional allowing you to jump and move foreward or backwards at the same time,\n\nTap the upper right half of the screen to melee\n\nTap the lower right half of the screen to fire your weapon\n\nRemember, one touch at a time, but two fingers to fire are fair game!\n\nHealth Boxes are in all levels, look for the unusual ones\n\nEnemies Guide:\nScisser: melee or fire to kill,\n\nHoneypot (walking cactus): melee or fire to kill, green projectiles means you can damage them with melee, red means they are invincible,\n\nWavers: melee or fire to kill, or simply keep your distance.";
 }
 
 -(void)willMoveFromView:(SKView *)view{
@@ -387,7 +393,7 @@
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
   
-  if(self.gameOver || self.player.meleeinaction)
+  if(self.gameOver || self.player.meleeinaction || self.player.lockmovement)
     return;
   
   
@@ -397,13 +403,13 @@
     [myjoystick moveFingertrackerto:touchlocation];
     //start delegating parts of the screen to specific movements
     
-    if(self.paused && CGRectContainsPoint(_unpauselabel.frame, touchlocation)) //check for unpause
+    if(self.paused && CGRectContainsPoint(_unpauselabel.frame, touchlocation)) //check for unpause/related pause items
       [self unpausegame];
     else if(self.paused && CGRectContainsPoint(_controlslabel.frame, touchlocation))
       [self displaycontrolstext];
     else if(self.paused && _controlstext.superview!=nil)
         [_controlstext removeFromSuperview];
-    else if(self.paused)
+    else if(self.paused)//loop if paused above here
       return;
     else if(CGRectContainsPoint(_startbutton.frame, touchlocation)){
       //[self.startbutton runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05] completion:^{NSLog(@"coloringstart");
@@ -448,6 +454,16 @@
       self.player.forwardtrack=NO;
       [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
     }
+    else if(touchlocation.x>self.camera.frame.size.width/2 && touchlocation.y<self.camera.frame.size.height/2){
+      //call build projectile/set it going right ->
+       //NSLog(@"start charge timer");
+      if(![self.player actionForKey:@"chargeT"])
+        [self.player runAction:self.player.chargebeamtimer withKey:@"chargeT"];
+      /*if(self.player.forwardtrack)
+        [self firePlayerProjectilewithdirection:TRUE];
+      else
+        [self firePlayerProjectilewithdirection:FALSE];*/
+    }
     
   
   }//uitouch iteration end
@@ -457,7 +473,7 @@
 
 -(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{ //need to modify to fit ^v asap
   
-  if(self.gameOver || self.paused || self.player.meleeinaction)
+  if(self.gameOver || self.paused || self.player.meleeinaction || self.player.lockmovement)
     return;
   
   //NSLog(@"Touch is moving");
@@ -465,11 +481,21 @@
     CGPoint currtouchlocation=[touch locationInNode:self.camera];
     CGPoint previoustouchlocation=[touch previousLocationInNode:self.camera];
     [myjoystick moveFingertrackerto:currtouchlocation];
-    if(currtouchlocation.x>self.size.width/2 && (previoustouchlocation.x<=self.size.width/2)){
-      //NSLog(@"moving to firing weapon");
-      self.player.shouldJump=NO;
-      self.player.goForeward=NO;
+    if((currtouchlocation.x<self.camera.frame.size.width/2 || currtouchlocation.y>self.camera.frame.size.height/2) && [self.player actionForKey:@"chargeT"]){//remove charge beam & related timer
+      //NSLog(@"removign  chargeT");
+      [self.player removeActionForKey:@"chargeT"];
+    }
+    if(currtouchlocation.x>self.camera.frame.size.width/2 && (previoustouchlocation.x<=self.camera.frame.size.width/2)){//this code to disable
+      //NSLog(@"moving to firing weapon");                                                                                  //movement and animations
+      self.player.shouldJump=NO;                                                                                           //when fire/melee area is
+      self.player.goForeward=NO;                                                                                           //accessed
       self.player.goBackward=NO;
+      [self.player removeMovementAnims];
+      [self.player resetTex];
+      /*if(self.player.forwardtrack)
+        [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
+      else if(self.player.backwardtrack)
+        [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];*/
     }
     else if([myjoystick shouldJump:currtouchlocation] && [myjoystick shouldGoForeward:previoustouchlocation]){
       //NSLog(@"moving from move right to jumping");
@@ -639,50 +665,45 @@
 
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 
-  if(self.gameOver || self.paused)
+  if(self.gameOver || self.paused /*|| self.player.lockmovement*/)
     return;
   if(self.player.meleeinaction){
-    [self.player removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
-    self.player.shouldJump=NO;
-    [self.player removeActionForKey:@"runf"];
+    self.player.shouldJump=NO;//disable player movement
     self.player.goForeward=NO;
-    [self.player removeActionForKey:@"runb"];
     self.player.goBackward=NO;
-    [self.player removeActionForKey:@"jmpf"];
-    [self.player removeActionForKey:@"jmpb"];
+    [self.player removeMovementAnims];//remove player animations/other side effects ex jmpblk/charge beam timer
     return;
   }
   
   for(UITouch *touch in touches){
   CGPoint fnctouchlocation=[touch locationInNode:self.camera];
-    [myjoystick resetFingertracker];
-    [self.player removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
-    [self.player removeActionForKey:@"runf"];   //also these movements must be NO after every touch finishes
-    self.player.goForeward=NO;                   //initial solution for fixing sticky buttons
-    [self.player removeActionForKey:@"runb"];
+    [myjoystick resetFingertracker];   //these movements must be NO after every touch finishes
+    self.player.goForeward=NO;         //initial solution for fixing sticky buttons
     self.player.goBackward=NO;
-    [self.player removeActionForKey:@"jmpf"];
-    [self.player removeActionForKey:@"jmpb"];
     self.player.shouldJump=NO;
+    [self.player removeMovementAnims];
     
     if([myjoystick shouldJump:fnctouchlocation] || [myjoystick shouldJumpBackward:fnctouchlocation] || [myjoystick shouldJumpForeward:fnctouchlocation]){
       //NSLog(@"done touching up");
-      if(self.player.backwardtrack)
+      [self.player resetTex];
+      /*if(self.player.backwardtrack)
         [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
       else
-        [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
+        [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];*/
     }
     else if([myjoystick shouldGoForeward:fnctouchlocation]){
       //NSLog(@"done touching right");
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
-      [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
+      [self.player resetTex];
+      //[self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
     }
     else if([myjoystick shouldGoBackward:fnctouchlocation]){
       //NSLog(@"done touching left");
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
-      [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
+      [self.player resetTex];
+      //[self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
     }
     else if(CGRectContainsPoint(_startbutton.frame, fnctouchlocation)){
       //NSLog(@"do nothing hit the pause");//put here so the melee is not hit
@@ -712,13 +733,9 @@
 
 -(void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{//maybe need to add for touch in touches
   NSLog(@"recieved CANCELED touch");
-  [self.player removeActionForKey:@"jmpblk"]; //these actions are the only ones possibly needing to be removed
-  [self.player removeActionForKey:@"runf"];
+  [self.player removeMovementAnims];
   self.player.goForeward=NO;
-  [self.player removeActionForKey:@"runb"];
   self.player.goBackward=NO;
-  [self.player removeActionForKey:@"jmpf"];
-  [self.player removeActionForKey:@"jmpb"];
   self.player.shouldJump=NO;
 }
 
@@ -779,7 +796,7 @@
         enemyBase*enemylcop=(enemyBase*)enemyl;
         if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame) && !enemylcop.dead){
           //NSLog(@"hit an enemy");
-          [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies];
+          [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies withHit:self.player.currentBulletDamage];
           [currbullet removeAllActions];
           [currbullet removeFromParent];
           [self.bullets removeObject:currbullet];
@@ -880,11 +897,13 @@
 }
 -(void)replaybuttonpush:(id)sender{
   [[self.view viewWithTag:666] removeFromSuperview];
+  [[self.view viewWithTag:4545] removeFromSuperview];
   [self.view presentScene:[[GameLevelScene alloc] initWithSize:self.size]];
   [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
 -(void)continuebuttonpush:(id)sender{
   [[self.view viewWithTag:888] removeFromSuperview];
+  [[self.view viewWithTag:4545] removeFromSuperview];
   __weak GameLevelScene*weakself=self;
   [SKTextureAtlas preloadTextureAtlasesNamed:@[@"honeypot",@"Arachnus"] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
       GameLevelScene2*preload=[[GameLevelScene2 alloc]initWithSize:weakself.size];
