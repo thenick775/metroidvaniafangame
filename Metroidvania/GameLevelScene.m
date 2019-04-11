@@ -665,9 +665,9 @@
 
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 
-  if(self.gameOver || self.paused /*|| self.player.lockmovement*/)
+  if(self.gameOver || self.paused)
     return;
-  if(self.player.meleeinaction){
+  if(self.player.meleeinaction || self.player.lockmovement){//added here should test
     self.player.shouldJump=NO;//disable player movement
     self.player.goForeward=NO;
     self.player.goBackward=NO;

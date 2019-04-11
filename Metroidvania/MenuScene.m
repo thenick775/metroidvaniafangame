@@ -259,11 +259,11 @@
             __weak SKSpriteNode *weaksamusgunship=samusgunship;
             __weak SKAction *weakshipflyac=shipflyac;
             __weak NSArray *weaktexturesforlvl1=texturesforlvl1;
-            __block GameLevelScene*preload;
+            __block GameLevelScene3*preload;
             CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.5,self.view.bounds.size.height/1.5-10);
             
             [SKTextureAtlas preloadTextureAtlasesNamed:weaktexturesforlvl1 withCompletionHandler:^(NSError*error,NSArray*foundatlases){
-                    preload=[[GameLevelScene alloc]initWithSize:nextSceneSize];
+                    preload=[[GameLevelScene3 alloc]initWithSize:nextSceneSize];
                     preload.scaleMode = SKSceneScaleModeAspectFill;
                         NSLog(@"preloaded lvl1");
                         [weakshipflamesright2 runAction:weakflameflicker];

@@ -53,7 +53,7 @@
 
 }
 
--(void)hitByBulletWithArrayToRemoveFrom:(NSMutableArray *)arr{}
+-(void)hitByBulletWithArrayToRemoveFrom:(NSMutableArray *)arr withHit:(int)hit{}
 -(void)hitByMeleeWithArrayToRemoveFrom:(NSMutableArray *)arr{
     [self removeAllActions];
     [self removeAllChildren];

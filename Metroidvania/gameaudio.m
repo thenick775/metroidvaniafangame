@@ -50,10 +50,11 @@
 
 -(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{//for background music playing continuous tracks
     _currentQueueIterator++;
-    if(_currentQueueIterator>=_musicQueue.count)
+    if(_currentQueueIterator>=_musicQueue.count){
         _currentQueueIterator=0;
-    
+    }
     self.bkgrndmusic=_musicQueue[_currentQueueIterator];
+    self.bkgrndmusic.delegate=self;
     self.bkgrndmusic.volume=player.volume;
     [gameaudio playSound:self.bkgrndmusic];
 }

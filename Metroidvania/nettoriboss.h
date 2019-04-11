@@ -14,6 +14,7 @@
 @property(nonatomic,strong) NSMutableArray*projectilesInAction;
 -(instancetype)initWithPosition:(CGPoint)pos;
 -(void)updateWithDeltaTime:(NSTimeInterval)seconds;
+-(void)startAttack;
 
 @end
 
@@ -40,5 +41,11 @@
 //@property (nonatomic,assign) BOOL isattacking;
 @property (nonatomic,strong) SKAction *plantidle,*plantattack;
 -(instancetype)initWithPos:(CGPoint)pos andTextureAtlas:(SKTextureAtlas*)atlas;
+
+@end
+
+@interface netPlas : netprojbase
+
+-(instancetype)initWithImageNamed:(NSString *)name andAtlas:(SKTextureAtlas*)atlas andArrayToRemoveFrom:(NSMutableArray*)arr;
 
 @end

@@ -195,7 +195,7 @@
             [enemycon updateWithDeltaTime:self.delta];
             nettoriboss*boss=(nettoriboss*)enemycon;
             for(netprojbase*tmp in [boss.projectilesInAction reverseObjectEnumerator]){
-                if(tmp.canGiveDmg && CGRectContainsPoint(tmp.frame,[self convertPoint:self.player.position toNode:tmp.parent])){
+                if(tmp.canGiveDmg && CGRectIntersectsRect(tmp.frame, CGRectMake([self convertPoint:self.player.position toNode:tmp.parent].x, [self convertPoint:self.player.position toNode:tmp.parent].y, self.player.frame.size.width, self.player.frame.size.height))/*CGRectContainsPoint(tmp.frame,[self convertPoint:self.player.position toNode:tmp.parent])*/){
                     //NSLog(@"hit by nettoriproj");
                     [self enemyhitplayerdmgmsg:tmp.dmgamt];
                     [tmp runDmgac];
@@ -209,6 +209,9 @@
                 [self.player removeMovementAnims];
                 [self.player resetTex];
                 self.player.lockmovement=YES;
+                self.player.goForeward=NO;
+                self.player.goBackward=NO;
+                self.player.shouldJump=NO;
                 __weak GameLevelScene3*weakself=self;
                 __weak powerupBubble*weakenemyconcop=enemyconcop;
                 [enemyconcop setgainac:self.player.position];
