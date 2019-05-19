@@ -10,7 +10,6 @@
 
 @interface GameLevelScene2 : GameLevelScene 
 
--(instancetype)initWithSize:(CGSize)size;
 @property (nonatomic,strong) TMXLayer*background;
 @property (nonatomic,assign) bool hasHadBossInterac;
 

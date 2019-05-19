@@ -14,6 +14,8 @@
     GKComponentSystem*_agentSystem;
     SKAction*_petalidleanim,*_petalattackanim;
     SKSpriteNode*beam;
+    SKAction*_recievedamage;
+    SKSpriteNode*firesprite;
 }
 
 -(instancetype)initWithPosition:(CGPoint)pos{
@@ -23,7 +25,7 @@
         self.position=pos;
         [self setScale:1.2];
         self.anchorPoint=CGPointMake(1,0);
-        self.health=300;
+        self.health=350;
         self.dead=NO;
         self.projectilesInAction=[[NSMutableArray alloc] init];
         
@@ -36,12 +38,38 @@
         dmgbasehighac=[SKAction repeatActionForever:[SKAction animateWithTextures:@[[_nettoriAtlas textureNamed:@"nettori_dmgbasehigh1.png"],[_nettoriAtlas textureNamed:@"nettori_dmgbasehigh2.png"],[_nettoriAtlas textureNamed:@"nettori_dmgbasehigh3.png"],[_nettoriAtlas textureNamed:@"nettori_dmgbasehigh4.png"],[_nettoriAtlas textureNamed:@"nettori_dmgbasehigh5.png"]] timePerFrame:0.2 resize:YES restore:NO]];
         
         __weak nettoriboss*weakself=self;
-        attack1=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:5],[SKAction runBlock:^{NSLog(@"fire netplas");[weakself fireNetPlas];}]]]];
-        attack2=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:3.3],[SKAction runBlock:^{NSLog(@"fire netplas");[weakself fireNetPlas];}]]]];
-        attack3=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:3],[SKAction runBlock:^{NSLog(@"fire netplas");[weakself fireNetPlas];}],[SKAction waitForDuration:2],[SKAction runBlock:^{NSLog(@"fire netplas");[weakself fireNetPlas];}]]]];
-        attack4=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:1.78],[SKAction runBlock:^{NSLog(@"fire netplas");[weakself fireNetPlas];}],[SKAction waitForDuration:0.5],[SKAction runBlock:^{NSLog(@"fire netplas");[weakself fireNetPlas];}],[SKAction waitForDuration:2.5],[SKAction runBlock:^{NSLog(@"fire netplas");[weakself fireNetPlas];}]]]];
+        attack1=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:5]]]];
+        attack2=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:3.3]]]];
+        attack3=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:2],[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:3]]]];
+        attack4=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:0.5],[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:2.5],[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:1.78]]]];
+        
+        firesprite=[SKSpriteNode spriteNodeWithImageNamed:@"Fire1.png"];
+        firesprite.position=CGPointMake(-20,5);
+        firesprite.zPosition=self.zPosition+1;
+        [firesprite setScale:0.8];
+        [self addChild:firesprite];
+        SKAction*fireburnanim=[SKAction animateWithTextures:@[[SKTexture textureWithImageNamed:@"Fire1.png"],[SKTexture textureWithImageNamed:@"Fire2.png"],[SKTexture textureWithImageNamed:@"Fire3.png"],[SKTexture textureWithImageNamed:@"Fire4.png"],] timePerFrame:0.1 resize:NO restore:NO];
+        __weak SKSpriteNode*weakfiresprite=firesprite;
+        CGRect firerect=CGRectMake(-20, 5, self.frame.size.width-20, self.frame.size.height-20);
+        SKAction *adddmgfire=[SKAction runBlock:^{
+            //NSLog(@"fire aciton");
+            CGPoint p=firerect.origin;
+            p.x += arc4random_uniform((u_int32_t) CGRectGetWidth(firerect));
+            p.y += arc4random_uniform((u_int32_t) CGRectGetHeight(firerect));
+            SKSpriteNode *firecpy=weakfiresprite.copy;
+            [firecpy removeAllActions];
+            firecpy.position=p;
+            [firecpy runAction:fireburnanim completion:^{[firecpy removeFromParent];}];
+            [weakself addChild:firecpy];
+        }];
+        
+        _recievedamage=[SKAction repeatAction:adddmgfire count:8];
+        
        
-        [self runAction:attack3];
+        self.healthlbl=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
+        self.healthlbl.text=[NSString stringWithFormat:@"Boss Health:%d",self.health];
+        self.healthlbl.fontSize=15;
+        self.healthlbl.zPosition=15;
         
         petal*petal1=[[petal alloc] initWithAtlas:_nettoriAtlas andCS:_agentSystem andPos:CGPointMake(-16*9,16*6) andArr:self.projectilesInAction];
         [self addChild:petal1];
@@ -56,6 +84,7 @@
         petal*petal3=[[petal alloc] initWithAtlas:_nettoriAtlas andCS:_agentSystem andPos:CGPointMake(-16*17,16*6) andArr:self.projectilesInAction];
         [petal3 setXScale:-1];
         [self addChild:petal3];
+        
         
         plant *plnt1=[[plant alloc] initWithPos:CGPointMake(-16*9, -16*3) andTextureAtlas:_nettoriAtlas];
         [self addChild:plnt1];
@@ -90,29 +119,32 @@
 
 -(void)hitByBulletWithArrayToRemoveFrom:(NSMutableArray *)arr withHit:(int)hit{
     self.health=self.health-hit;
+    self.healthlbl.text=[NSString stringWithFormat:@"Boss Health:%d",self.health];
+    
     if(self.health<250 && ![self actionForKey:@"base"]){
+        [self runAction:[SKAction group:@[_recievedamage,dmgbaseac]] withKey:@"base"];
         [self removeActionForKey:@"1"];
-        [self runAction:dmgbaseac withKey:@"base"];
+        //[self runAction:dmgbaseac withKey:@"base"];
         [self runAction:attack2 withKey:@"2"];
     }
     else if(self.health<200 && ![self actionForKey:@"med"]){
+        [self runAction:[SKAction group:@[_recievedamage,dmgbasemedac]] withKey:@"med"];
         [self removeActionForKey:@"2"];
-        [self runAction:dmgbasemedac withKey:@"med"];
+        //[self runAction:dmgbasemedac withKey:@"med"];
         [self runAction:attack3 withKey:@"3"];
     }
     else if(self.health<100 && ![self actionForKey:@"high"]){
+        [self runAction:[SKAction group:@[_recievedamage,dmgbasehighac]] withKey:@"high"];
         [self removeActionForKey:@"3"];
-        [self runAction:dmgbasehighac withKey:@"high"];
+        //[self runAction:dmgbasehighac withKey:@"high"];
         [self runAction:attack4 withKey:@"4"];
     }
     if(self.health<=0){
         //NSLog(@"healthisbelowzero");
+        [self runAction:[SKAction repeatAction:_recievedamage count:3]];
         [self removeAllActions];
-        [self removeAllChildren];
-        __weak enemyBase*weakself=self;
-        [self runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[weakself removeFromParent];}]]]];
-        [arr removeObject:self];
-        //NSLog(@"%d",(int)arr.count);
+        self.texture=nil;
+        self.dead=YES;
     }
     
 }
@@ -126,15 +158,15 @@
 }
 
 -(void)dealloc{
-    NSLog(@"nettori deallocated");
+    //NSLog(@"nettori deallocated");
+    for(GKAgent2D*tmp in _agentSystem.components.reverseObjectEnumerator)//clean up componemnt system to avoid a leak
+        [_agentSystem removeComponent:tmp];
 }
 
 @end
 
 @implementation netprojbase
--(void)runDmgac{
-    
-}
+-(void)runDmgac{}
 @end
 
 @implementation plant
@@ -162,9 +194,13 @@
         //NSLog(@"petal eat ac running");
         __weak plant*weakself=self;
         [self removeActionForKey:@"idle"];
-        [self runAction:self.dmgaction completion:^{[weakself runAction:self.plantidle withKey:@"idle"];}];
+        [self runAction:self.dmgaction completion:^{[weakself runAction:weakself.plantidle withKey:@"idle"];}];
     }
 }
+
+/*-(void)dealloc{
+    NSLog(@"plant deallocated");
+}*/
 
 @end
 
@@ -184,8 +220,9 @@
         __weak GKComponentSystem*weakagentSystem=system;
         __weak petal*weakself=self;
         __weak NSMutableArray*weakarr=arr;
+        __weak SKTextureAtlas*weakatlas=atlas;
         _petalattack=[SKAction sequence:@[[SKAction waitForDuration:(float)arc4random_uniform(300.0)/100],[SKAction repeatActionForever:[SKAction sequence:@[_petalidleanim,[SKAction group:@[_petalattackanim,[SKAction sequence:@[[SKAction waitForDuration:0.6],[SKAction runBlock:^{
-            petalprojectile*tmp=[[petalprojectile alloc] initWithTextureAtlas:atlas andCS:weakagentSystem andPos:CGPointZero andArr:weakarr];
+            petalprojectile*tmp=[[petalprojectile alloc] initWithTextureAtlas:weakatlas andCS:weakagentSystem andPos:CGPointZero andArr:weakarr];
             //NSLog(@"adding petal proj");
             [weakarr addObject:tmp];
             //NSLog(@"weakarr count:%lu",(unsigned long)weakarr.count);
@@ -234,11 +271,11 @@
         SKAction*petalprojexplode=[SKAction animateWithTextures:@[[atlas textureNamed:@"petalprojexplode1.png"],[atlas textureNamed:@"petalprojexplode2.png"],[atlas textureNamed:@"petalprojexplode3.png"],] timePerFrame:0.1];
         SKAction*setDmgAvailability=[SKAction runBlock:^{weakself.canGiveDmg=YES;}];
         
-        
+        __weak NSMutableArray*weakarr=arr;
         SKAction*composedac=[SKAction sequence:@[petalprojidle,setDmgAvailability,petalprojexplode]];
         [system addComponent:self.agent];
         //[arr addObject:self];
-        [self runAction:composedac completion:^{[weaksystem removeComponent:weakself.agent];[arr removeObject:weakself];[weakself removeAllActions];[weakself removeFromParent];}];
+        [self runAction:composedac completion:^{[weaksystem removeComponent:weakself.agent];[weakarr removeObject:weakself];[weakself removeAllActions];[weakself removeFromParent];}];
         
     }
     return self;
@@ -270,7 +307,7 @@
         self.canGiveDmg=YES;
         self.dmgaction=nil;
         SKAction*beamanimate=[SKAction repeatAction:[SKAction animateWithTextures:@[[SKTexture textureWithImageNamed:@"plasmabeamodd.png"],[SKTexture textureWithImageNamed:@"plasmabeameven.png"]] timePerFrame:0.05 resize:YES restore:NO] count:10];
-        SKAction*beamspawn=[SKAction animateWithTextures:@[[atlas textureNamed:@"plasprojflash1.png"],[atlas textureNamed:@"plasprojflash2.png"],[atlas textureNamed:@"projspawn1.png"],[atlas textureNamed:@"projspawn2.png"],[atlas textureNamed:@"projspawn3.png"],[atlas textureNamed:@"projspawn4.png"],[atlas textureNamed:@"projspawn5.png"],[atlas textureNamed:@"projspawn6.png"],[atlas textureNamed:@"projspawn7.png"],[atlas textureNamed:@"projspawn8.png"],[atlas textureNamed:@"projspawn9.png"],[atlas textureNamed:@"projspawn10.png"],[atlas textureNamed:@"projspawn11.png"],[atlas textureNamed:@"projspawn12.png"],[atlas textureNamed:@"projspawn13.png"],[atlas textureNamed:@"projspawn14.png"],[atlas textureNamed:@"projspawn15.png"],[atlas textureNamed:@"projspawn16.png"],[atlas textureNamed:@"projspawn17.png"],[atlas textureNamed:@"projspawn18.png"],[atlas textureNamed:@"projspawn19.png"],[atlas textureNamed:@"projspawn20.png"]] timePerFrame:0.08 resize:YES restore:YES];
+        SKAction*beamspawn=[SKAction animateWithTextures:@[[atlas textureNamed:@"plasprojflash1.png"],[atlas textureNamed:@"plasprojflash2.png"],[atlas textureNamed:@"projspawn1.png"],[atlas textureNamed:@"projspawn2.png"],[atlas textureNamed:@"projspawn3.png"],[atlas textureNamed:@"projspawn4.png"],[atlas textureNamed:@"projspawn5.png"],[atlas textureNamed:@"projspawn6.png"],[atlas textureNamed:@"projspawn7.png"],[atlas textureNamed:@"projspawn8.png"],[atlas textureNamed:@"projspawn9.png"],[atlas textureNamed:@"projspawn10.png"],[atlas textureNamed:@"projspawn11.png"],[atlas textureNamed:@"projspawn12.png"],[atlas textureNamed:@"projspawn13.png"],[atlas textureNamed:@"projspawn14.png"],[atlas textureNamed:@"projspawn15.png"],[atlas textureNamed:@"projspawn16.png"],[atlas textureNamed:@"projspawn17.png"],[atlas textureNamed:@"projspawn18.png"],[atlas textureNamed:@"projspawn19.png"],[atlas textureNamed:@"projspawn20.png"]] timePerFrame:0.08 resize:YES restore:NO];
         CGVector projvector=CGVectorMake(-360,0);
         SKAction*beammove=[SKAction moveBy:projvector duration:1];
         __weak SKSpriteNode*weakbeam=self;
@@ -286,8 +323,8 @@
     return self;
 }
 
--(void)dealloc{
+/*-(void)dealloc{
     NSLog(@"netPlas dealloc");
-}
+}*/
 
 @end

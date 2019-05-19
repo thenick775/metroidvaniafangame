@@ -227,7 +227,7 @@
         
         
         audiomanager=[gameaudio alloc];
-        [audiomanager runBkgrndMusicForlvl:0];
+        [audiomanager runBkgrndMusicForlvl:0 andVol:0.6];
     }
     return self;
 }
@@ -259,11 +259,11 @@
             __weak SKSpriteNode *weaksamusgunship=samusgunship;
             __weak SKAction *weakshipflyac=shipflyac;
             __weak NSArray *weaktexturesforlvl1=texturesforlvl1;
-            __block GameLevelScene3*preload;
+            __block GameLevelScene*preload;
             CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.5,self.view.bounds.size.height/1.5-10);
             
             [SKTextureAtlas preloadTextureAtlasesNamed:weaktexturesforlvl1 withCompletionHandler:^(NSError*error,NSArray*foundatlases){
-                    preload=[[GameLevelScene3 alloc]initWithSize:nextSceneSize];
+                    preload=[[GameLevelScene alloc]initWithSize:nextSceneSize andVol:0.35];
                     preload.scaleMode = SKSceneScaleModeAspectFill;
                         NSLog(@"preloaded lvl1");
                         [weakshipflamesright2 runAction:weakflameflicker];
@@ -274,8 +274,8 @@
     }
 }
 
-/*- (void)dealloc {
+- (void)dealloc {
  NSLog(@"MENU SCENE DEALLOCATED");
- }*/
+ }
 
 @end

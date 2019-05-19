@@ -39,7 +39,6 @@
 		5979C753213B36BA00965A50 /* LFCGzipUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 5979C752213B36BA00965A50 /* LFCGzipUtility.m */; };
 		5979C75A213C79A100965A50 /* crateriaTileSet.png in Resources */ = {isa = PBXBuildFile; fileRef = 5979C759213C79A100965A50 /* crateriaTileSet.png */; };
 		5979C75D21447BF700965A50 /* arachnusintroduction.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5979C75B21447BF700965A50 /* arachnusintroduction.sks */; };
-		598856EB21DC61D400F9ACD8 /* nettori_projectile.sks in Resources */ = {isa = PBXBuildFile; fileRef = 598856E921DC61D400F9ACD8 /* nettori_projectile.sks */; };
 		59C0DE1420B91F25008999C3 /* PlayerProjectile.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C0DE1320B91F25008999C3 /* PlayerProjectile.m */; };
 		59CE01C121CDCD1D00BF13B1 /* enemyBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 59CE01C021CDCD1D00BF13B1 /* enemyBase.m */; };
 		59DAC084218278330077E10C /* gameaudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 59DAC083218278330077E10C /* gameaudio.m */; };
@@ -122,7 +121,6 @@
 		5979C752213B36BA00965A50 /* LFCGzipUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFCGzipUtility.m; sourceTree = "<group>"; };
 		5979C759213C79A100965A50 /* crateriaTileSet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crateriaTileSet.png; sourceTree = "<group>"; };
 		5979C75B21447BF700965A50 /* arachnusintroduction.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = arachnusintroduction.sks; sourceTree = "<group>"; };
-		598856E921DC61D400F9ACD8 /* nettori_projectile.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = nettori_projectile.sks; sourceTree = "<group>"; };
 		59C0DE1220B91F25008999C3 /* PlayerProjectile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerProjectile.h; sourceTree = "<group>"; };
 		59C0DE1320B91F25008999C3 /* PlayerProjectile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerProjectile.m; sourceTree = "<group>"; };
 		59CE01C021CDCD1D00BF13B1 /* enemyBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = enemyBase.m; sourceTree = "<group>"; };
@@ -256,7 +254,6 @@
 				5952F878210E76B000F3BC5B /* starsbackground.sks */,
 				5979C72D2133E0D400965A50 /* shootingstar.sks */,
 				5979C75B21447BF700965A50 /* arachnusintroduction.sks */,
-				598856E921DC61D400F9ACD8 /* nettori_projectile.sks */,
 			);
 			name = ParticleEmitters;
 			sourceTree = "<group>";
@@ -479,7 +476,6 @@
 				596F2DAB20C07CF100B32C47 /* floortilesimple.png in Resources */,
 				5979C75A213C79A100965A50 /* crateriaTileSet.png in Resources */,
 				59EE2C1021F5BC6000F8234E /* Launch Screen.storyboard in Resources */,
-				598856EB21DC61D400F9ACD8 /* nettori_projectile.sks in Resources */,
 				5952F877210AFDEF00F3BC5B /* Main.storyboard in Resources */,
 				5976965721E164C3001D825B /* Trap Beat 2017, Dope Rap_Trap Instrumentalc.mp3 in Resources */,
 				F275B6F1186E2749009F6E6B /* tileSet@2x.png in Resources */,

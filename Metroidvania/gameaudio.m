@@ -4,7 +4,6 @@
 //
 //  Created by nick vancise on 10/25/18.
 //  Base created by Patrick Collins
-
 #import "gameaudio.h"
 
 @implementation gameaudio{
@@ -12,32 +11,27 @@
     int _currentQueueIterator;
 }
 
--(void)runBkgrndMusicForlvl:(int)lvlnum{
+-(void)runBkgrndMusicForlvl:(int)lvlnum andVol:(float)volume{
     _musicQueue=[[NSMutableArray alloc] init];
     _currentQueueIterator=0;
-    
+    self.currentVolume=volume;
     if(lvlnum==0){
-        self.currentVolume=0.6;
         [_musicQueue addObject:[gameaudio setupSound:@"titlescreen_dystopian-future.wav" volume:self.currentVolume]];
     }
     else if(lvlnum==1){
-        self.currentVolume=0.35;
         //self.bkgrndmusic=[gameaudio setupRepeatingSound:@"lvl1-lost-moon.wav" volume:self.currentVolume];
         [_musicQueue addObject:[gameaudio setupSound:@"lvl1-lost-moon.wav" volume:self.currentVolume]];
     }
     else if(lvlnum==2){
-        self.currentVolume=0.3;
         [_musicQueue addObjectsFromArray:@[[gameaudio setupSound:@"11 Lonely.mp3" volume:self.currentVolume],[gameaudio setupSound:@"Trap Beat 2017, Dope Rap_Trap Instrumentalc.mp3" volume:self.currentVolume]]];
     }
     else if(lvlnum==3){
-        self.currentVolume=0.5;
         [_musicQueue addObjectsFromArray:@[[gameaudio setupSound:@"254Beats-Trap-2017.mp3" volume:self.currentVolume],[gameaudio setupSound:@"Yung_Kartz_-_08_-_Aye.mp3" volume:self.currentVolume]]];
     }
     
     self.bkgrndmusic=_musicQueue[_currentQueueIterator];
     self.bkgrndmusic.delegate=self;
     self.currentVolume=self.currentVolume*100;
-    //__weak gameaudio*weakself=self;
     [gameaudio playSound:self.bkgrndmusic];
 }
 
@@ -63,7 +57,6 @@
 //class functions
 // get a repeating sound
 +(AVAudioPlayer*)setupRepeatingSound:(NSString*)file volume:(float)volume {
-    //NSString*weakfile=file;
     AVAudioPlayer *s = [self setupSound:file volume:volume];
     s.numberOfLoops = -1;
     return s;
@@ -72,7 +65,6 @@
 // setup a sound
 +(AVAudioPlayer*)setupSound:(NSString*)file volume:(float)volume{
     NSError *error;
-    //__weak NSString*weakfile=file;
     NSURL *url = [[NSBundle mainBundle] URLForResource:file withExtension:nil];
     AVAudioPlayer *s = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
     s.numberOfLoops = 0;

@@ -36,35 +36,35 @@
 
 -(BOOL)shouldGoForeward:(CGPoint)pos{
     CGPoint temp=[self convertPoint:pos fromNode:self.parent];
-    if(temp.x>0 && temp.y<12 && pos.x<self.parent.frame.size.width/2){
+    if(temp.x>0 && temp.y<14 && pos.x<self.parent.frame.size.width/2){
         return YES;
     }
     else return NO;
 }
 -(BOOL)shouldGoBackward:(CGPoint)pos{
     CGPoint temp=[self convertPoint:pos fromNode:self.parent];
-    if(temp.x<0 && temp.y<12 && pos.x<self.parent.frame.size.width/2){
+    if(temp.x<0 && temp.y<14 && pos.x<self.parent.frame.size.width/2){
         return YES;
     }
     else return NO;
 }
 -(BOOL)shouldJumpForeward:(CGPoint)pos{
     CGPoint temp=[self convertPoint:pos fromNode:self.parent];
-    if(temp.x>14 && temp.y>12 && pos.x<self.parent.frame.size.width/2){
+    if(temp.x>14 && temp.y>14 && pos.x<self.parent.frame.size.width/2){
         return YES;
     }
     else return NO;
 }
 -(BOOL)shouldJumpBackward:(CGPoint)pos{
     CGPoint temp=[self convertPoint:pos fromNode:self.parent];
-    if(temp.x<-14 && temp.y>12 && pos.x<self.parent.frame.size.width/2){
+    if(temp.x<-14 && temp.y>14 && pos.x<self.parent.frame.size.width/2){
         return YES;
     }
     else return NO;
 }
 -(BOOL)shouldJump:(CGPoint)pos{
     CGPoint temp=[self convertPoint:pos fromNode:self.parent];
-    if(temp.y>12 && temp.x>-14 && temp.x<14 && pos.x<self.parent.frame.size.width/2){
+    if(temp.y>14 && temp.x>-14 && temp.x<14 && pos.x<self.parent.frame.size.width/2){
         return YES;
     }
     else return NO;

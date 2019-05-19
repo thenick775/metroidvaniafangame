@@ -15,13 +15,18 @@
 
 @implementation GameLevelScene3{
     SKTextureAtlas*_lvl3assets;
+    SKAction *removebosswall;
+    nettoriboss *nettori;
+    SKAction*idlecheck;
+    SKAction*idleblock;
 }
 
--(instancetype)initWithSize:(CGSize)size{
-    self = [super initWithSize:size];
+-(instancetype)initWithSize:(CGSize)size andVol:(float)vol{
+    self = [super initWithSize:size andVol:vol];
     if (self!=nil) {
         [self.map removeFromParent];
         self.map=nil;
+        self.volume=vol;
         
         self.backgroundColor = [SKColor blackColor];
         self.map = [JSTileMap mapNamed:@"level3.tmx"];
@@ -46,6 +51,7 @@
         self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];
         self.player.position = CGPointMake(150, 170);
         self.player.zPosition = 15;
+        self.hasHadBossInterac=NO;
         
         SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33] Y:[SKRange rangeWithUpperLimit:(self.map.tileSize.height*self.map.mapSize.height)-22]];
         plyrconst.referenceNode=self.parent;
@@ -120,14 +126,33 @@
         [self.enemies addObject:enemy3];
         [self.map addChild:enemy3];
         
-        nettoriboss *nettori=[[nettoriboss alloc] initWithPosition:CGPointMake(176*self.map.tileSize.width-10, 5*self.map.tileSize.height-2)];
+        nettori=[[nettoriboss alloc] initWithPosition:CGPointMake(176*self.map.tileSize.width-10, 5*self.map.tileSize.height-2)];
         [self.map addChild:nettori];
         [self.enemies addObject:nettori];
         
-        //SKEmitterNode*nettoriproj=[SKEmitterNode nodeWithFileNamed:@"nettori_projectile.sks"];//maybe have this draw all the petal particles
-        //nettoriproj.position=CGPointMake(nettori.position.x-100, nettori.position.y+50);
-        //nettoriproj.particleRenderOrder=SKParticleRenderOrderDontCare;
-        //[self.map addChild:nettoriproj];
+        __block BOOL bossdidenter=NO;
+        __weak nettoriboss*weaknettori=nettori;
+        idleblock=[SKAction runBlock:^{
+            if(weakself.player.position.x>weaknettori.position.x-200 && weakself.player.position.y<(weakself.map.tileSize.height*weakself.map.mapSize.height)/2  && !bossdidenter){
+                weaknettori.healthlbl.position=CGPointMake((-3.65*(weakself.size.width/10)), weakself.size.height/2-40);
+                [weakself.camera addChild:weaknettori.healthlbl];
+                [weaknettori startAttack];
+                weakself.hasHadBossInterac=YES;
+                bossdidenter=YES;
+                [weakself removeActionForKey:@"idlecheck"];
+            }
+        }];
+        
+        removebosswall=[SKAction runBlock:^{
+            [weaknettori.healthlbl removeFromParent];
+            for(int i=13;i<20;i++){
+                [weakself.walls removeTileAtCoord:CGPointMake(174,i)];
+                [weakself.walls removeTileAtCoord:CGPointMake(175,i)];
+            }}];
+        
+        idlecheck=[SKAction sequence:@[[SKAction waitForDuration:10],[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:1],idleblock]]]]];
+        [self runAction:idlecheck];
+        
     
     }
     return self;
@@ -136,7 +161,7 @@
 -(void)didMoveToView:(SKView *)view{
     //setup sound
     self.audiomanager=[gameaudio alloc];
-    [self.audiomanager runBkgrndMusicForlvl:3];
+    [self.audiomanager runBkgrndMusicForlvl:3 andVol:self.volume];
     
     __weak GameLevelScene3*weakself=self;
     dispatch_async(dispatch_get_main_queue(), ^{//deal with certain ui on main thread only
@@ -147,8 +172,19 @@
 -(void)replaybuttonpush:(id)sender{
     [[self.view viewWithTag:666] removeFromSuperview];
     [[self.view viewWithTag:4545] removeFromSuperview];
-    [self.view presentScene:[[GameLevelScene3 alloc] initWithSize:self.size]];
-    [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
+    //[self.view presentScene:[[GameLevelScene3 alloc] initWithSize:self.size andVol:self.audiomanager.currentVolume/100]];
+    if(self.hasHadBossInterac){
+        [self removeAllActions];
+        [self removeAllChildren];
+        [self.view presentScene:[[GameLevelScene3 alloc] initNearBossWithSize:self.size andVol:self.audiomanager.currentVolume/100]];
+    }
+    else{
+        [self removeAllActions];
+        [self removeAllChildren];
+        [self.view presentScene:[[GameLevelScene3 alloc] initWithSize:self.size andVol:self.audiomanager.currentVolume/100]];
+        
+    }
+    //[gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
 
 -(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
@@ -195,11 +231,15 @@
             [enemycon updateWithDeltaTime:self.delta];
             nettoriboss*boss=(nettoriboss*)enemycon;
             for(netprojbase*tmp in [boss.projectilesInAction reverseObjectEnumerator]){
-                if(tmp.canGiveDmg && CGRectIntersectsRect(tmp.frame, CGRectMake([self convertPoint:self.player.position toNode:tmp.parent].x, [self convertPoint:self.player.position toNode:tmp.parent].y, self.player.frame.size.width, self.player.frame.size.height))/*CGRectContainsPoint(tmp.frame,[self convertPoint:self.player.position toNode:tmp.parent])*/){
-                    //NSLog(@"hit by nettoriproj");
+                if(tmp.canGiveDmg && CGRectIntersectsRect(tmp.frame, CGRectMake([self convertPoint:self.player.frame.origin toNode:tmp.parent].x, [self convertPoint:self.player.frame.origin toNode:tmp.parent].y, self.player.frame.size.width, self.player.frame.size.height))){
                     [self enemyhitplayerdmgmsg:tmp.dmgamt];
                     [tmp runDmgac];
                 }
+            }
+            if(self.player.position.x>boss.position.x+550){
+                [boss removeAllChildren];
+                [self.enemies removeObject:boss];
+                [boss removeFromParent];
             }
         }
         else if([enemycon isKindOfClass:[powerupBubble class]]){
@@ -215,7 +255,7 @@
                 __weak GameLevelScene3*weakself=self;
                 __weak powerupBubble*weakenemyconcop=enemyconcop;
                 [enemyconcop setgainac:self.player.position];
-                [enemyconcop runAction:enemyconcop.gainPowerup completion:^{weakself.player.paused=NO;weakself.player.lockmovement=NO;[weakself enemyhitplayerdmgmsg:0];weakself.player.currentBulletType=@"chargereg";weakself.player.currentBulletRange=220;weakself.player.currentBulletDamage=2;[weakenemyconcop hitByMeleeWithArrayToRemoveFrom:weakself.enemies];}];
+                [enemyconcop runAction:enemyconcop.gainPowerup completion:^{weakself.player.paused=NO;weakself.player.lockmovement=NO;[weakself enemyhitplayerdmgmsg:0];[weakself.player switchbeamto:@"chargereg"];[weakenemyconcop hitByMeleeWithArrayToRemoveFrom:weakself.enemies];}];
             }
         }
     }
@@ -237,6 +277,12 @@
                 if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame) && !enemylcop.dead){
                     //NSLog(@"hit an enemy");
                     [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies withHit:self.player.currentBulletDamage];
+                    
+                    if([enemylcop isKindOfClass:[nettoriboss class]] && enemylcop.dead){//maybe
+                        //NSLog(@"removing boss wall");
+                        [self runAction:removebosswall];
+                    }
+                    
                     [currbullet removeAllActions];
                     [currbullet removeFromParent];
                     [self.bullets removeObject:currbullet];
@@ -287,8 +333,6 @@
             [self.player runAction:[SKAction moveTo:self.travelportal.position duration:1.5] completion:^{[self gameOver:1];}];
             return;
         }
-        
-        
         
         NSInteger tilecolumn=tileindex%3; //this is how array of coordinates around player is navigated
         NSInteger tilerows=tileindex/3;   //using a 3X3 grid
@@ -388,11 +432,30 @@
     self.player.position=self.player.desiredPosition;
 }//fnc bracket
 
+-(instancetype)initNearBossWithSize:(CGSize)size andVol:(float)volume{
+    self=[self initWithSize:size andVol:volume];
+    if(self!=nil){
+        for(SKSpriteNode*tmp in self.enemies.reverseObjectEnumerator){
+            if([tmp isKindOfClass:[nettoriboss class]] || tmp.position.x>nettori.position.x)
+                continue;
+            else{
+                [tmp removeAllActions];
+                [tmp removeAllChildren];
+                [tmp removeFromParent];
+                [self.enemies removeObject:tmp];
+            }
+        }
+        self.player.position=CGPointMake(149*self.map.tileSize.width, 23*self.map.tileSize.height);
+        [self.player switchbeamto:@"chargereg"];
+        idlecheck=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:0.8],idleblock]]];
+        [self runAction:idlecheck];
+    }
+    return self;
+}
 
 
-
-/*- (void)dealloc {
+- (void)dealloc {
     NSLog(@"LVL3 SCENE DEALLOCATED");
-}*/
+}
 
 @end

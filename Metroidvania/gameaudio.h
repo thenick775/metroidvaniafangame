@@ -11,7 +11,7 @@
 @interface gameaudio : NSObject <AVAudioPlayerDelegate>
 
 
--(void)runBkgrndMusicForlvl:(int)lvlnum;
+-(void)runBkgrndMusicForlvl:(int)lvlnum andVol:(float)volume;
 @property(nonatomic,strong) AVAudioPlayer*bkgrndmusic;
 @property(nonatomic,assign) float currentVolume;    // % out of 100;
 

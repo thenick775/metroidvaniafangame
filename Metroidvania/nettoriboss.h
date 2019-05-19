@@ -12,6 +12,7 @@
 @interface nettoriboss : enemyBase
 
 @property(nonatomic,strong) NSMutableArray*projectilesInAction;
+@property (nonatomic,strong) SKLabelNode *healthlbl;
 -(instancetype)initWithPosition:(CGPoint)pos;
 -(void)updateWithDeltaTime:(NSTimeInterval)seconds;
 -(void)startAttack;

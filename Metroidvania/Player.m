@@ -24,11 +24,11 @@
         self.playervelocity = CGPointMake(0.0, 0.0);
         self.health=100;
         _gravity=CGPointMake(0.0, -450.0);
-        _forewardMove=CGPointMake(800.0, 0.0);
-        _backwardMove=CGPointMake(-800.0, 0.0);
+        _forewardMove=CGPointMake(850.0, 0.0);
+        _backwardMove=CGPointMake(-850.0, 0.0);
         _jumpMove=CGPointMake(0.0, 253.0);
-        _minmovement=CGPointMake(-150.0, -255.0);
-        _maxmovement=CGPointMake(150.0, 250.0);
+        _minmovement=CGPointMake(-180.0, -255.0);
+        _maxmovement=CGPointMake(180.0, 250.0);
         self.currentBulletRange=180/*220*/;
         self.currentBulletDamage=1;
         self.currentBulletType=@"default";//types available, default, plasma, chargereg, charge
@@ -208,6 +208,20 @@
         [self runAction:[SKAction setTexture:self.forewards resize:YES]];
     else if(self.backwardtrack)
         [self runAction:[SKAction setTexture:self.backwards resize:YES]];
+}
+
+-(void)switchbeamto:(NSString *)to{
+    self.currentBulletType=to;
+    
+    if([to isEqualToString:@"chargereg"]){
+        self.currentBulletRange=220;
+        self.currentBulletDamage=2;
+    }
+    else if([to isEqualToString:@"plasma"]){
+        self.currentBulletRange=235;
+        self.currentBulletDamage=3;
+    }
+    //need to work out how to swich damage of charge on demand
 }
 
 /*-(void)dealloc{
