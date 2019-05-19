@@ -231,7 +231,7 @@
             [enemycon updateWithDeltaTime:self.delta];
             nettoriboss*boss=(nettoriboss*)enemycon;
             for(netprojbase*tmp in [boss.projectilesInAction reverseObjectEnumerator]){
-                if(tmp.canGiveDmg && CGRectIntersectsRect(tmp.frame, CGRectMake([self convertPoint:self.player.frame.origin toNode:tmp.parent].x, [self convertPoint:self.player.frame.origin toNode:tmp.parent].y, self.player.frame.size.width, self.player.frame.size.height))){
+                if(!boss.dead && tmp.canGiveDmg && CGRectIntersectsRect(tmp.frame, CGRectMake([self convertPoint:self.player.frame.origin toNode:tmp.parent].x, [self convertPoint:self.player.frame.origin toNode:tmp.parent].y, self.player.frame.size.width, self.player.frame.size.height))){
                     [self enemyhitplayerdmgmsg:tmp.dmgamt];
                     [tmp runDmgac];
                 }
@@ -454,8 +454,8 @@
 }
 
 
-- (void)dealloc {
+/*-(void)dealloc {
     NSLog(@"LVL3 SCENE DEALLOCATED");
-}
+}*/
 
 @end

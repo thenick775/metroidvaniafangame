@@ -274,8 +274,8 @@
     }
 }
 
-- (void)dealloc {
+/*- (void)dealloc {
  NSLog(@"MENU SCENE DEALLOCATED");
- }
+ }*/
 
 @end

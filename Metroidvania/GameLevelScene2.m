@@ -396,8 +396,8 @@
     return self;
 }
 
-- (void)dealloc {
+/*- (void)dealloc {
     NSLog(@"LVL2 SCENE DEALLOCATED");
-}
+}*/
 
 @end

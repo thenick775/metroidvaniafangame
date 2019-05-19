@@ -919,8 +919,8 @@
   self.healthbar.size=CGSizeMake((((float)self.player.health/100)*_healthbarsize), self.healthbar.size.height);
 }
 
--(void)dealloc {
+/*-(void)dealloc {
   NSLog(@"LVL1 SCENE DEALLOCATED");
-}
+}*/
 
 @end

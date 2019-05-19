@@ -9,13 +9,13 @@
 /* Begin PBXBuildFile section */
 		592B389D20DB008400C62977 /* MenuScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 592B389C20DB008400C62977 /* MenuScene.m */; };
 		593F109B21D9CB3B008208E6 /* 346na4n.png in Resources */ = {isa = PBXBuildFile; fileRef = 593F109A21D9CB3A008208E6 /* 346na4n.png */; };
-		593F109F21D9D894008208E6 /* nyzlew.png in Resources */ = {isa = PBXBuildFile; fileRef = 593F109E21D9D893008208E6 /* nyzlew.png */; };
 		593F10A221DAA914008208E6 /* nettoriboss.m in Sources */ = {isa = PBXBuildFile; fileRef = 593F10A121DAA914008208E6 /* nettoriboss.m */; };
 		59450D6E21B360BC0019BAEB /* door.m in Sources */ = {isa = PBXBuildFile; fileRef = 59450D6D21B360BC0019BAEB /* door.m */; };
 		5948813221F1B337008F742A /* joystick.m in Sources */ = {isa = PBXBuildFile; fileRef = 5948813121F1B337008F742A /* joystick.m */; };
 		594F557B20CDE911000E476E /* GameLevelScene2.m in Sources */ = {isa = PBXBuildFile; fileRef = 594F557A20CDE911000E476E /* GameLevelScene2.m */; };
 		594F558520CE16A9000E476E /* spacefloortile.png in Resources */ = {isa = PBXBuildFile; fileRef = 594F558420CE16A9000E476E /* spacefloortile.png */; };
 		594F559320CE1CA0000E476E /* level2.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 594F559220CE1CA0000E476E /* level2.tmx */; };
+		594F9A2A2291DE28008B4795 /* nyzlew.png in Resources */ = {isa = PBXBuildFile; fileRef = 594F9A292291DE28008B4795 /* nyzlew.png */; };
 		5952F8752106AAB600F3BC5B /* arachnusboss.m in Sources */ = {isa = PBXBuildFile; fileRef = 5952F8742106AAB600F3BC5B /* arachnusboss.m */; };
 		5952F877210AFDEF00F3BC5B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5952F876210AFDEF00F3BC5B /* Main.storyboard */; };
 		5952F87A210E76B000F3BC5B /* starsbackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5952F878210E76B000F3BC5B /* starsbackground.sks */; };
@@ -80,7 +80,6 @@
 		592B389B20DB008400C62977 /* MenuScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MenuScene.h; sourceTree = "<group>"; };
 		592B389C20DB008400C62977 /* MenuScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MenuScene.m; sourceTree = "<group>"; };
 		593F109A21D9CB3A008208E6 /* 346na4n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 346na4n.png; sourceTree = "<group>"; };
-		593F109E21D9D893008208E6 /* nyzlew.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nyzlew.png; sourceTree = "<group>"; };
 		593F10A021DAA902008208E6 /* nettoriboss.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = nettoriboss.h; sourceTree = "<group>"; };
 		593F10A121DAA914008208E6 /* nettoriboss.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = nettoriboss.m; sourceTree = "<group>"; };
 		59450D6C21B360850019BAEB /* door.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = door.h; sourceTree = "<group>"; };
@@ -91,6 +90,7 @@
 		594F557A20CDE911000E476E /* GameLevelScene2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameLevelScene2.m; sourceTree = "<group>"; };
 		594F558420CE16A9000E476E /* spacefloortile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spacefloortile.png; sourceTree = "<group>"; };
 		594F559220CE1CA0000E476E /* level2.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = level2.tmx; sourceTree = "<group>"; };
+		594F9A292291DE28008B4795 /* nyzlew.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nyzlew.png; sourceTree = "<group>"; };
 		5952F8732106AAB600F3BC5B /* arachnusboss.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = arachnusboss.h; sourceTree = "<group>"; };
 		5952F8742106AAB600F3BC5B /* arachnusboss.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = arachnusboss.m; sourceTree = "<group>"; };
 		5952F876210AFDEF00F3BC5B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -366,8 +366,8 @@
 				59DAC0B22187ED8C0077E10C /* rm_a4a03.png */,
 				59DAC0B32187ED8C0077E10C /* rm_a5b04.png */,
 				593F109A21D9CB3A008208E6 /* 346na4n.png */,
-				593F109E21D9D893008208E6 /* nyzlew.png */,
 				59DAC0B62187F70E0077E10C /* lvl3tilesets.png */,
+				594F9A292291DE28008B4795 /* nyzlew.png */,
 				F275B6BB186E21CB009F6E6B /* level1.tmx */,
 				594F559220CE1CA0000E476E /* level2.tmx */,
 				59DAC0B02187E3660077E10C /* level3.tmx */,
@@ -479,6 +479,7 @@
 				5952F877210AFDEF00F3BC5B /* Main.storyboard in Resources */,
 				5976965721E164C3001D825B /* Trap Beat 2017, Dope Rap_Trap Instrumentalc.mp3 in Resources */,
 				F275B6F1186E2749009F6E6B /* tileSet@2x.png in Resources */,
+				594F9A2A2291DE28008B4795 /* nyzlew.png in Resources */,
 				594F558520CE16A9000E476E /* spacefloortile.png in Resources */,
 				5976965321E16123001D825B /* Yung_Kartz_-_08_-_Aye.mp3 in Resources */,
 				5952F87A210E76B000F3BC5B /* starsbackground.sks in Resources */,
@@ -493,7 +494,6 @@
 				59DAC0B12187E3660077E10C /* level3.tmx in Resources */,
 				5976965121E1367D001D825B /* 254Beats-Trap-2017.mp3 in Resources */,
 				F275B6F0186E2749009F6E6B /* tileSet.png in Resources */,
-				593F109F21D9D894008208E6 /* nyzlew.png in Resources */,
 				596F2DB420C1ECAB00B32C47 /* pipesroom.png in Resources */,
 				5979C75D21447BF700965A50 /* arachnusintroduction.sks in Resources */,
 			);

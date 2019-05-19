@@ -47,10 +47,9 @@
         firesprite.position=CGPointMake(-20,5);
         firesprite.zPosition=self.zPosition+1;
         [firesprite setScale:0.8];
-        [self addChild:firesprite];
         SKAction*fireburnanim=[SKAction animateWithTextures:@[[SKTexture textureWithImageNamed:@"Fire1.png"],[SKTexture textureWithImageNamed:@"Fire2.png"],[SKTexture textureWithImageNamed:@"Fire3.png"],[SKTexture textureWithImageNamed:@"Fire4.png"],] timePerFrame:0.1 resize:NO restore:NO];
         __weak SKSpriteNode*weakfiresprite=firesprite;
-        CGRect firerect=CGRectMake(-20, 5, self.frame.size.width-20, self.frame.size.height-20);
+        CGRect firerect=CGRectMake(-28,5,self.frame.size.width-23,self.frame.size.height-20);
         SKAction *adddmgfire=[SKAction runBlock:^{
             //NSLog(@"fire aciton");
             CGPoint p=firerect.origin;
@@ -63,7 +62,7 @@
             [weakself addChild:firecpy];
         }];
         
-        _recievedamage=[SKAction repeatAction:adddmgfire count:8];
+        _recievedamage=[SKAction sequence:@[[SKAction repeatAction:adddmgfire count:8],[SKAction waitForDuration:0.38]]];
         
        
         self.healthlbl=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
@@ -122,28 +121,25 @@
     self.healthlbl.text=[NSString stringWithFormat:@"Boss Health:%d",self.health];
     
     if(self.health<250 && ![self actionForKey:@"base"]){
-        [self runAction:[SKAction group:@[_recievedamage,dmgbaseac]] withKey:@"base"];
+        [self runAction:[SKAction group:@[[SKAction repeatAction:_recievedamage count:2],[SKAction sequence:@[[SKAction waitForDuration:0.5],dmgbaseac]]]] withKey:@"base"];
         [self removeActionForKey:@"1"];
-        //[self runAction:dmgbaseac withKey:@"base"];
         [self runAction:attack2 withKey:@"2"];
     }
     else if(self.health<200 && ![self actionForKey:@"med"]){
-        [self runAction:[SKAction group:@[_recievedamage,dmgbasemedac]] withKey:@"med"];
+        [self runAction:[SKAction group:@[[SKAction repeatAction:_recievedamage count:2],[SKAction sequence:@[[SKAction waitForDuration:0.5],dmgbasemedac]]]] withKey:@"med"];
         [self removeActionForKey:@"2"];
-        //[self runAction:dmgbasemedac withKey:@"med"];
         [self runAction:attack3 withKey:@"3"];
     }
     else if(self.health<100 && ![self actionForKey:@"high"]){
-        [self runAction:[SKAction group:@[_recievedamage,dmgbasehighac]] withKey:@"high"];
+        [self runAction:[SKAction group:@[[SKAction repeatAction:_recievedamage count:2],[SKAction sequence:@[[SKAction waitForDuration:0.5],dmgbasehighac]]]] withKey:@"high"];
         [self removeActionForKey:@"3"];
-        //[self runAction:dmgbasehighac withKey:@"high"];
         [self runAction:attack4 withKey:@"4"];
     }
     if(self.health<=0){
         //NSLog(@"healthisbelowzero");
-        [self runAction:[SKAction repeatAction:_recievedamage count:3]];
-        [self removeAllActions];
-        self.texture=nil;
+        __weak nettoriboss*weakself=self;
+        [self runAction:[SKAction repeatAction:_recievedamage count:6] completion:^{[weakself removeAllActions];
+            weakself.texture=nil;}];
         self.dead=YES;
     }
     

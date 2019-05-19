@@ -47,9 +47,9 @@
     self.zRotation = (CGFloat)agent.rotation;
 }
 
--(void)dealloc{
+/*(void)dealloc{
     NSLog(@"honeypotproj dealloc");
-}
+}*/
 
 @end
 
@@ -167,7 +167,7 @@
 }
 
 -(void)dealloc{
-    NSLog(@"honeypot deallocated");
+    //NSLog(@"honeypot deallocated");
     for(GKAgent2D*tmp in self.agentSystem.components.reverseObjectEnumerator){
         [self.agentSystem removeComponent:tmp];
     }
