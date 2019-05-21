@@ -55,7 +55,7 @@ Ray Wenderlich.com-Base super mario assets (1st lvl)
 
 Tommy Lee-"honeypot" walking cactus enemy, metroid sprite (used as volume slider)
 
-N-finity-Arachnus boss, Waver enemy , Sciser enemy, Nettori boss
+N-finity-Arachnus boss, Waver enemy, Choot enemy, Sciser enemy, Nettori boss
 
 ansimuz-Space parallax backround (menu scene background)
 
