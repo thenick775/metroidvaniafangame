@@ -12,6 +12,7 @@
 #import "PlayerProjectile.h"
 #import "nettoriboss.h"
 #import "powerupBubble.h"
+#import "choot.h"
 
 @implementation GameLevelScene3{
     SKTextureAtlas*_lvl3assets;
@@ -52,6 +53,10 @@
         self.player.position = CGPointMake(150, 170);
         self.player.zPosition = 15;
         self.hasHadBossInterac=NO;
+        
+        self.travelportal=NULL;
+        [self.travelportal removeAllActions];
+        [self.travelportal removeFromParent];
         
         SKConstraint*plyrconst=[SKConstraint positionX:[SKRange rangeWithLowerLimit:0 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-33] Y:[SKRange rangeWithUpperLimit:(self.map.tileSize.height*self.map.mapSize.height)-22]];
         plyrconst.referenceNode=self.parent;
@@ -126,6 +131,14 @@
         [self.enemies addObject:enemy3];
         [self.map addChild:enemy3];
         
+        choot*enemy4=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*98,self.map.tileSize.height*3) andDist:150 andCount:9 andTime:1.2 Del:0];
+        [self.enemies addObject:enemy4];
+        [self.map addChild:enemy4];
+        
+        choot*enemy5=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*117,self.map.tileSize.height*3) andDist:150 andCount:9 andTime:1.2 Del:5.364];
+        [self.enemies addObject:enemy5];
+        [self.map addChild:enemy5];
+        
         nettori=[[nettoriboss alloc] initWithPosition:CGPointMake(176*self.map.tileSize.width-10, 5*self.map.tileSize.height-2)];
         [self.map addChild:nettori];
         [self.enemies addObject:nettori];
@@ -182,82 +195,18 @@
         [self removeAllActions];
         [self removeAllChildren];
         [self.view presentScene:[[GameLevelScene3 alloc] initWithSize:self.size andVol:self.audiomanager.currentVolume/100]];
-        
     }
     //[gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
 
 -(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
     BOOL bulletlock=NO;
-    for(id enemycon in [self.enemies reverseObjectEnumerator]){
-        
-        if([enemycon isKindOfClass:[sciserenemy class]]){
-            sciserenemy*enemyconcop=(sciserenemy*)enemycon;
-            if(fabs(self.player.position.x-enemyconcop.position.x)<70){  //minimize comparisons
-                //NSLog(@"in here");
-                if(CGRectContainsPoint(self.player.collisionBoundingBox, CGPointAdd(enemyconcop.enemybullet1.position, enemyconcop.position))){
-                    //NSLog(@"enemy hit player bullet#1");
-                    [enemyconcop.enemybullet1 setHidden:YES];
-                    [self enemyhitplayerdmgmsg:25];
-                }
-                else if(CGRectContainsPoint(self.player.collisionBoundingBox,CGPointAdd(enemyconcop.enemybullet2.position, enemyconcop.position))){
-                    //NSLog(@"enemy hit player buller#2");
-                    [enemyconcop.enemybullet2 setHidden:YES];
-                    [self enemyhitplayerdmgmsg:25];
-                }
-                if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
-                    //NSLog(@"meleehit");
-                    [self.player runAction:self.player.meleedelayac];
-                    [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
-                }
-            }
-        }
-        else if([enemycon isKindOfClass:[waver class]]){
-            waver*enemyconcop=(waver*)enemycon;
-            [enemyconcop updateWithDeltaTime:self.delta andPlayerpos:self.player.position];
-            if(fabs(self.player.position.x-enemyconcop.position.x)<40 && fabs(self.player.position.y-enemyconcop.position.y)<60 && !enemyconcop.attacking){
-                [enemyconcop attack];
-            }
-            if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0))){
-                [self enemyhitplayerdmgmsg:15];
-            }
-            if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
-                //NSLog(@"meleehit");
-                [self.player runAction:self.player.meleedelayac];
-                [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
-            }
-        }
-        else if([enemycon isKindOfClass:[nettoriboss class]]){
-            [enemycon updateWithDeltaTime:self.delta];
-            nettoriboss*boss=(nettoriboss*)enemycon;
-            for(netprojbase*tmp in [boss.projectilesInAction reverseObjectEnumerator]){
-                if(!boss.dead && tmp.canGiveDmg && CGRectIntersectsRect(tmp.frame, CGRectMake([self convertPoint:self.player.frame.origin toNode:tmp.parent].x, [self convertPoint:self.player.frame.origin toNode:tmp.parent].y, self.player.frame.size.width, self.player.frame.size.height))){
-                    [self enemyhitplayerdmgmsg:tmp.dmgamt];
-                    [tmp runDmgac];
-                }
-            }
-            if(self.player.position.x>boss.position.x+550){
-                [boss removeAllChildren];
-                [self.enemies removeObject:boss];
-                [boss removeFromParent];
-            }
-        }
-        else if([enemycon isKindOfClass:[powerupBubble class]]){
-            powerupBubble*enemyconcop=(powerupBubble*)enemycon;
-            if(CGRectIntersectsRect(enemyconcop.frame,self.player.frame) && enemyconcop.served!=YES){
-                //NSLog(@"player intersecting powerupbub");
-                [self.player removeMovementAnims];
-                [self.player resetTex];
-                self.player.lockmovement=YES;
-                self.player.goForeward=NO;
-                self.player.goBackward=NO;
-                self.player.shouldJump=NO;
-                __weak GameLevelScene3*weakself=self;
-                __weak powerupBubble*weakenemyconcop=enemyconcop;
-                [enemyconcop setgainac:self.player.position];
-                [enemyconcop runAction:enemyconcop.gainPowerup completion:^{weakself.player.paused=NO;weakself.player.lockmovement=NO;[weakself enemyhitplayerdmgmsg:0];[weakself.player switchbeamto:@"chargereg"];[weakenemyconcop hitByMeleeWithArrayToRemoveFrom:weakself.enemies];}];
-            }
-        }
+    
+    __weak GameLevelScene3*weakself=self;
+    
+    for(id enemycon in [self.enemies reverseObjectEnumerator]){//enemy to player+melee
+        enemyBase*enemyconcop=(enemyBase*)enemycon;
+        [enemyconcop enemytoplayerandmelee:weakself];
     }
     
     
@@ -271,10 +220,10 @@
             continue;//avoid comparing with removed bullet
         }
         
-        for(id enemyl in self.enemies){
+        for(id enemyl in self.enemies){//swotch this to below line
             //NSLog(@"bullet frame:%@",NSStringFromCGRect(currbullet.frame));
                 enemyBase*enemylcop=(enemyBase*)enemyl;
-                if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame) && !enemylcop.dead){
+                if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,enemylcop.dx,enemylcop.dy), currbullet.frame) && !enemylcop.dead){
                     //NSLog(@"hit an enemy");
                     [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies withHit:self.player.currentBulletDamage];
                     
@@ -286,7 +235,7 @@
                     [currbullet removeAllActions];
                     [currbullet removeFromParent];
                     [self.bullets removeObject:currbullet];
-                    bulletlock=YES;
+                    bulletlock=YES;//to prevent from comparing with a deallocated bullet for door collision
                     break; //if bullet hits enemy stop checking for same bullet
                 }
         }

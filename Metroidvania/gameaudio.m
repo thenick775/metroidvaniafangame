@@ -26,7 +26,8 @@
         [_musicQueue addObjectsFromArray:@[[gameaudio setupSound:@"11 Lonely.mp3" volume:self.currentVolume],[gameaudio setupSound:@"Trap Beat 2017, Dope Rap_Trap Instrumentalc.mp3" volume:self.currentVolume]]];
     }
     else if(lvlnum==3){
-        [_musicQueue addObjectsFromArray:@[[gameaudio setupSound:@"254Beats-Trap-2017.mp3" volume:self.currentVolume],[gameaudio setupSound:@"Yung_Kartz_-_08_-_Aye.mp3" volume:self.currentVolume]]];
+        //[_musicQueue addObjectsFromArray:@[[gameaudio setupSound:@"254Beats-Trap-2017.mp3" volume:self.currentVolume],[gameaudio setupSound:@"Yung_Kartz_-_08_-_Aye.mp3" volume:self.currentVolume]]];
+        [_musicQueue addObjectsFromArray:@[[gameaudio setupSound:@"not-for-profit-2515834-fake-friends.mp3" volume:self.currentVolume],[gameaudio setupSound:@"not-for-profit-2501700-hold-up.mp3" volume:self.currentVolume]]];
     }
     
     self.bkgrndmusic=_musicQueue[_currentQueueIterator];

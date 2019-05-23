@@ -25,7 +25,9 @@
         self.position=pos;
         [self setScale:1.2];
         self.anchorPoint=CGPointMake(1,0);
-        self.health=350;
+        self.health=400;//350;
+        self.dx=10;
+        self.dy=0;
         self.dead=NO;
         self.projectilesInAction=[[NSMutableArray alloc] init];
         
@@ -40,8 +42,8 @@
         __weak nettoriboss*weakself=self;
         attack1=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:5]]]];
         attack2=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:3.3]]]];
-        attack3=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:2],[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:3]]]];
-        attack4=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:0.5],[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:2.5],[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:1.78]]]];
+        attack3=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:1.8],[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:2.1]]]];
+        attack4=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:0.5],[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:2.3],[SKAction runBlock:^{[weakself fireNetPlas];}],[SKAction waitForDuration:1.78]]]];
         
         firesprite=[SKSpriteNode spriteNodeWithImageNamed:@"Fire1.png"];
         firesprite.position=CGPointMake(-20,5);
@@ -109,7 +111,6 @@
 }
 
 -(void)updateWithDeltaTime:(NSTimeInterval)seconds{
-    
     if(seconds<0.16)
         seconds=0.16;
     
@@ -120,17 +121,17 @@
     self.health=self.health-hit;
     self.healthlbl.text=[NSString stringWithFormat:@"Boss Health:%d",self.health];
     
-    if(self.health<250 && ![self actionForKey:@"base"]){
+    if(self.health<325 && ![self actionForKey:@"base"]){
         [self runAction:[SKAction group:@[[SKAction repeatAction:_recievedamage count:2],[SKAction sequence:@[[SKAction waitForDuration:0.5],dmgbaseac]]]] withKey:@"base"];
         [self removeActionForKey:@"1"];
         [self runAction:attack2 withKey:@"2"];
     }
-    else if(self.health<200 && ![self actionForKey:@"med"]){
+    else if(self.health<225 && ![self actionForKey:@"med"]){
         [self runAction:[SKAction group:@[[SKAction repeatAction:_recievedamage count:2],[SKAction sequence:@[[SKAction waitForDuration:0.5],dmgbasemedac]]]] withKey:@"med"];
         [self removeActionForKey:@"2"];
         [self runAction:attack3 withKey:@"3"];
     }
-    else if(self.health<100 && ![self actionForKey:@"high"]){
+    else if(self.health<125 && ![self actionForKey:@"high"]){
         [self runAction:[SKAction group:@[[SKAction repeatAction:_recievedamage count:2],[SKAction sequence:@[[SKAction waitForDuration:0.5],dmgbasehighac]]]] withKey:@"high"];
         [self removeActionForKey:@"3"];
         [self runAction:attack4 withKey:@"4"];
@@ -140,17 +141,32 @@
         __weak nettoriboss*weakself=self;
         [self runAction:[SKAction repeatAction:_recievedamage count:6] completion:^{[weakself removeAllActions];
             weakself.texture=nil;}];
+        [self removeActionForKey:@"4"];
         self.dead=YES;
     }
     
 }
 
--(void)hitByMeleeWithArrayToRemoveFrom:(NSMutableArray *)arr{
-    
-    
-}
+-(void)hitByMeleeWithArrayToRemoveFrom:(NSMutableArray *)arr{}
 -(void)startAttack{
     [self runAction:attack1 withKey:@"1"];
+}
+
+
+-(void)enemytoplayerandmelee:(GameLevelScene *)scene{
+    [self updateWithDeltaTime:scene.delta];
+    //nettoriboss*boss=(nettoriboss*)enemycon;
+    for(netprojbase*tmp in [self.projectilesInAction reverseObjectEnumerator]){
+        if(!self.dead && tmp.canGiveDmg && CGRectIntersectsRect(tmp.frame, CGRectMake([scene convertPoint:scene.player.frame.origin toNode:tmp.parent].x, [scene convertPoint:scene.player.frame.origin toNode:tmp.parent].y, scene.player.frame.size.width, scene.player.frame.size.height))){
+            [scene enemyhitplayerdmgmsg:tmp.dmgamt];
+            [tmp runDmgac];
+        }
+    }
+    if(scene.player.position.x>self.position.x+550){
+        [self removeAllChildren];
+        [scene.enemies removeObject:self];
+        [self removeFromParent];
+    }
 }
 
 -(void)dealloc{

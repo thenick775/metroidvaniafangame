@@ -31,7 +31,7 @@
                 _bullettexswitch=@[[bullet textureNamed:@"samus_projectileoddsright.png"],[bullet textureNamed:@"samus_projectileevensright.png"]];
             }
             else if(!direction){
-                projvector=CGVectorMake(/*-180*/-mag_range,0);
+                projvector=CGVectorMake(-mag_range,0);
                 self.position=CGPointMake(pos.x-12, pos.y+4);
                 _bulletframes=@[[bullet textureNamed:@"samus_projectile1.png"],[bullet textureNamed:@"samus_projectile2.png"]];
                 _bullettexswitch=@[[bullet textureNamed:@"samus_projectileoddsleft.png"],[bullet textureNamed:@"samus_projectileevensleft.png"]];

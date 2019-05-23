@@ -238,30 +238,10 @@
     if(boss1.active)
     [boss1 handleanimswithfocuspos:self.player.position.x];   //evaluate boss actions/attacks
     
+    __weak GameLevelScene2*weakself=self;
+    
     for(id enemycon in [self.enemies reverseObjectEnumerator]){//enemy to player (also including melee to enemy for convienence)
-        
-        if([enemycon isKindOfClass:[sciserenemy class]]){
-            sciserenemy*enemyconcop=(sciserenemy*)enemycon;
-        if(fabs(self.player.position.x-enemyconcop.position.x)<70){  //minimize comparisons
-            //NSLog(@"in here");
-            if(CGRectContainsPoint(self.player.collisionBoundingBox, CGPointAdd(enemyconcop.enemybullet1.position, enemyconcop.position))){
-                //NSLog(@"enemy hit player bullet#1");
-                [enemyconcop.enemybullet1 setHidden:YES];
-                [self enemyhitplayerdmgmsg:25];
-            }
-            else if(CGRectContainsPoint(self.player.collisionBoundingBox,CGPointAdd(enemyconcop.enemybullet2.position, enemyconcop.position))){
-                //NSLog(@"enemy hit player bullet#2");
-                [enemyconcop.enemybullet2 setHidden:YES];
-                [self enemyhitplayerdmgmsg:25];
-            }
-            if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
-                //NSLog(@"meleehit");
-                [self.player runAction:self.player.meleedelayac];
-                [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
-            }
-        }
-    }
-    else if([enemycon isKindOfClass:[arachnusboss class]]){
+       if([enemycon isKindOfClass:[arachnusboss class]]){
         arachnusboss*enemyconcop=(arachnusboss*)enemycon;
         if(fabs(self.player.position.x-enemyconcop.position.x)<440){
         if(CGRectContainsPoint(CGRectInset(enemyconcop.frame,3,0), self.player.position)){
@@ -274,60 +254,10 @@
         }
     }
   }
-    else if([enemycon isKindOfClass:[honeypot class]]){
-        honeypot*enemyconcop=(honeypot*)enemycon;
-        if(enemyconcop.dead){
-            [enemyconcop updateWithDeltaTime:self.delta];
-            CGPoint realpos=[self convertPoint:self.player.position toNode:enemyconcop];
-            enemyconcop.target.position=vector2((float)realpos.x,(float)realpos.y);
-        
-            for(honeypotproj *child in [enemyconcop.children reverseObjectEnumerator]){
-                if(CGRectContainsPoint(self.player.frame,[self convertPoint:child.position fromNode:enemyconcop])){
-                    [self enemyhitplayerdmgmsg:12];
-                }
-                if(!child.anger && self.player.meleeinaction && !self.player.meleedelay && CGRectContainsPoint([self.player meleeBoundingBoxNormalized],[self convertPoint:child.position fromNode:enemyconcop])){
-                    //NSLog(@"hit honeypot child");
-                    [enemyconcop dealChildDamage:3 withChild:child];
-                }
-            }
-            if(enemyconcop.agentSystem.components.count==0){
-                [enemyconcop removeAllActions];
-                [enemyconcop removeAllChildren];
-                [enemyconcop removeFromParent];
-                [self.enemies removeObject:enemyconcop];
-            }
-        
-        }
-        else if(CGRectIntersectsRect(self.player.frame,enemyconcop.frame) && [enemyconcop actionForKey:@"walk"]/*!enemyconcop.dead*/){
-            [self enemyhitplayerdmgmsg:15];
-        }
-        if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame) && [enemyconcop actionForKey:@"walk"]){
-            //NSLog(@"meleehit");
-            [self.player runAction:self.player.meleedelayac];
-            [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
-        }
-        if(self.player.position.x>enemyconcop.position.x+150 && [enemyconcop actionForKey:@"walk"]){
-            //NSLog(@"past position of player");
-            [enemyconcop runAction:enemyconcop.explodeangry];
-        }
-        
+    else{
+        enemyBase*enemyconcop=(enemyBase*)enemycon;
+        [enemyconcop enemytoplayerandmelee:weakself];
     }
-    else if([enemycon isKindOfClass:[waver class]]){
-        waver*enemyconcop=(waver*)enemycon;
-        [enemyconcop updateWithDeltaTime:self.delta andPlayerpos:self.player.position];
-        if(fabs(self.player.position.x-enemyconcop.position.x)<40 && fabs(self.player.position.y-enemyconcop.position.y)<60 && !enemyconcop.attacking){
-            [enemyconcop attack];
-        }
-        if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0))){
-            [self enemyhitplayerdmgmsg:15];
-        }
-        if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
-            //NSLog(@"meleehit");
-            [self.player runAction:self.player.meleedelayac];
-            [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
-        }
-    }
-        
 }
     
     

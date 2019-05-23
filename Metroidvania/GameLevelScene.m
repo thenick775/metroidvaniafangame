@@ -726,44 +726,11 @@
 
 -(void)handleBulletEnemyCollisions{ //switch this to use id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
   
-  for(id enemycon in [self.enemies reverseObjectEnumerator]){
-    
-    if([enemycon isKindOfClass:[sciserenemy class]]){
-      sciserenemy*enemyconcop=(sciserenemy*)enemycon;
-      if(fabs(self.player.position.x-enemyconcop.position.x)<70){  //minimize comparisons
-        //NSLog(@"in here");
-        if(CGRectContainsPoint(self.player.collisionBoundingBox, CGPointAdd(enemyconcop.enemybullet1.position, enemyconcop.position))){
-          //NSLog(@"enemy hit player bullet#1");
-          [enemyconcop.enemybullet1 setHidden:YES];
-          [self enemyhitplayerdmgmsg:25];
-        }
-        else if(CGRectContainsPoint(self.player.collisionBoundingBox,CGPointAdd(enemyconcop.enemybullet2.position, enemyconcop.position))){
-          //NSLog(@"enemy hit player buller#2");
-          [enemyconcop.enemybullet2 setHidden:YES];
-          [self enemyhitplayerdmgmsg:25];
-        }
-        if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
-          //NSLog(@"meleehit");
-          [self.player runAction:self.player.meleedelayac];
-          [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
-        }
-      }
-    }
-    else if([enemycon isKindOfClass:[waver class]]){
-      waver*enemyconcop=(waver*)enemycon;
-      [enemyconcop updateWithDeltaTime:self.delta andPlayerpos:self.player.position];
-      if(fabs(self.player.position.x-enemyconcop.position.x)<40 && fabs(self.player.position.y-enemyconcop.position.y)<60 && !enemyconcop.attacking){
-        [enemyconcop attack];
-      }
-      if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0))){
-        [self enemyhitplayerdmgmsg:15];
-      }
-      if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
-        //NSLog(@"meleehit");
-        [self.player runAction:self.player.meleedelayac];
-        [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
-      }
-    }
+  __weak GameLevelScene*weakself=self;
+  
+  for(id enemycon in [self.enemies reverseObjectEnumerator]){//enemy to player+melee
+    enemyBase*enemyconcop=(enemyBase*)enemycon;
+    [enemyconcop enemytoplayerandmelee:weakself];
   }
   
   

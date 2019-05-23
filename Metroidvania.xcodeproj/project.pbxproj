@@ -16,6 +16,10 @@
 		594F558520CE16A9000E476E /* spacefloortile.png in Resources */ = {isa = PBXBuildFile; fileRef = 594F558420CE16A9000E476E /* spacefloortile.png */; };
 		594F559320CE1CA0000E476E /* level2.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 594F559220CE1CA0000E476E /* level2.tmx */; };
 		594F9A2A2291DE28008B4795 /* nyzlew.png in Resources */ = {isa = PBXBuildFile; fileRef = 594F9A292291DE28008B4795 /* nyzlew.png */; };
+		594F9A2C2292009C008B4795 /* srx.png in Resources */ = {isa = PBXBuildFile; fileRef = 594F9A2B2292009C008B4795 /* srx.png */; };
+		594F9A2F2292640B008B4795 /* not-for-profit-2501700-hold-up.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 594F9A2D2292640B008B4795 /* not-for-profit-2501700-hold-up.mp3 */; };
+		594F9A302292640B008B4795 /* not-for-profit-2515834-fake-friends.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 594F9A2E2292640B008B4795 /* not-for-profit-2515834-fake-friends.mp3 */; };
+		594F9A3222938D83008B4795 /* choot.m in Sources */ = {isa = PBXBuildFile; fileRef = 594F9A3122938D83008B4795 /* choot.m */; };
 		5952F8752106AAB600F3BC5B /* arachnusboss.m in Sources */ = {isa = PBXBuildFile; fileRef = 5952F8742106AAB600F3BC5B /* arachnusboss.m */; };
 		5952F877210AFDEF00F3BC5B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5952F876210AFDEF00F3BC5B /* Main.storyboard */; };
 		5952F87A210E76B000F3BC5B /* starsbackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5952F878210E76B000F3BC5B /* starsbackground.sks */; };
@@ -91,6 +95,11 @@
 		594F558420CE16A9000E476E /* spacefloortile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spacefloortile.png; sourceTree = "<group>"; };
 		594F559220CE1CA0000E476E /* level2.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = level2.tmx; sourceTree = "<group>"; };
 		594F9A292291DE28008B4795 /* nyzlew.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nyzlew.png; sourceTree = "<group>"; };
+		594F9A2B2292009C008B4795 /* srx.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = srx.png; sourceTree = "<group>"; };
+		594F9A2D2292640B008B4795 /* not-for-profit-2501700-hold-up.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "not-for-profit-2501700-hold-up.mp3"; sourceTree = "<group>"; };
+		594F9A2E2292640B008B4795 /* not-for-profit-2515834-fake-friends.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "not-for-profit-2515834-fake-friends.mp3"; sourceTree = "<group>"; };
+		594F9A3122938D83008B4795 /* choot.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = choot.m; sourceTree = "<group>"; };
+		594F9A3322938D8F008B4795 /* choot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = choot.h; sourceTree = "<group>"; };
 		5952F8732106AAB600F3BC5B /* arachnusboss.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = arachnusboss.h; sourceTree = "<group>"; };
 		5952F8742106AAB600F3BC5B /* arachnusboss.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = arachnusboss.m; sourceTree = "<group>"; };
 		5952F876210AFDEF00F3BC5B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -225,6 +234,8 @@
 				59CE01C021CDCD1D00BF13B1 /* enemyBase.m */,
 				596F2DA720BFAFAE00B32C47 /* sciserenemy.h */,
 				596F2DA820BFAFAE00B32C47 /* sciserenemy.m */,
+				594F9A3322938D8F008B4795 /* choot.h */,
+				594F9A3122938D83008B4795 /* choot.m */,
 				5971B78D215F831000A65C6E /* honeypot.h */,
 				5971B78E215F831C00A65C6E /* honeypot.m */,
 				595D4059216F16CE004A7D24 /* waver.h */,
@@ -281,6 +292,8 @@
 				5976965021E1367D001D825B /* 254Beats-Trap-2017.mp3 */,
 				5976965221E16123001D825B /* Yung_Kartz_-_08_-_Aye.mp3 */,
 				5976965421E16414001D825B /* 11 Lonely.mp3 */,
+				594F9A2D2292640B008B4795 /* not-for-profit-2501700-hold-up.mp3 */,
+				594F9A2E2292640B008B4795 /* not-for-profit-2515834-fake-friends.mp3 */,
 				5976965621E164C3001D825B /* Trap Beat 2017, Dope Rap_Trap Instrumentalc.mp3 */,
 			);
 			name = audiofiles;
@@ -368,6 +381,7 @@
 				593F109A21D9CB3A008208E6 /* 346na4n.png */,
 				59DAC0B62187F70E0077E10C /* lvl3tilesets.png */,
 				594F9A292291DE28008B4795 /* nyzlew.png */,
+				594F9A2B2292009C008B4795 /* srx.png */,
 				F275B6BB186E21CB009F6E6B /* level1.tmx */,
 				594F559220CE1CA0000E476E /* level2.tmx */,
 				59DAC0B02187E3660077E10C /* level3.tmx */,
@@ -473,6 +487,7 @@
 				595C42D720FD3CCE00A47BB8 /* 52089.png in Resources */,
 				F275B6BF186E21CB009F6E6B /* level1.tmx in Resources */,
 				596F2DAF20C1496400B32C47 /* backgroundobjects.png in Resources */,
+				594F9A302292640B008B4795 /* not-for-profit-2515834-fake-friends.mp3 in Resources */,
 				596F2DAB20C07CF100B32C47 /* floortilesimple.png in Resources */,
 				5979C75A213C79A100965A50 /* crateriaTileSet.png in Resources */,
 				59EE2C1021F5BC6000F8234E /* Launch Screen.storyboard in Resources */,
@@ -488,6 +503,8 @@
 				59DAC0972187D4430077E10C /* titlescreen_dystopian-future.wav in Resources */,
 				F275B690186E0B06009F6E6B /* Images.xcassets in Resources */,
 				596F2DA620BF5FBA00B32C47 /* roombackround.png in Resources */,
+				594F9A2F2292640B008B4795 /* not-for-profit-2501700-hold-up.mp3 in Resources */,
+				594F9A2C2292009C008B4795 /* srx.png in Resources */,
 				595C42DD20FD418100A47BB8 /* brokendoors.png in Resources */,
 				594F559320CE1CA0000E476E /* level2.tmx in Resources */,
 				59DAC0992187D4430077E10C /* lvl1-lost-moon.wav in Resources */,
@@ -533,6 +550,7 @@
 				F275B6DE186E25C1009F6E6B /* SKAction+SKTExtras.m in Sources */,
 				595D4058216F16C2004A7D24 /* waver.m in Sources */,
 				F275B6DF186E25C1009F6E6B /* SKAction+SKTSpecialEffects.m in Sources */,
+				594F9A3222938D83008B4795 /* choot.m in Sources */,
 				F275B6E1186E25C1009F6E6B /* SKNode+SKTDebugDraw.m in Sources */,
 				59CE01C121CDCD1D00BF13B1 /* enemyBase.m in Sources */,
 			);
