@@ -47,6 +47,10 @@
     self.zRotation = (CGFloat)agent.rotation;
 }
 
+/*(void)dealloc{
+    NSLog(@"honeypotproj dealloc");
+}*/
+
 @end
 
 
@@ -72,6 +76,8 @@
     self.target=[[GKAgent2D alloc]init];
     self.target.radius=7;
     self.target.delegate=nil;
+    self.dx=5;
+    self.dy=0;
    
         
     SKAction *walkanim=[SKAction animateWithTextures:@[[_honeypotatlas textureNamed:@"honeypot1.png"],[_honeypotatlas textureNamed:@"honeypot2.png"],[_honeypotatlas textureNamed:@"honeypot3.png"],[_honeypotatlas textureNamed:@"honeypot4.png"],[_honeypotatlas textureNamed:@"honeypot5.png"],[_honeypotatlas textureNamed:@"honeypot6.png"],[_honeypotatlas textureNamed:@"honeypot7.png"],[_honeypotatlas textureNamed:@"honeypot8.png"]] timePerFrame:0.2 resize:YES restore:NO];
@@ -162,9 +168,49 @@
             [self runAction:self.explode];
 }
 
-/*-(void)dealloc{
-    NSLog(@"honeypot deallocated");
-}*/
+-(void)enemytoplayerandmelee:(GameLevelScene *)scene{
+    if(self.dead){
+        [self updateWithDeltaTime:scene.delta];
+        CGPoint realpos=[scene convertPoint:scene.player.position toNode:self];
+        self.target.position=vector2((float)realpos.x,(float)realpos.y);
+        
+        for(honeypotproj *child in [self.children reverseObjectEnumerator]){
+            if(CGRectContainsPoint(scene.player.frame,[scene convertPoint:child.position fromNode:self])){
+                [scene enemyhitplayerdmgmsg:12];
+            }
+            if(!child.anger && scene.player.meleeinaction && !scene.player.meleedelay && CGRectContainsPoint([scene.player meleeBoundingBoxNormalized],[scene convertPoint:child.position fromNode:self])){
+                //NSLog(@"hit honeypot child");
+                [self dealChildDamage:3 withChild:child];
+            }
+        }
+        if(self.agentSystem.components.count==0){
+            [self removeAllActions];
+            [self removeAllChildren];
+            [self removeFromParent];
+            [scene.enemies removeObject:self];
+        }
+        
+    }
+    else if(CGRectIntersectsRect(scene.player.frame,self.frame) && [self actionForKey:@"walk"]/*!enemyconcop.dead*/){
+        [scene enemyhitplayerdmgmsg:15];
+    }
+    if(scene.player.meleeinaction && !scene.player.meleedelay && CGRectIntersectsRect([scene.player meleeBoundingBoxNormalized],self.frame) && [self actionForKey:@"walk"]){
+        //NSLog(@"meleehit");
+        [scene.player runAction:scene.player.meleedelayac];
+        [self hitByMeleeWithArrayToRemoveFrom:scene.enemies];
+    }
+    if(scene.player.position.x>self.position.x+150 && [self actionForKey:@"walk"]){
+        //NSLog(@"past position of player");
+        [self runAction:self.explodeangry];
+    }
+}
+
+-(void)dealloc{
+    //NSLog(@"honeypot deallocated");
+    for(GKAgent2D*tmp in self.agentSystem.components.reverseObjectEnumerator){
+        [self.agentSystem removeComponent:tmp];
+    }
+}
 
 @end
 

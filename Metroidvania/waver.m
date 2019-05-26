@@ -22,6 +22,8 @@
     self = [super initWithImageNamed:@"waver_r3.png"];
     if(self!=nil){
         self.health=20;
+        self.dx=5;
+        self.dy=0;
         self.attacking=NO;
         self.position=position;
         SKTextureAtlas*waveratlas=[SKTextureAtlas atlasNamed:@"Waver"];
@@ -101,6 +103,20 @@
     [self runAction:[SKAction sequence:@[[SKAction waitForDuration:10.0],[SKAction runBlock:^{[weakagent.behavior setWeight:0.0 forGoal:weakseektarget];[weakagent.behavior setWeight:10.0 forGoal:weakstayonpath];[weakagent.behavior setWeight:15.0 forGoal:weakwander];weakagent.maxSpeed=12;weakagent.mass=5;}],[SKAction waitForDuration:7.0],[SKAction runBlock:^{weakself.attacking=NO;}]]]];
 }
 
+-(void)enemytoplayerandmelee:(GameLevelScene *)scene{
+    [self updateWithDeltaTime:scene.delta andPlayerpos:scene.player.position];
+    if(fabs(scene.player.position.x-self.position.x)<40 && fabs(scene.player.position.y-self.position.y)<60 && !self.attacking){
+        [self attack];
+    }
+    if(CGRectIntersectsRect(scene.player.frame,CGRectInset(self.frame,2,0))){
+        [scene enemyhitplayerdmgmsg:15];
+    }
+    if(scene.player.meleeinaction && !scene.player.meleedelay && CGRectIntersectsRect([scene.player meleeBoundingBoxNormalized],self.frame)){
+        //NSLog(@"meleehit");
+        [scene.player runAction:scene.player.meleedelayac];
+        [self hitByMeleeWithArrayToRemoveFrom:scene.enemies];
+    }
+}
 
 /*-(void)dealloc{
     NSLog(@"waver deallocated");

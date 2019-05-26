@@ -50,5 +50,6 @@
 -(CGRect)collisionBoundingBox;
 -(CGRect)meleeBoundingBoxNormalized;
 -(void)resetTex;
+-(void)switchbeamto:(NSString*)to;
 
 @end

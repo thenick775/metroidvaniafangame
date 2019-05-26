@@ -46,7 +46,7 @@
   UITextView *_controlstext;
 }
 
--(instancetype)initWithSize:(CGSize)size {
+-(instancetype)initWithSize:(CGSize)size andVol:(float)vol{
   self=[super initWithSize:size];
   if (self!=nil) {
     /* Setup scene here */
@@ -54,7 +54,7 @@
     //self.view.shouldCullNonVisibleNodes=NO; //??? seems to help framerate for now
     [self.map removeFromParent];
     self.map=nil;
-    
+    self.volume=vol;
     self.backgroundColor=[SKColor colorWithRed:0.7259 green:0 blue:0.8863 alpha:1.0];
     self.map = [JSTileMap mapNamed:@"level1.tmx"];
     [self addChild:self.map];
@@ -172,7 +172,7 @@
 -(void)didMoveToView:(SKView *)view{
   //setup sound
   self.audiomanager=[gameaudio alloc];
-  [self.audiomanager runBkgrndMusicForlvl:1];
+  [self.audiomanager runBkgrndMusicForlvl:1 andVol:self.volume];
   __weak GameLevelScene*weakself=self;
   dispatch_async(dispatch_get_main_queue(), ^{ //deal with certain ui (that could be used immediately) on main thread only
     [weakself setupVolumeSliderAndReplayAndContinue:weakself];
@@ -455,14 +455,9 @@
       [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
     }
     else if(touchlocation.x>self.camera.frame.size.width/2 && touchlocation.y<self.camera.frame.size.height/2){
-      //call build projectile/set it going right ->
        //NSLog(@"start charge timer");
       if(![self.player actionForKey:@"chargeT"])
         [self.player runAction:self.player.chargebeamtimer withKey:@"chargeT"];
-      /*if(self.player.forwardtrack)
-        [self firePlayerProjectilewithdirection:TRUE];
-      else
-        [self firePlayerProjectilewithdirection:FALSE];*/
     }
     
   
@@ -492,10 +487,6 @@
       self.player.goBackward=NO;
       [self.player removeMovementAnims];
       [self.player resetTex];
-      /*if(self.player.forwardtrack)
-        [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
-      else if(self.player.backwardtrack)
-        [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];*/
     }
     else if([myjoystick shouldJump:currtouchlocation] && [myjoystick shouldGoForeward:previoustouchlocation]){
       //NSLog(@"moving from move right to jumping");
@@ -665,9 +656,9 @@
 
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 
-  if(self.gameOver || self.paused /*|| self.player.lockmovement*/)
+  if(self.gameOver || self.paused)
     return;
-  if(self.player.meleeinaction){
+  if(self.player.meleeinaction || self.player.lockmovement){//added here should test
     self.player.shouldJump=NO;//disable player movement
     self.player.goForeward=NO;
     self.player.goBackward=NO;
@@ -686,24 +677,18 @@
     if([myjoystick shouldJump:fnctouchlocation] || [myjoystick shouldJumpBackward:fnctouchlocation] || [myjoystick shouldJumpForeward:fnctouchlocation]){
       //NSLog(@"done touching up");
       [self.player resetTex];
-      /*if(self.player.backwardtrack)
-        [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
-      else
-        [self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];*/
     }
     else if([myjoystick shouldGoForeward:fnctouchlocation]){
       //NSLog(@"done touching right");
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
       [self.player resetTex];
-      //[self.player runAction:[SKAction setTexture:self.player.forewards resize:YES]];
     }
     else if([myjoystick shouldGoBackward:fnctouchlocation]){
       //NSLog(@"done touching left");
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
       [self.player resetTex];
-      //[self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
     }
     else if(CGRectContainsPoint(_startbutton.frame, fnctouchlocation)){
       //NSLog(@"do nothing hit the pause");//put here so the melee is not hit
@@ -739,46 +724,13 @@
   self.player.shouldJump=NO;
 }
 
--(void)handleBulletEnemyCollisions{ //switch this to ise id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
+-(void)handleBulletEnemyCollisions{ //switch this to use id in fast enumeration so as to keep 1 enemy arr with multiple enemy types
   
-  for(id enemycon in [self.enemies reverseObjectEnumerator]){
-    
-    if([enemycon isKindOfClass:[sciserenemy class]]){
-      sciserenemy*enemyconcop=(sciserenemy*)enemycon;
-      if(fabs(self.player.position.x-enemyconcop.position.x)<70){  //minimize comparisons
-        //NSLog(@"in here");
-        if(CGRectContainsPoint(self.player.collisionBoundingBox, CGPointAdd(enemyconcop.enemybullet1.position, enemyconcop.position))){
-          //NSLog(@"enemy hit player bullet#1");
-          [enemyconcop.enemybullet1 setHidden:YES];
-          [self enemyhitplayerdmgmsg:25];
-        }
-        else if(CGRectContainsPoint(self.player.collisionBoundingBox,CGPointAdd(enemyconcop.enemybullet2.position, enemyconcop.position))){
-          //NSLog(@"enemy hit player buller#2");
-          [enemyconcop.enemybullet2 setHidden:YES];
-          [self enemyhitplayerdmgmsg:25];
-        }
-        if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
-          //NSLog(@"meleehit");
-          [self.player runAction:self.player.meleedelayac];
-          [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
-        }
-      }
-    }
-    else if([enemycon isKindOfClass:[waver class]]){
-      waver*enemyconcop=(waver*)enemycon;
-      [enemyconcop updateWithDeltaTime:self.delta andPlayerpos:self.player.position];
-      if(fabs(self.player.position.x-enemyconcop.position.x)<40 && fabs(self.player.position.y-enemyconcop.position.y)<60 && !enemyconcop.attacking){
-        [enemyconcop attack];
-      }
-      if(CGRectIntersectsRect(self.player.frame,CGRectInset(enemyconcop.frame,2,0))){
-        [self enemyhitplayerdmgmsg:15];
-      }
-      if(self.player.meleeinaction && !self.player.meleedelay && CGRectIntersectsRect([self.player meleeBoundingBoxNormalized],enemyconcop.frame)){
-        //NSLog(@"meleehit");
-        [self.player runAction:self.player.meleedelayac];
-        [enemyconcop hitByMeleeWithArrayToRemoveFrom:self.enemies];
-      }
-    }
+  __weak GameLevelScene*weakself=self;
+  
+  for(id enemycon in [self.enemies reverseObjectEnumerator]){//enemy to player+melee
+    enemyBase*enemyconcop=(enemyBase*)enemycon;
+    [enemyconcop enemytoplayerandmelee:weakself];
   }
   
   
@@ -850,6 +802,12 @@
   [_controlslabel removeFromParent];
   self.volumeslider.hidden=YES;
   
+  self.player.shouldJump=NO;//disable player movement
+  self.player.goForeward=NO;
+  self.player.goBackward=NO;
+  [self.player removeMovementAnims];
+  [self.player resetTex];
+  
   self.paused=NO;
 }
 -(void)displaycontrolstext{
@@ -858,11 +816,13 @@
 }
 
 -(void)setStayPaused{//for use to keep the scene paused while returning from background
-  //NSLog(@"staying paused");
+  NSLog(@"staying paused");
+  self.userInteractionEnabled=NO;
   self.stayPaused=YES;
   [self unpausegame];
   GameLevelScene*weakself=self;
   [self runAction:[SKAction sequence:@[[SKAction waitForDuration:0.05],[SKAction runBlock:^{[weakself pausegame];}]]] completion:^{weakself.stayPaused=NO;}];
+  self.userInteractionEnabled=YES;
 }
 
 -(void)slideraction:(id)sender{
@@ -898,7 +858,7 @@
 -(void)replaybuttonpush:(id)sender{
   [[self.view viewWithTag:666] removeFromSuperview];
   [[self.view viewWithTag:4545] removeFromSuperview];
-  [self.view presentScene:[[GameLevelScene alloc] initWithSize:self.size]];
+  [self.view presentScene:[[GameLevelScene alloc] initWithSize:self.size andVol:self.audiomanager.currentVolume/100]];
   [gameaudio pauseSound:self.audiomanager.bkgrndmusic];
 }
 -(void)continuebuttonpush:(id)sender{
@@ -906,7 +866,7 @@
   [[self.view viewWithTag:4545] removeFromSuperview];
   __weak GameLevelScene*weakself=self;
   [SKTextureAtlas preloadTextureAtlasesNamed:@[@"honeypot",@"Arachnus"] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
-      GameLevelScene2*preload=[[GameLevelScene2 alloc]initWithSize:weakself.size];
+      GameLevelScene2*preload=[[GameLevelScene2 alloc]initWithSize:weakself.size andVol:weakself.audiomanager.currentVolume/100];
       preload.scaleMode = SKSceneScaleModeAspectFill;
         NSLog(@"preloaded lvl2");
         [weakself.view presentScene:preload];

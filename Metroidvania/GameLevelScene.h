@@ -27,6 +27,7 @@
 @property (nonatomic,strong) TravelPortal * travelportal;
 @property (nonatomic,strong) gameaudio*audiomanager;
 @property (nonatomic,strong) MySlider*volumeslider;
+@property (nonatomic,assign) float volume;
 
 -(void)slideraction:(id)sender;
 -(void)damageRecievedMsg;
@@ -38,5 +39,5 @@
 -(CGRect)tileRectFromTileCoords:(CGPoint)fnccoordinate;
 -(NSInteger)tileGIDAtTileCoord:(CGPoint)tilecoordinate forLayer:(TMXLayer *)fnclayer;
 -(void)hitHealthBox;
--(instancetype)initWithSize:(CGSize)size;
+-(instancetype)initWithSize:(CGSize)size andVol:(float)vol;
 @end

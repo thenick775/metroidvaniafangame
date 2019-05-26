@@ -24,11 +24,11 @@
         self.playervelocity = CGPointMake(0.0, 0.0);
         self.health=100;
         _gravity=CGPointMake(0.0, -450.0);
-        _forewardMove=CGPointMake(800.0, 0.0);
-        _backwardMove=CGPointMake(-800.0, 0.0);
+        _forewardMove=CGPointMake(860.0, 0.0);
+        _backwardMove=CGPointMake(-860.0, 0.0);
         _jumpMove=CGPointMake(0.0, 253.0);
-        _minmovement=CGPointMake(-150.0, -255.0);
-        _maxmovement=CGPointMake(150.0, 250.0);
+        _minmovement=CGPointMake(-190.0, -255.0);
+        _maxmovement=CGPointMake(190.0, 250.0);
         self.currentBulletRange=180/*220*/;
         self.currentBulletDamage=1;
         self.currentBulletType=@"default";//types available, default, plasma, chargereg, charge
@@ -125,8 +125,8 @@
         NSArray *travelthruportalarray=@[[samusregsuit textureNamed:@"samus_travel1.png"],[samusregsuit textureNamed:@"samus_travel2.png"],[samusregsuit textureNamed:@"samus_travel3.png"],[samusregsuit textureNamed:@"samus_travel4.png"],[samusregsuit textureNamed:@"samus_travel5.png"],[samusregsuit textureNamed:@"samus_travel6.png"],[samusregsuit textureNamed:@"samus_travel7.png"],[samusregsuit textureNamed:@"samus_travel8.png"],[samusregsuit textureNamed:@"samus_travel9.png"],[samusregsuit textureNamed:@"samus_travel10.png"]];
         
         
-        self.runAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:runarray timePerFrame:0.075 resize:YES restore:NO]];
-        self.runBackwardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:runbackwardsarray timePerFrame:0.075 resize:YES restore:NO]];
+        self.runAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:runarray timePerFrame:0.07 resize:YES restore:NO]];
+        self.runBackwardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:runbackwardsarray timePerFrame:0.07 resize:YES restore:NO]];
         self.jumpForewardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:jumpforewardsarray timePerFrame:0.04 resize:YES restore:NO]];
         self.jumpBackwardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:jumpbackwardsarray timePerFrame:0.04 resize:YES restore:NO]];
         self.enterfromportalAnimation=[SKAction sequence:@[[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2],[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samus_turnr1.png"],[samusregsuit textureNamed:@"samus_turnr2.png"],[samusregsuit textureNamed:@"samus_turnr3.png"]] timePerFrame:0.1 resize:NO restore:NO]]];
@@ -148,9 +148,9 @@
     CGPoint backwardStep=CGPointMultiplyScalar(_backwardMove, delta);
     
     if (self.shouldJump)
-       self.playervelocity=CGPointMake(self.playervelocity.x*0.85, self.playervelocity.y); //makes horizontal movement last longer if jumping due to onle 2% decrease in x velocity
+       self.playervelocity=CGPointMake(self.playervelocity.x*0.84, self.playervelocity.y); //decreases horizontal movement for jmp
     else if(self.goForeward || self.goBackward){
-        self.playervelocity=CGPointMake(self.playervelocity.x*0.85, self.playervelocity.y);
+        self.playervelocity=CGPointMake(self.playervelocity.x*0.85, self.playervelocity.y);//same for fwd&bkwd
     }
     else
     self.playervelocity=CGPointMake(self.playervelocity.x*0.80, self.playervelocity.y);  //horizontal dampening force "reducing" horizontal movement each frame
@@ -208,6 +208,20 @@
         [self runAction:[SKAction setTexture:self.forewards resize:YES]];
     else if(self.backwardtrack)
         [self runAction:[SKAction setTexture:self.backwards resize:YES]];
+}
+
+-(void)switchbeamto:(NSString *)to{
+    self.currentBulletType=to;
+    
+    if([to isEqualToString:@"chargereg"]){//dmg or range does not change for charge, that must be done dynamically and then reverted
+        self.currentBulletRange=220;
+        self.currentBulletDamage=2;
+    }
+    else if([to isEqualToString:@"plasma"]){
+        self.currentBulletRange=235;
+        self.currentBulletDamage=3;
+    }
+    //need to work out how to swich damage of charge on demand
 }
 
 /*-(void)dealloc{

@@ -53,7 +53,7 @@
 
 }
 
--(void)hitByBulletWithArrayToRemoveFrom:(NSMutableArray *)arr{}
+-(void)hitByBulletWithArrayToRemoveFrom:(NSMutableArray *)arr withHit:(int)hit{}
 -(void)hitByMeleeWithArrayToRemoveFrom:(NSMutableArray *)arr{
     [self removeAllActions];
     [self removeAllChildren];
@@ -61,6 +61,24 @@
     [self runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction runBlock:^{[weakself removeFromParent];}]]]];
     [arr removeObject:self];
 }
+
+
+-(void)enemytoplayerandmelee:(GameLevelScene *)scene{
+    if(CGRectIntersectsRect(self.frame,scene.player.frame) && self.served!=YES){
+        //NSLog(@"player intersecting powerupbub");
+        [scene.player removeMovementAnims];
+        [scene.player resetTex];
+        scene.player.lockmovement=YES;
+        scene.player.goForeward=NO;
+        scene.player.goBackward=NO;
+        scene.player.shouldJump=NO;
+        __weak GameLevelScene*weakself=scene;
+        __weak powerupBubble*weakenemyconcop=self;
+        [self setgainac:scene.player.position];
+        [self runAction:self.gainPowerup completion:^{weakself.player.paused=NO;weakself.player.lockmovement=NO;[weakself enemyhitplayerdmgmsg:0];[weakself.player switchbeamto:@"chargereg"];[weakenemyconcop hitByMeleeWithArrayToRemoveFrom:weakself.enemies];}];
+    }
+}
+
 
 /*-(void)dealloc{
     NSLog(@"powerupBubble deallocated");

@@ -15,7 +15,6 @@
 @property(nonatomic,strong) SKEffectNode*effectNode;
 
 -(instancetype)initWithPosition:(CGPoint)pos andCenter:(CGPoint)center andTexAtlas:(SKTextureAtlas*)atlas;
--(void)moveAndGain:(CGPoint)point;
 -(void)setgainac:(CGPoint)point;
 
 @end
