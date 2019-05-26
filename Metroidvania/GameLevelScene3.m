@@ -165,8 +165,6 @@
         
         idlecheck=[SKAction sequence:@[[SKAction waitForDuration:10],[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:1],idleblock]]]]];
         [self runAction:idlecheck];
-        
-    
     }
     return self;
 }
