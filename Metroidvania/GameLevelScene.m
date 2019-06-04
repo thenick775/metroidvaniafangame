@@ -38,10 +38,9 @@
 @end
 
 @implementation GameLevelScene{
-  NSString *fintext;
-  SKLabelNode *endgamelabel;
   UIButton *_continuebutton,*_replaybutton;
-  SKSpriteNode*_pauselabel,*_unpauselabel,*_controlslabel,*_startbutton;
+  SKSpriteNode *won,*died;
+  SKSpriteNode*_pauselabel,*_unpauselabel,*_controlslabel,*_startbutton,*_mask;
   joystick*myjoystick;
   UITextView *_controlstext;
 }
@@ -87,14 +86,14 @@
     SKRange *xrange=[SKRange rangeWithLowerLimit:self.size.width/2 upperLimit:(self.map.mapSize.width*self.map.tileSize.width)-self.size.width/2];
     SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
     SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
-    self.camera.constraints=@[[SKConstraint distance:[SKRange rangeWithUpperLimit:4] toNode:self.player],edgeconstraint];/*=@[[SKConstraint distance:[SKRange rangeWithConstantValue:0.0] toNode:self.player],edgeconstraint];*/
+    self.camera.constraints=@[[SKConstraint distance:[SKRange rangeWithUpperLimit:4] toNode:self.player],edgeconstraint];
     
     //health label initialization
     self.healthlabel=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
     self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
     self.healthlabel.fontSize=15;
     self.healthlabel.zPosition=19;
-    self.healthlabel.position=CGPointMake((-4*(self.size.width/10))+3, self.size.height/2-20);
+    self.healthlabel.position=CGPointMake((-4*(self.size.width/10))+5, self.size.height/2-20);
     [self.camera addChild:self.healthlabel];
     
     //health bar initialization
@@ -112,21 +111,26 @@
     [self.camera addChild:self.healthbarborder];
     
     //gameover buttons/labels
-    endgamelabel=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
-    endgamelabel.fontSize=40;
-    endgamelabel.position=CGPointMake(0,35);
+    self.replayimage=[UIImage imageNamed:@"replay.png"];
+    won=[SKSpriteNode spriteNodeWithImageNamed:@"won.png"];
+    won.position=CGPointMake(0, 51);
+    died=[SKSpriteNode spriteNodeWithImageNamed:@"died.png"];
+    died.position=CGPointMake(0, 51);
     
     //pause-unpause buttons/labels & pause screen items
     _pauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"pauselabel.png"];
     _pauselabel.position=CGPointMake(0,35);
-    _pauselabel.zPosition=18;
+    _pauselabel.zPosition=21;
     _unpauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"unpauselabel.png"];
     _unpauselabel.position=CGPointMake(0,0);
-    _unpauselabel.zPosition=18;
+    _unpauselabel.zPosition=21;
     [_unpauselabel setScale:1.35];
     _controlslabel=[SKSpriteNode spriteNodeWithImageNamed:@"controlslabel.png"];
     _controlslabel.position=CGPointMake(0,-30);
-    _controlslabel.zPosition=18;
+    _controlslabel.zPosition=21;
+    _mask=[SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:self.size];
+    _mask.alpha=0.65;
+    _mask.zPosition=20;
     
     //portal stuff
     _travelportal=[[TravelPortal alloc] initWithImage:@"travelmirror.png"];
@@ -198,25 +202,24 @@
   
   _replaybutton=[UIButton buttonWithType:UIButtonTypeCustom]; //replay button
   _replaybutton.tag=666;
-  UIImage *replayimage=[UIImage imageNamed:@"replay"];
-  [_replaybutton setImage:replayimage forState:UIControlStateNormal];
+  [_replaybutton setImage:weakself.replayimage forState:UIControlStateNormal];
   [_replaybutton addTarget:weakself action:@selector(replaybuttonpush:) forControlEvents:UIControlEventTouchUpInside];
-  _replaybutton.frame=CGRectMake(weakself.view.bounds.size.width/2.0-replayimage.size.width/2, weakself.view.bounds.size.height/2.0-replayimage.size.height/1.5, replayimage.size.width, replayimage.size.height);
+  _replaybutton.frame=CGRectMake(weakself.view.bounds.size.width/2.0-weakself.replayimage.size.width/2, weakself.view.bounds.size.height/2.0-weakself.replayimage.size.height/1.5, weakself.replayimage.size.width, weakself.replayimage.size.height);
   
   _continuebutton=[UIButton buttonWithType:UIButtonTypeCustom]; //continue button
   _continuebutton.tag=888;
   UIImage *continueimage=[UIImage imageNamed:@"continuebutton.png"];
   [_continuebutton setImage:continueimage forState:UIControlStateNormal];
   [_continuebutton addTarget:weakself action:@selector(continuebuttonpush:) forControlEvents:UIControlEventTouchUpInside];
-  _continuebutton.frame=CGRectMake(weakself.view.bounds.size.width/2.0-continueimage.size.width/2/*/4.0-15*/, weakself.view.bounds.size.height/2.0-continueimage.size.height/1.5/*4.0+7*/, continueimage.size.width, continueimage.size.height);
+  _continuebutton.frame=CGRectMake(weakself.view.bounds.size.width/2.0-continueimage.size.width/2, weakself.view.bounds.size.height/2.0-continueimage.size.height/1.5, continueimage.size.width, continueimage.size.height);
   
-  _controlstext=[[UITextView alloc] initWithFrame:CGRectMake(weakself.view.bounds.size.width/2-(weakself.view.bounds.size.width*0.7)/2/*/4.0-15*/, weakself.view.bounds.size.height/4/*4.0+7*/, weakself.view.bounds.size.width*0.7,weakself.view.bounds.size.height/2)/*CGRectMake(0, 0, weakself.size.width/4, weakself.size.height/4)*/];
+  _controlstext=[[UITextView alloc] initWithFrame:CGRectMake(weakself.view.bounds.size.width/2-(weakself.view.bounds.size.width*0.7)/2, weakself.view.bounds.size.height/4, weakself.view.bounds.size.width*0.7,weakself.view.bounds.size.height/2)];
   _controlstext.scrollEnabled=YES;
   _controlstext.editable=NO;
   [_controlstext setFont:[UIFont systemFontOfSize:16]];
   _controlstext.backgroundColor=[SKColor darkGrayColor];
   _controlstext.textColor=[SKColor whiteColor];
-  _controlstext.text=@"Use the joystick to move around by sliding your finger,\nit is 5 directional allowing you to jump and move foreward or backwards at the same time,\n\nTap the upper right half of the screen to melee\n\nTap the lower right half of the screen to fire your weapon\n\nRemember, one touch at a time, but two fingers to fire are fair game!\n\nHealth Boxes are in all levels, look for the unusual ones\n\nEnemies Guide:\nScisser: melee or fire to kill,\n\nHoneypot (walking cactus): melee or fire to kill, green projectiles means you can damage them with melee, red means they are invincible,\n\nWavers: melee or fire to kill, or simply keep your distance.";
+  _controlstext.text=@"Use the joystick to move around by sliding your finger,\nit is 5 directional allowing you to jump and move foreward or backwards at the same time,\n\nTap the upper right half of the screen to melee\n\nTap the lower right half of the screen to fire your weapon\n\nRemember, one touch at a time, but two fingers to fire are fair game!\n\nHealth Boxes are in all levels, look for the unusual tiles\n\nEnemies Guide:\nScisser: melee or fire to kill,\n\nHoneypot (walking cactus): melee or fire to kill, green projectiles means you can damage them with melee, red means they are invincible,\n\nWavers: melee or fire to kill, or simply keep your distance,\n\nChoot: melee or fire to kill, or just jump over,\n\nZero: melee or fire to kill.";
 }
 
 -(void)willMoveFromView:(SKView *)view{
@@ -788,6 +791,7 @@
   //[self.startbutton runAction:[SKAction colorizeWithColor:[UIColor darkGrayColor] colorBlendFactor:0.8 duration:0.05] completion:^{NSLog(@"coloringstart");}];
   //[self.view addSubview:_controlstext];
   //[self.view bringSubviewToFront:_controlstext];
+  [self.camera addChild:_mask];
   [self.camera addChild:_pauselabel];
   [self.camera addChild:_unpauselabel];
   [self.camera addChild:_controlslabel];
@@ -800,6 +804,7 @@
   [_pauselabel removeFromParent];
   [_unpauselabel removeFromParent];
   [_controlslabel removeFromParent];
+  [_mask removeFromParent];
   self.volumeslider.hidden=YES;
   
   self.player.shouldJump=NO;//disable player movement
@@ -841,18 +846,15 @@
     [self.player runAction:[SKAction setTexture:self.player.backwards resize:YES]];
   
   if(didwin){
-    fintext=@"You Won!";
-    endgamelabel.text=fintext;
-    __weak SKLabelNode *weakendgamelabel=endgamelabel;
+    __weak GameLevelScene*weakself=self;
     __weak UIButton *weakcontinuebutton=_continuebutton;
-    [self.player runAction:self.player.travelthruportalAnimation completion:^{[self.camera addChild:weakendgamelabel];[self.view addSubview:weakcontinuebutton];}];
+    __weak SKSpriteNode*weakwon=won;
+    [self.player runAction:self.player.travelthruportalAnimation completion:^{[weakself.camera addChild:weakwon];[weakself.view addSubview:weakcontinuebutton];}];
   }
   else{
-    fintext=@"You Died :(";
-  //label setup for end of game message
-  endgamelabel.text=fintext;
-  [self.camera addChild:endgamelabel];
-  [self.view addSubview:_replaybutton];
+    //label setup for end of game message
+    [self.camera addChild:died/*endgamelabel*/];
+    [self.view addSubview:_replaybutton];
   }
 }
 -(void)replaybuttonpush:(id)sender{

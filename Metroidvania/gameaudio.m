@@ -96,8 +96,9 @@
     [player pause];
 }
 
-/*-(void)dealloc{
-    NSLog(@"soundmanager deallocated");
-}*/
+-(void)dealloc{
+    //NSLog(@"soundmanager deallocated");
+    [_musicQueue removeAllObjects];
+}
 
 @end

@@ -28,6 +28,7 @@
 @property (nonatomic,strong) gameaudio*audiomanager;
 @property (nonatomic,strong) MySlider*volumeslider;
 @property (nonatomic,assign) float volume;
+@property (nonatomic,strong) UIImage*replayimage;
 
 -(void)slideraction:(id)sender;
 -(void)damageRecievedMsg;

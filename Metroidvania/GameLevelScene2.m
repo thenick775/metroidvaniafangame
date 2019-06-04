@@ -66,7 +66,8 @@
         SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
         SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
         self.camera.constraints=@[[SKConstraint distance:[SKRange rangeWithLowerLimit:0 upperLimit:4] toNode:self.player],edgeconstraint];
-       
+        self.replayimage=[UIImage imageNamed:@"replay5.png"];
+        
         //star background initialization here
         SKEmitterNode *starbackground=[SKEmitterNode nodeWithFileNamed:@"starsbackground.sks"];
         starbackground.position=CGPointMake(2400,(self.map.mapSize.height*self.map.tileSize.height));
