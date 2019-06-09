@@ -66,7 +66,8 @@
         SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
         SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
         self.camera.constraints=@[[SKConstraint distance:[SKRange rangeWithLowerLimit:0 upperLimit:4] toNode:self.player],edgeconstraint];
-       
+        self.replayimage=[UIImage imageNamed:@"replay5.png"];
+        
         //star background initialization here
         SKEmitterNode *starbackground=[SKEmitterNode nodeWithFileNamed:@"starsbackground.sks"];
         starbackground.position=CGPointMake(2400,(self.map.mapSize.height*self.map.tileSize.height));
@@ -275,7 +276,7 @@
                 arachnusboss*enemylcop=(arachnusboss*)enemyl;
                 if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
                     //NSLog(@"hit an enemy");
-                    enemylcop.health--;
+                    enemylcop.health-=enemylcop.health-currbullet.hit;
                     enemylcop.healthlbl.text=[NSString stringWithFormat:@"Boss Health:%d",enemylcop.health];
                     if(enemylcop.health<=0){
                         [self.enemies removeObject:enemylcop];
@@ -289,9 +290,9 @@
             }
            else{
                 enemyBase*enemylcop=(enemyBase*)enemyl;
-                if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame) && !enemylcop.dead){
+                if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,enemylcop.dx,enemylcop.dy), currbullet.frame) && !enemylcop.dead){
                     //NSLog(@"hit an enemy");
-                    [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies withHit:self.player.currentBulletDamage];
+                    [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies withHit:currbullet.hit];
                     [currbullet removeAllActions];
                     [currbullet removeFromParent];
                     [self.bullets removeObject:currbullet];

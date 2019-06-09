@@ -73,6 +73,7 @@
         SKRange *yrange=[SKRange rangeWithLowerLimit:self.size.height/2 upperLimit:(self.map.mapSize.height*self.map.tileSize.height)-self.size.height/2];
         SKConstraint*edgeconstraint=[SKConstraint positionX:xrange Y:yrange];
         self.camera.constraints=@[[SKConstraint distance:[SKRange rangeWithLowerLimit:0 upperLimit:4] toNode:self.player],edgeconstraint];
+        self.replayimage=[UIImage imageNamed:@"replay5.png"];
         
         //mutable arrays here
         [self.bullets removeAllObjects];
@@ -223,7 +224,7 @@
                 enemyBase*enemylcop=(enemyBase*)enemyl;
                 if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,enemylcop.dx,enemylcop.dy), currbullet.frame) && !enemylcop.dead){
                     //NSLog(@"hit an enemy");
-                    [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies withHit:self.player.currentBulletDamage];
+                    [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies withHit:currbullet.hit];
                     
                     if([enemylcop isKindOfClass:[nettoriboss class]] && enemylcop.dead){//maybe
                         //NSLog(@"removing boss wall");
@@ -393,6 +394,7 @@
             }
         }
         self.player.position=CGPointMake(149*self.map.tileSize.width, 23*self.map.tileSize.height);
+        self.player.chargebeamenabled=YES;
         [self.player switchbeamto:@"chargereg"];
         idlecheck=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:0.8],idleblock]]];
         [self runAction:idlecheck];

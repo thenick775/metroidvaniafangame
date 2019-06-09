@@ -42,8 +42,9 @@
 @property (nonatomic,assign) NSString *currentBulletType;
 @property (nonatomic,assign) int currentBulletRange;
 @property (nonatomic,assign) int currentBulletDamage;
-@property (nonatomic,assign) BOOL chargebeamenabled;
+@property (nonatomic,assign) BOOL chargebeamenabled,chargebeamactive,chargebeamrunning;
 @property (nonatomic,strong) SKAction *chargebeamtimer;
+@property (nonatomic,strong) SKSpriteNode *lower,*upper,*flame;
 
 -(void)update:(NSTimeInterval)delta;
 -(void)removeMovementAnims;
@@ -51,5 +52,6 @@
 -(CGRect)meleeBoundingBoxNormalized;
 -(void)resetTex;
 -(void)switchbeamto:(NSString*)to;
+-(void)removeChargeSpr;
 
 @end

@@ -75,7 +75,7 @@
         __weak GameLevelScene*weakself=scene;
         __weak powerupBubble*weakenemyconcop=self;
         [self setgainac:scene.player.position];
-        [self runAction:self.gainPowerup completion:^{weakself.player.paused=NO;weakself.player.lockmovement=NO;[weakself enemyhitplayerdmgmsg:0];[weakself.player switchbeamto:@"chargereg"];[weakenemyconcop hitByMeleeWithArrayToRemoveFrom:weakself.enemies];}];
+        [self runAction:self.gainPowerup completion:^{weakself.player.paused=NO;weakself.player.lockmovement=NO;[weakself enemyhitplayerdmgmsg:0];[weakself.player switchbeamto:@"chargereg"];weakself.player.chargebeamenabled=YES;[weakenemyconcop hitByMeleeWithArrayToRemoveFrom:weakself.enemies];}];
     }
 }
 

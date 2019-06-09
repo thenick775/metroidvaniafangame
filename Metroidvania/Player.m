@@ -15,6 +15,7 @@
     CGPoint _jumpMove;
     CGPoint _minmovement;
     CGPoint _maxmovement;
+    SKAction*fire_anim;
 }
 
 -(id)initWithImageNamed:(NSString *)name{
@@ -33,6 +34,7 @@
         self.currentBulletDamage=1;
         self.currentBulletType=@"default";//types available, default, plasma, chargereg, charge
         self.chargebeamenabled=NO;
+        self.chargebeamactive=NO;
         self.lockmovement=NO;
         
         __weak Player*weakself=self;
@@ -87,7 +89,37 @@
         SKAction *meleedelaymirror=[SKAction sequence:@[[SKAction fadeAlphaTo:1 duration:0.03],meleeblkmirror,[SKAction waitForDuration:0.78],[SKAction fadeAlphaTo:0 duration:0.1],[SKAction runBlock:^{[weakself removeAllChildren];weakself.meleeinaction=NO;[weakmeleeweapon setXScale:1];weakmeleeweapon.position=CGPointMake(16,4);}]]];
         meleeblkmirror.timingMode=SKActionTimingEaseOut;
         
-        self.chargebeamtimer=[SKAction sequence:@[[SKAction waitForDuration:4.0],[SKAction runBlock:^{NSLog(@"chargebeam timer reached 4 sec");}]]];
+        SKAction*charging_lower=[SKAction animateWithTextures:@[[projectiles textureNamed:@"charging_lower1_3.png"],[projectiles textureNamed:@"charging_lower2_4_8.png"],[projectiles textureNamed:@"charging_lower1_3.png"],[projectiles textureNamed:@"charging_lower2_4_8.png"],[projectiles textureNamed:@"charging_lower5_7_10.png"],[projectiles textureNamed:@"charging_lower6.png"],[projectiles textureNamed:@"charging_lower5_7_10.png"],[projectiles textureNamed:@"charging_lower2_4_8.png"],[projectiles textureNamed:@"charging_lower9_11_13.png"],[projectiles textureNamed:@"charging_lower5_7_10.png"],[projectiles textureNamed:@"charging_lower9_11_13.png"],[projectiles textureNamed:@"charging_lower12.png"],[projectiles textureNamed:@"charging_lower9_11_13.png"]] timePerFrame:0.08 resize:YES restore:NO];
+        SKAction*charging_upper=[SKAction animateWithTextures:@[[projectiles textureNamed:@"charging_upper1.png"],[projectiles textureNamed:@"charging_upper2.png"],[projectiles textureNamed:@"charging_upper3.png"],[projectiles textureNamed:@"charging_upper4.png"]] timePerFrame:0.08 resize:YES restore:NO];
+        SKAction*ready_lower=[SKAction animateWithTextures:@[[projectiles textureNamed:@"ready_lower1.png"],[projectiles textureNamed:@"ready_lower2.png"],[projectiles textureNamed:@"ready_lower3.png"],[projectiles textureNamed:@"ready_lower4.png"]] timePerFrame:0.08 resize:YES restore:NO];
+        SKAction*ready_upper=[SKAction animateWithTextures:@[[projectiles textureNamed:@"ready_upper1.png"],[projectiles textureNamed:@"ready_upper2.png"],[projectiles textureNamed:@"ready_upper3.png"],[projectiles textureNamed:@"ready_upper4.png"],[projectiles textureNamed:@"ready_upper5.png"]] timePerFrame:0.04 resize:YES restore:NO];
+        fire_anim=[SKAction animateWithTextures:@[[projectiles textureNamed:@"charge_flame1.png"],[projectiles textureNamed:@"charge_flame2.png"],[projectiles textureNamed:@"charge_flame3.png"],[projectiles textureNamed:@"charge_flame4.png"],[projectiles textureNamed:@"charge_flame5.png"]] timePerFrame:0.05 resize:YES restore:NO];
+        self.lower=[SKSpriteNode spriteNodeWithTexture:[projectiles textureNamed:@"charging_lower_1_3.png"]];
+        self.lower.zPosition=self.zPosition+1;
+        self.upper=[SKSpriteNode spriteNodeWithTexture:[projectiles textureNamed:@"charging_upper1.png"]];
+        self.upper.zPosition=self.zPosition+1;
+        self.flame=[SKSpriteNode spriteNodeWithTexture:[projectiles textureNamed:@"charge_flame1.png"]];
+        self.flame.zPosition=self.zPosition+1;
+        SKAction*charge_blk=[SKAction runBlock:^{
+            weakself.chargebeamactive=YES;//switch to active here pair the other with active charge beam
+            weakself.lower.position=weakself.forwardtrack ? CGPointMake(12,4):CGPointMake(-12, 4);
+            weakself.upper.position=weakself.forwardtrack ? CGPointMake(12,4):CGPointMake(-12, 4);
+            [weakself addChild:weakself.lower];
+            [weakself addChild:weakself.upper];
+            [weakself.lower runAction:charging_lower completion:^{
+                [weakself.upper removeActionForKey:@"chgupp"];
+                [weakself.upper runAction:[SKAction repeatActionForever:ready_upper]];
+                [weakself.lower runAction:[SKAction repeatActionForever:ready_lower]];
+            }];
+            [weakself.upper runAction:[SKAction repeatActionForever:charging_upper] withKey:@"chgupp"];
+        }];
+        SKAction*chargeini=[SKAction runBlock:^{
+            [weakself runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction colorizeWithColor:[SKColor purpleColor] colorBlendFactor:0.7 duration:0.1],[SKAction colorizeWithColorBlendFactor:0.0 duration:0.1]]]] withKey:@"chgini"];
+        }];
+        
+        self.chargebeamtimer=[SKAction sequence:@[[SKAction group:@[[SKAction waitForDuration:2.0],[SKAction sequence:@[[SKAction waitForDuration:0.9],[SKAction group:@[charge_blk,chargeini]]]]]],[SKAction runBlock:^{[weakself switchbeamto:@"charge"];weakself.chargebeamrunning=YES;
+            [weakself removeActionForKey:@"chgini"];
+            [weakself runAction:[SKAction repeatActionForever:weakself.damageaction] withKey:@"chgflash"];}]]];//fix timing
         
         self.meleeactionright=[SKAction runBlock:^{if(!weakself.meleeinaction){
             weakself.meleeinaction=YES;
@@ -217,11 +249,34 @@
         self.currentBulletRange=220;
         self.currentBulletDamage=2;
     }
+    else if([to isEqualToString:@"charge"]){
+        self.currentBulletRange=250;
+        self.currentBulletDamage=20;
+    }
     else if([to isEqualToString:@"plasma"]){
         self.currentBulletRange=235;
         self.currentBulletDamage=3;
     }
     //need to work out how to swich damage of charge on demand
+}
+
+-(void)removeChargeSpr{
+    [self removeActionForKey:@"chargeT"];
+    [self removeActionForKey:@"chgini"];
+    [self.upper  removeAllActions];
+    [self.upper removeFromParent];
+    [self.lower removeAllActions];
+    [self.lower removeFromParent];
+    [self runAction:[SKAction colorizeWithColorBlendFactor:0.0 duration:0.1]];
+    if(self.chargebeamrunning){
+        self.chargebeamrunning=NO;
+        [self removeActionForKey:@"chgflash"];
+        self.flame.position=self.forwardtrack ? CGPointMake(12,2):CGPointMake(-12,2);
+        self.flame.xScale=self.forwardtrack ? -1:1;
+        [self addChild:self.flame];
+        __weak SKSpriteNode*weakflame=self.flame;
+        [self.flame runAction:fire_anim completion:^{[weakflame removeFromParent];[weakflame removeAllActions];}];
+    }
 }
 
 /*-(void)dealloc{
