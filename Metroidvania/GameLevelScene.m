@@ -114,8 +114,10 @@
     self.replayimage=[UIImage imageNamed:@"replay.png"];
     won=[SKSpriteNode spriteNodeWithImageNamed:@"won.png"];
     won.position=CGPointMake(0, 51);
+    won.zPosition=21;
     died=[SKSpriteNode spriteNodeWithImageNamed:@"died.png"];
     died.position=CGPointMake(0, 51);
+    died.zPosition=21;
     
     //pause-unpause buttons/labels & pause screen items
     _pauselabel=[SKSpriteNode spriteNodeWithImageNamed:@"pauselabel.png"];
