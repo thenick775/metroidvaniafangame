@@ -459,7 +459,7 @@
     }
     else if(touchlocation.x>self.camera.frame.size.width/2 && touchlocation.y<self.camera.frame.size.height/2){
        //NSLog(@"start charge timer");
-      if(![self.player actionForKey:@"chargeT"])
+      if(![self.player actionForKey:@"chargeT"] && self.player.chargebeamenabled)
         [self.player runAction:self.player.chargebeamtimer withKey:@"chargeT"];
     }
     
@@ -669,6 +669,11 @@
     return;
   }
   
+  if(self.player.chargebeamactive){
+    [self.player removeChargeSpr];
+    self.player.chargebeamactive=NO;
+  }
+    
   for(UITouch *touch in touches){
   CGPoint fnctouchlocation=[touch locationInNode:self.camera];
     [myjoystick resetFingertracker];   //these movements must be NO after every touch finishes
@@ -712,10 +717,12 @@
   }
 }
 -(void)firePlayerProjectilewithdirection:(BOOL)direction{
-  PlayerProjectile *newProjectile=[[PlayerProjectile alloc] initWithPos:self.player.position andMag_Range:self.player.currentBulletRange andType:self.player.currentBulletType andDirection:direction];
+  PlayerProjectile *newProjectile=[[PlayerProjectile alloc] initWithPos:self.player.position andMag_Range:self.player.currentBulletRange andType:self.player.currentBulletType andDirection:direction hit:self.player.currentBulletDamage];
   newProjectile.zPosition=16;
   [self.map addChild:newProjectile];
   [self.bullets addObject:newProjectile];
+  if(self.player.chargebeamenabled && [self.player.currentBulletType isEqualToString:@"charge"])
+    [self.player switchbeamto:@"chargereg"];
   //NSLog(@"adding projectile,count:%d",(int)self.bullets.count);
 }
 
@@ -749,9 +756,9 @@
     for(id enemyl in self.enemies){
       //NSLog(@"bullet frame:%@",NSStringFromCGRect(currbullet.frame));
         enemyBase*enemylcop=(enemyBase*)enemyl;
-        if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame) && !enemylcop.dead){
-          //NSLog(@"hit an enemy");
-          [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies withHit:self.player.currentBulletDamage];
+        if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,enemylcop.dx,enemylcop.dy), currbullet.frame) && !enemylcop.dead){
+          //NSLog(@"hit an enemy, current  bullet hit=%d",currbullet.hit);
+          [enemylcop hitByBulletWithArrayToRemoveFrom:self.enemies withHit:currbullet.hit];
           [currbullet removeAllActions];
           [currbullet removeFromParent];
           [self.bullets removeObject:currbullet];
