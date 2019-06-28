@@ -10,6 +10,7 @@
 #import "GameLevelScene2.h"
 #import "gameaudio.h"
 #import "GameLevelScene3.h"
+#import "saveData.h"
 
 @implementation MenuScene{
     SKSpriteNode *_cntrlbkrnd;
@@ -224,6 +225,10 @@
       
         _buttonhighlight=[SKAction colorizeWithColor:[SKColor darkGrayColor] colorBlendFactor:0.8 duration:0.05];
         _buttonunhighlight=[SKAction colorizeWithColorBlendFactor:0.0 duration:0.05];
+        
+        //add loadgame stuff here
+        
+        
         
         
         audiomanager=[gameaudio alloc];

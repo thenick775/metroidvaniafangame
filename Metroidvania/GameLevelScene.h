@@ -9,6 +9,7 @@
 #import "Player.h"
 #import "JSTileMap.h"
 #import "gameaudio.h"
+#import "saveData.h"
 
 @interface MySlider : UISlider
 @end
