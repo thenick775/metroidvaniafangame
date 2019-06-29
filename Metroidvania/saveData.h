@@ -12,18 +12,22 @@
 
 
 @property (strong,nonatomic) NSMutableArray*lvlarr;      //will use these to store all levels data at once, since encoding is easy.
-@property (strong,nonatomic) NSMutableArray*bultypearr;  //These should not be accessed directly
-@property (strong,nonatomic) NSMutableArray*bulrangearr;
+@property (strong,nonatomic) NSMutableArray*seenbossarr;  //These should not be accessed directly
+@property (strong,nonatomic) NSMutableArray*progarr;
+@property (assign,nonatomic) int currentslot;
 
 +(instancetype)sharedInstance;
-+(void)editlvlwithval:(NSInteger)val forsaveslot:(int)slot;
-+(void)editbultypewithval:(NSString*)val forsaveslot:(int)slot;
-+(void)editbulrangewithval:(NSInteger)val forsaveslot:(int)slot;
-+(NSInteger)getlvlfromslot:(int)slot;
-+(NSInteger)getbulrangefromslot:(int)slot;
-+(NSString*)getbultypefromslot:(int)slot;
++(void)editlvlwithval:(NSNumber*)val forsaveslot:(int)slot;
++(void)editprogwithval:(NSString*)val forsaveslot:(int)slot;
++(void)editseenbosswithval:(BOOL)val forsaveslot:(int)slot;
++(void)editcurrslot:(int)slot;
++(NSNumber*)getlvlfromslot:(int)slot;
++(BOOL)getseenbossfromslot:(int)slot;
++(NSString*)getprogfromslot:(int)slot;
++(int)getcurrslot;
 +(void)printcurr;
 +(void)arch;
 +(void)unarch;
++(void)delete_vals;//for developer testing at the moment
 
 @end

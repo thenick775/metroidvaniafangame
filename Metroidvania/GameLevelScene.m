@@ -57,6 +57,9 @@
     self.backgroundColor=[SKColor colorWithRed:0.7259 green:0 blue:0.8863 alpha:1.0];
     self.map = [JSTileMap mapNamed:@"level1.tmx"];
     [self addChild:self.map];
+    [saveData editlvlwithval:@1 forsaveslot:[saveData getcurrslot]];
+    [saveData printcurr];
+    [saveData arch];
     
     self.walls=[self.map layerNamed:@"walls"];
     self.hazards=[self.map layerNamed:@"hazards"];
@@ -895,6 +898,11 @@
   
   self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
   self.healthbar.size=CGSizeMake((((float)self.player.health/100)*_healthbarsize), self.healthbar.size.height);
+}
+
+
+-(instancetype)initNearBossWithSize:(CGSize)size andVol:(float)volume{
+  return [self initWithSize:size andVol:volume];//not used on this level as there is no boss
 }
 
 /*-(void)dealloc {

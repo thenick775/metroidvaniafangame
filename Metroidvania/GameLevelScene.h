@@ -42,4 +42,5 @@
 -(NSInteger)tileGIDAtTileCoord:(CGPoint)tilecoordinate forLayer:(TMXLayer *)fnclayer;
 -(void)hitHealthBox;
 -(instancetype)initWithSize:(CGSize)size andVol:(float)vol;
+-(instancetype)initNearBossWithSize:(CGSize)size andVol:(float)volume;
 @end

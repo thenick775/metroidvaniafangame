@@ -32,6 +32,9 @@
         self.map = [JSTileMap mapNamed:@"level2.tmx"];
         [self addChild:self.map];
         self.volume=vol;
+        [saveData editlvlwithval:@2 forsaveslot:[saveData getcurrslot]];
+        [saveData printcurr];
+        [saveData arch];
         
         self.walls=[self.map layerNamed:@"walls"];
         self.hazards=[self.map layerNamed:@"hazards"];

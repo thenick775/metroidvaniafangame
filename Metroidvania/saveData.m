@@ -17,8 +17,8 @@
         mydat = [[saveData alloc] init];
         if(mydat!=nil){
             mydat.lvlarr=[[NSMutableArray alloc] initWithArray:@[@0,@0,@0]];
-            mydat.bultypearr=[[NSMutableArray alloc] initWithArray:@[@"",@"",@""]];
-            mydat.bulrangearr=[[NSMutableArray alloc] initWithArray:@[@0,@0,@0]];
+            mydat.seenbossarr=[[NSMutableArray alloc] initWithArray:@[@NO,@NO,@NO]];
+            mydat.progarr=[[NSMutableArray alloc] initWithArray:@[@"empty",@"empty",@"empty"]];
         }
     });
     return mydat;
@@ -28,8 +28,8 @@
     saveData *mydat = [saveData sharedInstance];
     
     [mydat setLvlarr:[aDecoder decodeObjectOfClass:[NSMutableArray class] forKey:@"LVL_key"]];
-    [mydat setBultypearr:[aDecoder decodeObjectOfClass:[NSMutableArray class] forKey:@"Bultype_key"]];
-    [mydat setBulrangearr:[aDecoder decodeObjectOfClass:[NSMutableArray class] forKey:@"Bulrange_key"]];
+    [mydat setSeenbossarr:[aDecoder decodeObjectOfClass:[NSMutableArray class] forKey:@"Bultype_key"]];
+    [mydat setProgarr:[aDecoder decodeObjectOfClass:[NSMutableArray class] forKey:@"Prog_key"]];
     return mydat;
 }
 
@@ -37,13 +37,13 @@
     saveData *mydat = [saveData sharedInstance];
     
     [aCoder encodeObject:mydat.lvlarr forKey:@"LVL_key"];
-    [aCoder encodeObject:mydat.bultypearr forKey:@"Bultype_key"];
-    [aCoder encodeObject:mydat.bulrangearr forKey:@"Bulrange_key"];
+    [aCoder encodeObject:mydat.seenbossarr forKey:@"Bultype_key"];
+    [aCoder encodeObject:mydat.progarr forKey:@"Prog_key"];
 }
 
 +(void)printcurr{//convience print
     saveData *mydat = [saveData sharedInstance];
-    NSLog(@"%@\n%@\n%@",mydat.lvlarr,mydat.bultypearr,mydat.bulrangearr);
+    NSLog(@"%@\n%@\n%@",mydat.lvlarr,mydat.seenbossarr,mydat.progarr);
 }
 
 +(void)arch{//used to archive the singleton
@@ -55,31 +55,50 @@
 
 +(void)unarch{//used to unarchive the singleton
     NSError* _Nullable __autoreleasing theerror;
-    [NSKeyedUnarchiver unarchivedObjectOfClass:[saveData class] fromData:[[NSUserDefaults standardUserDefaults] objectForKey:@"Tot_dat_key"] error:&theerror];
-    if(theerror!=nil)
-        NSLog(@"%@",theerror);
+    NSData *dat=[[NSUserDefaults standardUserDefaults] objectForKey:@"Tot_dat_key"];
+    if(dat!=nil){
+        NSLog(@"unarchiving");
+        [NSKeyedUnarchiver unarchivedObjectOfClass:[saveData class] fromData:[[NSUserDefaults standardUserDefaults] objectForKey:@"Tot_dat_key"] error:&theerror];
+        if(theerror!=nil)
+            NSLog(@"%@",theerror);
+    }
+    else
+        NSLog(@"no data to unarchive");
 }
 
-+(void)editlvlwithval:(NSInteger)val forsaveslot:(int)slot{//initial, I may change these to use objectatindex
-    [saveData sharedInstance].lvlarr[slot]=[NSNumber numberWithInteger:val];
++(void)editlvlwithval:(NSNumber*)val forsaveslot:(int)slot{//initial, I may change these to use objectatindex
+    [saveData sharedInstance].lvlarr[slot]=val;//[NSNumber numberWithInteger:val];
 }
-+(void)editbultypewithval:(NSString*)val forsaveslot:(int)slot{
-    [saveData sharedInstance].bultypearr[slot]=val;
++(void)editprogwithval:(NSString*)val forsaveslot:(int)slot{
+    [saveData sharedInstance].progarr[slot]=val;
 }
-+(void)editbulrangewithval:(NSInteger)val forsaveslot:(int)slot{
-    [saveData sharedInstance].bulrangearr[slot]=[NSNumber numberWithInteger:val];
++(void)editseenbosswithval:(BOOL)val forsaveslot:(int)slot{
+    [saveData sharedInstance].seenbossarr[slot]=[NSNumber numberWithBool:val];
 }
-+(NSInteger)getlvlfromslot:(int)slot{
-    return (NSInteger)[saveData sharedInstance].lvlarr[slot];
++(void)editcurrslot:(int)slot{
+    [saveData sharedInstance].currentslot=slot;
 }
-+(NSInteger)getbulrangefromslot:(int)slot{
-    return (NSInteger)[saveData sharedInstance].bulrangearr[slot];
++(NSNumber*)getlvlfromslot:(int)slot{
+    return [saveData sharedInstance].lvlarr[slot];//[[saveData sharedInstance].lvlarr[slot] integerValue];
 }
-+(NSString*)getbultypefromslot:(int)slot{
-    return (NSString*)[saveData sharedInstance].bultypearr[slot];
++(BOOL)getseenbossfromslot:(int)slot{
+    return [[saveData sharedInstance].seenbossarr[slot] boolValue];
+}
++(NSString*)getprogfromslot:(int)slot{
+    return [saveData sharedInstance].progarr[slot];
+}
++(int)getcurrslot{
+    return [saveData sharedInstance].currentslot;
 }
 
 
 + (BOOL)supportsSecureCoding{return YES;}//here to support NSSecureCoding
+
+
++(void)delete_vals{//for developer testing at the moment, reset functions should be implemented
+    NSLog(@"in delete vals");
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"Tot_dat_key"];
+}
+
 
 @end
