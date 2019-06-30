@@ -15,7 +15,7 @@
 @implementation MenuScene{
     SKSpriteNode *_cntrlbkrnd;
     SKSpriteNode *_savebkrnd;
-    SKShapeNode*cell,*cell1,*cell2;
+    saveCell*cell,*cell1,*cell2;
     BOOL viewingcntrls;
     BOOL viewingsslots;
     SKAction *shipflyact;
@@ -28,7 +28,7 @@
     UIBezierPath *shippath;
     SKAction *shipflyac;
     SKTransition *menutolvl1tran;
-    NSArray *texturesforlvl1,*texturesforlvl2,*texturesforlvl3;
+    NSArray *texturesforlvl;
     SKAction *_buttonhighlight;
     SKAction *_buttonunhighlight;
     gameaudio*audiomanager;
@@ -219,11 +219,8 @@
         
         shipflyac=[SKAction group:@[shipreducesize,[SKAction followPath:shippath.CGPath duration:1.7]]];
         [shipflyac setTimingMode:SKActionTimingEaseIn];
-       
-        texturesforlvl1=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"Waver"];
-        texturesforlvl2=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver"];
-        texturesforlvl3=@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Nettori",@"Waver"];
-     
+    texturesforlvl=@[@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"Waver"],@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Arachnus",@"Waver"],@[@"Samusregsuit",@"projectiles",@"Sciser",@"travelmirror",@"honeypot",@"Nettori",@"Waver"]];
+        
         self.labelsin=[SKAction sequence:@[[SKAction waitForDuration:1.5],[SKAction fadeInWithDuration:1.5]]];
         [self runAction:[SKAction runBlock:^{[weakself.titlelabel runAction:weakself.labelsin completion:^{weakself.labelsin.speed=3;[weakself._playlabel runAction:weakself.labelsin];[weakself._playbutton runAction:weakself.labelsin];[weakself._cntrllabel runAction:weakself.labelsin completion:^{weakself.userInteractionEnabled=YES;}];}];}]];
       
@@ -239,52 +236,18 @@
         _savebkrnd.zPosition=5;
         [self addChild:_savebkrnd];
         
-        
-        cell=[SKShapeNode shapeNodeWithRectOfSize:CGSizeMake(_savebkrnd.size.width*0.75, _savebkrnd.size.height*0.3) cornerRadius:12];
+        cell=[[saveCell alloc] initWithSize:CGSizeMake(_savebkrnd.size.width*0.75, _savebkrnd.size.height*0.3) andcorRad:12 forslot:0];
         cell.position=CGPointMake(0, _savebkrnd.size.height*0.3+_savebkrnd.size.height*0.03);
         cell.fillColor=[SKColor blackColor];
         cell.zPosition=6;
-        cell1=cell.copy;
+        cell1=[[saveCell alloc] initWithSize:CGSizeMake(_savebkrnd.size.width*0.75, _savebkrnd.size.height*0.3) andcorRad:12 forslot:1];
         cell1.position=CGPointZero;
-        cell2=cell.copy;
-        cell2.position=CGPointMake(0, -_savebkrnd.size.height*0.3-_savebkrnd.size.height*0.03);
-        
-        SKLabelNode *load1=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
-        load1.zPosition=7;
-        load1.fontSize=16;
-        SKLabelNode *load2=load1.copy;
-        SKLabelNode *load3=load1.copy;
-        SKLabelNode *load1left=load1.copy;
-        SKLabelNode *load1right=load1.copy;
-        SKLabelNode *load2left=load1.copy;
-        SKLabelNode *load2right=load1.copy;
-        SKLabelNode *load3left=load1.copy;
-        SKLabelNode *load3right=load1.copy;
-        load1.text=[@"lvl: " stringByAppendingString:[[saveData getlvlfromslot:0] stringValue]];
-        load1left.text=@"save slot 1";
-        load1left.position=CGPointMake(cell.frame.size.width*-0.33,0);
-        load1right.text=[saveData getprogfromslot:0];
-        load1right.position=CGPointMake(cell.frame.size.width*0.33,0);
-        load2.text=[@"lvl: " stringByAppendingString:[[saveData getlvlfromslot:1] stringValue]];
-        load2left.text=@"save slot 2";
-        load2left.position=CGPointMake(cell1.frame.size.width*-0.33,0);
-        load2right.text=[saveData getprogfromslot:1];
-        load2right.position=CGPointMake(cell1.frame.size.width*0.33,0);
-        load3.text=[@"lvl: " stringByAppendingString:[[saveData getlvlfromslot:2] stringValue]];
-        load3left.text=@"save slot 3";
-        load3left.position=CGPointMake(cell2.frame.size.width*-0.33,0);
-        load3right.text=[saveData getprogfromslot:2];
-        load3right.position=CGPointMake(cell2.frame.size.width*0.33,0);
-        
-        [cell addChild:load1];
-        [cell addChild:load1left];
-        [cell addChild:load1right];
-        [cell1 addChild:load2];
-        [cell1 addChild:load2left];
-        [cell1 addChild:load2right];
-        [cell2 addChild:load3];
-        [cell2 addChild:load3left];
-        [cell2 addChild:load3right];
+        cell1.fillColor=[SKColor blackColor];
+        cell1.zPosition=6;
+        cell2=[[saveCell alloc] initWithSize:CGSizeMake(_savebkrnd.size.width*0.75, _savebkrnd.size.height*0.3) andcorRad:12 forslot:2];
+        cell2.position=CGPointMake(0, -_savebkrnd.size.height*0.3-_savebkrnd.size.height*0.03);;
+        cell2.fillColor=[SKColor blackColor];
+        cell2.zPosition=6;
         [_savebkrnd addChild:cell];
         [_savebkrnd addChild:cell1];
         [_savebkrnd addChild:cell2];
@@ -316,72 +279,69 @@
             viewingsslots=NO;
         }
         else if((CGRectContainsPoint(self._playlabel.frame,[touch locationInNode:self]) || CGRectContainsPoint(self._playbutton.frame,[touch locationInNode:self])) && !viewingsslots){
-            
             [_savebkrnd runAction:[SKAction fadeInWithDuration:0.2]];
             [self._playlabel runAction:_buttonhighlight];
             [self._playbutton runAction:_buttonhighlight];
             viewingsslots=YES;
-            
-            /*[self._playlabel runAction:_buttonhighlight];
-            [self._playbutton runAction:_buttonhighlight];
-            
-            __weak MenuScene *weakself = self;
-            __weak SKTransition*weakmenutolvl1tran=menutolvl1tran;
-            __weak SKSpriteNode*weakshipflamesright2=shipflamesright2;
-            __weak SKSpriteNode*weakshipflamesleft2=shipflamesleft2;
-            __weak SKAction *weakflameflicker=flameflicker;
-            __weak SKSpriteNode *weaksamusgunship=samusgunship;
-            __weak SKAction *weakshipflyac=shipflyac;
-            __weak NSArray *weaktexturesforlvl1=texturesforlvl1;
-            __block GameLevelScene*preload;
-            CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.5,self.view.bounds.size.height/1.5-10);
-            
-            [SKTextureAtlas preloadTextureAtlasesNamed:weaktexturesforlvl1 withCompletionHandler:^(NSError*error,NSArray*foundatlases){
-                    preload=[[GameLevelScene alloc]initWithSize:nextSceneSize andVol:0.35];
-                    preload.scaleMode = SKSceneScaleModeAspectFill;
-                        NSLog(@"preloaded lvl1");
-                        [weakshipflamesright2 runAction:weakflameflicker];
-                        [weakshipflamesleft2 runAction:weakflameflicker];
-                        [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
-                }];*/
         }
-        else if(viewingsslots && ([self cgpointinslot:[touch locationInNode:_savebkrnd]])!=-1 ){
-            NSArray *texturesforlvl;
-            CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.5,self.view.bounds.size.height/1.5-10);
+        else if(viewingsslots && CGRectContainsPoint(_savebkrnd.frame,[touch locationInNode:self])/*&& ([self cgpointinslot:[touch locationInNode:_savebkrnd]])!=-1*/ ){
             int p=[self cgpointinslot:[touch locationInNode:_savebkrnd]];
-            [saveData editcurrslot:p];
-            __block GameLevelScene*preload;
-            __weak MenuScene *weakself = self;
-            __weak SKTransition*weakmenutolvl1tran=menutolvl1tran;
-            __weak SKSpriteNode*weakshipflamesright2=shipflamesright2;
-            __weak SKSpriteNode*weakshipflamesleft2=shipflamesleft2;
-            __weak SKAction *weakflameflicker=flameflicker;
-            __weak SKSpriteNode *weaksamusgunship=samusgunship;
-            __weak SKAction *weakshipflyac=shipflyac;
-            __weak NSArray *weaktexturesforlvl=texturesforlvl;
-            __weak SKSpriteNode *weaksavebkrnd=_savebkrnd;
-            
-            if([saveData getseenbossfromslot:p]){
-                preload=[[self setupscenefromslot:p] initNearBossWithSize:nextSceneSize andVol:0.35];
+            switch (p) {
+                case 0:
+                    if(cell.selected && [touch locationInNode:cell].x<=0){
+                        //NSLog(@"cell 0 less than 0");
+                        [self runlevelforslot:p];
+                    }
+                    else if(cell.selected && [touch locationInNode:cell].x>0){
+                        //NSLog(@"cell 0 greater than 0");
+                        [saveData reset_slot:0];
+                    }
+                    else if(!cell.selected){
+                        [cell fadeLabels];
+                    }
+                    break;
+                case 1:
+                    if(cell1.selected && [touch locationInNode:cell1].x<=0){
+                        //NSLog(@"cell 1 less than 0");
+                        [self runlevelforslot:p];
+                    }
+                    else if(cell1.selected && [touch locationInNode:cell1].x>0){
+                        //NSLog(@"cell 1 greater than 0");
+                        [saveData reset_slot:1];
+                    }
+                    else if(!cell1.selected){
+                        [cell1 fadeLabels];
+                    }
+                    break;
+                case 2:
+                    if(cell2.selected && [touch locationInNode:cell2].x<=0){
+                        //NSLog(@"cell 2 less than 0");
+                        [self runlevelforslot:p];
+                    }
+                    else if(cell2.selected && [touch locationInNode:cell2].x>0){
+                        //NSLog(@"cell 2 greater than 0");
+                        [saveData reset_slot:2];
+                    }
+                    else if(!cell2.selected){
+                        [cell2 fadeLabels];
+                    }
+                    break;
+                    
+                default:
+                    if(cell.selected)
+                        [cell showLabels:0];
+                    if(cell1.selected)
+                        [cell1 showLabels:1];
+                    if(cell2.selected)
+                        [cell2 showLabels:2];
+                    break;
             }
-            else{
-                preload=[[self setupscenefromslot:p] initWithSize:nextSceneSize andVol:0.35];
-            }
-            
-            preload.scaleMode = SKSceneScaleModeAspectFill;
-            self.userInteractionEnabled=NO;
-            
-            [SKTextureAtlas preloadTextureAtlasesNamed:weaktexturesforlvl withCompletionHandler:^(NSError*error,NSArray*foundatlases){
-                NSLog(@"preloaded lvl");
-                [weaksavebkrnd runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction waitForDuration:1.0]]] completion:^{
-                    [weakshipflamesright2 runAction:weakflameflicker];
-                    [weakshipflamesleft2 runAction:weakflameflicker];
-                    [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
-                }];
-            }];
         }
     }
 }
+
+
+
 
 -(int)cgpointinslot:(CGPoint)point{
     int val=-1;
@@ -422,8 +382,111 @@
     return temp;
 }
 
+-(void)runlevelforslot:(int)p{
+    CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.5,self.view.bounds.size.height/1.5-10);
+    [saveData editcurrslot:p];
+    __block GameLevelScene*preload;
+    __weak MenuScene *weakself = self;
+    __weak SKTransition*weakmenutolvl1tran=menutolvl1tran;
+    __weak SKSpriteNode*weakshipflamesright2=shipflamesright2;
+    __weak SKSpriteNode*weakshipflamesleft2=shipflamesleft2;
+    __weak SKAction *weakflameflicker=flameflicker;
+    __weak SKSpriteNode *weaksamusgunship=samusgunship;
+    __weak SKAction *weakshipflyac=shipflyac;
+    __weak NSArray *weaktexturesforlvl=texturesforlvl[p];
+    __weak SKSpriteNode *weaksavebkrnd=_savebkrnd;
+    
+    if([saveData getseenbossfromslot:p]){
+        preload=[[self setupscenefromslot:p] initNearBossWithSize:nextSceneSize andVol:0.35];
+    }
+    else{
+        preload=[[self setupscenefromslot:p] initWithSize:nextSceneSize andVol:0.35];
+    }
+    
+    preload.scaleMode = SKSceneScaleModeAspectFill;
+    self.userInteractionEnabled=NO;
+    
+    [SKTextureAtlas preloadTextureAtlasesNamed:weaktexturesforlvl withCompletionHandler:^(NSError*error,NSArray*foundatlases){
+        NSLog(@"preloaded lvl");
+        [weaksavebkrnd runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction waitForDuration:1.0]]] completion:^{
+            [weakshipflamesright2 runAction:weakflameflicker];
+            [weakshipflamesleft2 runAction:weakflameflicker];
+            [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
+        }];
+    }];
+}
+
 - (void)dealloc {
  NSLog(@"MENU SCENE DEALLOCATED");
  }
 
+@end
+
+
+
+@implementation saveCell
+
+-(instancetype)initWithSize:(CGSize)size andcorRad:(CGFloat)corrad forslot:(int)slot{
+    self=[super init];
+    if(self!=nil){
+        self.path=(CGPathRef)CFAutorelease(CGPathCreateWithRoundedRect(CGRectMake(-size.width/2,-size.height/2, size.width, size.height), 12, 12, nil));
+        self.left=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
+        self.left.zPosition=7;
+        self.left.fontSize=16;
+        self.center=self.left.copy;
+        self.right=self.left.copy;
+        self.left.text=[NSString stringWithFormat:@"save slot %d",slot];
+        self.left.position=CGPointMake(self.frame.size.width*-0.33,0);
+        self.center.text=[@"lvl: " stringByAppendingString:[[saveData getlvlfromslot:slot] stringValue]];
+        self.right.text=[saveData getprogfromslot:slot];
+        self.right.position=CGPointMake(self.frame.size.width*0.33,0);
+        [self addChild:self.left];
+        [self addChild:self.center];
+        [self addChild:self.right];
+    }
+    return self;
+}
+
+-(void)fadeLabels{
+    self.selected=YES;
+    __weak saveCell*weakself=self;
+    SKAction*fadeac=[SKAction fadeOutWithDuration:0.25];
+    NSTimeInterval waitdir=0;
+    for(SKLabelNode*child in self.children){
+        [child runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],fadeac]]];
+        waitdir+=0.2;
+    }
+    [self runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction runBlock:^{weakself.left.text=@"continue?";weakself.right.text=@"reset?";}]]]];
+    waitdir+=0.05;
+    
+    [self.left runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction fadeInWithDuration:0.25]]]];
+    waitdir+=0.3;
+    [self.right runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction fadeInWithDuration:0.25]]]];
+}
+
+-(void)showLabels:(int)p{
+    self.selected=NO;
+    __weak saveCell*weakself=self;
+    SKAction*fadeac=[SKAction fadeInWithDuration:0.25];
+    NSTimeInterval waitdir=0;
+    
+    
+    [self.left runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction fadeOutWithDuration:0.25]]]];
+    waitdir+=0.3;
+    [self.right runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction fadeOutWithDuration:0.25]]]];
+    waitdir+=0.3;
+    
+    __weak NSString*tmp=[saveData getprogfromslot:p];
+    [self runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction runBlock:^{weakself.left.text=[NSString stringWithFormat:@"save slot %d",p];weakself.right.text=tmp;}]]]];
+    waitdir+=0.05;
+    
+    for(SKLabelNode*child in self.children){
+        [child runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],fadeac]]];
+        waitdir+=0.2;
+    }
+}
+
+-(void)dealloc{
+    NSLog(@"in savecell dealloc");
+}
 @end

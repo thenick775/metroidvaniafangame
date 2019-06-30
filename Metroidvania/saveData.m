@@ -55,10 +55,10 @@
 
 +(void)unarch{//used to unarchive the singleton
     NSError* _Nullable __autoreleasing theerror;
-    NSData *dat=[[NSUserDefaults standardUserDefaults] objectForKey:@"Tot_dat_key"];
-    if(dat!=nil){
+    NSData *mydat=[[NSUserDefaults standardUserDefaults] objectForKey:@"Tot_dat_key"];
+    if(mydat!=nil){
         NSLog(@"unarchiving");
-        [NSKeyedUnarchiver unarchivedObjectOfClass:[saveData class] fromData:[[NSUserDefaults standardUserDefaults] objectForKey:@"Tot_dat_key"] error:&theerror];
+        [NSKeyedUnarchiver unarchivedObjectOfClass:[saveData class] fromData:mydat error:&theerror];
         if(theerror!=nil)
             NSLog(@"%@",theerror);
     }
@@ -94,6 +94,13 @@
 
 + (BOOL)supportsSecureCoding{return YES;}//here to support NSSecureCoding
 
++(void)reset_slot:(int)slot{
+    saveData *mydat=[saveData sharedInstance];
+    mydat.lvlarr[slot]=@0;
+    mydat.seenbossarr[slot]=@NO;
+    mydat.progarr[slot]=@"empty";
+    //[saveData arch];
+}
 
 +(void)delete_vals{//for developer testing at the moment, reset functions should be implemented
     NSLog(@"in delete vals");
