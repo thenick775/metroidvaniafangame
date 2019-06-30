@@ -45,6 +45,7 @@
 		5979C75D21447BF700965A50 /* arachnusintroduction.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5979C75B21447BF700965A50 /* arachnusintroduction.sks */; };
 		59C0DE1420B91F25008999C3 /* PlayerProjectile.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C0DE1320B91F25008999C3 /* PlayerProjectile.m */; };
 		59CE01C121CDCD1D00BF13B1 /* enemyBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 59CE01C021CDCD1D00BF13B1 /* enemyBase.m */; };
+		59D7CCFA22C066FC00FABB8B /* saveData.m in Sources */ = {isa = PBXBuildFile; fileRef = 59D7CCF922C066FC00FABB8B /* saveData.m */; };
 		59DAC084218278330077E10C /* gameaudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 59DAC083218278330077E10C /* gameaudio.m */; };
 		59DAC086218278800077E10C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59DAC085218278800077E10C /* AVFoundation.framework */; };
 		59DAC0972187D4430077E10C /* titlescreen_dystopian-future.wav in Resources */ = {isa = PBXBuildFile; fileRef = 59DAC0942187D4430077E10C /* titlescreen_dystopian-future.wav */; };
@@ -134,6 +135,8 @@
 		59C0DE1320B91F25008999C3 /* PlayerProjectile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerProjectile.m; sourceTree = "<group>"; };
 		59CE01C021CDCD1D00BF13B1 /* enemyBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = enemyBase.m; sourceTree = "<group>"; };
 		59CE01C221CDCD2F00BF13B1 /* enemyBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = enemyBase.h; sourceTree = "<group>"; };
+		59D7CCF822C066FC00FABB8B /* saveData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = saveData.h; sourceTree = "<group>"; };
+		59D7CCF922C066FC00FABB8B /* saveData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = saveData.m; sourceTree = "<group>"; };
 		59DAC082218278220077E10C /* gameaudio.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gameaudio.h; sourceTree = "<group>"; };
 		59DAC083218278330077E10C /* gameaudio.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = gameaudio.m; sourceTree = "<group>"; };
 		59DAC085218278800077E10C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -276,6 +279,8 @@
 				592B389C20DB008400C62977 /* MenuScene.m */,
 				F275B68A186E0B06009F6E6B /* GameLevelScene.h */,
 				F275B68B186E0B06009F6E6B /* GameLevelScene.m */,
+				59D7CCF822C066FC00FABB8B /* saveData.h */,
+				59D7CCF922C066FC00FABB8B /* saveData.m */,
 				594F557920CDE911000E476E /* GameLevelScene2.h */,
 				594F557A20CDE911000E476E /* GameLevelScene2.m */,
 				59DAC09C2187DAE80077E10C /* GameLevelScene3.h */,
@@ -549,6 +554,7 @@
 				596F2DA920BFAFAE00B32C47 /* sciserenemy.m in Sources */,
 				F275B6DE186E25C1009F6E6B /* SKAction+SKTExtras.m in Sources */,
 				595D4058216F16C2004A7D24 /* waver.m in Sources */,
+				59D7CCFA22C066FC00FABB8B /* saveData.m in Sources */,
 				F275B6DF186E25C1009F6E6B /* SKAction+SKTSpecialEffects.m in Sources */,
 				594F9A3222938D83008B4795 /* choot.m in Sources */,
 				F275B6E1186E25C1009F6E6B /* SKNode+SKTDebugDraw.m in Sources */,
