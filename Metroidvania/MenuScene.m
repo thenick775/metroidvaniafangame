@@ -301,6 +301,7 @@
                 else if(cell.selected && [touch locationInNode:cell].x>0 && p==cell.cellno){
                     //NSLog(@"cell %d greater than 0",p);
                     [saveData reset_slot:p];
+                    [saveData arch];
                 }
                 else if(!cell.selected && p==cell.cellno){
                     [cell fadeLabels];
