@@ -34,7 +34,7 @@ Technical details:
 The gifs may take some time to load due to the filesize, any FPS tags are slower than on actual device (gifs captured using third party software).
 
 
-![](menuscenedemo_v3.gif)
+![](menuscenedemo_v4.gif)
 
 ![](honeypottrackdemo_v4.gif)
 
