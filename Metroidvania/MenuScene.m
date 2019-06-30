@@ -15,22 +15,17 @@
 @implementation MenuScene{
     SKSpriteNode *_cntrlbkrnd;
     SKSpriteNode *_savebkrnd;
-    saveCell*cell,*cell1,*cell2;
+    //saveCell*cell,*cell1,*cell2;
     BOOL viewingcntrls;
     BOOL viewingsslots;
-    SKAction *shipflyact;
-    SKSpriteNode *samusgunship;
-    SKSpriteNode *shipflames1;
-    SKSpriteNode *shipflamesright2;
-    SKSpriteNode *shipflamesleft2;
-    SKAction *shipreducesize;
-    SKAction *flameflicker;
+    SKAction *shipflyact,*shipreducesize,*flameflicker;
+    SKSpriteNode *samusgunship,*shipflames1,*shipflamesright2,*shipflamesleft2;
     UIBezierPath *shippath;
     SKAction *shipflyac;
     SKTransition *menutolvl1tran;
     NSArray *texturesforlvl;
-    SKAction *_buttonhighlight;
-    SKAction *_buttonunhighlight;
+    NSArray*cells;
+    SKAction *_buttonhighlight,*_buttonunhighlight;
     gameaudio*audiomanager;
 }
 
@@ -236,21 +231,22 @@
         _savebkrnd.zPosition=5;
         [self addChild:_savebkrnd];
         
-        cell=[[saveCell alloc] initWithSize:CGSizeMake(_savebkrnd.size.width*0.75, _savebkrnd.size.height*0.3) andcorRad:12 forslot:0];
+        saveCell*cell=[[saveCell alloc] initWithSize:CGSizeMake(_savebkrnd.size.width*0.75, _savebkrnd.size.height*0.3) andcorRad:12 forslot:0];
         cell.position=CGPointMake(0, _savebkrnd.size.height*0.3+_savebkrnd.size.height*0.03);
         cell.fillColor=[SKColor blackColor];
         cell.zPosition=6;
-        cell1=[[saveCell alloc] initWithSize:CGSizeMake(_savebkrnd.size.width*0.75, _savebkrnd.size.height*0.3) andcorRad:12 forslot:1];
+        saveCell*cell1=[[saveCell alloc] initWithSize:CGSizeMake(_savebkrnd.size.width*0.75, _savebkrnd.size.height*0.3) andcorRad:12 forslot:1];
         cell1.position=CGPointZero;
         cell1.fillColor=[SKColor blackColor];
         cell1.zPosition=6;
-        cell2=[[saveCell alloc] initWithSize:CGSizeMake(_savebkrnd.size.width*0.75, _savebkrnd.size.height*0.3) andcorRad:12 forslot:2];
+        saveCell*cell2=[[saveCell alloc] initWithSize:CGSizeMake(_savebkrnd.size.width*0.75, _savebkrnd.size.height*0.3) andcorRad:12 forslot:2];
         cell2.position=CGPointMake(0, -_savebkrnd.size.height*0.3-_savebkrnd.size.height*0.03);;
         cell2.fillColor=[SKColor blackColor];
         cell2.zPosition=6;
-        [_savebkrnd addChild:cell];
-        [_savebkrnd addChild:cell1];
-        [_savebkrnd addChild:cell2];
+        cells=@[cell,cell1,cell2];
+        [_savebkrnd addChild:cells[0]];
+        [_savebkrnd addChild:cells[1]];
+        [_savebkrnd addChild:cells[2]];
         
         audiomanager=[gameaudio alloc];
         [audiomanager runBkgrndMusicForlvl:0 andVol:0.6];
@@ -274,6 +270,10 @@
         }
         else if(viewingsslots && !CGRectContainsPoint(_savebkrnd.frame,[touch locationInNode:self])){
             [_savebkrnd runAction:[SKAction fadeOutWithDuration:0.2]];
+            for(saveCell*cell in cells){
+                if(cell.selected)
+                    [cell showLabels];
+            }
             [self._playlabel runAction:_buttonunhighlight];
             [self._playbutton runAction:_buttonunhighlight];
             viewingsslots=NO;
@@ -286,55 +286,25 @@
         }
         else if(viewingsslots && CGRectContainsPoint(_savebkrnd.frame,[touch locationInNode:self])/*&& ([self cgpointinslot:[touch locationInNode:_savebkrnd]])!=-1*/ ){
             int p=[self cgpointinslot:[touch locationInNode:_savebkrnd]];
-            switch (p) {
-                case 0:
-                    if(cell.selected && [touch locationInNode:cell].x<=0){
-                        //NSLog(@"cell 0 less than 0");
-                        [self runlevelforslot:p];
-                    }
-                    else if(cell.selected && [touch locationInNode:cell].x>0){
-                        //NSLog(@"cell 0 greater than 0");
-                        [saveData reset_slot:0];
-                    }
-                    else if(!cell.selected){
-                        [cell fadeLabels];
+            for(saveCell*cell in cells){
+                if(p==-1){
+                    for(saveCell*cell in cells){
+                        if(cell.selected)
+                            [cell showLabels];
                     }
                     break;
-                case 1:
-                    if(cell1.selected && [touch locationInNode:cell1].x<=0){
-                        //NSLog(@"cell 1 less than 0");
-                        [self runlevelforslot:p];
-                    }
-                    else if(cell1.selected && [touch locationInNode:cell1].x>0){
-                        //NSLog(@"cell 1 greater than 0");
-                        [saveData reset_slot:1];
-                    }
-                    else if(!cell1.selected){
-                        [cell1 fadeLabels];
-                    }
-                    break;
-                case 2:
-                    if(cell2.selected && [touch locationInNode:cell2].x<=0){
-                        //NSLog(@"cell 2 less than 0");
-                        [self runlevelforslot:p];
-                    }
-                    else if(cell2.selected && [touch locationInNode:cell2].x>0){
-                        //NSLog(@"cell 2 greater than 0");
-                        [saveData reset_slot:2];
-                    }
-                    else if(!cell2.selected){
-                        [cell2 fadeLabels];
-                    }
-                    break;
-                    
-                default:
-                    if(cell.selected)
-                        [cell showLabels:0];
-                    if(cell1.selected)
-                        [cell1 showLabels:1];
-                    if(cell2.selected)
-                        [cell2 showLabels:2];
-                    break;
+                }
+                else if(cell.selected && [touch locationInNode:cell].x<=0 && p==cell.cellno){
+                    //NSLog(@"cell %d less than 0",p);
+                    [self runlevelforslot:p];
+                }
+                else if(cell.selected && [touch locationInNode:cell].x>0 && p==cell.cellno){
+                    //NSLog(@"cell %d greater than 0",p);
+                    [saveData reset_slot:p];
+                }
+                else if(!cell.selected && p==cell.cellno){
+                    [cell fadeLabels];
+                }
             }
         }
     }
@@ -345,13 +315,13 @@
 
 -(int)cgpointinslot:(CGPoint)point{
     int val=-1;
-    if(CGRectContainsPoint(cell.frame, point)){
+    if(CGRectContainsPoint(((saveCell*)cells[0]).frame, point)){
         val=0;
     }
-    else if(CGRectContainsPoint(cell1.frame, point)){
+    else if(CGRectContainsPoint(((saveCell*)cells[1]).frame, point)){
         val=1;
     }
-    else if(CGRectContainsPoint(cell2.frame, point)){
+    else if(CGRectContainsPoint(((saveCell*)cells[2]).frame, point)){
         val=2;
     }
     return val;
@@ -408,7 +378,7 @@
     
     [SKTextureAtlas preloadTextureAtlasesNamed:weaktexturesforlvl withCompletionHandler:^(NSError*error,NSArray*foundatlases){
         NSLog(@"preloaded lvl");
-        [weaksavebkrnd runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.2],[SKAction waitForDuration:1.0]]] completion:^{
+        [weaksavebkrnd runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.3],[SKAction waitForDuration:1.0]]] completion:^{
             [weakshipflamesright2 runAction:weakflameflicker];
             [weakshipflamesleft2 runAction:weakflameflicker];
             [weaksamusgunship runAction:weakshipflyac completion:^{ [weakself.view presentScene:preload transition:weakmenutolvl1tran];}];
@@ -416,9 +386,9 @@
     }];
 }
 
-- (void)dealloc {
+/*- (void)dealloc {
  NSLog(@"MENU SCENE DEALLOCATED");
- }
+ }*/
 
 @end
 
@@ -440,6 +410,7 @@
         self.center.text=[@"lvl: " stringByAppendingString:[[saveData getlvlfromslot:slot] stringValue]];
         self.right.text=[saveData getprogfromslot:slot];
         self.right.position=CGPointMake(self.frame.size.width*0.33,0);
+        self.cellno=slot;
         [self addChild:self.left];
         [self addChild:self.center];
         [self addChild:self.right];
@@ -464,7 +435,7 @@
     [self.right runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction fadeInWithDuration:0.25]]]];
 }
 
--(void)showLabels:(int)p{
+-(void)showLabels{
     self.selected=NO;
     __weak saveCell*weakself=self;
     SKAction*fadeac=[SKAction fadeInWithDuration:0.25];
@@ -472,12 +443,12 @@
     
     
     [self.left runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction fadeOutWithDuration:0.25]]]];
-    waitdir+=0.3;
+    waitdir+=0.25;
     [self.right runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction fadeOutWithDuration:0.25]]]];
-    waitdir+=0.3;
+    waitdir+=0.25;
     
-    __weak NSString*tmp=[saveData getprogfromslot:p];
-    [self runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction runBlock:^{weakself.left.text=[NSString stringWithFormat:@"save slot %d",p];weakself.right.text=tmp;}]]]];
+    __weak NSString*tmp=[saveData getprogfromslot:self.cellno];
+    [self runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction runBlock:^{weakself.left.text=[NSString stringWithFormat:@"save slot %d",weakself.cellno];weakself.right.text=tmp;}]]]];
     waitdir+=0.05;
     
     for(SKLabelNode*child in self.children){
@@ -486,7 +457,7 @@
     }
 }
 
--(void)dealloc{
+/*-(void)dealloc{
     NSLog(@"in savecell dealloc");
-}
+}*/
 @end

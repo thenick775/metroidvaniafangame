@@ -33,7 +33,7 @@
         self.map = [JSTileMap mapNamed:@"level3.tmx"];
         [self addChild:self.map];
         [saveData editlvlwithval:@3 forsaveslot:[saveData getcurrslot]];
-        [saveData printcurr];
+        //[saveData printcurr];
         [saveData arch];
     
         self.walls=[self.map layerNamed:@"walls"];

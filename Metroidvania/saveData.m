@@ -99,7 +99,7 @@
     mydat.lvlarr[slot]=@0;
     mydat.seenbossarr[slot]=@NO;
     mydat.progarr[slot]=@"empty";
-    //[saveData arch];
+    [saveData arch];
 }
 
 +(void)delete_vals{//for developer testing at the moment, reset functions should be implemented

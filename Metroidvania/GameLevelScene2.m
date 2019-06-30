@@ -33,7 +33,7 @@
         [self addChild:self.map];
         self.volume=vol;
         [saveData editlvlwithval:@2 forsaveslot:[saveData getcurrslot]];
-        [saveData printcurr];
+        //[saveData printcurr];
         [saveData arch];
         
         self.walls=[self.map layerNamed:@"walls"];

@@ -22,9 +22,10 @@
 @property (nonatomic,strong) SKLabelNode*left;
 @property (nonatomic,strong) SKLabelNode*right;
 @property (nonatomic,assign) BOOL selected;
+@property (nonatomic,assign) int cellno;
 
 -(void)fadeLabels;
--(void)showLabels:(int)p;
+-(void)showLabels;
 -(instancetype)initWithSize:(CGSize)size andcorRad:(CGFloat)corrad forslot:(int)slot;
 
 @end
