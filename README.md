@@ -29,6 +29,8 @@ Technical details:
 
 -The joystick was implemented from scratch in joystick.m and allows 5-directional movement. This scheme is disconnected from the player animation, while providing inputs for the player physics (player x and +y vectors).
 
+-Saving data is implemented as a singleton that saves its state to disk by conforming to the NSSecureCoding protocol. 
+
 The gifs may take some time to load due to the filesize, any FPS tags are slower than on actual device (gifs captured using third party software).
 
 
