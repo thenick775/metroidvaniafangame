@@ -61,6 +61,8 @@
     //[saveData printcurr];
     [saveData arch];
     
+    self.hasHadBossInterac=NO;
+    
     self.walls=[self.map layerNamed:@"walls"];
     self.hazards=[self.map layerNamed:@"hazards"];
     self.mysteryboxes=[self.map layerNamed:@"mysteryboxes"];
@@ -904,6 +906,8 @@
 -(instancetype)initNearBossWithSize:(CGSize)size andVol:(float)volume{
   return [self initWithSize:size andVol:volume];//not used on this level as there is no boss
 }
+
+-(void)setBossInterac{};
 
 /*-(void)dealloc {
   NSLog(@"LVL1 SCENE DEALLOCATED");

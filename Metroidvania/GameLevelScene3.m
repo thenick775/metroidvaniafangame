@@ -154,7 +154,8 @@
                 weaknettori.healthlbl.position=CGPointMake((-3.65*(weakself.size.width/10)), weakself.size.height/2-40);
                 [weakself.camera addChild:weaknettori.healthlbl];
                 [weaknettori startAttack];
-                weakself.hasHadBossInterac=YES;
+                //weakself.hasHadBossInterac=YES;
+                [weakself setBossInterac];
                 bossdidenter=YES;
                 [weakself removeActionForKey:@"idlecheck"];
             }
@@ -405,6 +406,15 @@
     return self;
 }
 
+-(void)setBossInterac{
+    NSLog(@"in set boss interac");
+    if(!self.hasHadBossInterac){
+        NSLog(@"actually setting boss interac");
+        self.hasHadBossInterac=YES;
+        [saveData editseenbosswithval:YES forsaveslot:[saveData getcurrslot]];
+        [saveData arch];
+    }
+}
 
 /*-(void)dealloc {
     NSLog(@"LVL3 SCENE DEALLOCATED");

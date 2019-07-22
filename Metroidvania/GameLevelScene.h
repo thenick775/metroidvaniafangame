@@ -30,6 +30,7 @@
 @property (nonatomic,strong) MySlider*volumeslider;
 @property (nonatomic,assign) float volume;
 @property (nonatomic,strong) UIImage*replayimage;
+@property (nonatomic,assign) BOOL hasHadBossInterac;
 
 -(void)slideraction:(id)sender;
 -(void)damageRecievedMsg;
@@ -43,4 +44,5 @@
 -(void)hitHealthBox;
 -(instancetype)initWithSize:(CGSize)size andVol:(float)vol;
 -(instancetype)initNearBossWithSize:(CGSize)size andVol:(float)volume;
+-(void)setBossInterac;
 @end

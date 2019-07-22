@@ -225,7 +225,7 @@
         //add loadgame stuff here
         [saveData unarch];
         
-        _savebkrnd=[SKSpriteNode spriteNodeWithColor:[SKColor darkGrayColor] size:CGSizeMake(self.size.width-300,self.size.height*0.7/*250*/)];
+        _savebkrnd=[SKSpriteNode spriteNodeWithColor:[SKColor darkGrayColor] size:CGSizeMake(self.size.width-300,self.size.height*0.55/*250*/)];
         _savebkrnd.alpha=0;
         _savebkrnd.position=CGPointMake(self.size.width/2,self.size.height/2);
         _savebkrnd.zPosition=5;
@@ -279,7 +279,7 @@
             viewingsslots=NO;
         }
         else if((CGRectContainsPoint(self._playlabel.frame,[touch locationInNode:self]) || CGRectContainsPoint(self._playbutton.frame,[touch locationInNode:self])) && !viewingsslots){
-            [_savebkrnd runAction:[SKAction fadeInWithDuration:0.2]];
+            [_savebkrnd runAction:[SKAction fadeInWithDuration:0.25]];
             [self._playlabel runAction:_buttonhighlight];
             [self._playbutton runAction:_buttonhighlight];
             viewingsslots=YES;
@@ -430,7 +430,7 @@
         [child runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],fadeac]]];
         waitdir+=0.2;
     }
-    [self runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction runBlock:^{weakself.left.text=@"continue?";weakself.right.text=@"reset?";}]]]];
+    [self runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction runBlock:^{weakself.left.text=[weakself.right.text isEqualToString:@"empty"] ? @"start?":@"continue?";weakself.right.text=@"reset?";}]]]];
     waitdir+=0.05;
     
     [self.left runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction fadeInWithDuration:0.25]]]];

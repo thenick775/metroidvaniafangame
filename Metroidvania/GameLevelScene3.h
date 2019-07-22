@@ -15,6 +15,5 @@
 @property (nonatomic,strong) TMXLayer*background;
 @property (nonatomic,strong) TMXLayer*foreground;
 @property (nonatomic,strong) NSMutableArray*doors;
-@property (nonatomic,assign) bool hasHadBossInterac;
 
 @end

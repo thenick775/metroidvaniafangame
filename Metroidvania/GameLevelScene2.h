@@ -11,6 +11,5 @@
 @interface GameLevelScene2 : GameLevelScene 
 
 @property (nonatomic,strong) TMXLayer*background;
-@property (nonatomic,assign) bool hasHadBossInterac;
 
 @end
