@@ -15,7 +15,7 @@
     CGPoint _jumpMove;
     CGPoint _minmovement;
     CGPoint _maxmovement;
-    SKAction*fire_anim;
+    SKAction*_fire_anim;
 }
 
 -(id)initWithImageNamed:(NSString *)name{
@@ -93,7 +93,7 @@
         SKAction*charging_upper=[SKAction animateWithTextures:@[[projectiles textureNamed:@"charging_upper1.png"],[projectiles textureNamed:@"charging_upper2.png"],[projectiles textureNamed:@"charging_upper3.png"],[projectiles textureNamed:@"charging_upper4.png"]] timePerFrame:0.08 resize:YES restore:NO];
         SKAction*ready_lower=[SKAction animateWithTextures:@[[projectiles textureNamed:@"ready_lower1.png"],[projectiles textureNamed:@"ready_lower2.png"],[projectiles textureNamed:@"ready_lower3.png"],[projectiles textureNamed:@"ready_lower4.png"]] timePerFrame:0.08 resize:YES restore:NO];
         SKAction*ready_upper=[SKAction animateWithTextures:@[[projectiles textureNamed:@"ready_upper1.png"],[projectiles textureNamed:@"ready_upper2.png"],[projectiles textureNamed:@"ready_upper3.png"],[projectiles textureNamed:@"ready_upper4.png"],[projectiles textureNamed:@"ready_upper5.png"]] timePerFrame:0.04 resize:YES restore:NO];
-        fire_anim=[SKAction animateWithTextures:@[[projectiles textureNamed:@"charge_flame1.png"],[projectiles textureNamed:@"charge_flame2.png"],[projectiles textureNamed:@"charge_flame3.png"],[projectiles textureNamed:@"charge_flame4.png"],[projectiles textureNamed:@"charge_flame5.png"]] timePerFrame:0.05 resize:YES restore:NO];
+        _fire_anim=[SKAction animateWithTextures:@[[projectiles textureNamed:@"charge_flame1.png"],[projectiles textureNamed:@"charge_flame2.png"],[projectiles textureNamed:@"charge_flame3.png"],[projectiles textureNamed:@"charge_flame4.png"],[projectiles textureNamed:@"charge_flame5.png"]] timePerFrame:0.05 resize:YES restore:NO];
         self.lower=[SKSpriteNode spriteNodeWithTexture:[projectiles textureNamed:@"charging_lower_1_3.png"]];
         self.lower.zPosition=self.zPosition+1;
         self.upper=[SKSpriteNode spriteNodeWithTexture:[projectiles textureNamed:@"charging_upper1.png"]];
@@ -275,7 +275,7 @@
         self.flame.xScale=self.forwardtrack ? -1:1;
         [self addChild:self.flame];
         __weak SKSpriteNode*weakflame=self.flame;
-        [self.flame runAction:fire_anim completion:^{[weakflame removeFromParent];[weakflame removeAllActions];}];
+        [self.flame runAction:_fire_anim completion:^{[weakflame removeFromParent];[weakflame removeAllActions];}];
     }
 }
 

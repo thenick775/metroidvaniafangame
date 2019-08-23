@@ -407,9 +407,9 @@
 }
 
 -(void)setBossInterac{
-    NSLog(@"in set boss interac");
+    //NSLog(@"in set boss interac");
     if(!self.hasHadBossInterac){
-        NSLog(@"actually setting boss interac");
+        //NSLog(@"actually setting boss interac");
         self.hasHadBossInterac=YES;
         [saveData editseenbosswithval:YES forsaveslot:[saveData getcurrslot]];
         [saveData arch];

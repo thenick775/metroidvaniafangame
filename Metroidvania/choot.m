@@ -9,14 +9,14 @@
 
 
 @implementation choot{
-    SKTextureAtlas*chootTex;
-    SKSpriteNode*projsprite;
-    SKAction*explode;
+    SKTextureAtlas*_chootTex;
+    SKSpriteNode*_projsprite;
+    SKAction*_explode;
 }
 
 -(instancetype)initWithPos:(CGPoint)pos andDist:(int)dist andCount:(int)count andTime:(float)time Del:(float)del{
-    chootTex=[SKTextureAtlas atlasNamed:@"choot"];
-    self=[super initWithTexture:[chootTex textureNamed:@"choot1.png"]];
+    _chootTex=[SKTextureAtlas atlasNamed:@"choot"];
+    self=[super initWithTexture:[_chootTex textureNamed:@"choot1.png"]];
     if(self!=nil){
         self.position=pos;
         self.orig_y=pos.y;
@@ -25,16 +25,16 @@
         self.dx=5;
         self.dy=0;
         self.projectilesInAction=[[NSMutableArray alloc] init];
-        NSArray *jumptex=@[[chootTex textureNamed:@"choot1.png"],[chootTex textureNamed:@"choot2.png"],[chootTex textureNamed:@"choot3.png"]];
-        NSArray *fallstart=@[[chootTex textureNamed:@"choot4.png"],[chootTex textureNamed:@"choot5.png"],[chootTex textureNamed:@"choot5.png"],[chootTex textureNamed:@"choot6.png"]];
-        NSArray *falltex=@[[chootTex textureNamed:@"choot7.png"],[chootTex textureNamed:@"choot8.png"],[chootTex textureNamed:@"choot9.png"]];
-        NSArray *explodetex=@[[chootTex textureNamed:@"choothit1.png"],[chootTex textureNamed:@"choothit2.png"],[chootTex textureNamed:@"choothit3.png"],[chootTex textureNamed:@"choothit4.png"]];
+        NSArray *jumptex=@[[_chootTex textureNamed:@"choot1.png"],[_chootTex textureNamed:@"choot2.png"],[_chootTex textureNamed:@"choot3.png"]];
+        NSArray *fallstart=@[[_chootTex textureNamed:@"choot4.png"],[_chootTex textureNamed:@"choot5.png"],[_chootTex textureNamed:@"choot5.png"],[_chootTex textureNamed:@"choot6.png"]];
+        NSArray *falltex=@[[_chootTex textureNamed:@"choot7.png"],[_chootTex textureNamed:@"choot8.png"],[_chootTex textureNamed:@"choot9.png"]];
+        NSArray *explodetex=@[[_chootTex textureNamed:@"choothit1.png"],[_chootTex textureNamed:@"choothit2.png"],[_chootTex textureNamed:@"choothit3.png"],[_chootTex textureNamed:@"choothit4.png"]];
         
         
-        projsprite=[SKSpriteNode spriteNodeWithTexture:[chootTex textureNamed:@"chootp1.png"]];
-        projsprite.zPosition=-101;
-        projsprite.position=CGPointZero;
-        __weak SKSpriteNode*weakprojsprite=projsprite;
+        _projsprite=[SKSpriteNode spriteNodeWithTexture:[_chootTex textureNamed:@"chootp1.png"]];
+        _projsprite.zPosition=-101;
+        _projsprite.position=CGPointZero;
+        __weak SKSpriteNode*weakprojsprite=_projsprite;
         __weak choot*weakself=self;
         SKAction*fallblock=[SKAction runBlock:^{
             SKSpriteNode*weakprojspritecpy=weakprojsprite.copy;
@@ -47,8 +47,8 @@
         }];
         
         SKAction*jump=[SKAction group:@[[SKAction moveByX:0 y:dist duration:time],[SKAction animateWithTextures:jumptex timePerFrame:0.08 resize:YES restore:NO]]];
-        SKAction*fall=[SKAction group:@[[SKAction moveByX:0 y:-dist duration:(2.5*time)],[SKAction sequence:@[[SKAction animateWithTextures:fallstart timePerFrame:0.08 resize:YES restore:NO],[SKAction repeatAction:[SKAction sequence:@[fallblock,[SKAction animateWithTextures:falltex timePerFrame:0.1 resize:YES restore:YES]]] count:count],[SKAction setTexture:[chootTex textureNamed:@"choot1.png"] resize:YES]]]]];
-        explode=[SKAction animateWithTextures:explodetex timePerFrame:0.1];
+        SKAction*fall=[SKAction group:@[[SKAction moveByX:0 y:-dist duration:(2.5*time)],[SKAction sequence:@[[SKAction animateWithTextures:fallstart timePerFrame:0.08 resize:YES restore:NO],[SKAction repeatAction:[SKAction sequence:@[fallblock,[SKAction animateWithTextures:falltex timePerFrame:0.1 resize:YES restore:YES]]] count:count],[SKAction setTexture:[_chootTex textureNamed:@"choot1.png"] resize:YES]]]]];
+        _explode=[SKAction animateWithTextures:explodetex timePerFrame:0.1];
         
         
         
@@ -94,7 +94,7 @@
     __weak choot*weakself=self;
     __weak SKSpriteNode*weakproj=proj;
     [proj removeAllActions];
-    [proj runAction:explode completion:^{[weakself.projectilesInAction removeObject:weakproj];[weakproj removeAllActions];[weakproj removeFromParent];}];
+    [proj runAction:_explode completion:^{[weakself.projectilesInAction removeObject:weakproj];[weakproj removeAllActions];[weakproj removeFromParent];}];
 }
 
 -(void)enemytoplayerandmelee:(GameLevelScene *)scene{
