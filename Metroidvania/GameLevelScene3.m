@@ -13,6 +13,7 @@
 #import "nettoriboss.h"
 #import "powerupBubble.h"
 #import "choot.h"
+#import "desgeega.h"
 
 @implementation GameLevelScene3{
     SKTextureAtlas*_lvl3assets;
@@ -142,6 +143,38 @@
         choot*enemy5=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*117,self.map.tileSize.height*3) andDist:150 andCount:9 andTime:1.2 Del:5.364];
         [self.enemies addObject:enemy5];
         [self.map addChild:enemy5];
+        
+        choot*enemy6=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*297,self.map.tileSize.height*18) andDist:95 andCount:9 andTime:1.2 Del:5.364];
+        [self.enemies addObject:enemy6];
+        [self.map addChild:enemy6];
+        
+        choot*enemy7=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*301,self.map.tileSize.height*18) andDist:95 andCount:9 andTime:1.25 Del:5.364];
+        [self.enemies addObject:enemy7];
+        [self.map addChild:enemy7];
+        
+        choot*enemy8=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*305,self.map.tileSize.height*18) andDist:95 andCount:9 andTime:1.3 Del:5.364];
+        [self.enemies addObject:enemy8];
+        [self.map addChild:enemy8];
+        
+        choot*enemy9=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*319,self.map.tileSize.height*18) andDist:95 andCount:9 andTime:1.2 Del:5.364];
+        [self.enemies addObject:enemy9];
+        [self.map addChild:enemy9];
+        
+        choot*enemy10=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*323,self.map.tileSize.height*18) andDist:95 andCount:9 andTime:1.25 Del:5.364];
+        [self.enemies addObject:enemy10];
+        [self.map addChild:enemy10];
+        
+        choot*enemy11=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*327,self.map.tileSize.height*18) andDist:95 andCount:9 andTime:1.3 Del:5.364];
+        [self.enemies addObject:enemy11];
+        [self.map addChild:enemy11];
+        
+        desgeega*enemy12=[[desgeega alloc] initWithPosition:CGPointMake(self.map.tileSize.width*234, (self.map.tileSize.height*4)-3) andPosConst:[SKRange rangeWithLowerLimit:self.map.tileSize.width*222 upperLimit:self.map.tileSize.width*282] andJmpHeight:150 andJmpDist:80];
+        [self.enemies addObject:enemy12];
+        [self.map addChild:enemy12];
+        
+        desgeega*enemy13=[[desgeega alloc] initWithPosition:CGPointMake(self.map.tileSize.width*258, (self.map.tileSize.height*11)-3) andPosConst:[SKRange rangeWithLowerLimit:self.map.tileSize.width*255 upperLimit:self.map.tileSize.width*276] andJmpHeight:150 andJmpDist:80];
+        [self.enemies addObject:enemy13];
+        [self.map addChild:enemy13];
         
         nettori=[[nettoriboss alloc] initWithPosition:CGPointMake(176*self.map.tileSize.width-10, 5*self.map.tileSize.height-2)];
         [self.map addChild:nettori];

@@ -79,7 +79,6 @@
 
 -(void)enemytoplayerandmelee:(GameLevelScene *)scene{
     if(fabs(scene.player.position.x-self.position.x)<70){  //minimize comparisons
-        //NSLog(@"in here");
         if(CGRectContainsPoint(scene.player.collisionBoundingBox, CGPointAdd(self.enemybullet1.position, self.position))){
             //NSLog(@"enemy hit player bullet#1");
             [self.enemybullet1 setHidden:YES];

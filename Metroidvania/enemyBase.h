@@ -10,6 +10,7 @@
 #import "SKTUtils.h"
 
 @interface enemyBase : SKSpriteNode
+
 @property (nonatomic,assign) int health;
 @property (nonatomic,assign) BOOL dead;
 @property (nonatomic,assign) int dx,dy;

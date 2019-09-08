@@ -101,6 +101,11 @@
     if(CGRectIntersectsRect(scene.player.frame,CGRectInset(self.frame,2,0))){
         [scene enemyhitplayerdmgmsg:20];
     }
+    if(scene.player.meleeinaction && !scene.player.meleedelay && CGRectIntersectsRect([scene.player meleeBoundingBoxNormalized],self.frame)){
+        //NSLog(@"meleehit");
+        [scene.player runAction:scene.player.meleedelayac];
+        [self hitByMeleeWithArrayToRemoveFrom:scene.enemies];
+    }
     for(SKSpriteNode*tmp in self.projectilesInAction.reverseObjectEnumerator){
         if(CGRectContainsPoint(scene.player.frame, [scene convertPoint:tmp.position fromNode:self])){
             [scene enemyhitplayerdmgmsg:15];
