@@ -42,6 +42,7 @@ The gifs may take some time to load due to the filesize, any FPS tags are slower
 
 ![](lvl3demov5.gif)
 
+![](lvl3desroom.gif)
 
 Credits for art assets ripped by:
 
@@ -63,7 +64,7 @@ ansimuz-Space parallax backround (menu scene background)
 
 Bob Bobium-Human Station Menuscene (space colony ceres), Door sprites
 
-Greiga Master-Chozo Statue, Nettori boss
+Greiga Master-Chozo Statue, Nettori boss, Dessgeega
 
 Cha0sMiles07 & Ngamer-Samus Projectile sprites
 
