@@ -9,7 +9,6 @@
 #import "sciserenemy.h"
 #import "waver.h"
 #import "SKTUtils.h"
-#import "PlayerProjectile.h"
 #import "nettoriboss.h"
 #import "powerupBubble.h"
 #import "choot.h"
@@ -26,8 +25,6 @@
 -(instancetype)initWithSize:(CGSize)size andVol:(float)vol{
     self = [super initWithSize:size andVol:vol];
     if (self!=nil) {
-        [self.map removeFromParent];
-        self.map=nil;
         self.volume=vol;
         
         self.backgroundColor = [SKColor blackColor];
@@ -80,11 +77,11 @@
         self.replayimage=[UIImage imageNamed:@"replay5.png"];
         
         //mutable arrays here
-        [self.bullets removeAllObjects];
+        /*[self.bullets removeAllObjects];
         [self.enemies removeAllObjects];
         self.bullets=[[NSMutableArray alloc]init];
         self.enemies=[[NSMutableArray alloc]init];
-        self.doors=[[NSMutableArray alloc]init];
+        self.doors=[[NSMutableArray alloc]init];*/
         
         //scene items here
         SKSpriteNode*powerupstatue=[SKSpriteNode spriteNodeWithTexture:[_lvl3assets textureNamed:@"powerupstatuelvl3.png"]];

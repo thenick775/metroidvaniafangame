@@ -10,9 +10,7 @@
 #import "honeypot.h"
 #import "arachnusboss.h"
 #import "SKTUtils.h"
-#import "PlayerProjectile.h"
 #import "waver.h"
-#import "gameaudio.h"
 #import "enemyBase.h"
 
 @implementation GameLevelScene2{
@@ -26,8 +24,6 @@
     self=[super initWithSize:size andVol:vol];
     if (self!=nil) {
         //self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
-        [self.map removeFromParent]; //gets rid of super's implementation of my map
-        self.map=nil;
         self.backgroundColor = [SKColor blackColor];
         self.map = [JSTileMap mapNamed:@"level2.tmx"];
         [self addChild:self.map];
@@ -50,7 +46,6 @@
         //player initializiation stuff
         self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];
         self.player.position = CGPointMake(100, 150);
-        //self.player.position=CGPointMake(3980-60,100);
         self.player.zPosition = 15;
         self.hasHadBossInterac=NO;
         
@@ -81,10 +76,10 @@
         self.travelportal.position=CGPointMake(self.map.tileSize.width*391,self.map.tileSize.height*8);
         
         //mutable arrays here
-        [self.bullets removeAllObjects];
+        /*[self.bullets removeAllObjects];
         [self.enemies removeAllObjects];
         self.bullets=[[NSMutableArray alloc]init];
-        self.enemies=[[NSMutableArray alloc]init];
+        self.enemies=[[NSMutableArray alloc]init];*/
         
         //enemies here
         sciserenemy *enemy=[[sciserenemy alloc] initWithPos:CGPointMake(12.5*self.map.tileSize.width,2.625*self.map.tileSize.height)];

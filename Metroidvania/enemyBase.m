@@ -34,5 +34,5 @@
     }
 }
 
--(void)enemytoplayerandmelee:(GameLevelScene *)scene{}
+-(void)enemytoplayerandmelee:(levelBase *)scene{}
 @end

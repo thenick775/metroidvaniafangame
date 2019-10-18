@@ -14,6 +14,7 @@
 @property (nonatomic,strong) SKSpriteNode *_cntrllabel;
 @property (nonatomic,strong) SKSpriteNode *titlelabel;
 @property (nonatomic,strong) SKAction*labelsin;
+
 @end
 
 @interface saveCell : SKShapeNode

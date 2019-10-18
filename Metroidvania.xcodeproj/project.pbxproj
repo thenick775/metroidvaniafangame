@@ -46,6 +46,7 @@
 		5979C75A213C79A100965A50 /* crateriaTileSet.png in Resources */ = {isa = PBXBuildFile; fileRef = 5979C759213C79A100965A50 /* crateriaTileSet.png */; };
 		5979C75D21447BF700965A50 /* arachnusintroduction.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5979C75B21447BF700965A50 /* arachnusintroduction.sks */; };
 		59C0DE1420B91F25008999C3 /* PlayerProjectile.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C0DE1320B91F25008999C3 /* PlayerProjectile.m */; };
+		59C57B702357E0E80086064C /* levelBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C57B6F2357E0E80086064C /* levelBase.m */; };
 		59CE01C121CDCD1D00BF13B1 /* enemyBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 59CE01C021CDCD1D00BF13B1 /* enemyBase.m */; };
 		59D7CCFA22C066FC00FABB8B /* saveData.m in Sources */ = {isa = PBXBuildFile; fileRef = 59D7CCF922C066FC00FABB8B /* saveData.m */; };
 		59DAC084218278330077E10C /* gameaudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 59DAC083218278330077E10C /* gameaudio.m */; };
@@ -138,6 +139,8 @@
 		5979C75B21447BF700965A50 /* arachnusintroduction.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = arachnusintroduction.sks; sourceTree = "<group>"; };
 		59C0DE1220B91F25008999C3 /* PlayerProjectile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerProjectile.h; sourceTree = "<group>"; };
 		59C0DE1320B91F25008999C3 /* PlayerProjectile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerProjectile.m; sourceTree = "<group>"; };
+		59C57B6E2357E0E80086064C /* levelBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = levelBase.h; sourceTree = "<group>"; };
+		59C57B6F2357E0E80086064C /* levelBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = levelBase.m; sourceTree = "<group>"; };
 		59CE01C021CDCD1D00BF13B1 /* enemyBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = enemyBase.m; sourceTree = "<group>"; };
 		59CE01C221CDCD2F00BF13B1 /* enemyBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = enemyBase.h; sourceTree = "<group>"; };
 		59D7CCF822C066FC00FABB8B /* saveData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = saveData.h; sourceTree = "<group>"; };
@@ -283,6 +286,8 @@
 		5979C75F214630F500965A50 /* levels */ = {
 			isa = PBXGroup;
 			children = (
+				59C57B6E2357E0E80086064C /* levelBase.h */,
+				59C57B6F2357E0E80086064C /* levelBase.m */,
 				592B389B20DB008400C62977 /* MenuScene.h */,
 				592B389C20DB008400C62977 /* MenuScene.m */,
 				F275B68A186E0B06009F6E6B /* GameLevelScene.h */,
@@ -559,6 +564,7 @@
 				F275B6E3186E25C1009F6E6B /* SKTAudio.m in Sources */,
 				F275B6E4186E25C1009F6E6B /* SKTEffects.m in Sources */,
 				59C0DE1420B91F25008999C3 /* PlayerProjectile.m in Sources */,
+				59C57B702357E0E80086064C /* levelBase.m in Sources */,
 				594F557B20CDE911000E476E /* GameLevelScene2.m in Sources */,
 				596F2DA920BFAFAE00B32C47 /* sciserenemy.m in Sources */,
 				F275B6DE186E25C1009F6E6B /* SKAction+SKTExtras.m in Sources */,
@@ -697,7 +703,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metroidvania/Metroidvania-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Metroidvania/Metroidvania-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -717,7 +723,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metroidvania/Metroidvania-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Metroidvania/Metroidvania-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

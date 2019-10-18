@@ -30,7 +30,7 @@
   [SKTextureAtlas preloadTextureAtlasesNamed:texturesformenuscene withCompletionHandler:^(NSError*error,NSArray*foundatlases){
     dispatch_async(dispatch_get_main_queue(), ^{
     NSLog(@"preloaded menuscene");
-    menuscenep=[[MenuScene alloc] initWithSize:/*skView*/weakview.bounds.size];
+    menuscenep=[[MenuScene alloc] initWithSize:weakview.bounds.size];
     [weakview presentScene:menuscenep];
     });
   }];

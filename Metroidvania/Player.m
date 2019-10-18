@@ -242,6 +242,7 @@
         [self runAction:[SKAction setTexture:self.backwards resize:YES]];
 }
 
+
 -(void)switchbeamto:(NSString *)to{
     self.currentBulletType=to;
     

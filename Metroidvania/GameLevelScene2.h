@@ -4,11 +4,9 @@
 //
 //  Created by nick vancise on 6/10/18.
 
+#import "levelBase.h"
 
-#import <SpriteKit/SpriteKit.h>
-#import "GameLevelScene.h"
-
-@interface GameLevelScene2 : GameLevelScene 
+@interface GameLevelScene2 : levelBase
 
 @property (nonatomic,strong) TMXLayer*background;
 

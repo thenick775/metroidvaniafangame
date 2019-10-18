@@ -6,6 +6,7 @@
 
 
 #import "MenuScene.h"
+#import "levelBase.h"
 #import "GameLevelScene.h"
 #import "GameLevelScene2.h"
 #import "GameLevelScene3.h"
@@ -15,13 +16,11 @@
 @implementation MenuScene{
     SKSpriteNode *_cntrlbkrnd;
     SKSpriteNode *_savebkrnd;
-    //saveCell*cell,*cell1,*cell2;
     BOOL viewingcntrls;
     BOOL viewingsslots;
-    SKAction *shipflyact,*shipreducesize,*flameflicker;
+    SKAction *shipflyac,*shipreducesize,*flameflicker;
     SKSpriteNode *samusgunship,*shipflames1,*shipflamesright2,*shipflamesleft2;
     UIBezierPath *shippath;
-    SKAction *shipflyac;
     SKTransition *menutolvl1tran;
     NSArray *texturesforlvl;
     NSArray*cells;
@@ -313,9 +312,6 @@
     }
 }
 
-
-
-
 -(int)cgpointinslot:(CGPoint)point{
     int val=-1;
     if(CGRectContainsPoint(((saveCell*)cells[0]).frame, point)){
@@ -330,8 +326,8 @@
     return val;
 }
 
--(GameLevelScene*)setupscenefromslot:(int)slot{
-    GameLevelScene*temp;
+-(levelBase*)setupscenefromslot:(int)slot{
+    levelBase*temp;
     int lvl=[[saveData getlvlfromslot:slot] intValue];
     
     switch (lvl) {
@@ -358,7 +354,7 @@
 -(void)runlevelforslot:(int)p{
     CGSize nextSceneSize=CGSizeMake(self.view.bounds.size.width/1.5,self.view.bounds.size.height/1.5-10);
     [saveData editcurrslot:p];
-    __block GameLevelScene*preload;
+    __block levelBase*preload;
     __weak MenuScene *weakself = self;
     __weak SKTransition*weakmenutolvl1tran=menutolvl1tran;
     __weak SKSpriteNode*weakshipflamesright2=shipflamesright2;

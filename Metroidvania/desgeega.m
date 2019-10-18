@@ -139,7 +139,7 @@
 -(SKAction*)recenter{
     if(fabs(self.position.x-((_constrs[1]+_constrs[0])/2))<25)
         return _idleac;
-    return (((_constrs[1]+_constrs[0])/2)>self.position.x)? _jmpright:_jmpleft;
+    return (((_constrs[1]+_constrs[0])/2)>self.position.x)? [SKAction sequence:@[_idle,_jmpright]]:[SKAction sequence:@[_idle,_jmpleft]];
 }
 
 -(void)enemytoplayerandmelee:(GameLevelScene *)scene{
