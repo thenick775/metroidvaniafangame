@@ -196,14 +196,11 @@
   NSInteger tileindecies[8]={7,1,3,5,0,2,6,8};
   self.player.onGround=NO;
   
-  
   for(NSInteger i=0;i<8;i++){
     NSInteger tileindex=tileindecies[i];
-    
     CGRect playerrect=[self.player collisionBoundingBox];
     CGPoint playercoordinate=[self.walls coordForPoint:self.player.desiredPosition];
-    
-  
+      
     if(playercoordinate.y >= self.map.mapSize.height-1 ){ //sets gameover if you go below the bottom of the maps y max-1
       [self gameOver:0];
       return;
@@ -216,9 +213,7 @@
       [self.player runAction:[SKAction moveTo:self.travelportal.position duration:1.5] completion:^{[self gameOver:1];}];
       return;
     }
-    
-    
-    
+
     NSInteger tilecolumn=tileindex%3; //this is how array of coordinates around player is navigated
     NSInteger tilerows=tileindex/3;   //using a 3X3 grid
     
@@ -228,73 +223,72 @@
     NSInteger hazardtilegid=[self tileGIDAtTileCoord:tilecoordinate forLayer:self.hazards];
     NSInteger mysteryboxgid=[self tileGIDAtTileCoord:tilecoordinate forLayer:self.mysteryboxes];
     
-  
     if(thetileGID !=0 || mysteryboxgid!=0){
-      CGRect tilerect=[self tileRectFromTileCoords:tilecoordinate];
-      //NSLog(@"TILE GID: %ld Tile coordinate: %@ Tile rect: %@ Player Rect: %@",(long)thetileGID,NSStringFromCGPoint(tilecoordinate),NSStringFromCGRect(tilerect),NSStringFromCGRect(playerrect));
-      //collision detection here
-      
-      if(CGRectIntersectsRect(playerrect, tilerect)){
-        CGRect pl_tl_intersection=CGRectIntersection(playerrect, tilerect); //distance of intersection where player and tile overlap
+        CGRect tilerect=[self tileRectFromTileCoords:tilecoordinate];
         
-        if(tileindex==7){
-          //tile below the sprite
-          self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x, self.player.desiredPosition.y+pl_tl_intersection.size.height);
-          
-          self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
-          self.player.onGround=YES;
-        }
-        else if(tileindex==1){
-          //tile above the sprite
-          if(mysteryboxgid!=0){
-            //NSLog(@"hit a mysterybox!!");
-            [self.mysteryboxes removeTileAtCoord:tilecoordinate];
-            [self hitHealthBox]; //adjusts player healthlabel/healthbar
-          }
-          else{
-          self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x, self.player.desiredPosition.y-pl_tl_intersection.size.height);
-          self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
-          }
-        }
-        else if(tileindex==3){
-          //tile back left of sprite
-          self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x+pl_tl_intersection.size.width, self.player.desiredPosition.y);
-        }
-        else if(tileindex==5){
-          //tile front right of sprite
-          self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x-pl_tl_intersection.size.width, self.player.desiredPosition.y);
-        }
-        else{
-          if(pl_tl_intersection.size.width>pl_tl_intersection.size.height){
-            //this is for resolving collision up or down due to ^
-            float intersectionheight;
-            if(thetileGID!=0){
-            self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
+        if(CGRectIntersectsRect(playerrect, tilerect)){
+            CGRect pl_tl_intersection=CGRectIntersection(playerrect, tilerect); //distance of intersection where player and tile overlap
+            switch (tileindex) {
+                case 7:
+                    //tile below the sprite
+                    self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x, self.player.desiredPosition.y+pl_tl_intersection.size.height);
+                    
+                    self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
+                    self.player.onGround=YES;
+                    break;
+                case 1:
+                    //tile above the sprite
+                    if(mysteryboxgid!=0){
+                      //NSLog(@"hit a mysterybox!!");
+                      [self.mysteryboxes removeTileAtCoord:tilecoordinate];
+                      [self hitHealthBox]; //adjusts player healthlabel/healthbar
+                    }
+                    else{
+                    self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x, self.player.desiredPosition.y-pl_tl_intersection.size.height);
+                    self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
+                    }
+                    break;
+                case 3:
+                    //tile back left of sprite
+                    self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x+pl_tl_intersection.size.width, self.player.desiredPosition.y);
+                    break;
+                case 5:
+                    //tile front right of sprite
+                    self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x-pl_tl_intersection.size.width, self.player.desiredPosition.y);
+                    break;
+                    
+                default:
+                    if(pl_tl_intersection.size.width>pl_tl_intersection.size.height){
+                      //this is for resolving collision up or down due to ^
+                      float intersectionheight;
+                      if(thetileGID!=0){
+                      self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
+                      }
+                      
+                      if(tileindex>4){
+                        intersectionheight=pl_tl_intersection.size.height;
+                        self.player.onGround=YES;
+                      }
+                      else
+                        intersectionheight=-pl_tl_intersection.size.height;
+                      
+                      self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x, self.player.desiredPosition.y+intersectionheight);
+                    }
+                    else{
+                      //this is for resolving collisions left or right due to ^
+                      float intersectionheight;
+                      if(tileindex==0 || tileindex==6)
+                        intersectionheight=pl_tl_intersection.size.width;
+                      else
+                        intersectionheight=-pl_tl_intersection.size.width;
+                      
+                      self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x+intersectionheight, self.player.desiredPosition.y);
+                    }
+                    break;
             }
             
-            if(tileindex>4){
-              intersectionheight=pl_tl_intersection.size.height;
-              self.player.onGround=YES;
-            }
-            else
-              intersectionheight=-pl_tl_intersection.size.height;
-            
-            self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x, self.player.desiredPosition.y+intersectionheight);
-          }
-          else{
-            //this is for resolving collisions left or right due to ^
-            float intersectionheight;
-            
-            if(tileindex==0 || tileindex==6)
-              intersectionheight=pl_tl_intersection.size.width;
-            else
-              intersectionheight=-pl_tl_intersection.size.width;
-            
-            self.player.desiredPosition=CGPointMake(self.player.desiredPosition.x+intersectionheight, self.player.desiredPosition.y);
-          }
-          
         }
-      }
+        
     }//if thetilegid bracket
     
     if(hazardtilegid!=0){//for hazard layer
@@ -317,7 +311,6 @@
   
   if(self.gameOver || self.player.meleeinaction || self.player.lockmovement)
     return;
-  
   
   for(UITouch *touch in touches){
     //NSLog(@"touchbegan");
@@ -645,25 +638,23 @@
 }
 
 -(void)damageRecievedMsg{//for tile hazard layer if used
-  
   --self.player.health;
   self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
   self.healthbar.size=CGSizeMake((((float)self.player.health/100)*self.healthbarsize), self.healthbar.size.height);
-  
 }
 
 -(void)enemyhitplayerdmgmsg:(int)hit{
   if(!self.player.plyrrecievingdmg){
-  self.player.plyrrecievingdmg=YES;
-  self.player.health=self.player.health-hit;
-  if(self.player.health<=0 && !self.gameOver){
-    self.player.health=0;
-    [self gameOver:0];
-  }
-  self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
-  self.healthbar.size=CGSizeMake((((float)self.player.health/100)*self.healthbarsize), self.healthbar.size.height);
+      self.player.plyrrecievingdmg=YES;
+      self.player.health=self.player.health-hit;
+      if(self.player.health<=0 && !self.gameOver){
+          self.player.health=0;
+          [self gameOver:0];
+      }
+      self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
+      self.healthbar.size=CGSizeMake((((float)self.player.health/100)*self.healthbarsize), self.healthbar.size.height);
   
-  [self.player runAction:[SKAction group:@[self.player.plyrdmgwaitlock,[SKAction repeatAction:self.player.damageaction count:15]]]];
+      [self.player runAction:[SKAction group:@[self.player.plyrdmgwaitlock,[SKAction repeatAction:self.player.damageaction count:15]]]];
   }
 }
 
@@ -729,7 +720,7 @@
 }
 
 -(void)setStayPaused{//for use to keep the scene paused while returning from background
-  NSLog(@"staying paused");
+  //NSLog(@"staying paused");
   self.userInteractionEnabled=NO;
   self.stayPaused=YES;
   [self unpausegame];

@@ -14,16 +14,14 @@
 #import "saveData.h"
 
 @implementation MenuScene{
-    SKSpriteNode *_cntrlbkrnd;
-    SKSpriteNode *_savebkrnd;
-    BOOL viewingcntrls;
-    BOOL viewingsslots;
+    saveCellManager *_savebkrnd;
+    BOOL viewingcntrls,viewingsslots;
     SKAction *shipflyac,*shipreducesize,*flameflicker;
     SKSpriteNode *samusgunship,*shipflames1,*shipflamesright2,*shipflamesleft2;
+    SKSpriteNode *_cntrlbkrnd;
     UIBezierPath *shippath;
     SKTransition *menutolvl1tran;
     NSArray *texturesforlvl;
-    NSArray*cells;
     SKAction *_buttonhighlight,*_buttonunhighlight;
     gameaudio*audiomanager;
 }
@@ -224,28 +222,8 @@
         //add loadgame stuff here
         [saveData unarch];
         
-        _savebkrnd=[SKSpriteNode spriteNodeWithColor:[SKColor darkGrayColor] size:CGSizeMake(self.size.width-300,self.size.height*0.55/*250*/)];
-        _savebkrnd.alpha=0;
-        _savebkrnd.position=CGPointMake(self.size.width/2,self.size.height/2);
-        _savebkrnd.zPosition=5;
+        _savebkrnd=[[saveCellManager alloc] initWithRect:CGRectMake((self.size.width/2)-((self.size.width-300)/2),(self.size.height/2)-((self.size.height*0.55)/2), self.size.width-300, self.size.height*0.55) andRad:12];
         [self addChild:_savebkrnd];
-        
-        saveCell*cell=[[saveCell alloc] initWithSize:CGSizeMake(_savebkrnd.size.width*0.75, _savebkrnd.size.height*0.3) andcorRad:12 forslot:0];
-        cell.position=CGPointMake(0, _savebkrnd.size.height*0.3+_savebkrnd.size.height*0.03);
-        cell.fillColor=[SKColor blackColor];
-        cell.zPosition=6;
-        saveCell*cell1=[[saveCell alloc] initWithSize:CGSizeMake(_savebkrnd.size.width*0.75, _savebkrnd.size.height*0.3) andcorRad:12 forslot:1];
-        cell1.position=CGPointZero;
-        cell1.fillColor=[SKColor blackColor];
-        cell1.zPosition=6;
-        saveCell*cell2=[[saveCell alloc] initWithSize:CGSizeMake(_savebkrnd.size.width*0.75, _savebkrnd.size.height*0.3) andcorRad:12 forslot:2];
-        cell2.position=CGPointMake(0, -_savebkrnd.size.height*0.3-_savebkrnd.size.height*0.03);;
-        cell2.fillColor=[SKColor blackColor];
-        cell2.zPosition=6;
-        cells=@[cell,cell1,cell2];
-        [_savebkrnd addChild:cells[0]];
-        [_savebkrnd addChild:cells[1]];
-        [_savebkrnd addChild:cells[2]];
         
         audiomanager=[gameaudio alloc];
         [audiomanager runBkgrndMusicForlvl:0 andVol:0.6];
@@ -269,7 +247,7 @@
         }
         else if(viewingsslots && !CGRectContainsPoint(_savebkrnd.frame,[touch locationInNode:self])){
             [_savebkrnd runAction:[SKAction fadeOutWithDuration:0.2]];
-            for(saveCell*cell in cells){
+            for(saveCell*cell in _savebkrnd.cells){
                 if(cell.selected)
                     [cell showLabels];
             }
@@ -283,11 +261,11 @@
             [self._playbutton runAction:_buttonhighlight];
             viewingsslots=YES;
         }
-        else if(viewingsslots && CGRectContainsPoint(_savebkrnd.frame,[touch locationInNode:self])/*&& ([self cgpointinslot:[touch locationInNode:_savebkrnd]])!=-1*/ ){
-            int p=[self cgpointinslot:[touch locationInNode:_savebkrnd]];
-            for(saveCell*cell in cells){
+        else if(viewingsslots && CGRectContainsPoint(_savebkrnd.frame,[touch locationInNode:self])){
+            int p=[_savebkrnd cgpointinslot:[touch locationInNode:_savebkrnd]];
+            for(saveCell*cell in _savebkrnd.cells){
                 if(p==-1){
-                    for(saveCell*cell in cells){
+                    for(saveCell*cell in _savebkrnd.cells){
                         if(cell.selected)
                             [cell showLabels];
                     }
@@ -300,7 +278,7 @@
                 else if(cell.selected && [touch locationInNode:cell].x>0 && p==cell.cellno){
                     //NSLog(@"cell %d greater than 0",p);
                     [saveData reset_slot:p];
-                    ((saveCell*)cells[p]).center.text=[@"lvl: " stringByAppendingString:[[saveData getlvlfromslot:p] stringValue]];
+                    ((saveCell*)_savebkrnd.cells[p]).center.text=[@"lvl: " stringByAppendingString:[[saveData getlvlfromslot:p] stringValue]];
                     [saveData arch];
                     [cell showLabels];
                 }
@@ -310,20 +288,6 @@
             }
         }
     }
-}
-
--(int)cgpointinslot:(CGPoint)point{
-    int val=-1;
-    if(CGRectContainsPoint(((saveCell*)cells[0]).frame, point)){
-        val=0;
-    }
-    else if(CGRectContainsPoint(((saveCell*)cells[1]).frame, point)){
-        val=1;
-    }
-    else if(CGRectContainsPoint(((saveCell*)cells[2]).frame, point)){
-        val=2;
-    }
-    return val;
 }
 
 -(levelBase*)setupscenefromslot:(int)slot{
@@ -363,14 +327,9 @@
     __weak SKSpriteNode *weaksamusgunship=samusgunship;
     __weak SKAction *weakshipflyac=shipflyac;
     __weak NSArray *weaktexturesforlvl=texturesforlvl[p];
-    __weak SKSpriteNode *weaksavebkrnd=_savebkrnd;
+    __weak saveCellManager *weaksavebkrnd=_savebkrnd;
     
-    if([saveData getseenbossfromslot:p]){
-        preload=[[self setupscenefromslot:p] initNearBossWithSize:nextSceneSize andVol:0.35];
-    }
-    else{
-        preload=[[self setupscenefromslot:p] initWithSize:nextSceneSize andVol:0.35];
-    }
+    preload=[saveData getseenbossfromslot:p] ? [[self setupscenefromslot:p] initNearBossWithSize:nextSceneSize andVol:0.35] : [[self setupscenefromslot:p] initWithSize:nextSceneSize andVol:0.35];
     
     preload.scaleMode = SKSceneScaleModeAspectFill;
     self.userInteractionEnabled=NO;
@@ -389,74 +348,4 @@
  NSLog(@"MENU SCENE DEALLOCATED");
  }*/
 
-@end
-
-
-
-@implementation saveCell
-
--(instancetype)initWithSize:(CGSize)size andcorRad:(CGFloat)corrad forslot:(int)slot{
-    self=[super init];
-    if(self!=nil){
-        self.path=(CGPathRef)CFAutorelease(CGPathCreateWithRoundedRect(CGRectMake(-size.width/2,-size.height/2, size.width, size.height), 12, 12, nil));
-        self.left=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];
-        self.left.zPosition=7;
-        self.left.fontSize=16;
-        self.center=self.left.copy;
-        self.right=self.left.copy;
-        self.left.text=[NSString stringWithFormat:@"save slot %d",slot];
-        self.left.position=CGPointMake(self.frame.size.width*-0.33,0);
-        self.center.text=[@"lvl: " stringByAppendingString:[[saveData getlvlfromslot:slot] stringValue]];
-        self.right.text=[saveData getprogfromslot:slot];
-        self.right.position=CGPointMake(self.frame.size.width*0.33,0);
-        self.cellno=slot;
-        [self addChild:self.left];
-        [self addChild:self.center];
-        [self addChild:self.right];
-    }
-    return self;
-}
-
--(void)fadeLabels{
-    self.selected=YES;
-    __weak saveCell*weakself=self;
-    SKAction*fadeac=[SKAction fadeOutWithDuration:0.25];
-    NSTimeInterval waitdir=0;
-    for(SKLabelNode*child in self.children){
-        [child runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],fadeac]]];
-        waitdir+=0.2;
-    }
-    [self runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction runBlock:^{weakself.left.text=[weakself.right.text isEqualToString:@"empty"] ? @"start?":@"continue?";weakself.right.text=@"reset?";}]]]];
-    waitdir+=0.05;
-    
-    [self.left runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction fadeInWithDuration:0.25]]]];
-    waitdir+=0.3;
-    [self.right runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction fadeInWithDuration:0.25]]]];
-}
-
--(void)showLabels{
-    self.selected=NO;
-    __weak saveCell*weakself=self;
-    SKAction*fadeac=[SKAction fadeInWithDuration:0.25];
-    NSTimeInterval waitdir=0;
-    
-    
-    [self.left runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction fadeOutWithDuration:0.25]]]];
-    waitdir+=0.25;
-    [self.right runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction fadeOutWithDuration:0.25]]]];
-    waitdir+=0.25;
-    
-    __weak NSString*tmp=[saveData getprogfromslot:self.cellno];
-    [self runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],[SKAction runBlock:^{weakself.left.text=[NSString stringWithFormat:@"save slot %d",weakself.cellno];weakself.right.text=tmp;}]]]];
-    waitdir+=0.05;
-    
-    for(SKLabelNode*child in self.children){
-        [child runAction:[SKAction sequence:@[[SKAction waitForDuration:waitdir],fadeac]]];
-        waitdir+=0.2;
-    }
-}
-
-/*-(void)dealloc{
-    NSLog(@"in savecell dealloc");
-}*/
 @end

@@ -29,7 +29,6 @@
         [self addChild:self.map];
         self.volume=vol;
         [saveData editlvlwithval:@2 forsaveslot:[saveData getcurrslot]];
-        //[saveData printcurr];
         [saveData arch];
         
         self.walls=[self.map layerNamed:@"walls"];
@@ -74,12 +73,6 @@
         
         //portal adjust position to suit this level
         self.travelportal.position=CGPointMake(self.map.tileSize.width*391,self.map.tileSize.height*8);
-        
-        //mutable arrays here
-        /*[self.bullets removeAllObjects];
-        [self.enemies removeAllObjects];
-        self.bullets=[[NSMutableArray alloc]init];
-        self.enemies=[[NSMutableArray alloc]init];*/
         
         //enemies here
         sciserenemy *enemy=[[sciserenemy alloc] initWithPos:CGPointMake(12.5*self.map.tileSize.width,2.625*self.map.tileSize.height)];

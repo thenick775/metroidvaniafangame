@@ -38,7 +38,6 @@
     self.map = [JSTileMap mapNamed:@"level1.tmx"];
     [self addChild:self.map];
     [saveData editlvlwithval:@1 forsaveslot:[saveData getcurrslot]];
-    //[saveData printcurr];
     [saveData arch];
     
     self.hasHadBossInterac=NO;
@@ -74,10 +73,6 @@
     
     //portal stuff
     self.travelportal.position=CGPointMake((self.map.mapSize.width * self.map.tileSize.width)-120, 95.0);
-    
-    //scene mutable arrays here
-    /*self.bullets=[[NSMutableArray alloc]init];
-    self.enemies=[[NSMutableArray alloc]init];*/
     
     //tutorial labels here
     SKLabelNode*shootlabel1=[SKLabelNode labelNodeWithFontNamed:@"Marker Felt"];

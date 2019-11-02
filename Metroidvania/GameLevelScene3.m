@@ -31,7 +31,6 @@
         self.map = [JSTileMap mapNamed:@"level3.tmx"];
         [self addChild:self.map];
         [saveData editlvlwithval:@3 forsaveslot:[saveData getcurrslot]];
-        //[saveData printcurr];
         [saveData arch];
     
         self.walls=[self.map layerNamed:@"walls"];
@@ -77,11 +76,7 @@
         self.replayimage=[UIImage imageNamed:@"replay5.png"];
         
         //mutable arrays here
-        /*[self.bullets removeAllObjects];
-        [self.enemies removeAllObjects];
-        self.bullets=[[NSMutableArray alloc]init];
-        self.enemies=[[NSMutableArray alloc]init];
-        self.doors=[[NSMutableArray alloc]init];*/
+        self.doors=[[NSMutableArray alloc]init];
         
         //scene items here
         SKSpriteNode*powerupstatue=[SKSpriteNode spriteNodeWithTexture:[_lvl3assets textureNamed:@"powerupstatuelvl3.png"]];

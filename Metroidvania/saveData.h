@@ -7,6 +7,7 @@
 
 
 #import <Foundation/Foundation.h>
+#import <SpriteKit/SpriteKit.h>
 
 @interface saveData : NSObject <NSSecureCoding>
 
@@ -30,5 +31,27 @@
 +(void)unarch;
 +(void)reset_slot:(int)slot;
 +(void)delete_vals;//for developer testing at the moment
+
+@end
+
+@interface saveCellManager : SKShapeNode
+
+@property (nonatomic,strong) NSArray*cells;
+-(instancetype)initWithRect:(CGRect)rect andRad:(int)rad;
+-(int)cgpointinslot:(CGPoint)point;
+
+@end
+
+@interface saveCell : SKShapeNode
+
+@property (nonatomic,strong) SKLabelNode*center;
+@property (nonatomic,strong) SKLabelNode*left;
+@property (nonatomic,strong) SKLabelNode*right;
+@property (nonatomic,assign) BOOL selected;
+@property (nonatomic,assign) int cellno;
+
+-(void)fadeLabels;
+-(void)showLabels;
+-(instancetype)initWithSize:(CGSize)size andcorRad:(CGFloat)corrad forslot:(int)slot;
 
 @end
