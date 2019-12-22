@@ -9,7 +9,6 @@
 
 @interface choot : enemyBase
 
-
 @property (nonatomic,assign) int orig_y;
 @property(nonatomic,strong) NSMutableArray*projectilesInAction;
 -(instancetype)initWithPos:(CGPoint)pos andDist:(int)dist andCount:(int)count andTime:(float)time Del:(float)del;

@@ -13,9 +13,9 @@
     SKAction *_bulletanim;
     NSArray *_bulletframes;
     NSArray  *_bullettexswitch;
-    SKAction *fixsize;
-    SKSpriteNode *temp;
-    SKAction *tempaction;
+    SKAction *_fixsize;
+    SKSpriteNode *_temp;
+    SKAction *_tempaction;
 }
 
 -(instancetype)initWithPos:(CGPoint)pos andMag_Range:(int)mag_range andType:(NSString*)type andDirection:(BOOL) direction hit:(int)hit{ //direction:true==forewards false==backwards
@@ -32,29 +32,29 @@
         if([type isEqualToString:@"default"]){
             _bulletframes=@[[bullet textureNamed:@"samus_projectile1.png"],[bullet textureNamed:@"samus_projectile2.png"]];
             _bullettexswitch=@[[bullet textureNamed:@"samus_projectileoddsleft.png"],[bullet textureNamed:@"samus_projectileevensleft.png"]];
-            fixsize=[SKAction setTexture:[bullet textureNamed:@"samus_projectileoddsleft.png"] resize:YES];
+            _fixsize=[SKAction setTexture:[bullet textureNamed:@"samus_projectileoddsleft.png"] resize:YES];
         }
         else if([type isEqualToString:@"plasma"]){
             _bulletframes=@[[bullet textureNamed:@"samus_plasma1.png"],[bullet textureNamed:@"samus_plasma2.png"]];
             _bullettexswitch=@[[bullet textureNamed:@"plasmabeamodd.png"],[bullet textureNamed:@"plasmabeameven.png"]];
-            fixsize=[SKAction sequence:@[[SKAction setTexture:[bullet textureNamed:@"plasmabeamodd.png"] resize:YES],[SKAction scaleTo:0.6 duration:0]]];
+            _fixsize=[SKAction sequence:@[[SKAction setTexture:[bullet textureNamed:@"plasmabeamodd.png"] resize:YES],[SKAction scaleTo:0.6 duration:0]]];
         }
         else if([type isEqualToString:@"chargereg"]){
             _bulletframes=@[[bullet textureNamed:@"samus_projectile1.png"],[bullet textureNamed:@"samus_projectile2.png"]];
             _bullettexswitch=@[[bullet textureNamed:@"charge_odd1.png"],[bullet textureNamed:@"charge_even1.png"]];
-            fixsize=[SKAction sequence:@[[SKAction setTexture:[bullet textureNamed:@"charge_odd1.png"] resize:YES]]];
+            _fixsize=[SKAction sequence:@[[SKAction setTexture:[bullet textureNamed:@"charge_odd1.png"] resize:YES]]];
         }
         else if([type isEqualToString:@"charge"]){
             _bulletframes=@[[bullet textureNamed:@"samus_projectile1.png"],[bullet textureNamed:@"samus_projectile2.png"]];
             _bullettexswitch=@[[bullet textureNamed:@"charge_ch1.png"],[bullet textureNamed:@"charge_ch2.png"]];
-            fixsize=[SKAction sequence:@[[SKAction setTexture:[bullet textureNamed:@"charge_ch1.png"] resize:YES]]];
+            _fixsize=[SKAction sequence:@[[SKAction setTexture:[bullet textureNamed:@"charge_ch1.png"] resize:YES]]];
             
-            temp=[SKSpriteNode spriteNodeWithTexture:[bullet textureNamed:@"charge_follower1.png"]];
-            temp.position=CGPointMake(15,0);
-            tempaction=[SKAction animateWithTextures:@[[bullet textureNamed:@"charge_follower1.png"],[bullet textureNamed:@"charge_follower2.png"],[bullet textureNamed:@"charge_follower3.png"],[bullet textureNamed:@"charged_follower4.png"],[bullet textureNamed:@"charged_follower5.png"],] timePerFrame:0.06 resize:YES restore:NO];
-            __weak SKSpriteNode*weaktemp=temp;
+            _temp=[SKSpriteNode spriteNodeWithTexture:[bullet textureNamed:@"charge_follower1.png"]];
+            _temp.position=CGPointMake(15,0);
+            _tempaction=[SKAction animateWithTextures:@[[bullet textureNamed:@"charge_follower1.png"],[bullet textureNamed:@"charge_follower2.png"],[bullet textureNamed:@"charge_follower3.png"],[bullet textureNamed:@"charged_follower4.png"],[bullet textureNamed:@"charged_follower5.png"],] timePerFrame:0.06 resize:YES restore:NO];
+            __weak SKSpriteNode*weaktemp=_temp;
             __weak PlayerProjectile*weakself=self;
-            __weak SKAction*weaktempaction=tempaction;
+            __weak SKAction*weaktempaction=_tempaction;
             SKAction*projblk=[SKAction runBlock:^{
                 SKSpriteNode*tmpcpy=weaktemp.copy;
                 __weak SKSpriteNode*weaktmpcpy=tmpcpy;
@@ -71,7 +71,7 @@
         SKAction *bulletswitch=[SKAction repeatAction:[SKAction animateWithTextures:_bullettexswitch timePerFrame:0.1] count:5];
         NSArray *firegroup=@[bulletswitch,_fireaction];
         SKAction *fireaction=[SKAction group:firegroup];
-        NSArray *actionseq=@[_bulletanim,fixsize,fireaction];
+        NSArray *actionseq=@[_bulletanim,_fixsize,fireaction];
         SKAction *bulletseq=[SKAction sequence:actionseq];
         
         [self runAction:bulletseq completion:^{self.cleanup=YES;}];

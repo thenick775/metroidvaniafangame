@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5904B05A23107F350098A28F /* desgeega.m in Sources */ = {isa = PBXBuildFile; fileRef = 5904B05923107F350098A28F /* desgeega.m */; };
 		592B389D20DB008400C62977 /* MenuScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 592B389C20DB008400C62977 /* MenuScene.m */; };
 		593F109B21D9CB3B008208E6 /* 346na4n.png in Resources */ = {isa = PBXBuildFile; fileRef = 593F109A21D9CB3A008208E6 /* 346na4n.png */; };
 		593F10A221DAA914008208E6 /* nettoriboss.m in Sources */ = {isa = PBXBuildFile; fileRef = 593F10A121DAA914008208E6 /* nettoriboss.m */; };
@@ -24,6 +25,7 @@
 		5952F877210AFDEF00F3BC5B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5952F876210AFDEF00F3BC5B /* Main.storyboard */; };
 		5952F87A210E76B000F3BC5B /* starsbackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5952F878210E76B000F3BC5B /* starsbackground.sks */; };
 		5952F88D212F71DD00F3BC5B /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5952F88C212F71DD00F3BC5B /* GameplayKit.framework */; };
+		59576E402313CC4700E0860C /* desgeegahang.sks in Resources */ = {isa = PBXBuildFile; fileRef = 59576E3E2313CC4700E0860C /* desgeegahang.sks */; };
 		595C42D720FD3CCE00A47BB8 /* 52089.png in Resources */ = {isa = PBXBuildFile; fileRef = 595C42D620FD3CCD00A47BB8 /* 52089.png */; };
 		595C42DD20FD418100A47BB8 /* brokendoors.png in Resources */ = {isa = PBXBuildFile; fileRef = 595C42DC20FD418100A47BB8 /* brokendoors.png */; };
 		595D4058216F16C2004A7D24 /* waver.m in Sources */ = {isa = PBXBuildFile; fileRef = 595D4057216F16C2004A7D24 /* waver.m */; };
@@ -44,6 +46,7 @@
 		5979C75A213C79A100965A50 /* crateriaTileSet.png in Resources */ = {isa = PBXBuildFile; fileRef = 5979C759213C79A100965A50 /* crateriaTileSet.png */; };
 		5979C75D21447BF700965A50 /* arachnusintroduction.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5979C75B21447BF700965A50 /* arachnusintroduction.sks */; };
 		59C0DE1420B91F25008999C3 /* PlayerProjectile.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C0DE1320B91F25008999C3 /* PlayerProjectile.m */; };
+		59C57B702357E0E80086064C /* levelBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C57B6F2357E0E80086064C /* levelBase.m */; };
 		59CE01C121CDCD1D00BF13B1 /* enemyBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 59CE01C021CDCD1D00BF13B1 /* enemyBase.m */; };
 		59D7CCFA22C066FC00FABB8B /* saveData.m in Sources */ = {isa = PBXBuildFile; fileRef = 59D7CCF922C066FC00FABB8B /* saveData.m */; };
 		59DAC084218278330077E10C /* gameaudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 59DAC083218278330077E10C /* gameaudio.m */; };
@@ -82,6 +85,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5904B05823107F350098A28F /* desgeega.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = desgeega.h; sourceTree = "<group>"; };
+		5904B05923107F350098A28F /* desgeega.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = desgeega.m; sourceTree = "<group>"; };
 		592B389B20DB008400C62977 /* MenuScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MenuScene.h; sourceTree = "<group>"; };
 		592B389C20DB008400C62977 /* MenuScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MenuScene.m; sourceTree = "<group>"; };
 		593F109A21D9CB3A008208E6 /* 346na4n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 346na4n.png; sourceTree = "<group>"; };
@@ -106,6 +111,7 @@
 		5952F876210AFDEF00F3BC5B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		5952F878210E76B000F3BC5B /* starsbackground.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = starsbackground.sks; sourceTree = "<group>"; };
 		5952F88C212F71DD00F3BC5B /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = System/Library/Frameworks/GameplayKit.framework; sourceTree = SDKROOT; };
+		59576E3E2313CC4700E0860C /* desgeegahang.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = desgeegahang.sks; sourceTree = "<group>"; };
 		595C42D620FD3CCD00A47BB8 /* 52089.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 52089.png; sourceTree = "<group>"; };
 		595C42DC20FD418100A47BB8 /* brokendoors.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brokendoors.png; sourceTree = "<group>"; };
 		595D4057216F16C2004A7D24 /* waver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = waver.m; sourceTree = "<group>"; };
@@ -133,6 +139,8 @@
 		5979C75B21447BF700965A50 /* arachnusintroduction.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = arachnusintroduction.sks; sourceTree = "<group>"; };
 		59C0DE1220B91F25008999C3 /* PlayerProjectile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerProjectile.h; sourceTree = "<group>"; };
 		59C0DE1320B91F25008999C3 /* PlayerProjectile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerProjectile.m; sourceTree = "<group>"; };
+		59C57B6E2357E0E80086064C /* levelBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = levelBase.h; sourceTree = "<group>"; };
+		59C57B6F2357E0E80086064C /* levelBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = levelBase.m; sourceTree = "<group>"; };
 		59CE01C021CDCD1D00BF13B1 /* enemyBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = enemyBase.m; sourceTree = "<group>"; };
 		59CE01C221CDCD2F00BF13B1 /* enemyBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = enemyBase.h; sourceTree = "<group>"; };
 		59D7CCF822C066FC00FABB8B /* saveData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = saveData.h; sourceTree = "<group>"; };
@@ -235,6 +243,8 @@
 			children = (
 				59CE01C221CDCD2F00BF13B1 /* enemyBase.h */,
 				59CE01C021CDCD1D00BF13B1 /* enemyBase.m */,
+				5904B05823107F350098A28F /* desgeega.h */,
+				5904B05923107F350098A28F /* desgeega.m */,
 				596F2DA720BFAFAE00B32C47 /* sciserenemy.h */,
 				596F2DA820BFAFAE00B32C47 /* sciserenemy.m */,
 				594F9A3322938D8F008B4795 /* choot.h */,
@@ -268,6 +278,7 @@
 				5952F878210E76B000F3BC5B /* starsbackground.sks */,
 				5979C72D2133E0D400965A50 /* shootingstar.sks */,
 				5979C75B21447BF700965A50 /* arachnusintroduction.sks */,
+				59576E3E2313CC4700E0860C /* desgeegahang.sks */,
 			);
 			name = ParticleEmitters;
 			sourceTree = "<group>";
@@ -275,6 +286,8 @@
 		5979C75F214630F500965A50 /* levels */ = {
 			isa = PBXGroup;
 			children = (
+				59C57B6E2357E0E80086064C /* levelBase.h */,
+				59C57B6F2357E0E80086064C /* levelBase.m */,
 				592B389B20DB008400C62977 /* MenuScene.h */,
 				592B389C20DB008400C62977 /* MenuScene.m */,
 				F275B68A186E0B06009F6E6B /* GameLevelScene.h */,
@@ -494,6 +507,7 @@
 				596F2DAF20C1496400B32C47 /* backgroundobjects.png in Resources */,
 				594F9A302292640B008B4795 /* not-for-profit-2515834-fake-friends.mp3 in Resources */,
 				596F2DAB20C07CF100B32C47 /* floortilesimple.png in Resources */,
+				59576E402313CC4700E0860C /* desgeegahang.sks in Resources */,
 				5979C75A213C79A100965A50 /* crateriaTileSet.png in Resources */,
 				59EE2C1021F5BC6000F8234E /* Launch Screen.storyboard in Resources */,
 				5952F877210AFDEF00F3BC5B /* Main.storyboard in Resources */,
@@ -550,10 +564,12 @@
 				F275B6E3186E25C1009F6E6B /* SKTAudio.m in Sources */,
 				F275B6E4186E25C1009F6E6B /* SKTEffects.m in Sources */,
 				59C0DE1420B91F25008999C3 /* PlayerProjectile.m in Sources */,
+				59C57B702357E0E80086064C /* levelBase.m in Sources */,
 				594F557B20CDE911000E476E /* GameLevelScene2.m in Sources */,
 				596F2DA920BFAFAE00B32C47 /* sciserenemy.m in Sources */,
 				F275B6DE186E25C1009F6E6B /* SKAction+SKTExtras.m in Sources */,
 				595D4058216F16C2004A7D24 /* waver.m in Sources */,
+				5904B05A23107F350098A28F /* desgeega.m in Sources */,
 				59D7CCFA22C066FC00FABB8B /* saveData.m in Sources */,
 				F275B6DF186E25C1009F6E6B /* SKAction+SKTSpecialEffects.m in Sources */,
 				594F9A3222938D83008B4795 /* choot.m in Sources */,
@@ -687,7 +703,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metroidvania/Metroidvania-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Metroidvania/Metroidvania-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -707,7 +723,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metroidvania/Metroidvania-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Metroidvania/Metroidvania-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

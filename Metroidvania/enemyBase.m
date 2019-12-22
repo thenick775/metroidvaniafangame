@@ -28,12 +28,11 @@
     if(self.health<=0){
         [self removeAllActions];
         [self removeAllChildren];
-        //[self removeFromParent];
         __weak enemyBase*weakself=self;
         [self runAction:[SKAction sequence:@[[SKAction fadeOutWithDuration:0.1],[SKAction runBlock:^{[weakself removeFromParent];}]]]];
         [arr removeObject:self];
     }
 }
 
--(void)enemytoplayerandmelee:(GameLevelScene *)scene{}
+-(void)enemytoplayerandmelee:(levelBase *)scene{}
 @end

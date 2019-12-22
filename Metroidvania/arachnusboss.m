@@ -99,11 +99,13 @@
         SKAction *addfiretoparentblk=[SKAction runBlock:^{
             __block CGPoint pointinlevel=[weakself convertPoint:CGPointMake(49,-24) toNode:weakself.parent];
             SKAction *blkac=[SKAction runBlock:^{
+                pointinlevel=CGPointAdd(pointinlevel,CGPointMake(13,0));
+                if(pointinlevel.x>4218 || pointinlevel.x<3495)
+                    return;
                 SKSpriteNode*firecpy=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"Fire1.png"]];
                 firecpy.position=pointinlevel;
                 [weakself.projectilesinaction addObject:firecpy];
                 [firecpy runAction:[SKAction repeatActionForever:fireburnanim]];
-                pointinlevel=CGPointAdd(pointinlevel,CGPointMake(13,0));
                 [weakself.parent addChild:firecpy];
                 [firecpy runAction:[SKAction sequence:@[[SKAction waitForDuration:4.0],fireendanim,[SKAction runBlock:^{[firecpy removeFromParent];[weakself.projectilesinaction removeObject:firecpy];[firecpy removeAllActions];}]]]];
             }];
@@ -123,11 +125,13 @@
         addfiretoparentblk=[SKAction runBlock:^{
             __block CGPoint pointinlevel=[weakself convertPoint:CGPointMake(-49,-24) toNode:weakself.parent];
             SKAction *blkac=[SKAction runBlock:^{
+                pointinlevel=CGPointSubtract(pointinlevel,CGPointMake(13,0));
+                if(pointinlevel.x>4218 || pointinlevel.x<3495)
+                    return;
                 SKSpriteNode*firecpy=[SKSpriteNode spriteNodeWithTexture:[arachnustextures textureNamed:@"Fire1.png"]];
                 firecpy.position=pointinlevel;
                 [weakself.projectilesinaction addObject:firecpy];
                 [firecpy runAction:[SKAction repeatActionForever:fireburnanim]];
-                pointinlevel=CGPointSubtract(pointinlevel,CGPointMake(13,0));
                 [weakself.parent addChild:firecpy];
                 [firecpy runAction:[SKAction sequence:@[[SKAction waitForDuration:4.0],fireendanim,[SKAction runBlock:^{[firecpy removeFromParent];[weakself.projectilesinaction removeObject:firecpy];[firecpy removeAllActions];}]]]];
             }];

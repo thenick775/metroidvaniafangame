@@ -9,10 +9,10 @@
 #import "sciserenemy.h"
 #import "waver.h"
 #import "SKTUtils.h"
-#import "PlayerProjectile.h"
 #import "nettoriboss.h"
 #import "powerupBubble.h"
 #import "choot.h"
+#import "desgeega.h"
 
 @implementation GameLevelScene3{
     SKTextureAtlas*_lvl3assets;
@@ -25,15 +25,12 @@
 -(instancetype)initWithSize:(CGSize)size andVol:(float)vol{
     self = [super initWithSize:size andVol:vol];
     if (self!=nil) {
-        [self.map removeFromParent];
-        self.map=nil;
         self.volume=vol;
         
         self.backgroundColor = [SKColor blackColor];
         self.map = [JSTileMap mapNamed:@"level3.tmx"];
         [self addChild:self.map];
         [saveData editlvlwithval:@3 forsaveslot:[saveData getcurrslot]];
-        //[saveData printcurr];
         [saveData arch];
     
         self.walls=[self.map layerNamed:@"walls"];
@@ -79,10 +76,6 @@
         self.replayimage=[UIImage imageNamed:@"replay5.png"];
         
         //mutable arrays here
-        [self.bullets removeAllObjects];
-        [self.enemies removeAllObjects];
-        self.bullets=[[NSMutableArray alloc]init];
-        self.enemies=[[NSMutableArray alloc]init];
         self.doors=[[NSMutableArray alloc]init];
         
         //scene items here
@@ -143,6 +136,38 @@
         [self.enemies addObject:enemy5];
         [self.map addChild:enemy5];
         
+        choot*enemy6=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*297,self.map.tileSize.height*18) andDist:95 andCount:9 andTime:1.2 Del:5.364];
+        [self.enemies addObject:enemy6];
+        [self.map addChild:enemy6];
+        
+        choot*enemy7=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*301,self.map.tileSize.height*18) andDist:95 andCount:9 andTime:1.25 Del:5.364];
+        [self.enemies addObject:enemy7];
+        [self.map addChild:enemy7];
+        
+        choot*enemy8=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*305,self.map.tileSize.height*18) andDist:95 andCount:9 andTime:1.3 Del:5.364];
+        [self.enemies addObject:enemy8];
+        [self.map addChild:enemy8];
+        
+        choot*enemy9=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*319,self.map.tileSize.height*18) andDist:95 andCount:9 andTime:1.2 Del:5.364];
+        [self.enemies addObject:enemy9];
+        [self.map addChild:enemy9];
+        
+        choot*enemy10=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*323,self.map.tileSize.height*18) andDist:95 andCount:9 andTime:1.25 Del:5.364];
+        [self.enemies addObject:enemy10];
+        [self.map addChild:enemy10];
+        
+        choot*enemy11=[[choot alloc] initWithPos:CGPointMake(self.map.tileSize.width*327,self.map.tileSize.height*18) andDist:95 andCount:9 andTime:1.3 Del:5.364];
+        [self.enemies addObject:enemy11];
+        [self.map addChild:enemy11];
+        
+        desgeega*enemy12=[[desgeega alloc] initWithPosition:CGPointMake(self.map.tileSize.width*234, (self.map.tileSize.height*4)-3) andPosConst:[SKRange rangeWithLowerLimit:self.map.tileSize.width*222 upperLimit:self.map.tileSize.width*282] andJmpHeight:150 andJmpDist:80];
+        [self.enemies addObject:enemy12];
+        [self.map addChild:enemy12];
+        
+        desgeega*enemy13=[[desgeega alloc] initWithPosition:CGPointMake(self.map.tileSize.width*258, (self.map.tileSize.height*11)-3) andPosConst:[SKRange rangeWithLowerLimit:self.map.tileSize.width*255 upperLimit:self.map.tileSize.width*276] andJmpHeight:150 andJmpDist:80];
+        [self.enemies addObject:enemy13];
+        [self.map addChild:enemy13];
+        
         nettori=[[nettoriboss alloc] initWithPosition:CGPointMake(176*self.map.tileSize.width-10, 5*self.map.tileSize.height-2)];
         [self.map addChild:nettori];
         [self.enemies addObject:nettori];
@@ -154,7 +179,8 @@
                 weaknettori.healthlbl.position=CGPointMake((-3.65*(weakself.size.width/10)), weakself.size.height/2-40);
                 [weakself.camera addChild:weaknettori.healthlbl];
                 [weaknettori startAttack];
-                weakself.hasHadBossInterac=YES;
+                //weakself.hasHadBossInterac=YES;
+                [weakself setBossInterac];
                 bossdidenter=YES;
                 [weakself removeActionForKey:@"idlecheck"];
             }
@@ -405,6 +431,15 @@
     return self;
 }
 
+-(void)setBossInterac{
+    //NSLog(@"in set boss interac");
+    if(!self.hasHadBossInterac){
+        //NSLog(@"actually setting boss interac");
+        self.hasHadBossInterac=YES;
+        [saveData editseenbosswithval:YES forsaveslot:[saveData getcurrslot]];
+        [saveData arch];
+    }
+}
 
 /*-(void)dealloc {
     NSLog(@"LVL3 SCENE DEALLOCATED");

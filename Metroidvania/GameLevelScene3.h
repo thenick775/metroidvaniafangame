@@ -5,16 +5,12 @@
 //  Created by nick vancise on 10/29/18.
 //
 
+#import "levelBase.h"
 
-#import <SpriteKit/SpriteKit.h>
-#import "GameLevelScene.h"
-#import "gameaudio.h"
-
-@interface GameLevelScene3 : GameLevelScene
+@interface GameLevelScene3 : levelBase
 
 @property (nonatomic,strong) TMXLayer*background;
 @property (nonatomic,strong) TMXLayer*foreground;
 @property (nonatomic,strong) NSMutableArray*doors;
-@property (nonatomic,assign) bool hasHadBossInterac;
 
 @end

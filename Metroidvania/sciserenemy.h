@@ -9,7 +9,6 @@
 
 @interface sciserenemy : enemyBase
 
-//@property (nonatomic,assign) int health;
 @property (nonatomic,strong) SKSpriteNode *enemybullet1;
 @property (nonatomic,strong) SKSpriteNode *enemybullet2;
 -(instancetype)initWithPos:(CGPoint)sciserpos;

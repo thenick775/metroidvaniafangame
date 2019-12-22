@@ -10,9 +10,7 @@
 #import "honeypot.h"
 #import "arachnusboss.h"
 #import "SKTUtils.h"
-#import "PlayerProjectile.h"
 #import "waver.h"
-#import "gameaudio.h"
 #import "enemyBase.h"
 
 @implementation GameLevelScene2{
@@ -26,14 +24,11 @@
     self=[super initWithSize:size andVol:vol];
     if (self!=nil) {
         //self.view.ignoresSiblingOrder=YES; //for performance optimization every time this class is instanciated
-        [self.map removeFromParent]; //gets rid of super's implementation of my map
-        self.map=nil;
         self.backgroundColor = [SKColor blackColor];
         self.map = [JSTileMap mapNamed:@"level2.tmx"];
         [self addChild:self.map];
         self.volume=vol;
         [saveData editlvlwithval:@2 forsaveslot:[saveData getcurrslot]];
-        //[saveData printcurr];
         [saveData arch];
         
         self.walls=[self.map layerNamed:@"walls"];
@@ -50,7 +45,6 @@
         //player initializiation stuff
         self.player = [[Player alloc] initWithImageNamed:@"samus_standf.png"];
         self.player.position = CGPointMake(100, 150);
-        //self.player.position=CGPointMake(3980-60,100);
         self.player.zPosition = 15;
         self.hasHadBossInterac=NO;
         
@@ -79,12 +73,6 @@
         
         //portal adjust position to suit this level
         self.travelportal.position=CGPointMake(self.map.tileSize.width*391,self.map.tileSize.height*8);
-        
-        //mutable arrays here
-        [self.bullets removeAllObjects];
-        [self.enemies removeAllObjects];
-        self.bullets=[[NSMutableArray alloc]init];
-        self.enemies=[[NSMutableArray alloc]init];
         
         //enemies here
         sciserenemy *enemy=[[sciserenemy alloc] initWithPos:CGPointMake(12.5*self.map.tileSize.width,2.625*self.map.tileSize.height)];
@@ -178,13 +166,15 @@
             //NSLog(@"checking boss idle");
             if(weakself.player.meleeinaction && CGRectIntersectsRect([weakself.player meleeBoundingBoxNormalized],weakboss1.frame) && !bossdidenter){
                 [weakself removeActionForKey:@"backuptimer"];
-                weakself.hasHadBossInterac=YES;
+                //weakself.hasHadBossInterac=YES;
+                [weakself setBossInterac];
                 bossdidenter=YES;
                 [weakself addChild:bossFire];
                 [weakself runAction:bossEntrance];
             }
             else if(weakself.player.position.x>weakboss1.position.x-100 && !bossdidenter && !timerrepeat){
-                weakself.hasHadBossInterac=YES;
+                //weakself.hasHadBossInterac=YES;
+                [weakself setBossInterac];
                 timerrepeat=YES;
                 [weakself runAction:[SKAction sequence:@[[SKAction waitForDuration:13.0],[SKAction runBlock:^{
                 bossdidenter=YES;
@@ -226,6 +216,7 @@
 -(void)continuebuttonpush:(id)sender{
     [[self.view viewWithTag:888] removeFromSuperview];
     [[self.view viewWithTag:4545] removeFromSuperview];
+    [saveData editseenbosswithval:NO forsaveslot:[saveData getcurrslot]];//potential solution, once we transfer to the new level we archive, so no need to archive here
     __weak GameLevelScene2*weakself=self;
     [SKTextureAtlas preloadTextureAtlasesNamed:@[@"lvl3assets",@"Nettori"] withCompletionHandler:^(NSError*error,NSArray*foundatlases){
         GameLevelScene3*preload=[[GameLevelScene3 alloc]initWithSize:weakself.size andVol:weakself.audiomanager.currentVolume/100];
@@ -279,7 +270,7 @@
                 arachnusboss*enemylcop=(arachnusboss*)enemyl;
                 if(CGRectIntersectsRect(CGRectInset(enemylcop.frame,5,0), currbullet.frame)){
                     //NSLog(@"hit an enemy");
-                    enemylcop.health-=enemylcop.health-currbullet.hit;
+                    enemylcop.health-=currbullet.hit;
                     enemylcop.healthlbl.text=[NSString stringWithFormat:@"Boss Health:%d",enemylcop.health];
                     if(enemylcop.health<=0){
                         [self.enemies removeObject:enemylcop];
@@ -323,11 +314,22 @@
                 }
         }
         self.player.position = CGPointMake(3700,150);
+        self.hasHadBossInterac=YES;
        
         idlecheck=[SKAction sequence:@[[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:0.8],idleblk]]]]];
         [self runAction:idlecheck withKey:@"idlecheck"];
     }
     return self;
+}
+
+-(void)setBossInterac{
+    //NSLog(@"in set boss interac");
+    if(!self.hasHadBossInterac){
+        //NSLog(@"actually setting boss interac");
+        self.hasHadBossInterac=YES;
+        [saveData editseenbosswithval:YES forsaveslot:[saveData getcurrslot]];
+        [saveData arch];
+    }
 }
 
 /*- (void)dealloc {
