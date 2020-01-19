@@ -6,6 +6,15 @@ This is a simple 2d platformer fan game, all nintendo art assets do not belong t
 I have written the event driven animation scheme, collission detection, character physics, scene architecture, and game logic. 
 This game is targeted for iphone 8 through XS, and uses a MVC pattern.
 
+![](menuscenedemo_v4.gif)
+
+![](honeypottrackdemo_v4.gif)
+
+![](bossdemo_v3.gif)
+
+![](lvl3demov5.gif)
+
+![](lvl3desroom.gif)
 
 Technical details:
 
@@ -33,16 +42,6 @@ Technical details:
 
 The gifs may take some time to load due to the filesize, any FPS tags are slower than on actual device (gifs captured using third party software).
 
-
-![](menuscenedemo_v4.gif)
-
-![](honeypottrackdemo_v4.gif)
-
-![](bossdemo_v3.gif)
-
-![](lvl3demov5.gif)
-
-![](lvl3desroom.gif)
 
 Credits for art assets ripped by:
 
