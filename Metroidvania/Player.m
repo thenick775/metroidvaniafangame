@@ -117,7 +117,7 @@
             [weakself runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction colorizeWithColor:[SKColor purpleColor] colorBlendFactor:0.7 duration:0.1],[SKAction colorizeWithColorBlendFactor:0.0 duration:0.1]]]] withKey:@"chgini"];
         }];
         
-        self.chargebeamtimer=[SKAction sequence:@[[SKAction group:@[[SKAction waitForDuration:2.0],[SKAction sequence:@[[SKAction waitForDuration:0.9],[SKAction group:@[charge_blk,chargeini]]]]]],[SKAction runBlock:^{[weakself switchbeamto:@"charge"];weakself.chargebeamrunning=YES;
+        self.chargebeamtimer=[SKAction sequence:@[[SKAction group:@[[SKAction waitForDuration:1.7],[SKAction sequence:@[[SKAction waitForDuration:0.5],[SKAction group:@[charge_blk,chargeini]]]]]],[SKAction runBlock:^{[weakself switchbeamto:@"charge"];weakself.chargebeamrunning=YES;
             [weakself removeActionForKey:@"chgini"];
             [weakself runAction:[SKAction repeatActionForever:weakself.damageaction] withKey:@"chgflash"];}]]];//fix timing
         

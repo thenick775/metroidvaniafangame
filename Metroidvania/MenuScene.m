@@ -79,12 +79,16 @@
         
          __weak MenuScene *weakself=self;
         UIBezierPath*starbez=[UIBezierPath bezierPath];
-        [starbez moveToPoint:CGPointMake(-20,self.size.height+5)];
-        [starbez addQuadCurveToPoint:CGPointMake(self.size.width-60,-180) controlPoint:CGPointMake(self.size.width/2+90,self.size.height-20)];
+        __weak UIBezierPath*weakstarbez=starbez;
+        //[starbez moveToPoint:CGPointMake(-20,self.size.height+5)];
+        //[starbez addQuadCurveToPoint:CGPointMake(self.size.width-60,-180) controlPoint:CGPointMake(self.size.width/2+90,self.size.height-20)];
         SKEmitterNode*shootingstar=[SKEmitterNode nodeWithFileNamed:@"shootingstar.sks"];
         shootingstar.particleRenderOrder=SKParticleRenderOrderDontCare;
         shootingstar.targetNode=self;
         SKAction*shootstarblk=[SKAction runBlock:^{
+            int rand=-90 + arc4random_uniform(330);
+            [weakstarbez moveToPoint:CGPointMake(-20-abs((int)(rand*0.75)),weakself.size.height+5)];
+            [weakstarbez addQuadCurveToPoint:CGPointMake(weakself.size.width-60+rand,-180) controlPoint:CGPointMake(weakself.size.width/2+90+rand,weakself.size.height-20)];
             [shootingstar setPaused:NO];
             [shootingstar resetSimulation];
             [weakself addChild:shootingstar];
