@@ -340,6 +340,7 @@
                     
                     self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
                     self.player.onGround=YES;
+                    [self.player stopFalling];
                 }
                 else if(tileindex==1){
                     //tile above the sprite
@@ -372,6 +373,7 @@
                         if(tileindex>4){
                             intersectionheight=pl_tl_intersection.size.height;
                             self.player.onGround=YES;
+                            [self.player stopFalling];
                         }
                         else
                             intersectionheight=-pl_tl_intersection.size.height;

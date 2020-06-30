@@ -10,7 +10,7 @@
 
 @property (nonatomic,assign) CGPoint playervelocity;
 @property (nonatomic,assign) CGPoint desiredPosition;
-@property (nonatomic,assign) BOOL onGround;
+@property (nonatomic,assign) BOOL onGround, falling;
 @property (nonatomic,assign) BOOL shouldJump;
 @property (nonatomic,assign) BOOL goForeward;
 @property (nonatomic,assign) BOOL goBackward;
@@ -21,6 +21,7 @@
 @property (nonatomic,strong) SKAction *runBackwardsAnimation;
 @property (nonatomic,strong) SKAction *jumpForewardsAnimation;
 @property (nonatomic,strong) SKAction *jumpBackwardsAnimation;
+@property (nonatomic,strong) SKAction *fallForwardsAnimation, *fallBackwardsAnimation;
 @property (nonatomic,strong) SKAction *travelthruportalAnimation;
 @property (nonatomic,strong) SKAction *enterfromportalAnimation;
 @property (nonatomic,strong) SKTexture *backwards;
@@ -52,5 +53,7 @@
 -(void)resetTex;
 -(void)switchbeamto:(NSString*)to;
 -(void)removeChargeSpr;
+-(void)stopFalling;
+-(void)startFalling;
 
 @end

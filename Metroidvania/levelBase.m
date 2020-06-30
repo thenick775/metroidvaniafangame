@@ -235,6 +235,7 @@
                     
                     self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
                     self.player.onGround=YES;
+                    [self.player stopFalling];
                     break;
                 case 1:
                     //tile above the sprite
@@ -262,12 +263,13 @@
                       //this is for resolving collision up or down due to ^
                       float intersectionheight;
                       if(thetileGID!=0){
-                      self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
+                          self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
                       }
                       
                       if(tileindex>4){
                         intersectionheight=pl_tl_intersection.size.height;
                         self.player.onGround=YES;
+                        [self.player stopFalling];
                       }
                       else
                         intersectionheight=-pl_tl_intersection.size.height;
@@ -595,20 +597,27 @@
     [self.player removeMovementAnims];
     
     if([self.myjoystick shouldJump:fnctouchlocation] || [self.myjoystick shouldJumpBackward:fnctouchlocation] || [self.myjoystick shouldJumpForeward:fnctouchlocation]){
+        [self.player startFalling];
       //NSLog(@"done touching up");
-      [self.player resetTex];
+      //[self.player resetTex];
     }
     else if([self.myjoystick shouldGoForeward:fnctouchlocation]){
       //NSLog(@"done touching right");
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
-      [self.player resetTex];
+      if(self.player.onGround)
+          [self.player resetTex];
+      else
+          [self.player startFalling];
     }
     else if([self.myjoystick shouldGoBackward:fnctouchlocation]){
       //NSLog(@"done touching left");
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
-      [self.player resetTex];
+      if(self.player.onGround)
+          [self.player resetTex];
+      else
+          [self.player startFalling];
     }
     else if(CGRectContainsPoint(_startbutton.frame, fnctouchlocation)){
       //NSLog(@"do nothing hit the pause");//put here so the melee is not hit
@@ -622,6 +631,8 @@
      // NSLog(@"start firing weapon");
     }
     else if(fnctouchlocation.x>self.camera.frame.size.width/2 && fnctouchlocation.y>self.camera.frame.size.height/2){
+        if(self.player.falling)
+            [self.player stopFalling];
       [self.player runAction:self.player.meleeactionright withKey:@"melee"];
     }
   
