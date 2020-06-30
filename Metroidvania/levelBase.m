@@ -202,7 +202,7 @@
     CGPoint playercoordinate=[self.walls coordForPoint:self.player.desiredPosition];
       
     if(playercoordinate.y >= self.map.mapSize.height-1 ){ //sets gameover if you go below the bottom of the maps y max-1
-      [self gameOver:0];
+      [self gameOver:NO];
       return;
     }
     if(self.player.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-220 && !self.repeating){
@@ -211,7 +211,7 @@
     }
     if(self.travelportal!=NULL && CGRectIntersectsRect(CGRectInset(playerrect,4,6),[self.travelportal collisionBoundingBox])){
         [self.player resetTex];
-        [self.player runAction:[SKAction moveTo:self.travelportal.position duration:1.5] completion:^{[self gameOver:1];}];
+        [self.player runAction:[SKAction moveTo:self.travelportal.position duration:1.5] completion:^{[self gameOver:YES];}];
       return;
     }
 
@@ -299,7 +299,7 @@
       if(CGRectIntersectsRect(CGRectInset(playerrect, 1, 0), hazardtilerect)){
         [self damageRecievedMsg];
         if(self.player.health<=0){
-          [self gameOver:0];
+          [self gameOver:NO];
         }
       }//if rects intersect
     }//if hazard tile
@@ -336,6 +336,8 @@
     else if([self.myjoystick shouldGoForeward:touchlocation]){
       //NSLog(@"touching right control");
       self.player.goForeward=YES;
+      if(self.player.backwardtrack)
+          [self.player runAction:self.player.fallForwardsAnimation withKey:@"fall"];
       
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
@@ -345,6 +347,8 @@
     else if([self.myjoystick shouldGoBackward:touchlocation]){
       //NSLog(@"touching left control");
       self.player.goBackward=YES;
+      if(self.player.forwardtrack)
+          [self.player runAction:self.player.fallBackwardsAnimation withKey:@"fall"];
       
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
@@ -664,7 +668,7 @@
       self.player.health=self.player.health-hit;
       if(self.player.health<=0 && !self.gameOver){
           self.player.health=0;
-          [self gameOver:0];
+          [self gameOver:NO];
       }
       self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
       self.healthbar.size=CGSizeMake((((float)self.player.health/100)*self.healthbarsize), self.healthbar.size.height);

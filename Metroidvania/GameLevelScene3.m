@@ -304,7 +304,7 @@
         
         
         if(playercoordinate.y >= self.map.mapSize.height-1 ){ //sets gameover if you go below the bottom of the maps y max-1
-            [self gameOver:0];
+            [self gameOver:NO];
             return;
         }
         if(self.player.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-220 && !self.repeating){
@@ -313,7 +313,7 @@
         }
         if(self.travelportal!=NULL && CGRectIntersectsRect(CGRectInset(playerrect,4,6),[self.travelportal collisionBoundingBox])){
             [self.player resetTex];
-            [self.player runAction:[SKAction moveTo:self.travelportal.position duration:1.5] completion:^{[self gameOver:1];}];
+            [self.player runAction:[SKAction moveTo:self.travelportal.position duration:1.5] completion:^{[self gameOver:YES];}];
             return;
         }
         
@@ -402,15 +402,15 @@
             if(CGRectIntersectsRect(CGRectInset(playerrect, 1, 0), hazardtilerect)){
                 [self damageRecievedMsg];
                 if(self.player.health<=0){
-                    [self gameOver:0];
+                    [self gameOver:NO];
                 }
             }//if rects intersect
         }//if hazard tile
         
         if(tileindex==3 || tileindex==5 || tileindex==1 || tileindex==7){
-        for(door*tmpdoor in self.doors){
-            [tmpdoor handleCollisionsWithPlayer:self.player];
-        }
+            for(door*tmpdoor in self.doors){
+                [tmpdoor handleCollisionsWithPlayer:self.player];
+            }
         }
         
     }//for loop bracket
