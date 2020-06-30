@@ -260,11 +260,12 @@
     if(self.falling){
         self.falling=NO;
         [self removeActionForKey:@"fall"];
-        [self resetTex];
         if(self.goForeward)
             [self runAction:self.runAnimation withKey:@"runf"];
         else if(self.goBackward)
             [self runAction:self.runBackwardsAnimation withKey:@"runb"];
+        else
+            [self resetTex];
     }
 }
 

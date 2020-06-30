@@ -312,6 +312,7 @@
             self.repeating=YES;
         }
         if(self.travelportal!=NULL && CGRectIntersectsRect(CGRectInset(playerrect,4,6),[self.travelportal collisionBoundingBox])){
+            [self.player resetTex];
             [self.player runAction:[SKAction moveTo:self.travelportal.position duration:1.5] completion:^{[self gameOver:1];}];
             return;
         }
