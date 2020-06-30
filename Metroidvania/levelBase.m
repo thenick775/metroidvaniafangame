@@ -338,8 +338,8 @@
       
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
-      
-      [self.player runAction:self.player.runAnimation withKey:@"runf"];
+      if(!self.player.falling)
+          [self.player runAction:self.player.runAnimation withKey:@"runf"];
     }
     else if([self.myjoystick shouldGoBackward:touchlocation]){
       //NSLog(@"touching left control");
@@ -347,11 +347,12 @@
       
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
-      
-      [self.player runAction:self.player.runBackwardsAnimation withKey:@"runb"];
+      if(!self.player.falling)
+          [self.player runAction:self.player.runBackwardsAnimation withKey:@"runb"];
     }
     else if([self.myjoystick shouldJump:touchlocation]){
       self.player.shouldJump=YES;
+      self.player.falling=NO;
       if(self.player.forwardtrack)
         [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       else
@@ -362,6 +363,7 @@
       self.player.goForeward=YES;
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
+      self.player.falling=NO;
       [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
     }
     else if([self.myjoystick shouldJumpBackward:touchlocation]){
@@ -369,6 +371,7 @@
       self.player.goBackward=YES;
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
+      self.player.falling=NO;
       [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
     }
     else if(touchlocation.x>self.camera.frame.size.width/2 && touchlocation.y<self.camera.frame.size.height/2){

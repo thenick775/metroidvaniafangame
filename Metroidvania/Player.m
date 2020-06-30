@@ -200,11 +200,13 @@
     }
     if(self.goForeward){
         self.playervelocity=CGPointAdd(self.playervelocity, forewardStep);
-        self.texture=self.forewards;
+        if(!self.falling)
+            self.texture=self.forewards;
     }
     if(self.goBackward){
         self.playervelocity=CGPointAdd(self.playervelocity, backwardStep);
-        self.texture=self.backwards;
+        if(!self.falling)
+            self.texture=self.backwards;
     }
     
     self.playervelocity=CGPointMake(Clamp(self.playervelocity.x, _minmovement.x, _maxmovement.x), Clamp(self.playervelocity.y, _minmovement.y, _maxmovement.y));
@@ -245,11 +247,13 @@
 }
 
 -(void)startFalling{
-    self.falling=YES;
-    if(self.forwardtrack)
-        [self runAction:self.fallForwardsAnimation withKey:@"fall"];
-    else if(self.backwardtrack)
-        [self runAction:self.fallBackwardsAnimation withKey:@"fall"];
+    if(!self.falling){
+        self.falling=YES;
+        if(self.forwardtrack)
+            [self runAction:self.fallForwardsAnimation withKey:@"fall"];
+        else if(self.backwardtrack)
+            [self runAction:self.fallBackwardsAnimation withKey:@"fall"];
+    }
 }
 
 -(void)stopFalling{
@@ -257,6 +261,10 @@
         self.falling=NO;
         [self removeActionForKey:@"fall"];
         [self resetTex];
+        if(self.goForeward)
+            [self runAction:self.runAnimation withKey:@"runf"];
+        else if(self.goBackward)
+            [self runAction:self.runBackwardsAnimation withKey:@"runb"];
     }
 }
 

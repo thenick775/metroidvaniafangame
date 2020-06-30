@@ -116,7 +116,7 @@
         [self.doors addObject:door5];
         
         door *door6=[[door alloc] initWithTextureAtlas:_lvl3assets hasMarker:YES andNames:@[@"bluedoor1.png",@"bluedoor2.png",@"bluedoor3.png",@"bluedoor4.png",@"bluedoor5.png",@"marker",@"bluedoormeniscus1.png",@"bluedoormeniscus2.png",@"bluedoormeniscus3.png",@"bluedoormeniscus4.png",@"doormeniscus5.png"]];
-        door6.position=CGPointMake(418.5*self.map.tileSize.width, 8*self.map.tileSize.height);//???
+        door6.position=CGPointMake(418*self.map.tileSize.width, 8*self.map.tileSize.height);//???
         [self.map addChild:door6];
         [self.doors addObject:door6];
         
