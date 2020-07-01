@@ -43,38 +43,38 @@ Technical details:
 The gifs may take some time to load due to the filesize, any FPS tags are slower than on actual device (gifs captured using third party software).
 
 
-Credits for art assets ripped by:
+    Credits for art assets ripped by:
 
-Garact Jownson-Some background objects from metroid fusion
+    Garact Jownson-Some background objects from metroid fusion
 
-Midiwaffle-Crateria tileset
+    Midiwaffle-Crateria tileset
 
-FlamingCobra-TRO Tileset
+    FlamingCobra-TRO Tileset
 
-B Hopkins & Captain Invictus-samus normal suit
+    B Hopkins & Captain Invictus-samus normal suit
 
-Ray Wenderlich.com-Base super mario assets (1st lvl)
+    Ray Wenderlich.com-Base super mario assets (1st lvl)
 
-Tommy Lee-"honeypot" walking cactus enemy, metroid sprite (used as volume slider)
+    Tommy Lee-"honeypot" walking cactus enemy, metroid sprite (used as volume slider)
 
-N-finity-Arachnus boss, Waver enemy, Choot enemy, Sciser enemy, Nettori boss
+    N-finity-Arachnus boss, Waver enemy, Choot enemy, Sciser enemy, Nettori boss
 
-ansimuz-Space parallax backround (menu scene background)
+    ansimuz-Space parallax backround (menu scene background)
 
-Bob Bobium-Human Station Menuscene (space colony ceres), Door sprites
+    Bob Bobium-Human Station Menuscene (space colony ceres), Door sprites
 
-Greiga Master-Chozo Statue, Nettori boss, Dessgeega
+    Greiga Master-Chozo Statue, Nettori boss, Dessgeega
 
-Cha0sMiles07 & Ngamer-Samus Projectile sprites
+    Cha0sMiles07 & Ngamer-Samus Projectile sprites
 
-Some labels were made using fontmeme.com
+    Some labels were made using fontmeme.com
 
-Credit for music:
+    Credit for music:
 
-BurghRecords-Dystopian Future Fx Sounds (used in menuscene, background music) liscensed under Creative Commons 0 Liscense
+    BurghRecords-Dystopian Future Fx Sounds (used in menuscene, background music) liscensed under Creative Commons 0 Liscense
 
-Micah Young-Lost Moon's Grateful Eights (used in lvl1, background music) liscensed under Creative Commons Attribution Liscense
+    Micah Young-Lost Moon's Grateful Eights (used in lvl1, background music) liscensed under Creative Commons Attribution Liscense
 
-Yung Kartz-Lonely, Aye licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License.
+    Yung Kartz-Lonely, Aye licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License.
 
-254beats-Trap-2017, Trap Beat 2017 Dope Rap_Trap Instrumental sourced from Mdundo
+    254beats-Trap-2017, Trap Beat 2017 Dope Rap_Trap Instrumental sourced from Mdundo
