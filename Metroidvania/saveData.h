@@ -30,7 +30,6 @@
 +(void)arch;
 +(void)unarch;
 +(void)reset_slot:(int)slot;
-+(void)delete_vals;//for developer testing at the moment
 
 @end
 

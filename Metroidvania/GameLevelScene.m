@@ -20,8 +20,6 @@
 
 @implementation GameLevelScene{
   UIButton *_continuebutton,*_replaybutton;
-  //SKSpriteNode *won,*died;
-  //SKSpriteNode*_pauselabel,*_unpauselabel,*_controlslabel,*_startbutton,*_mask;
   UITextView *_controlstext;
 }
 
@@ -110,12 +108,7 @@
     waver*enemy3=[[waver alloc] initWithPosition:CGPointMake(160*self.map.tileSize.width, 8*self.map.tileSize.height) xRange:350 yRange:20];
     [self.enemies addObject:enemy3];
     [self.map addChild:enemy3];
-    
-    //door stuff here
-    //self.repeating=NO;
-    //self.stayPaused=NO;
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setStayPaused) name:@"stayPausedNotification" object:nil];//notification listening for stayPausedNotification
-    
+        
   }
   return self;
 }

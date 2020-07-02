@@ -101,12 +101,6 @@
     mydat.progarr[slot]=@"empty";
 }
 
-+(void)delete_vals{//for developer testing at the moment, reset functions should be implemented
-    NSLog(@"in delete vals");
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"Tot_dat_key"];
-}
-
-
 @end
 
 @implementation saveCellManager

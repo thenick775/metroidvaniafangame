@@ -336,7 +336,7 @@
     else if([self.myjoystick shouldGoForeward:touchlocation]){
       //NSLog(@"touching right control");
       self.player.goForeward=YES;
-      if(self.player.backwardtrack)
+      if(self.player.backwardtrack && self.player.falling)
           [self.player runAction:self.player.fallForwardsAnimation withKey:@"fall"];
       
       self.player.forwardtrack=YES;
@@ -347,7 +347,7 @@
     else if([self.myjoystick shouldGoBackward:touchlocation]){
       //NSLog(@"touching left control");
       self.player.goBackward=YES;
-      if(self.player.forwardtrack)
+      if(self.player.forwardtrack && self.player.falling)
           [self.player runAction:self.player.fallBackwardsAnimation withKey:@"fall"];
       
       self.player.backwardtrack=YES;

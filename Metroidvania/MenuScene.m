@@ -192,6 +192,8 @@
         shipflames1=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"gunshipflames1.png"]];
         shipflamesright2=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"gunshipflamesright2.png"]];
         shipflamesleft2=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"gunshipflamesleft2.png"]];
+        SKSpriteNode *shipflamesrightinner=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"gunshipflamesright2.png"]];
+        SKSpriteNode *shipflamesleftinner=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"gunshipflamesleft2.png"]];
         
         
         shipreducesize=[SKAction scaleTo:0 duration:1.8];
@@ -203,9 +205,13 @@
         
         
         samusgunship.position=CGPointMake(-15,-15);
-        shipflamesright2.position=CGPointMake(25,-8);
-        shipflamesleft2.position=CGPointMake(-25,-8);
+        shipflamesrightinner.position=CGPointMake(25,-8);
+        shipflamesleftinner.position=CGPointMake(-25,-8);
+        shipflamesright2.position=CGPointMake(33,-12);
+        shipflamesleft2.position=CGPointMake(-33,-12);
         [samusgunship addChild:shipflames1];
+        [samusgunship addChild:shipflamesrightinner];
+        [samusgunship addChild:shipflamesleftinner];
         [samusgunship addChild:shipflamesright2];
         [samusgunship addChild:shipflamesleft2];
         [self addChild:samusgunship];
