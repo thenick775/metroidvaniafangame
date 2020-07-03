@@ -13,6 +13,7 @@
 #import "powerupBubble.h"
 #import "choot.h"
 #import "desgeega.h"
+#import "spacepirate.h"
 
 @implementation GameLevelScene3{
     SKTextureAtlas*_lvl3assets;
@@ -181,6 +182,10 @@
         nettori=[[nettoriboss alloc] initWithPosition:CGPointMake(176*self.map.tileSize.width-10, 5*self.map.tileSize.height-2)];
         [self.map addChild:nettori];
         [self.enemies addObject:nettori];
+        
+        spacepirate*enemy14=[[spacepirate alloc] initWithPosition:CGPointMake(self.map.tileSize.width*518, self.map.tileSize.height*9.5) onWall:NO];
+        [self.enemies addObject:enemy14];
+        [self.map addChild:enemy14];
         
         __block BOOL bossdidenter=NO;
         __weak nettoriboss*weaknettori=nettori;
