@@ -66,6 +66,8 @@ The gifs may take some time to load due to the filesize, any FPS tags are slower
     Greiga Master-Chozo Statue, Nettori boss, Dessgeega
 
     Cha0sMiles07 & Ngamer-Samus Projectile sprites
+    
+    Rogultgot-Space Pirate sprites
 
     Some labels were made using fontmeme.com
 
