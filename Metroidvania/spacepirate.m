@@ -31,8 +31,20 @@
         _runb=[SKAction sequence:@[[SKAction scaleXTo:-1 duration:0],[SKAction group:@[[SKAction moveByX:-45 y:0 duration:0.9],runfbase]],[SKAction scaleXTo:1 duration:0]]];
         
         SKAction *jumpbase=[SKAction animateWithTextures:@[[_spacepirateatlas textureNamed:@"spacepirate10.png"],[_spacepirateatlas textureNamed:@"spacepirate11.png"],[_spacepirateatlas textureNamed:@"spacepirate12.png"],[_spacepirateatlas textureNamed:@"spacepirate13.png"],[_spacepirateatlas textureNamed:@"spacepirate14.png"],[_spacepirateatlas textureNamed:@"spacepirate15.png"],[_spacepirateatlas textureNamed:@"spacepirate16.png"],[_spacepirateatlas textureNamed:@"spacepirate17.png"],[_spacepirateatlas textureNamed:@"spacepirate18.png"],[_spacepirateatlas textureNamed:@"spacepirate19.png"]] timePerFrame:0.12 resize:YES restore:NO];
-        _jumpf=[SKAction group:@[jumpbase]];
-        _jumpb=[SKAction sequence:@[[SKAction scaleXTo:-1 duration:0],jumpbase,[SKAction scaleXTo:1 duration:0]]];
+        
+        __weak spacepirate *weakself=self;
+        __block bool jumpdirec = false; //forwards
+        
+        SKAction *jumpdirecf=[SKAction runBlock:^{jumpdirec=false;}];
+        SKAction *jumpdirecb=[SKAction runBlock:^{jumpdirec=true;}];
+        SKAction *jumpmove=[SKAction runBlock:^{
+            UIBezierPath *jumppath1=[UIBezierPath bezierPath];
+            [jumppath1 moveToPoint:CGPointMake(0, 0)];
+            [jumppath1 addQuadCurveToPoint:CGPointMake(jumpdirec?-50:50, 0) controlPoint:CGPointMake(jumpdirec?-25:25, 50)];
+            [weakself runAction:[SKAction sequence:@[[SKAction waitForDuration:0.5],[SKAction followPath:jumppath1.CGPath asOffset:YES orientToPath:NO duration:0.8]]] completion:^{}];
+        }];
+        _jumpf=[SKAction sequence:@[jumpdirecf,[SKAction group:@[jumpbase,jumpmove]]]];
+        _jumpb=[SKAction sequence:@[[SKAction scaleXTo:-1 duration:0],jumpdirecb,[SKAction group:@[jumpbase,jumpmove]],[SKAction scaleXTo:1 duration:0]]];
         
         SKAction *crawlbbase=[SKAction group:@[[SKAction sequence:@[[SKAction moveByX:0 y:-15 duration:0.25],[SKAction waitForDuration:1.35],[SKAction moveByX:0 y:15 duration:0.05]]],[SKAction animateWithTextures:@[[_spacepirateatlas textureNamed:@"spacepirate20.png"],[_spacepirateatlas textureNamed:@"spacepirate21.png"],[_spacepirateatlas textureNamed:@"spacepirate22.png"],[_spacepirateatlas textureNamed:@"spacepirate23.png"],[_spacepirateatlas textureNamed:@"spacepirate24.png"],[_spacepirateatlas textureNamed:@"spacepirate25.png"],[_spacepirateatlas textureNamed:@"spacepirate26.png"],[_spacepirateatlas textureNamed:@"spacepirate27.png"],[_spacepirateatlas textureNamed:@"spacepirate28.png"],[_spacepirateatlas textureNamed:@"spacepirate29.png"],[_spacepirateatlas textureNamed:@"spacepirate30.png"],[_spacepirateatlas textureNamed:@"spacepirate31.png"]] timePerFrame:0.12 resize:YES restore:NO]]];
         
@@ -42,7 +54,7 @@
         _turnlr=[SKAction animateWithTextures:@[[_spacepirateatlas textureNamed:@"spacepirate32.png"],[_spacepirateatlas textureNamed:@"spacepirate33.png"],[_spacepirateatlas textureNamed:@"spacepirate34.png"],[_spacepirateatlas textureNamed:@"spacepirate35.png"],[_spacepirateatlas textureNamed:@"spacepirate36.png"],[_spacepirateatlas textureNamed:@"spacepirate37.png"],[_spacepirateatlas textureNamed:@"spacepirate38.png"],[_spacepirateatlas textureNamed:@"spacepirate39.png"],[_spacepirateatlas textureNamed:@"spacepirate40.png"],[_spacepirateatlas textureNamed:@"spacepirate41.png"],[_spacepirateatlas textureNamed:@"spacepirate42.png"],[_spacepirateatlas textureNamed:@"spacepirate43.png"]] timePerFrame:0.10 resize:YES restore:NO];
         _turnrl=_turnlr.reversedAction;
         
-        __weak spacepirate*weakself=self;
+        //__weak spacepirate*weakself=self;
         SKAction *fireregbase=[SKAction animateWithTextures:@[[_spacepirateatlas textureNamed:@"spacepirate44.png"],[_spacepirateatlas textureNamed:@"spacepirate45.png"],[_spacepirateatlas textureNamed:@"spacepirate46.png"],[_spacepirateatlas textureNamed:@"spacepirate47.png"],[_spacepirateatlas textureNamed:@"spacepirate48.png"],[_spacepirateatlas textureNamed:@"spacepirate49.png"],[_spacepirateatlas textureNamed:@"spacepirate50.png"]] timePerFrame:0.13 resize:YES restore:NO];
         _fireregf=[SKAction group:@[fireregbase,[SKAction sequence:@[[SKAction waitForDuration:0.6],[SKAction runBlock:^{[weakself fireProjectile:1];}]]]]];
         _fireregb=[SKAction group:@[[SKAction sequence:@[[SKAction scaleXTo:-1 duration:0],fireregbase,[SKAction scaleXTo:1 duration:0]]],[SKAction sequence:@[[SKAction waitForDuration:0.6],[SKAction runBlock:^{[weakself fireProjectile:0];}]]]]];

@@ -339,7 +339,7 @@
     __weak NSArray *weaktexturesforlvl=texturesforlvl[p];
     __weak saveCellManager *weaksavebkrnd=_savebkrnd;
     
-    preload=[saveData getseenbossfromslot:p] ? [[self setupscenefromslot:p] initNearBossWithSize:nextSceneSize andVol:0.35] : [[self setupscenefromslot:p] initWithSize:nextSceneSize andVol:[saveData getvolume]];
+    preload=[saveData getseenbossfromslot:p] ? [[self setupscenefromslot:p] initNearBossWithSize:nextSceneSize andVol:[saveData getvolume]] : [[self setupscenefromslot:p] initWithSize:nextSceneSize andVol:[saveData getvolume]];
     
     preload.scaleMode = SKSceneScaleModeAspectFill;
     self.userInteractionEnabled=NO;
