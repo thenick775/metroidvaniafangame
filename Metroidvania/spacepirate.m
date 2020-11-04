@@ -10,7 +10,7 @@
 @implementation spacepirate{
     SKTextureAtlas *_spacepirateatlas;
     NSMutableArray *_projectilesInAction;
-    SKAction *_runf,*_jumpf,*_crawlb,*_turnlr,*_fireregf,*_fireupf,*_firedownf,*_wallfiref,*_wallcrawlbb; //origionals
+    SKAction *_runf,*_jumpf,*_jumpb,*_crawlb,*_turnlr,*_fireregf,*_fireupf,*_firedownf,*_wallfiref,*_wallcrawlbb; //origionals
     SKAction *_wallcrawlbf,*_runb,*_crawlf,*_turnrl,*_wallfireb,*_fireregb,*_fireupb,*_firedownb,*_wallcrawlfb,*_wallcrawlff; //based on existing animations
 }
 
@@ -30,7 +30,9 @@
         _runf=[SKAction group:@[[SKAction moveByX:45 y:0 duration:0.9],runfbase]];
         _runb=[SKAction sequence:@[[SKAction scaleXTo:-1 duration:0],[SKAction group:@[[SKAction moveByX:-45 y:0 duration:0.9],runfbase]],[SKAction scaleXTo:1 duration:0]]];
         
-        _jumpf=[SKAction animateWithTextures:@[[_spacepirateatlas textureNamed:@"spacepirate10.png"],[_spacepirateatlas textureNamed:@"spacepirate11.png"],[_spacepirateatlas textureNamed:@"spacepirate12.png"],[_spacepirateatlas textureNamed:@"spacepirate13.png"],[_spacepirateatlas textureNamed:@"spacepirate14.png"],[_spacepirateatlas textureNamed:@"spacepirate15.png"],[_spacepirateatlas textureNamed:@"spacepirate16.png"],[_spacepirateatlas textureNamed:@"spacepirate17.png"],[_spacepirateatlas textureNamed:@"spacepirate18.png"],[_spacepirateatlas textureNamed:@"spacepirate19.png"]] timePerFrame:0.12 resize:YES restore:NO];
+        SKAction *jumpbase=[SKAction animateWithTextures:@[[_spacepirateatlas textureNamed:@"spacepirate10.png"],[_spacepirateatlas textureNamed:@"spacepirate11.png"],[_spacepirateatlas textureNamed:@"spacepirate12.png"],[_spacepirateatlas textureNamed:@"spacepirate13.png"],[_spacepirateatlas textureNamed:@"spacepirate14.png"],[_spacepirateatlas textureNamed:@"spacepirate15.png"],[_spacepirateatlas textureNamed:@"spacepirate16.png"],[_spacepirateatlas textureNamed:@"spacepirate17.png"],[_spacepirateatlas textureNamed:@"spacepirate18.png"],[_spacepirateatlas textureNamed:@"spacepirate19.png"]] timePerFrame:0.12 resize:YES restore:NO];
+        _jumpf=[SKAction group:@[jumpbase]];
+        _jumpb=[SKAction sequence:@[[SKAction scaleXTo:-1 duration:0],jumpbase,[SKAction scaleXTo:1 duration:0]]];
         
         SKAction *crawlbbase=[SKAction group:@[[SKAction sequence:@[[SKAction moveByX:0 y:-15 duration:0.25],[SKAction waitForDuration:1.35],[SKAction moveByX:0 y:15 duration:0.05]]],[SKAction animateWithTextures:@[[_spacepirateatlas textureNamed:@"spacepirate20.png"],[_spacepirateatlas textureNamed:@"spacepirate21.png"],[_spacepirateatlas textureNamed:@"spacepirate22.png"],[_spacepirateatlas textureNamed:@"spacepirate23.png"],[_spacepirateatlas textureNamed:@"spacepirate24.png"],[_spacepirateatlas textureNamed:@"spacepirate25.png"],[_spacepirateatlas textureNamed:@"spacepirate26.png"],[_spacepirateatlas textureNamed:@"spacepirate27.png"],[_spacepirateatlas textureNamed:@"spacepirate28.png"],[_spacepirateatlas textureNamed:@"spacepirate29.png"],[_spacepirateatlas textureNamed:@"spacepirate30.png"],[_spacepirateatlas textureNamed:@"spacepirate31.png"]] timePerFrame:0.12 resize:YES restore:NO]]];
         
@@ -51,8 +53,9 @@
         _firedownf=[SKAction animateWithTextures:@[[_spacepirateatlas textureNamed:@"spacepirate58.png"],[_spacepirateatlas textureNamed:@"spacepirate59.png"],[_spacepirateatlas textureNamed:@"spacepirate60.png"],[_spacepirateatlas textureNamed:@"spacepirate61.png"],[_spacepirateatlas textureNamed:@"spacepirate62.png"],[_spacepirateatlas textureNamed:@"spacepirate63.png"],[_spacepirateatlas textureNamed:@"spacepirate64.png"],[_spacepirateatlas textureNamed:@"spacepirate65.png"]] timePerFrame:0.13 resize:YES restore:NO];
         _firedownb=[SKAction sequence:@[[SKAction scaleXTo:-1 duration:0],_firedownf,[SKAction scaleXTo:1 duration:0]]];
          
-        _wallfiref=[SKAction animateWithTextures:@[[_spacepirateatlas textureNamed:@"spacepirate66.png"],[_spacepirateatlas textureNamed:@"spacepirate67.png"],[_spacepirateatlas textureNamed:@"spacepirate68.png"],[_spacepirateatlas textureNamed:@"spacepirate69.png"],[_spacepirateatlas textureNamed:@"spacepirate70.png"],[_spacepirateatlas textureNamed:@"spacepirate71.png"],[_spacepirateatlas textureNamed:@"spacepirate72.png"]] timePerFrame:0.13 resize:YES restore:NO];
-        _wallfireb=[SKAction sequence:@[[SKAction scaleXTo:-1 duration:0],_wallfiref,[SKAction scaleXTo:1 duration:0]]];
+        SKAction *wallfirebase=[SKAction animateWithTextures:@[[_spacepirateatlas textureNamed:@"spacepirate66.png"],[_spacepirateatlas textureNamed:@"spacepirate67.png"],[_spacepirateatlas textureNamed:@"spacepirate68.png"],[_spacepirateatlas textureNamed:@"spacepirate69.png"],[_spacepirateatlas textureNamed:@"spacepirate70.png"],[_spacepirateatlas textureNamed:@"spacepirate71.png"],[_spacepirateatlas textureNamed:@"spacepirate72.png"]] timePerFrame:0.13 resize:YES restore:NO];
+        _wallfiref=[SKAction group:@[wallfirebase,[SKAction sequence:@[[SKAction waitForDuration:0.6],[SKAction runBlock:^{[weakself fireProjectile:1];}]]]]];
+        _wallfireb=[SKAction sequence:@[[SKAction scaleXTo:-1 duration:0],[SKAction group:@[wallfirebase,[SKAction sequence:@[[SKAction waitForDuration:0.6],[SKAction runBlock:^{[weakself fireProjectile:0];}]]]]],[SKAction scaleXTo:1 duration:0]]];
          
         SKAction *wallcrawlbbbase=[SKAction animateWithTextures:@[[_spacepirateatlas textureNamed:@"spacepirate73.png"],[_spacepirateatlas textureNamed:@"spacepirate74.png"],[_spacepirateatlas textureNamed:@"spacepirate75.png"],[_spacepirateatlas textureNamed:@"spacepirate76.png"],[_spacepirateatlas textureNamed:@"spacepirate77.png"],[_spacepirateatlas textureNamed:@"spacepirate78.png"],[_spacepirateatlas textureNamed:@"spacepirate79.png"],[_spacepirateatlas textureNamed:@"spacepirate80.png"],[_spacepirateatlas textureNamed:@"spacepirate81.png"]] timePerFrame:0.12 resize:YES restore:NO];
         
@@ -67,7 +70,7 @@
             
         }
         
-        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[_runf,_runb,_jumpf,_crawlb,_crawlf,_turnlr,_turnrl,_fireregf,_fireregb,_fireupf,_fireupb,_firedownf,_firedownb,_wallfiref,_wallfireb,_wallcrawlbb,_wallcrawlbf,_wallcrawlfb,_wallcrawlff]]]];//test animations
+        [self runAction:[SKAction repeatActionForever:[SKAction sequence:@[_runf,_runb,_jumpf,_jumpb,_crawlb,_crawlf,_turnlr,_turnrl,_fireregf,_fireregb,_fireupf,_fireupb,_firedownf,_firedownb,_wallfiref,_wallfireb,_wallcrawlbb,_wallcrawlbf,_wallcrawlfb,_wallcrawlff]]]];//test animations
  
     }
     return self;
@@ -104,7 +107,7 @@
         [scene.player runAction:scene.player.meleedelayac];
         [self hitByMeleeWithArrayToRemoveFrom:scene.enemies];
     }
-    NSLog(@"proj in action: %lu",(unsigned long)_projectilesInAction.count);
+    //NSLog(@"proj in action: %lu",(unsigned long)_projectilesInAction.count);
     for(SKSpriteNode*tmp in _projectilesInAction.reverseObjectEnumerator){
         if(CGRectContainsPoint(scene.player.frame,tmp.position)){
             [scene enemyhitplayerdmgmsg:10];

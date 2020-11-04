@@ -16,6 +16,7 @@
 @property (strong,nonatomic) NSMutableArray*seenbossarr;  //These should not be accessed directly
 @property (strong,nonatomic) NSMutableArray*progarr;
 @property (assign,nonatomic) int currentslot;
+@property (assign,nonatomic) float currentvolume;
 
 +(instancetype)sharedInstance;
 +(void)editlvlwithval:(NSNumber*)val forsaveslot:(int)slot;
@@ -30,6 +31,8 @@
 +(void)arch;
 +(void)unarch;
 +(void)reset_slot:(int)slot;
++(void)editvolumewithval:(float)val;
++(float)getvolume;
 
 @end
 

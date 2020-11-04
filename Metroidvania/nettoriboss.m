@@ -155,7 +155,6 @@
 
 -(void)enemytoplayerandmelee:(GameLevelScene *)scene{
     [self updateWithDeltaTime:scene.delta];
-    //nettoriboss*boss=(nettoriboss*)enemycon;
     for(netprojbase*tmp in [self.projectilesInAction reverseObjectEnumerator]){
         if(!self.dead && tmp.canGiveDmg && CGRectIntersectsRect(tmp.frame, CGRectMake([scene convertPoint:scene.player.frame.origin toNode:tmp.parent].x, [scene convertPoint:scene.player.frame.origin toNode:tmp.parent].y, scene.player.frame.size.width, scene.player.frame.size.height))){
             [scene enemyhitplayerdmgmsg:tmp.dmgamt];

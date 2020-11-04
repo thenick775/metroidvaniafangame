@@ -702,6 +702,7 @@
   UISlider*tmpslider=(UISlider*)sender;
   self.audiomanager.bkgrndmusic.volume=tmpslider.value/100;
   self.audiomanager.currentVolume=tmpslider.value;
+  [saveData editvolumewithval:tmpslider.value/100];
 }
 
 -(void)pausegame{

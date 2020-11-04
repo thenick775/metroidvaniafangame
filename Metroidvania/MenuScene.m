@@ -236,7 +236,7 @@
         [self addChild:_savebkrnd];
         
         audiomanager=[gameaudio alloc];
-        [audiomanager runBkgrndMusicForlvl:0 andVol:0.6];
+        [audiomanager runBkgrndMusicForlvl:0 andVol:[saveData getvolume]];
     }
     return self;
 }
@@ -339,7 +339,7 @@
     __weak NSArray *weaktexturesforlvl=texturesforlvl[p];
     __weak saveCellManager *weaksavebkrnd=_savebkrnd;
     
-    preload=[saveData getseenbossfromslot:p] ? [[self setupscenefromslot:p] initNearBossWithSize:nextSceneSize andVol:0.35] : [[self setupscenefromslot:p] initWithSize:nextSceneSize andVol:0.35];
+    preload=[saveData getseenbossfromslot:p] ? [[self setupscenefromslot:p] initNearBossWithSize:nextSceneSize andVol:0.35] : [[self setupscenefromslot:p] initWithSize:nextSceneSize andVol:[saveData getvolume]];
     
     preload.scaleMode = SKSceneScaleModeAspectFill;
     self.userInteractionEnabled=NO;
