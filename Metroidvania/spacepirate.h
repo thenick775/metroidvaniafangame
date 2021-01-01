@@ -6,9 +6,10 @@
 //
 
 #import "enemyBase.h"
+#import <GameplayKit/GameplayKit.h>
 
 @interface spacepirate : enemyBase
 
--(instancetype)initWithPosition:(CGPoint)pos onWall:(BOOL)onwall;
+-(instancetype)initWithPosition:(CGPoint)pos onWall:(BOOL)onwall withOrientation:(BOOL)orientation;
 
 @end

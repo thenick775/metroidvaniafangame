@@ -126,6 +126,11 @@
         [self.map addChild:door7];
         [self.doors addObject:door7];
         
+        door *door8=[[door alloc] initWithTextureAtlas:_lvl3assets hasMarker:YES andNames:@[@"bluedoor1.png",@"bluedoor2.png",@"bluedoor3.png",@"bluedoor4.png",@"bluedoor5.png",@"marker",@"bluedoormeniscus1.png",@"bluedoormeniscus2.png",@"bluedoormeniscus3.png",@"bluedoormeniscus4.png",@"doormeniscus5.png"]];
+        door8.position=CGPointMake(581.2*self.map.tileSize.width, 27*self.map.tileSize.height);
+        [self.map addChild:door8];
+        [self.doors addObject:door8];
+        
         //enemies here
         waver*enemy1=[[waver alloc] initWithPosition:CGPointMake(107*self.map.tileSize.width, 8*self.map.tileSize.height) xRange:350 yRange:15];
         [self.enemies addObject:enemy1];
@@ -183,9 +188,13 @@
         [self.map addChild:nettori];
         [self.enemies addObject:nettori];
         
-        spacepirate*enemy14=[[spacepirate alloc] initWithPosition:CGPointMake(self.map.tileSize.width*518, self.map.tileSize.height*9.5) onWall:NO];
+        spacepirate*enemy14=[[spacepirate alloc] initWithPosition:CGPointMake(self.map.tileSize.width*518, self.map.tileSize.height*9.5-3) onWall:NO withOrientation:NO];
         [self.enemies addObject:enemy14];
         [self.map addChild:enemy14];
+        
+        spacepirate*enemy15=[[spacepirate alloc] initWithPosition:CGPointMake(self.map.tileSize.width*578.2, self.map.tileSize.height*15) onWall:YES withOrientation:NO];
+        [self.enemies addObject:enemy15];
+        [self.map addChild:enemy15];
         
         __block BOOL bossdidenter=NO;
         __weak nettoriboss*weaknettori=nettori;
@@ -251,8 +260,6 @@
         enemyBase*enemyconcop=(enemyBase*)enemycon;
         [enemyconcop enemytoplayerandmelee:weakself];
     }
-    
-    
     
     for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){
         if(currbullet.cleanup || [self tileGIDAtTileCoord:[self.walls coordForPoint:currbullet.position] forLayer:self.walls]){//here to avoid another run through of arr
