@@ -117,7 +117,7 @@
             [weakself runAction:[SKAction repeatActionForever:[SKAction sequence:@[[SKAction colorizeWithColor:[SKColor purpleColor] colorBlendFactor:0.7 duration:0.1],[SKAction colorizeWithColorBlendFactor:0.0 duration:0.1]]]] withKey:@"chgini"];
         }];
         
-        self.chargebeamtimer=[SKAction sequence:@[[SKAction group:@[[SKAction waitForDuration:2.0],[SKAction sequence:@[[SKAction waitForDuration:0.9],[SKAction group:@[charge_blk,chargeini]]]]]],[SKAction runBlock:^{[weakself switchbeamto:@"charge"];weakself.chargebeamrunning=YES;
+        self.chargebeamtimer=[SKAction sequence:@[[SKAction group:@[[SKAction waitForDuration:1.7],[SKAction sequence:@[[SKAction waitForDuration:0.5],[SKAction group:@[charge_blk,chargeini]]]]]],[SKAction runBlock:^{[weakself switchbeamto:@"charge"];weakself.chargebeamrunning=YES;
             [weakself removeActionForKey:@"chgini"];
             [weakself runAction:[SKAction repeatActionForever:weakself.damageaction] withKey:@"chgflash"];}]]];//fix timing
         
@@ -154,6 +154,10 @@
        // NSArray *jumpbackwardsstartarray=@[[samusregsuit textureNamed:@"samus_jumpb1.png"],[samusregsuit textureNamed:@"samus_jumpb2.png"]];
         NSArray *jumpbackwardsarray=@[[samusregsuit textureNamed:@"samus_jumpb3.png"],[samusregsuit textureNamed:@"samus_jumpb4.png"],[samusregsuit textureNamed:@"samus_jumpb5.png"],[samusregsuit textureNamed:@"samus_jumpb6.png"],[samusregsuit textureNamed:@"samus_jumpb7.png"],[samusregsuit textureNamed:@"samus_jumpb8.png"],[samusregsuit textureNamed:@"samus_jumpb9.png"],[samusregsuit textureNamed:@"samus_jumpb10.png"]];
         
+        NSArray *fallforwardsarray=@[[samusregsuit textureNamed:@"samus_fallingf1.png"],[samusregsuit textureNamed:@"samus_fallingf2.png"]];
+        
+        NSArray *fallbackwardsarray=@[[samusregsuit textureNamed:@"samus_fallingb1.png"],[samusregsuit textureNamed:@"samus_fallingb2.png"]];
+        
         NSArray *travelthruportalarray=@[[samusregsuit textureNamed:@"samus_travel1.png"],[samusregsuit textureNamed:@"samus_travel2.png"],[samusregsuit textureNamed:@"samus_travel3.png"],[samusregsuit textureNamed:@"samus_travel4.png"],[samusregsuit textureNamed:@"samus_travel5.png"],[samusregsuit textureNamed:@"samus_travel6.png"],[samusregsuit textureNamed:@"samus_travel7.png"],[samusregsuit textureNamed:@"samus_travel8.png"],[samusregsuit textureNamed:@"samus_travel9.png"],[samusregsuit textureNamed:@"samus_travel10.png"]];
         
         
@@ -161,6 +165,8 @@
         self.runBackwardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:runbackwardsarray timePerFrame:0.07 resize:YES restore:NO]];
         self.jumpForewardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:jumpforewardsarray timePerFrame:0.04 resize:YES restore:NO]];
         self.jumpBackwardsAnimation=[SKAction repeatActionForever:[SKAction animateWithTextures:jumpbackwardsarray timePerFrame:0.04 resize:YES restore:NO]];
+        self.fallForwardsAnimation=[SKAction animateWithTextures:fallforwardsarray timePerFrame:0.25 resize:YES restore:NO];
+        self.fallBackwardsAnimation=[SKAction animateWithTextures:fallbackwardsarray timePerFrame:0.25 resize:YES restore:NO];
         self.enterfromportalAnimation=[SKAction sequence:@[[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2],[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samus_turnr1.png"],[samusregsuit textureNamed:@"samus_turnr2.png"],[samusregsuit textureNamed:@"samus_turnr3.png"]] timePerFrame:0.1 resize:NO restore:NO]]];
         self.travelthruportalAnimation=[SKAction sequence:@[[SKAction animateWithTextures:travelthruportalarray timePerFrame:0.2 resize:YES restore:NO],[SKAction group:@[[SKAction animateWithTextures:@[[samusregsuit textureNamed:@"samusfade.png"]] timePerFrame:1.5 resize:YES restore:NO],[SKAction fadeOutWithDuration:1.4]]]]];
     
@@ -187,7 +193,6 @@
     else
     self.playervelocity=CGPointMake(self.playervelocity.x*0.80, self.playervelocity.y);  //horizontal dampening force "reducing" horizontal movement each frame
     
-    
     //using calculated step values
    
     if(self.shouldJump && self.onGround){
@@ -195,19 +200,18 @@
     }
     if(self.goForeward){
         self.playervelocity=CGPointAdd(self.playervelocity, forewardStep);
-        self.texture=self.forewards;
+        if(!self.falling)
+            self.texture=self.forewards;
     }
     if(self.goBackward){
         self.playervelocity=CGPointAdd(self.playervelocity, backwardStep);
-        self.texture=self.backwards;
+        if(!self.falling)
+            self.texture=self.backwards;
     }
-    
-    
     
     self.playervelocity=CGPointMake(Clamp(self.playervelocity.x, _minmovement.x, _maxmovement.x), Clamp(self.playervelocity.y, _minmovement.y, _maxmovement.y));
     
     //NSLog(@"playervelocity: %@",NSStringFromCGPoint(self.playervelocity));
-    
     CGPoint velocitymove=CGPointMultiplyScalar(self.playervelocity, delta);
     
     if(!self.lockmovement)
@@ -242,6 +246,28 @@
         [self runAction:[SKAction setTexture:self.backwards resize:YES]];
 }
 
+-(void)startFalling{
+    if(!self.falling){
+        self.falling=YES;
+        if(self.forwardtrack)
+            [self runAction:self.fallForwardsAnimation withKey:@"fall"];
+        else if(self.backwardtrack)
+            [self runAction:self.fallBackwardsAnimation withKey:@"fall"];
+    }
+}
+
+-(void)stopFalling{
+    if(self.falling){
+        self.falling=NO;
+        [self removeActionForKey:@"fall"];
+        if(self.goForeward)
+            [self runAction:self.runAnimation withKey:@"runf"];
+        else if(self.goBackward)
+            [self runAction:self.runBackwardsAnimation withKey:@"runb"];
+        else
+            [self resetTex];
+    }
+}
 
 -(void)switchbeamto:(NSString *)to{
     self.currentBulletType=to;

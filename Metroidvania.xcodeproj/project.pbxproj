@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5904B05A23107F350098A28F /* desgeega.m in Sources */ = {isa = PBXBuildFile; fileRef = 5904B05923107F350098A28F /* desgeega.m */; };
+		590EFE7824AD802100F0548C /* spacepirate.m in Sources */ = {isa = PBXBuildFile; fileRef = 590EFE7724AD802100F0548C /* spacepirate.m */; };
 		592B389D20DB008400C62977 /* MenuScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 592B389C20DB008400C62977 /* MenuScene.m */; };
 		593F109B21D9CB3B008208E6 /* 346na4n.png in Resources */ = {isa = PBXBuildFile; fileRef = 593F109A21D9CB3A008208E6 /* 346na4n.png */; };
 		593F10A221DAA914008208E6 /* nettoriboss.m in Sources */ = {isa = PBXBuildFile; fileRef = 593F10A121DAA914008208E6 /* nettoriboss.m */; };
@@ -87,6 +88,8 @@
 /* Begin PBXFileReference section */
 		5904B05823107F350098A28F /* desgeega.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = desgeega.h; sourceTree = "<group>"; };
 		5904B05923107F350098A28F /* desgeega.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = desgeega.m; sourceTree = "<group>"; };
+		590EFE7624AD802100F0548C /* spacepirate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = spacepirate.h; sourceTree = "<group>"; };
+		590EFE7724AD802100F0548C /* spacepirate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = spacepirate.m; sourceTree = "<group>"; };
 		592B389B20DB008400C62977 /* MenuScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MenuScene.h; sourceTree = "<group>"; };
 		592B389C20DB008400C62977 /* MenuScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MenuScene.m; sourceTree = "<group>"; };
 		593F109A21D9CB3A008208E6 /* 346na4n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 346na4n.png; sourceTree = "<group>"; };
@@ -245,6 +248,8 @@
 				59CE01C021CDCD1D00BF13B1 /* enemyBase.m */,
 				5904B05823107F350098A28F /* desgeega.h */,
 				5904B05923107F350098A28F /* desgeega.m */,
+				590EFE7624AD802100F0548C /* spacepirate.h */,
+				590EFE7724AD802100F0548C /* spacepirate.m */,
 				596F2DA720BFAFAE00B32C47 /* sciserenemy.h */,
 				596F2DA820BFAFAE00B32C47 /* sciserenemy.m */,
 				594F9A3322938D8F008B4795 /* choot.h */,
@@ -288,12 +293,12 @@
 			children = (
 				59C57B6E2357E0E80086064C /* levelBase.h */,
 				59C57B6F2357E0E80086064C /* levelBase.m */,
+				59D7CCF822C066FC00FABB8B /* saveData.h */,
+				59D7CCF922C066FC00FABB8B /* saveData.m */,
 				592B389B20DB008400C62977 /* MenuScene.h */,
 				592B389C20DB008400C62977 /* MenuScene.m */,
 				F275B68A186E0B06009F6E6B /* GameLevelScene.h */,
 				F275B68B186E0B06009F6E6B /* GameLevelScene.m */,
-				59D7CCF822C066FC00FABB8B /* saveData.h */,
-				59D7CCF922C066FC00FABB8B /* saveData.m */,
 				594F557920CDE911000E476E /* GameLevelScene2.h */,
 				594F557A20CDE911000E476E /* GameLevelScene2.m */,
 				59DAC09C2187DAE80077E10C /* GameLevelScene3.h */,
@@ -465,7 +470,7 @@
 		F275B665186E0B06009F6E6B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					F275B66C186E0B06009F6E6B = {
@@ -545,6 +550,7 @@
 				F275B68C186E0B06009F6E6B /* GameLevelScene.m in Sources */,
 				592B389D20DB008400C62977 /* MenuScene.m in Sources */,
 				F275B6E2186E25C1009F6E6B /* SKNode+SKTExtras.m in Sources */,
+				590EFE7824AD802100F0548C /* spacepirate.m in Sources */,
 				59FFC330224DAD2C00236F2E /* powerupBubble.m in Sources */,
 				5979C750213B368A00965A50 /* JSTileMap.m in Sources */,
 				5979C753213B36BA00965A50 /* LFCGzipUtility.m in Sources */,
@@ -614,6 +620,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -639,7 +646,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -667,6 +674,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -686,7 +694,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -696,15 +704,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 527ET46V8M;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metroidvania/Metroidvania-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Metroidvania/Metroidvania-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise.metroidvaniav2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;
@@ -716,15 +724,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 527ET46V8M;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metroidvania/Metroidvania-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/Metroidvania/Metroidvania-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nickvancise.metroidvaniav2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SPRITEKIT_TEXTURE_ATLAS_OUTPUT = YES;

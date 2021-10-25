@@ -202,7 +202,7 @@
     CGPoint playercoordinate=[self.walls coordForPoint:self.player.desiredPosition];
       
     if(playercoordinate.y >= self.map.mapSize.height-1 ){ //sets gameover if you go below the bottom of the maps y max-1
-      [self gameOver:0];
+      [self gameOver:NO];
       return;
     }
     if(self.player.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-220 && !self.repeating){
@@ -210,7 +210,8 @@
       self.repeating=YES;
     }
     if(self.travelportal!=NULL && CGRectIntersectsRect(CGRectInset(playerrect,4,6),[self.travelportal collisionBoundingBox])){
-      [self.player runAction:[SKAction moveTo:self.travelportal.position duration:1.5] completion:^{[self gameOver:1];}];
+        [self.player resetTex];
+        [self.player runAction:[SKAction moveTo:self.travelportal.position duration:1.5] completion:^{[self gameOver:YES];}];
       return;
     }
 
@@ -235,6 +236,7 @@
                     
                     self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
                     self.player.onGround=YES;
+                    [self.player stopFalling];
                     break;
                 case 1:
                     //tile above the sprite
@@ -262,12 +264,13 @@
                       //this is for resolving collision up or down due to ^
                       float intersectionheight;
                       if(thetileGID!=0){
-                      self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
+                          self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
                       }
                       
                       if(tileindex>4){
                         intersectionheight=pl_tl_intersection.size.height;
                         self.player.onGround=YES;
+                        [self.player stopFalling];
                       }
                       else
                         intersectionheight=-pl_tl_intersection.size.height;
@@ -296,7 +299,7 @@
       if(CGRectIntersectsRect(CGRectInset(playerrect, 1, 0), hazardtilerect)){
         [self damageRecievedMsg];
         if(self.player.health<=0){
-          [self gameOver:0];
+          [self gameOver:NO];
         }
       }//if rects intersect
     }//if hazard tile
@@ -333,23 +336,28 @@
     else if([self.myjoystick shouldGoForeward:touchlocation]){
       //NSLog(@"touching right control");
       self.player.goForeward=YES;
+      if(self.player.backwardtrack && self.player.falling)
+          [self.player runAction:self.player.fallForwardsAnimation withKey:@"fall"];
       
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
-      
-      [self.player runAction:self.player.runAnimation withKey:@"runf"];
+      if(!self.player.falling)
+          [self.player runAction:self.player.runAnimation withKey:@"runf"];
     }
     else if([self.myjoystick shouldGoBackward:touchlocation]){
       //NSLog(@"touching left control");
       self.player.goBackward=YES;
+      if(self.player.forwardtrack && self.player.falling)
+          [self.player runAction:self.player.fallBackwardsAnimation withKey:@"fall"];
       
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
-      
-      [self.player runAction:self.player.runBackwardsAnimation withKey:@"runb"];
+      if(!self.player.falling)
+          [self.player runAction:self.player.runBackwardsAnimation withKey:@"runb"];
     }
     else if([self.myjoystick shouldJump:touchlocation]){
       self.player.shouldJump=YES;
+      self.player.falling=NO;
       if(self.player.forwardtrack)
         [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
       else
@@ -360,6 +368,7 @@
       self.player.goForeward=YES;
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
+      self.player.falling=NO;
       [self.player runAction:self.player.jumpForewardsAnimation withKey:@"jmpf"];
     }
     else if([self.myjoystick shouldJumpBackward:touchlocation]){
@@ -367,6 +376,7 @@
       self.player.goBackward=YES;
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
+      self.player.falling=NO;
       [self.player runAction:self.player.jumpBackwardsAnimation withKey:@"jmpb"];
     }
     else if(touchlocation.x>self.camera.frame.size.width/2 && touchlocation.y<self.camera.frame.size.height/2){
@@ -595,20 +605,27 @@
     [self.player removeMovementAnims];
     
     if([self.myjoystick shouldJump:fnctouchlocation] || [self.myjoystick shouldJumpBackward:fnctouchlocation] || [self.myjoystick shouldJumpForeward:fnctouchlocation]){
+        [self.player startFalling];
       //NSLog(@"done touching up");
-      [self.player resetTex];
+      //[self.player resetTex];
     }
     else if([self.myjoystick shouldGoForeward:fnctouchlocation]){
       //NSLog(@"done touching right");
       self.player.forwardtrack=YES;
       self.player.backwardtrack=NO;
-      [self.player resetTex];
+      if(self.player.onGround)
+          [self.player resetTex];
+      else
+          [self.player startFalling];
     }
     else if([self.myjoystick shouldGoBackward:fnctouchlocation]){
       //NSLog(@"done touching left");
       self.player.backwardtrack=YES;
       self.player.forwardtrack=NO;
-      [self.player resetTex];
+      if(self.player.onGround)
+          [self.player resetTex];
+      else
+          [self.player startFalling];
     }
     else if(CGRectContainsPoint(_startbutton.frame, fnctouchlocation)){
       //NSLog(@"do nothing hit the pause");//put here so the melee is not hit
@@ -622,6 +639,8 @@
      // NSLog(@"start firing weapon");
     }
     else if(fnctouchlocation.x>self.camera.frame.size.width/2 && fnctouchlocation.y>self.camera.frame.size.height/2){
+        if(self.player.falling)
+            [self.player stopFalling];
       [self.player runAction:self.player.meleeactionright withKey:@"melee"];
     }
   
@@ -649,7 +668,7 @@
       self.player.health=self.player.health-hit;
       if(self.player.health<=0 && !self.gameOver){
           self.player.health=0;
-          [self gameOver:0];
+          [self gameOver:NO];
       }
       self.healthlabel.text=[NSString stringWithFormat:@"Health:%d",self.player.health];
       self.healthbar.size=CGSizeMake((((float)self.player.health/100)*self.healthbarsize), self.healthbar.size.height);
@@ -683,6 +702,7 @@
   UISlider*tmpslider=(UISlider*)sender;
   self.audiomanager.bkgrndmusic.volume=tmpslider.value/100;
   self.audiomanager.currentVolume=tmpslider.value;
+  [saveData editvolumewithval:tmpslider.value/100];
 }
 
 -(void)pausegame{

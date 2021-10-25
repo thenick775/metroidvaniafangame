@@ -79,12 +79,16 @@
         
          __weak MenuScene *weakself=self;
         UIBezierPath*starbez=[UIBezierPath bezierPath];
-        [starbez moveToPoint:CGPointMake(-20,self.size.height+5)];
-        [starbez addQuadCurveToPoint:CGPointMake(self.size.width-60,-180) controlPoint:CGPointMake(self.size.width/2+90,self.size.height-20)];
+        __weak UIBezierPath*weakstarbez=starbez;
+        //[starbez moveToPoint:CGPointMake(-20,self.size.height+5)];
+        //[starbez addQuadCurveToPoint:CGPointMake(self.size.width-60,-180) controlPoint:CGPointMake(self.size.width/2+90,self.size.height-20)];
         SKEmitterNode*shootingstar=[SKEmitterNode nodeWithFileNamed:@"shootingstar.sks"];
         shootingstar.particleRenderOrder=SKParticleRenderOrderDontCare;
         shootingstar.targetNode=self;
         SKAction*shootstarblk=[SKAction runBlock:^{
+            int rand=-90 + arc4random_uniform(330);
+            [weakstarbez moveToPoint:CGPointMake(-20-abs((int)(rand*0.75)),weakself.size.height+5)];
+            [weakstarbez addQuadCurveToPoint:CGPointMake(weakself.size.width-60+rand,-180) controlPoint:CGPointMake(weakself.size.width/2+90+rand,weakself.size.height-20)];
             [shootingstar setPaused:NO];
             [shootingstar resetSimulation];
             [weakself addChild:shootingstar];
@@ -188,6 +192,8 @@
         shipflames1=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"gunshipflames1.png"]];
         shipflamesright2=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"gunshipflamesright2.png"]];
         shipflamesleft2=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"gunshipflamesleft2.png"]];
+        SKSpriteNode *shipflamesrightinner=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"gunshipflamesright2.png"]];
+        SKSpriteNode *shipflamesleftinner=[SKSpriteNode spriteNodeWithTexture:[backgroundtexatl textureNamed:@"gunshipflamesleft2.png"]];
         
         
         shipreducesize=[SKAction scaleTo:0 duration:1.8];
@@ -199,9 +205,13 @@
         
         
         samusgunship.position=CGPointMake(-15,-15);
-        shipflamesright2.position=CGPointMake(25,-8);
-        shipflamesleft2.position=CGPointMake(-25,-8);
+        shipflamesrightinner.position=CGPointMake(25,-8);
+        shipflamesleftinner.position=CGPointMake(-25,-8);
+        shipflamesright2.position=CGPointMake(33,-12);
+        shipflamesleft2.position=CGPointMake(-33,-12);
         [samusgunship addChild:shipflames1];
+        [samusgunship addChild:shipflamesrightinner];
+        [samusgunship addChild:shipflamesleftinner];
         [samusgunship addChild:shipflamesright2];
         [samusgunship addChild:shipflamesleft2];
         [self addChild:samusgunship];
@@ -226,7 +236,7 @@
         [self addChild:_savebkrnd];
         
         audiomanager=[gameaudio alloc];
-        [audiomanager runBkgrndMusicForlvl:0 andVol:0.6];
+        [audiomanager runBkgrndMusicForlvl:0 andVol:[saveData getvolume]];
     }
     return self;
 }
@@ -329,7 +339,7 @@
     __weak NSArray *weaktexturesforlvl=texturesforlvl[p];
     __weak saveCellManager *weaksavebkrnd=_savebkrnd;
     
-    preload=[saveData getseenbossfromslot:p] ? [[self setupscenefromslot:p] initNearBossWithSize:nextSceneSize andVol:0.35] : [[self setupscenefromslot:p] initWithSize:nextSceneSize andVol:0.35];
+    preload=[saveData getseenbossfromslot:p] ? [[self setupscenefromslot:p] initNearBossWithSize:nextSceneSize andVol:[saveData getvolume]] : [[self setupscenefromslot:p] initWithSize:nextSceneSize andVol:[saveData getvolume]];
     
     preload.scaleMode = SKSceneScaleModeAspectFill;
     self.userInteractionEnabled=NO;

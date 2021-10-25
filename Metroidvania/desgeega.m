@@ -103,7 +103,10 @@
 }
 
 -(void)projectileAttack{
-    if(_attackcount++<1){
+    for(int i=0;i<5;i++){
+        [self setHanger];
+    }
+    /*if(_attackcount++<1){
         __weak GKComponentSystem *weakagentSystem=self.agentSystem;
         __weak NSMutableArray*weakprojectilesinaction=self.projectilesInAction;
         for(int i=0;i<4;i++){
@@ -129,7 +132,7 @@
         for(GKAgent2D *thisagent in weakagentSystem.components){
             thisagent.behavior=seek;
         }
-    }
+    }*/
 }
 
 -(SKAction*)flee:(CGPoint)playerpos{//the nested ternary operators here were done just for fun

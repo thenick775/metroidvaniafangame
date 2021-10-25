@@ -13,6 +13,7 @@
 #import "powerupBubble.h"
 #import "choot.h"
 #import "desgeega.h"
+#import "spacepirate.h"
 
 @implementation GameLevelScene3{
     SKTextureAtlas*_lvl3assets;
@@ -115,6 +116,21 @@
         [self.map addChild:door5];
         [self.doors addObject:door5];
         
+        door *door6=[[door alloc] initWithTextureAtlas:_lvl3assets hasMarker:YES andNames:@[@"bluedoor1.png",@"bluedoor2.png",@"bluedoor3.png",@"bluedoor4.png",@"bluedoor5.png",@"marker",@"bluedoormeniscus1.png",@"bluedoormeniscus2.png",@"bluedoormeniscus3.png",@"bluedoormeniscus4.png",@"doormeniscus5.png"]];
+        door6.position=CGPointMake(419*self.map.tileSize.width, 8*self.map.tileSize.height);//???
+        [self.map addChild:door6];
+        [self.doors addObject:door6];
+        
+        door *door7=[[door alloc] initWithTextureAtlas:_lvl3assets hasMarker:YES andNames:@[@"bluedoor1.png",@"bluedoor2.png",@"bluedoor3.png",@"bluedoor4.png",@"bluedoor5.png",@"marker",@"bluedoormeniscus1.png",@"bluedoormeniscus2.png",@"bluedoormeniscus3.png",@"bluedoormeniscus4.png",@"doormeniscus5.png"]];
+        door7.position=CGPointMake(503*self.map.tileSize.width, 10*self.map.tileSize.height);
+        [self.map addChild:door7];
+        [self.doors addObject:door7];
+        
+        door *door8=[[door alloc] initWithTextureAtlas:_lvl3assets hasMarker:YES andNames:@[@"bluedoor1.png",@"bluedoor2.png",@"bluedoor3.png",@"bluedoor4.png",@"bluedoor5.png",@"marker",@"bluedoormeniscus1.png",@"bluedoormeniscus2.png",@"bluedoormeniscus3.png",@"bluedoormeniscus4.png",@"doormeniscus5.png"]];
+        door8.position=CGPointMake(581.2*self.map.tileSize.width, 27*self.map.tileSize.height);
+        [self.map addChild:door8];
+        [self.doors addObject:door8];
+        
         //enemies here
         waver*enemy1=[[waver alloc] initWithPosition:CGPointMake(107*self.map.tileSize.width, 8*self.map.tileSize.height) xRange:350 yRange:15];
         [self.enemies addObject:enemy1];
@@ -172,6 +188,14 @@
         [self.map addChild:nettori];
         [self.enemies addObject:nettori];
         
+        spacepirate*enemy14=[[spacepirate alloc] initWithPosition:CGPointMake(self.map.tileSize.width*518, self.map.tileSize.height*9.5-3) onWall:NO withOrientation:NO];
+        [self.enemies addObject:enemy14];
+        [self.map addChild:enemy14];
+        
+        spacepirate*enemy15=[[spacepirate alloc] initWithPosition:CGPointMake(self.map.tileSize.width*578.2, self.map.tileSize.height*15) onWall:YES withOrientation:NO];
+        [self.enemies addObject:enemy15];
+        [self.map addChild:enemy15];
+        
         __block BOOL bossdidenter=NO;
         __weak nettoriboss*weaknettori=nettori;
         idleblock=[SKAction runBlock:^{
@@ -187,8 +211,9 @@
         }];
         
         removebosswall=[SKAction runBlock:^{
+            NSLog(@"removing nettori tiles");
             [weaknettori.healthlbl removeFromParent];
-            for(int i=13;i<20;i++){
+            for(int i=38;i<45;i++){
                 [weakself.walls removeTileAtCoord:CGPointMake(174,i)];
                 [weakself.walls removeTileAtCoord:CGPointMake(175,i)];
             }}];
@@ -236,8 +261,6 @@
         enemyBase*enemyconcop=(enemyBase*)enemycon;
         [enemyconcop enemytoplayerandmelee:weakself];
     }
-    
-    
     
     for(PlayerProjectile *currbullet in [self.bullets reverseObjectEnumerator]){
         if(currbullet.cleanup || [self tileGIDAtTileCoord:[self.walls coordForPoint:currbullet.position] forLayer:self.walls]){//here to avoid another run through of arr
@@ -299,7 +322,7 @@
         
         
         if(playercoordinate.y >= self.map.mapSize.height-1 ){ //sets gameover if you go below the bottom of the maps y max-1
-            [self gameOver:0];
+            [self gameOver:NO];
             return;
         }
         if(self.player.position.x>=(self.map.mapSize.width*self.map.tileSize.width)-220 && !self.repeating){
@@ -307,7 +330,8 @@
             self.repeating=YES;
         }
         if(self.travelportal!=NULL && CGRectIntersectsRect(CGRectInset(playerrect,4,6),[self.travelportal collisionBoundingBox])){
-            [self.player runAction:[SKAction moveTo:self.travelportal.position duration:1.5] completion:^{[self gameOver:1];}];
+            [self.player resetTex];
+            [self.player runAction:[SKAction moveTo:self.travelportal.position duration:1.5] completion:^{[self gameOver:YES];}];
             return;
         }
         
@@ -335,6 +359,7 @@
                     
                     self.player.playervelocity=CGPointMake(self.player.playervelocity.x, 0.0);
                     self.player.onGround=YES;
+                    [self.player stopFalling];
                 }
                 else if(tileindex==1){
                     //tile above the sprite
@@ -367,6 +392,7 @@
                         if(tileindex>4){
                             intersectionheight=pl_tl_intersection.size.height;
                             self.player.onGround=YES;
+                            [self.player stopFalling];
                         }
                         else
                             intersectionheight=-pl_tl_intersection.size.height;
@@ -394,15 +420,15 @@
             if(CGRectIntersectsRect(CGRectInset(playerrect, 1, 0), hazardtilerect)){
                 [self damageRecievedMsg];
                 if(self.player.health<=0){
-                    [self gameOver:0];
+                    [self gameOver:NO];
                 }
             }//if rects intersect
         }//if hazard tile
         
         if(tileindex==3 || tileindex==5 || tileindex==1 || tileindex==7){
-        for(door*tmpdoor in self.doors){
-            [tmpdoor handleCollisionsWithPlayer:self.player];
-        }
+            for(door*tmpdoor in self.doors){
+                [tmpdoor handleCollisionsWithPlayer:self.player];
+            }
         }
         
     }//for loop bracket
@@ -423,6 +449,7 @@
             }
         }
         self.player.position=CGPointMake(149*self.map.tileSize.width, 23*self.map.tileSize.height);
+        //self.player.position = CGPointMake(self.map.tileSize.width*515, self.map.tileSize.height*14); //for spacepirate testing
         self.player.chargebeamenabled=YES;
         [self.player switchbeamto:@"chargereg"];
         idlecheck=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:0.8],idleblock]]];

@@ -19,6 +19,7 @@
             mydat.lvlarr=[[NSMutableArray alloc] initWithArray:@[@0,@0,@0]];
             mydat.seenbossarr=[[NSMutableArray alloc] initWithArray:@[@NO,@NO,@NO]];
             mydat.progarr=[[NSMutableArray alloc] initWithArray:@[@"empty",@"empty",@"empty"]];
+            mydat.currentvolume=0.6;
         }
     });
     return mydat;
@@ -30,6 +31,7 @@
     [mydat setLvlarr:[aDecoder decodeObjectOfClass:[NSMutableArray class] forKey:@"LVL_key"]];
     [mydat setSeenbossarr:[aDecoder decodeObjectOfClass:[NSMutableArray class] forKey:@"Bultype_key"]];
     [mydat setProgarr:[aDecoder decodeObjectOfClass:[NSMutableArray class] forKey:@"Prog_key"]];
+    [mydat setCurrentvolume:[aDecoder decodeFloatForKey:@"Vol_key"]];
     return mydat;
 }
 
@@ -39,11 +41,12 @@
     [aCoder encodeObject:mydat.lvlarr forKey:@"LVL_key"];
     [aCoder encodeObject:mydat.seenbossarr forKey:@"Bultype_key"];
     [aCoder encodeObject:mydat.progarr forKey:@"Prog_key"];
+    [aCoder encodeFloat:mydat.currentvolume forKey:@"Vol_key"];
 }
 
 +(void)printcurr{//convience print
     saveData *mydat = [saveData sharedInstance];
-    NSLog(@"%@\n%@\n%@",mydat.lvlarr,mydat.seenbossarr,mydat.progarr);
+    NSLog(@"%@\n%@\n%@\n%f",mydat.lvlarr,mydat.seenbossarr,mydat.progarr,mydat.currentvolume);
 }
 
 +(void)arch{//used to archive the singleton
@@ -75,6 +78,9 @@
 +(void)editseenbosswithval:(BOOL)val forsaveslot:(int)slot{
     [saveData sharedInstance].seenbossarr[slot]=[NSNumber numberWithBool:val];
 }
++(void)editvolumewithval:(float)val{
+    [saveData sharedInstance].currentvolume=val;
+}
 +(void)editcurrslot:(int)slot{
     [saveData sharedInstance].currentslot=slot;
 }
@@ -86,6 +92,9 @@
 }
 +(NSString*)getprogfromslot:(int)slot{
     return [saveData sharedInstance].progarr[slot];
+}
++(float)getvolume{
+    return [saveData sharedInstance].currentvolume;
 }
 +(int)getcurrslot{
     return [saveData sharedInstance].currentslot;
@@ -100,12 +109,6 @@
     mydat.seenbossarr[slot]=@NO;
     mydat.progarr[slot]=@"empty";
 }
-
-+(void)delete_vals{//for developer testing at the moment, reset functions should be implemented
-    NSLog(@"in delete vals");
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"Tot_dat_key"];
-}
-
 
 @end
 
