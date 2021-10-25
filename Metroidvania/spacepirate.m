@@ -14,6 +14,7 @@
     SKAction *_wallcrawlbf,*_runb,*_crawlf,*_turnrl,*_wallfireb,*_fireregb,*_fireupb,*_firedownb,*_wallcrawlfb,*_wallcrawlff; //based on existing animations
     GKRuleSystem*_spacepiraters;
     CGPoint _origpos;
+    BOOL _orientation;
 }
 
 -(instancetype)initWithPosition:(CGPoint)pos onWall:(BOOL)onwall withOrientation:(BOOL)orientation{ //orientation:yes -> right, no -> left (for wall bound only)
@@ -25,6 +26,8 @@
         self.dy=0;
         self.position=pos;
         self.dead=NO;
+        _orientation = orientation;
+        
         _origpos=pos;
         _projectilesInAction=[[NSMutableArray alloc] init];
         
@@ -101,9 +104,17 @@
         GKRule*wallshootrule=[GKRule ruleWithPredicate:wallshootpred assertingFact:@"wallshoot" grade:1.0];
         [_spacepiraters addRule:wallshootrule];
         
-        NSPredicate*wallshootpredup=[NSPredicate predicateWithFormat:@"($onwall==YES && ($coorddisty<15 || $coorddisty>-15))"];
-        GKRule*wallshootuprule=[GKRule ruleWithPredicate:wallshootpredup assertingFact:@"wallshoot" grade:1.0];
-        [_spacepiraters addRule:wallshootuprule];
+        NSPredicate*shootpred=[NSPredicate predicateWithFormat:@"($onwall==NO && ($coorddistx<15 || $coorddistx>-15))"];
+        GKRule*shootrule=[GKRule ruleWithPredicate:shootpred assertingFact:@"shoot" grade:1.0];
+        [_spacepiraters addRule:shootrule];
+        
+        NSPredicate*shootpredup=[NSPredicate predicateWithFormat:@"($onwall==NO && $coorddisty>15)"];
+        GKRule*shootuprule=[GKRule ruleWithPredicate:shootpredup assertingFact:@"shootup" grade:1.0];
+        [_spacepiraters addRule:shootuprule];
+            
+        NSPredicate*shootpreddown=[NSPredicate predicateWithFormat:@"($onwall==NO && $coorddisty< -15)"];
+        GKRule*shootdownrule=[GKRule ruleWithPredicate:shootpreddown assertingFact:@"shootdown" grade:1.0];
+        [_spacepiraters addRule:shootdownrule];
         
         NSPredicate*turnrightpred=[NSPredicate predicateWithFormat:@"($onwall==NO && $coorddistx>0 && $prevcoorddistx<0)"];
         GKRule *turnrightrule=[GKRule ruleWithPredicate:turnrightpred assertingFact:@"turnright" grade:1.0];
@@ -213,15 +224,53 @@
         [_spacepiraters evaluate];
         
         if([_spacepiraters gradeForFact:@"wallshoot"]==1){
-            actoexecute=_wallfireb;
+            if (_orientation){
+                actoexecute=_wallfiref;
+            } else{
+                actoexecute=_wallfireb;
+            }
+        }
+        else if([_spacepiraters gradeForFact:@"shoot"]==1){
+            if (_orientation){
+                actoexecute=_fireregf;
+            } else{
+                actoexecute=_fireregb;
+            }
+        }
+        else if ([_spacepiraters gradeForFact:@"shootup"]==1){
+            if (_orientation){
+                actoexecute=_fireupf;
+            } else{
+                actoexecute=_fireupb;
+            }
+        } else if ([_spacepiraters gradeForFact:@"shootdown"]==1){
+            if (_orientation){
+                actoexecute=_firedownf;
+            } else{
+                actoexecute=_firedownb;
+            }
         }
         else if([_spacepiraters gradeForFact:@"walldown"]==1){
-            _spacepiraters.state[@"prevhealth"]=@(self.health);
-            actoexecute=_wallcrawlbb;
+            if (_orientation){
+                actoexecute=_wallcrawlfb;
+            } else{
+                actoexecute=_wallcrawlbb;
+            }
         }
         else if([_spacepiraters gradeForFact:@"wallup"]==1){
-            _spacepiraters.state[@"prevhealth"]=@(self.health);
-            actoexecute=_wallcrawlbf;
+            if (_orientation){
+                actoexecute=_wallcrawlff;
+            } else{
+                actoexecute=_wallcrawlbf;
+            }
+        } else if ([_spacepiraters gradeForFact:@"runf"]==1){
+            actoexecute=_runf;
+        } else if ([_spacepiraters gradeForFact:@"runb"]==1){
+            actoexecute=_runb;
+        } else if ([_spacepiraters gradeForFact:@"turnleft"]==1){
+            actoexecute=_turnrl;
+        } else if ([_spacepiraters gradeForFact:@"turnright"]==1){
+            actoexecute=_turnlr;
         }
         
         

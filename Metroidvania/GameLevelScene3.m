@@ -211,8 +211,9 @@
         }];
         
         removebosswall=[SKAction runBlock:^{
+            NSLog(@"removing nettori tiles");
             [weaknettori.healthlbl removeFromParent];
-            for(int i=13;i<20;i++){
+            for(int i=38;i<45;i++){
                 [weakself.walls removeTileAtCoord:CGPointMake(174,i)];
                 [weakself.walls removeTileAtCoord:CGPointMake(175,i)];
             }}];
@@ -448,6 +449,7 @@
             }
         }
         self.player.position=CGPointMake(149*self.map.tileSize.width, 23*self.map.tileSize.height);
+        //self.player.position = CGPointMake(self.map.tileSize.width*515, self.map.tileSize.height*14); //for spacepirate testing
         self.player.chargebeamenabled=YES;
         [self.player switchbeamto:@"chargereg"];
         idlecheck=[SKAction repeatActionForever:[SKAction sequence:@[[SKAction waitForDuration:0.8],idleblock]]];
